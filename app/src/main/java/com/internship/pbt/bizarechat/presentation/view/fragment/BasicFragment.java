@@ -1,5 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment;
 
-public class BasicFragment {
+import android.app.Fragment;
+
+public class BasicFragment extends Fragment{
     //TODO Basic fragment inflate
 }

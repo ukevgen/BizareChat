@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.presentation.view.fragment.LoginFragment;
 
 public class LoginActivity extends BasicActivity {
 
@@ -16,6 +17,7 @@ public class LoginActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_base_layout);
+        addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
     }
 }
