@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.view;
+package com.internship.pbt.bizarechat;
 
 import android.app.Application;
 
