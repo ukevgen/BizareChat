@@ -11,7 +11,7 @@ public class BizareChatApp extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
-        if(BuildConfig.CRASH_REPORTS)
+        if (BuildConfig.CRASH_REPORTS)
             Fabric.with(this, new Crashlytics());
     }
 

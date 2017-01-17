@@ -23,14 +23,13 @@ public class HmacSha1Signature {
         return formatter.toString();
     }
 
-    public static String calculateRFC2104HMAC(String data, String key)
-    {
+    public static String calculateRFC2104HMAC(String data, String key) {
         try {
             SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
-        } catch(NoSuchAlgorithmException | InvalidKeyException ex){
+        } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
         }
         return null;
