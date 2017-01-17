@@ -8,7 +8,7 @@ import com.internship.pbt.bizarechat.R;
 
 public class LoginActivity extends BasicActivity {
 
-    public static Intent getCollingIntent(Context context){
+    public static Intent getCollingIntent(Context context) {
         return new Intent(context, LoginActivity.class);
     }
 

@@ -9,20 +9,20 @@ public class Navigator {
 
     private static Navigator mInstance;
 
-    public static Navigator getInstance(){
+    private Navigator() {
+        super();
+    }
 
+    public static Navigator getInstance() {
         if (mInstance == null)
             mInstance = new Navigator();
 
         return mInstance;
     }
-    private Navigator() {
-        super();
-    }
 
     //TODO Navigate method`s
 
-    public void navigateToLoginActivity(Context context){
+    public void navigateToLoginActivity(Context context) {
         Intent intentToLaunch = LoginActivity.getCollingIntent(context);
         context.startActivity(intentToLaunch);
     }
