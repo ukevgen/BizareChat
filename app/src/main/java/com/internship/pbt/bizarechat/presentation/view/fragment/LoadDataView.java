@@ -14,5 +14,4 @@ public interface LoadDataView {
     
     void showError(String message);
     
-    Context context();
 }
