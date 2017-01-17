@@ -1,9 +1,9 @@
 package com.internship.pbt.bizarechat.presentation.navigation;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.internship.pbt.bizarechat.presentation.view.activity.LoginActivity;
+import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 
 public class Navigator {
 
@@ -23,7 +23,10 @@ public class Navigator {
     //TODO Navigate method`s
 
     public void navigateToLoginActivity(Context context) {
-        Intent intentToLaunch = LoginActivity.getCollingIntent(context);
-        context.startActivity(intentToLaunch);
+        context.startActivity(LoginActivity.getCollingIntent(context));
+    }
+
+    public void navigateToMainActivity(Context context){
+        context.startActivity(MainActivity.getCallingIntent(context));
     }
 }
