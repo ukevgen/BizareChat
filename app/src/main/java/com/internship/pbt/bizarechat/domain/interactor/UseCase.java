@@ -6,8 +6,8 @@ import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.subscriptions.Subscriptions;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.Subscriptions;
 
 public abstract class UseCase {
 
@@ -20,6 +20,7 @@ public abstract class UseCase {
         this.mThreadExecutor = threadExecutor;
         this.mPostExecutorThread = postExecutionThread;
     }
+
     protected abstract Observable buildUseCaseObservable();
 
     @SuppressWarnings("unchecked")
@@ -30,6 +31,10 @@ public abstract class UseCase {
                 .subscribe(useCaseSubscriber);
     }
 
+    public void unsubscribe() {
+        if (!mSubscription.isUnsubscribed())
+            mSubscription.unsubscribe();
+    }
 
 
 }
