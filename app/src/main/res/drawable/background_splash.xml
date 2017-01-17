@@ -3,11 +3,15 @@
     <item
         android:drawable="@color/steelBlue"/>
 
-
-
-    <item>
+    <item android:bottom="30dp">
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/logo"/>
     </item>
+    <item android:top="100dp">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo_name"/>
+    </item>
+
 </layer-list>
