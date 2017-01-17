@@ -29,7 +29,7 @@ public class JobExecutor implements ThreadExecutor {
 
     private JobExecutor() {
         mThreadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors(),
+                Runtime.getRuntime().availableProcessors() * 2,
                 40,
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<Runnable>(),
