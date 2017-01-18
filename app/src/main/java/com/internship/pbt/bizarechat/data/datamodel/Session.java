@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.data.datamodel.response;
+package com.internship.pbt.bizarechat.data.datamodel;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

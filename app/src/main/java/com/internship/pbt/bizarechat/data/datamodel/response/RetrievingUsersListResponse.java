@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.data.datamodel.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.internship.pbt.bizarechat.data.datamodel.UserItemModel;
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class RetrievingUsersListResponse {
 
     @SerializedName("items")
     @Expose
-    private List<UserItemModel> items = null;
+    private List<UserModel> items = null;
 
 
     public Integer getCurrentPage() {
@@ -49,11 +49,11 @@ public class RetrievingUsersListResponse {
         this.totalEntries = totalEntries;
     }
 
-    public List<UserItemModel> getItems() {
+    public List<UserModel> getItems() {
         return items;
     }
 
-    public void setItems(List<UserItemModel> items) {
+    public void setItems(List<UserModel> items) {
         this.items = items;
     }
 }
