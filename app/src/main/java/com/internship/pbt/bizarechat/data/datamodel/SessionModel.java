@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.data.datamodel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Session {
+public class SessionModel {
 
     @SerializedName("application_id")
     @Expose
