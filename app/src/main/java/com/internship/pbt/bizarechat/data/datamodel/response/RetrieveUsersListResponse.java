@@ -6,7 +6,7 @@ import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 
 import java.util.List;
 
-public class RetrievingUsersListResponse {
+public class RetrieveUsersListResponse {
 
     @SerializedName("current_page")
     @Expose

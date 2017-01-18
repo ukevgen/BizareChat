@@ -6,7 +6,7 @@ import com.internship.pbt.bizarechat.data.datamodel.DialogInfModel;
 
 import java.util.List;
 
-public class RetrievingDialogsListResponse {
+public class RetrieveDialogsListResponse {
 
     @SerializedName("limit")
     @Expose
