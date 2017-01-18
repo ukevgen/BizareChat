@@ -96,6 +96,8 @@ dependencies {
         transitive = true;
     }
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
