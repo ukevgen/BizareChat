@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.util;
+package com.internship.pbt.bizarechat.data.util;
 
 import android.util.Log;
 
