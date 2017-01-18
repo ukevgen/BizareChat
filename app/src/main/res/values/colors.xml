@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="steelBlue">#327780</color>
+    <color name="background">#2BBC9B</color>
+    <color name="cardSignBackground">#327780</color>
+    <color name="button_sign_in">#004951</color>
+    <color name="button_sign_up">#165258</color>
 </resources>
