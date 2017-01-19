@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.view.fragment.MainFragment;
 
-public class MainActivity extends BasicActivity {
+public class MainActivity extends BaseActivity {
 
     public static Intent getCallingIntent(Context context){
         return new Intent(context, MainActivity.class);

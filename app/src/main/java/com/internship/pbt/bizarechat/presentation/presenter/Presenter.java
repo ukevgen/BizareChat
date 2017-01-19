@@ -2,16 +2,16 @@ package com.internship.pbt.bizarechat.presentation.presenter;
 
 public interface Presenter {
 
-    public void create();
+    void create();
 
-    public void start();
+    void start();
 
-    public void resume();
+    void resume();
 
-    public void pause();
+    void pause();
 
-    public void stop();
+    void stop();
 
-    public void destroy();
+    void destroy();
 
 }

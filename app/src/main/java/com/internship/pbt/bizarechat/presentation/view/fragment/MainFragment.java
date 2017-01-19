@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.internship.pbt.bizarechat.R;
 
-public class MainFragment extends BasicFragment { //TODO Change to better name
+public class MainFragment extends BaseFragment { //TODO Change to better name
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

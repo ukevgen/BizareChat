@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoginFragment;
 
-public class LoginActivity extends BasicActivity {
+public class LoginActivity extends BaseActivity {
 
     public static Intent getCollingIntent(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -18,6 +18,8 @@ public class LoginActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
         addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
     }
 }

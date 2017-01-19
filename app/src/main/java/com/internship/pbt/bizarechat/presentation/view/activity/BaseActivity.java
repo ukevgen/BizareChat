@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 
-public class BasicActivity extends Activity {
+public class BaseActivity extends Activity {
 
     protected Navigator mNavigator;
 
