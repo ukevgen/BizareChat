@@ -8,4 +8,14 @@
     <string name="forgot_password">Forgot password</string>
     <string name="message_session_expired">Your session has expired</string>
     <string name="message_no_connection">Check your internet connection</string>
+    <string name="email_com">email@com</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="phone">Phone</string>
+    <string name="website">Website</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid Password</string>
+    <string name="password_don_t_match">Password don\'t match</string>
+    <string name="invalid_phone">Invalid Phone</string>
+    <string name="link_facebook">Link Facebook</string>
 </resources>
