@@ -78,14 +78,17 @@ android {
         def FALSE = "false"
 
         def CRASH_REPORTS = "CRASH_REPORTS"
+        def SPLASH_DELAY = "SPLASH_DELAY"
 
         debug{
             testCoverageEnabled = true
             buildConfigField BOOLEAN, CRASH_REPORTS, FALSE
+            buildConfigField INT, SPLASH_DELAY, '200'
         }
 
         debugDev{
             buildConfigField BOOLEAN, CRASH_REPORTS, TRUE
+            buildConfigField INT, SPLASH_DELAY, '3000'
         }
 
         release {

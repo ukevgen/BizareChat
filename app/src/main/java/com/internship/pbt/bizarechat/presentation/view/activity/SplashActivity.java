@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.presentation.view.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.presentation.view.BasicActivity;
 
 
@@ -11,7 +12,7 @@ public class SplashActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(BuildConfig.SPLASH_DELAY);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

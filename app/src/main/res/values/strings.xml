@@ -3,7 +3,7 @@
     <string name="sign_in">SIGN IN</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
-    <string name="keep_me_sign_in">Keep me sign in</string>
+    <string name="keep_me_sign_in">Keep me signed in</string>
     <string name="sign_up">SIGN UP</string>
     <string name="forgot_password">Forgot password</string>
     <string name="message_session_expired">Your session has expired</string>

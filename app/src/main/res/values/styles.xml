@@ -15,32 +15,32 @@
     <style name="SignText">
         <item name="android:fontFamily">Roboto-Regular</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="EmailPasswordText">
         <item name="android:fontFamily">Roboto-Regular</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="SignUpButton">
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:background">#165258</item>
-
+        <item name="android:background">#27686f</item>
     </style>
 
     <style name="SignInButton">
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:background">#165258</item>
+        <item name="android:background">#004951</item>
 
     </style>
 
     <style name="ForgotPassword">
         <item name="android:fontFamily">Roboto-Regular</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:background">#327780</item>
+        <item name="android:alpha">0.69</item>
     </style>
 
 
