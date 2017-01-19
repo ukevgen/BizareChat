@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.fragment;
+package com.internship.pbt.bizarechat.presentation.view.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
 
 public class MainFragment extends BasicFragment { //TODO Change to better name
 

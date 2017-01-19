@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.fragment;
+package com.internship.pbt.bizarechat.presentation.view;
 
 import android.app.Fragment;
 

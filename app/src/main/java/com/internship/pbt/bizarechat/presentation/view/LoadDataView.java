@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.fragment;
+package com.internship.pbt.bizarechat.presentation.view;
 
 public interface LoadDataView {
 
@@ -11,5 +11,4 @@ public interface LoadDataView {
     void hideRetry();
 
     void showError(String message);
-
 }
