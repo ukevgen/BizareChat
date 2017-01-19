@@ -3,8 +3,11 @@ package com.internship.pbt.bizarechat.presentation.presenter.login;
 import android.text.Editable;
 import android.text.TextUtils;
 
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.view.login.LoginView;
 
@@ -15,7 +18,9 @@ public class LoginPresenterImpl implements LoginPresenter {
     private GetTokenUseCase getTokenUseCase;
 
     public LoginPresenterImpl(){
-//        getTokenUseCase = new GetTokenUseCase(new SessionDataRepository())
+        getTokenUseCase = new GetTokenUseCase(new SessionDataRepository(),
+                JobExecutor.getInstance(),
+                new UiThread());
     }
 
     @Override public void requestSession() {

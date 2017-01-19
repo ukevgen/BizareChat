@@ -4,5 +4,5 @@ import rx.Scheduler;
 
 public interface PostExecutorThread {
 
-    Scheduler getSheduler();
+    Scheduler getScheduler();
 }

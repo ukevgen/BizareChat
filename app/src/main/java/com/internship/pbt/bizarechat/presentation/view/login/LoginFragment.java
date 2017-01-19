@@ -74,10 +74,16 @@ public class LoginFragment extends BasicFragment implements LoginView{
             Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override public void onResume() {
+    @Override public void onStart() {
         super.onResume();
         loginPresenter = new LoginPresenterImpl();
         loginPresenter.setLoginView(this);
+    }
+
+    @Override public void onStop() {
+        super.onStop();
+        loginPresenter.destroy();
+        loginPresenter = null;
     }
 
     @Override public void navigateToRegistration() {
