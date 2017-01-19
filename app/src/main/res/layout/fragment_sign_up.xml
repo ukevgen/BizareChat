@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/background">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/SignText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/sign_up" />
+        </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_sign_up"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar_sign_up"
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="@dimen/cardCornerRadius">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardSignBackground">
+
+            <ImageView
+                android:id="@+id/user_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/userpic" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_email"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/user_pic"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_email"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/email_address"
+                    android:inputType="textEmailAddress"
+                    android:text="@string/email_com" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/invalid_email"
+                style="@style/InvalidInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/text_input_password"
+                android:layout_below="@+id/text_input_email"
+                android:text="@string/invalid_email"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_password"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/invalid_email"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_password"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/password" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/invalid_password"
+                style="@style/InvalidInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/text_input_password"
+                android:layout_below="@+id/text_input_password"
+                android:text="@string/invalid_password"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_password_confirm"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/invalid_password"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_confirm_password"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/confirm_password" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/invalid_confirm_password"
+                style="@style/InvalidInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/text_input_password_confirm"
+                android:layout_below="@+id/text_input_password_confirm"
+                android:text="@string/password_don_t_match"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_full_name"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/invalid_confirm_password"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_full_name"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/full_name" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_phone"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/text_input_full_name"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_phone"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/phone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/invalid_phone"
+                style="@style/InvalidInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/text_input_password_confirm"
+                android:layout_below="@+id/text_input_phone"
+                android:text="@string/invalid_phone"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_website"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/invalid_phone"
+                android:layout_centerHorizontal="true"
+                android:textColorHint="#8fb4b9">
+
+                <EditText
+                    android:id="@+id/register_website"
+                    style="@style/RegisterInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/website" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <Button
+
+                android:id="@+id/login_facebook_button"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/text_input_website"
+                android:layout_centerHorizontal="true"
+                android:background="@color/facebook_btn"
+                android:drawableLeft="@drawable/fb_icon"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/link_facebook"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/register_sign_up"
+                style="@style/SignUpButton"
+                android:layout_width="216dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/login_facebook_button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                android:text="@string/sign_up" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="5dp"
+                android:layout_below="@id/register_sign_up"></LinearLayout>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
