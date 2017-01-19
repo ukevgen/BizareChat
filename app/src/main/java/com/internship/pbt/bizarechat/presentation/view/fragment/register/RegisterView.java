@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
-import com.internship.pbt.bizarechat.presentation.view.LoadDataView;
+import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
 public interface RegisterView extends LoadDataView {
 

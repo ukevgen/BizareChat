@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view;
+package com.internship.pbt.bizarechat.presentation.view.fragment;
 
 public interface LoadDataView {
 
