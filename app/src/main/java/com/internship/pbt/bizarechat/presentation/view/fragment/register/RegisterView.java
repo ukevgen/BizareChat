@@ -9,4 +9,10 @@ public interface RegisterView extends LoadDataView {
     void loginFacebook();
 
     void loginTwitter();
+
+    String getEmailForValidation();
+
+    String getPasswordForValidation();
+
+    String getPhoneForValidation();
 }

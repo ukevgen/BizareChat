@@ -12,4 +12,8 @@ public class Validator {
     public boolean isValidPhoneNumber(String phoneNumber){
         return Patterns.PHONE.matcher(phoneNumber.trim()).matches();
     }
+
+    public boolean isValidPassword(String password){
+        return false; //TODO password validator
+    }
 }
