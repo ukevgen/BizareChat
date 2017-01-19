@@ -7,7 +7,6 @@ import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
-import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,7 +17,6 @@ import static com.internship.pbt.bizarechat.data.net.ApiConstants.AUTH_KEY;
 
 public class HmacSha1Signature {
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-    private static Random randomizer = new Random(27);
 
     private HmacSha1Signature(){}
 

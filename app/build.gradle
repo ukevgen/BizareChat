@@ -20,13 +20,6 @@ repositories {
     }
     mavenCentral()
 }
-configurations {
-    all*.exclude group: 'xpp3', module: 'xpp3'
-}
-
-configurations {
-    all*.exclude group: 'xpp3', module: 'xpp3'
-}
 
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'
