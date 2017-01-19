@@ -9,7 +9,7 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
-public abstract class UseCase {
+public abstract class UseCase<T> {
 
     private ThreadExecutor mThreadExecutor;
     private PostExecutorThread mPostExecutorThread;
@@ -21,7 +21,7 @@ public abstract class UseCase {
         this.mPostExecutorThread = postExecutionThread;
     }
 
-    protected abstract Observable buildUseCaseObservable();
+    protected abstract Observable<T> buildUseCaseObservable();
 
     @SuppressWarnings("unchecked")
     public void execute(Subscriber useCaseSubscriber) {

@@ -6,4 +6,6 @@
     <string name="keep_me_sign_in">Keep me sign in</string>
     <string name="sign_up">SIGN UP</string>
     <string name="forgot_password">Forgot password</string>
+    <string name="message_session_expired">Your session has expired</string>
+    <string name="message_no_connection">Check your internet connection</string>
 </resources>
