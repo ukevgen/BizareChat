@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.data.net;
 
 
 /**
-    This class is only place to store all API constants
+    This class is the only place to store all API constants
  */
 public class ApiConstants {
     public static final String APP_ID = "52253";

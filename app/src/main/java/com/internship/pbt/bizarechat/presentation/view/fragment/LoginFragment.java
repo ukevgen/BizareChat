@@ -1,5 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment;
 
+import com.internship.pbt.bizarechat.presentation.view.LoadDataView;
+
 public class LoginFragment extends BaseFragment implements LoadDataView {
 
     @Override public void showLoading() {

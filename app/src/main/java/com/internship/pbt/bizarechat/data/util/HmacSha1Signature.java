@@ -6,7 +6,6 @@ import com.internship.pbt.bizarechat.data.net.ApiConstants;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.Formatter;
 import java.util.Random;
 
@@ -33,9 +32,9 @@ public class HmacSha1Signature {
         return formatter.toString();
     }
 
-    public static String calculateSignature()
+    public static String calculateSignature(int nonce, long timestamp)
     {
-        String data = composeParametersToString();
+        String data = composeParametersToString(nonce, timestamp);
 
         try {
             SecretKeySpec signingKey = new SecretKeySpec(ApiConstants.AUTH_SECRET.getBytes(),
@@ -52,10 +51,7 @@ public class HmacSha1Signature {
     /**
      * Prepare string with parameters for signature calculation
      */
-    private static String composeParametersToString(){
-        int nonce = randomizer.nextInt();
-        long timestamp = new Date().getTime() / 1000;
-
+    private static String composeParametersToString(int nonce, long timestamp){
         StringBuilder sb = new StringBuilder("");
         sb.append("application_id=").append(APP_ID);
         sb.append("&auth_key=").append(AUTH_KEY);
