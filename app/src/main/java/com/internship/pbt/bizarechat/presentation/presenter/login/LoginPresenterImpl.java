@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.presentation.presenter.login;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
-import com.internship.pbt.bizarechat.presentation.view.login.LoginView;
+import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
 
 import rx.Subscriber;
 

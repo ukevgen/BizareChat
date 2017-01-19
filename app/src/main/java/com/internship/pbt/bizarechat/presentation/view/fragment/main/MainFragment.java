@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.main;
+package com.internship.pbt.bizarechat.presentation.view.fragment.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

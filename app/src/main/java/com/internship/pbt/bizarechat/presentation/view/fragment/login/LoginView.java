@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.login;
+package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
 
 import android.content.Context;

@@ -1,10 +1,10 @@
-package com.internship.pbt.bizarechat.presentation.view.login;
+package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
 
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
-import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
-public class LoginFragment extends BasicFragment implements LoginView{
+public class LoginFragment extends BaseFragment implements LoginView{
 
     @Override public void showError(String message) {
 

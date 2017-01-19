@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.view.BasicActivity;
-import com.internship.pbt.bizarechat.presentation.view.main.MainFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.main.MainFragment;
 
 public class MainActivity extends BaseActivity {
 

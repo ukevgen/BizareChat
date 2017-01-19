@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.view.BasicActivity;
-import com.internship.pbt.bizarechat.presentation.view.login.LoginFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 
 public class LoginActivity extends BaseActivity {
 
