@@ -13,7 +13,7 @@ public class SignInResponse {
 
     @SerializedName("blob_id")
     @Expose
-    private Object blobId;
+    private Integer blobId;
 
     @SerializedName("created_at")
     @Expose
@@ -25,7 +25,7 @@ public class SignInResponse {
 
     @SerializedName("email")
     @Expose
-    private Object email;
+    private String email;
 
     @SerializedName("external_user_id")
     @Expose
@@ -33,11 +33,11 @@ public class SignInResponse {
 
     @SerializedName("facebook_id")
     @Expose
-    private Object facebookId;
+    private Integer facebookId;
 
     @SerializedName("full_name")
     @Expose
-    private Object fullName;
+    private String fullName;
 
     @SerializedName("id")
     @Expose
@@ -53,15 +53,15 @@ public class SignInResponse {
 
     @SerializedName("phone")
     @Expose
-    private Object phone;
+    private String phone;
 
     @SerializedName("twitter_id")
     @Expose
-    private Object twitterId;
+    private String twitterId;
 
     @SerializedName("twitter_digits_id")
     @Expose
-    private Object twitterDigitsId;
+    private Integer twitterDigitsId;
 
     @SerializedName("updated_at")
     @Expose
@@ -69,18 +69,18 @@ public class SignInResponse {
 
     @SerializedName("website")
     @Expose
-    private Object website;
+    private String website;
 
     @SerializedName("user_tags")
     @Expose
     private String userTags;
 
 
-    public Object getBlobId() {
+    public Integer getBlobId() {
         return blobId;
     }
 
-    public void setBlobId(Object blobId) {
+    public void setBlobId(Integer blobId) {
         this.blobId = blobId;
     }
 
@@ -100,11 +100,11 @@ public class SignInResponse {
         this.customParameters = customParameters;
     }
 
-    public Object getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Object email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -116,19 +116,19 @@ public class SignInResponse {
         this.externalUserId = externalUserId;
     }
 
-    public Object getFacebookId() {
+    public Integer getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(Object facebookId) {
+    public void setFacebookId(Integer facebookId) {
         this.facebookId = facebookId;
     }
 
-    public Object getFullName() {
+    public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(Object fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -156,27 +156,27 @@ public class SignInResponse {
         this.login = login;
     }
 
-    public Object getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Object phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Object getTwitterId() {
+    public String getTwitterId() {
         return twitterId;
     }
 
-    public void setTwitterId(Object twitterId) {
+    public void setTwitterId(String twitterId) {
         this.twitterId = twitterId;
     }
 
-    public Object getTwitterDigitsId() {
+    public Integer getTwitterDigitsId() {
         return twitterDigitsId;
     }
 
-    public void setTwitterDigitsId(Object twitterDigitsId) {
+    public void setTwitterDigitsId(Integer twitterDigitsId) {
         this.twitterDigitsId = twitterDigitsId;
     }
 
@@ -188,11 +188,11 @@ public class SignInResponse {
         this.updatedAt = updatedAt;
     }
 
-    public Object getWebsite() {
+    public String getWebsite() {
         return website;
     }
 
-    public void setWebsite(Object website) {
+    public void setWebsite(String website) {
         this.website = website;
     }
 
