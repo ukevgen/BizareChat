@@ -13,13 +13,12 @@ public class CacheSharedPreferences {
     private static CacheSharedPreferences sInstance;
 
     private SharedPreferences mSharedPreferences;
-    private RxSharedPreferences mRxSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private CacheSharedPreferences(Context context){
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mEditor = mSharedPreferences.edit();
 
-        mRxSharedPreferences = RxSharedPreferences.create(mSharedPreferences);
+
     }
 
     public void putToken(String value){

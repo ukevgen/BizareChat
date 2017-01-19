@@ -5,6 +5,7 @@ import android.util.Patterns;
 
 public class Validator {
 
+    private final String PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}).{1,}";
     public boolean isValidEmail(String email){
         return Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches();
     }
