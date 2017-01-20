@@ -106,7 +106,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void showErrorInvalidEmail() {
-        mEmailLayout.setErrorEnabled(false);
         mEmailLayout.setError(getString(R.string.invalid_email));
     }
 
@@ -116,6 +115,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override public void showErrorInvalidPhone() {
         mPhoneLayout.setError(getString(R.string.invalid_phone));
+    }
+
+    @Override public void showErrorPasswordLength() {
+        mPasswordLayout.setError(getString(R.string.error_password_length));
     }
 
     @Override public void loginFacebook() {

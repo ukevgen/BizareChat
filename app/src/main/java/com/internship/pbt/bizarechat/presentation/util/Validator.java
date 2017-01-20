@@ -23,4 +23,8 @@ public class Validator {
         Matcher matcher = patterns.matcher(password);
         return matcher.matches();
     }
+
+    public boolean isPasswordLengthMatches(String password){
+        return password.length() >=6 && password.length() <= 12;
+    }
 }
