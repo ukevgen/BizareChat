@@ -4,7 +4,7 @@ package com.internship.pbt.bizarechat;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
-import com.internship.pbt.bizarechat.presentation.view.login.LoginFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 
 import org.junit.Before;
 import org.junit.Test;

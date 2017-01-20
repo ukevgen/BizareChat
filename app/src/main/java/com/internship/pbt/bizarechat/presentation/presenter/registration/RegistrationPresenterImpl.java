@@ -45,6 +45,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPhone();
     }
 
+    @Override public void showErrorPasswordLength() {
+        mRegisterView.showErrorPasswordLength();
+    }
+
     @Override public void hideErrorsInvalid() {
         mRegisterView.hideErrorInvalidEmail();
         mRegisterView.hideErrorInvalidPassword();
@@ -95,7 +99,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final class ValidInformation extends Subscriber<ValidationInformation> {
 
-        private Validator mValidator = new Validator();;
+        private Validator mValidator = new Validator();
 
         @Override public void onCompleted() {
             Log.d(TAG, this.getClass().getSimpleName() +
@@ -114,10 +118,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 showErrorInvalidPassword();
             if (!mValidator.isValidPhoneNumber(validationInformation.getPhone()))
                 showErrorInvalidPhoneNumber();
+            if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword()))
+                showErrorPasswordLength();
+
 
             if (mValidator.isValidEmail(validationInformation.getEmail()) &
                     mValidator.isValidPassword(validationInformation.getPassword()) &
-                    mValidator.isValidPhoneNumber(validationInformation.getPhone()))
+                    mValidator.isValidPhoneNumber(validationInformation.getPhone()) &
+                    mValidator.isPasswordLengthMatches(validationInformation.getPassword()))
                 saveUserAccInformation(validationInformation);
         }
     }

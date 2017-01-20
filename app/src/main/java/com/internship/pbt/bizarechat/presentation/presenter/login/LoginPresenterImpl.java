@@ -74,6 +74,5 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override public void destroy() {
         loginView = null;
-        getTokenUseCase = null;
     }
 }

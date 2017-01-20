@@ -7,9 +7,12 @@
     android:layout_width="@dimen/login_card_width"
     android:layout_height="@dimen/login_card_height"
     app:cardElevation="@dimen/login_card_elevation"
-    app:cardCornerRadius="@dimen/cardCornerRadius">
+    app:cardCornerRadius="@dimen/cardCornerRadius"
+    android:clipToPadding="false"
+    android:layout_margin="@dimen/card_login_margin">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/cardSignBackground">
@@ -24,13 +27,24 @@
             android:layout_marginTop="@dimen/login_email_margin_top"
             android:hint="@string/email_address"/>
 
+        <EditText
+            android:id="@+id/password"
+            style="@style/EmailPasswordText"
+            android:layout_width="@dimen/login_element_default_width"
+            android:layout_height="@dimen/login_element_default_height"
+            android:layout_marginTop="@dimen/login_password_margin_top"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:layout_below="@id/email"
+            android:layout_alignStart="@id/email"/>
+
         <CheckBox
             android:id="@+id/keep_me_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:layout_below="@+id/password"
-            android:layout_alignStart="@+id/password"
+            android:layout_below="@id/password"
+            android:layout_alignStart="@id/password"
             android:text="@string/keep_me_sign_in"
             android:textColor="@color/white"/>
 
@@ -64,16 +78,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/login_forgot_margin_top"
             android:text="@string/forgot_password"/>
-
-        <EditText
-            android:id="@+id/password"
-            style="@style/EmailPasswordText"
-            android:layout_width="@dimen/login_element_default_width"
-            android:layout_height="@dimen/login_element_default_height"
-            android:layout_marginTop="@dimen/login_password_margin_top"
-            android:hint="@string/password"
-            android:layout_below="@+id/email"
-            android:layout_alignStart="@+id/email"/>
 
     </RelativeLayout>
 
