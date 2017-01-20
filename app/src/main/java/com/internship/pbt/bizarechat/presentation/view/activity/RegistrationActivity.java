@@ -12,7 +12,10 @@ public class RegistrationActivity extends BaseActivity implements RegistrationFr
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_base_layout);
+
+
         addFragment(R.id.activityLayoutFragmentContainer, new RegistrationFragment());
     }
 

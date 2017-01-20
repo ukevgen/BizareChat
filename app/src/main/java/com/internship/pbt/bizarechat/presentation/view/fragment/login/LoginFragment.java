@@ -19,19 +19,10 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
-<<<<<<< HEAD
-<<<<<<< HEAD:app/src/main/java/com/internship/pbt/bizarechat/presentation/view/fragment/login/LoginFragment.java
-import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
-public class LoginFragment extends BaseFragment implements LoginView{
-=======
-import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
-import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
-=======
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
->>>>>>> romanK
 
 public class LoginFragment extends BaseFragment implements LoginView {
     private LoginPresenter loginPresenter;
@@ -59,10 +50,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         return view;
     }
-<<<<<<< HEAD
->>>>>>> d6af311b4f57f2fee08f9e88754af6457cf4c904:app/src/main/java/com/internship/pbt/bizarechat/presentation/view/login/LoginFragment.java
-=======
->>>>>>> romanK
 
     private void addTextListener(){
         TextWatcher textWatcher = new TextWatcher() {
