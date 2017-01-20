@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.presenter.register;
+package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.util.Log;
 
@@ -12,9 +12,9 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
-public class RegisterPresenterImpl implements RegistrationPresenter {
+public class RegistrationPresenterImpl implements RegistrationPresenter {
 
-    private final String TAG = "RegisterPresenterImpl";
+    private final String TAG = "RegistrPresenterImpl";
 
     private Validator mValidator;
     private RegisterView mRegisterView;

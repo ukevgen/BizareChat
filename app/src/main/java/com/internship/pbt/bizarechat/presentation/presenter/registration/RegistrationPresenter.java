@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.presenter.register;
+package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;

@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
-import com.internship.pbt.bizarechat.presentation.presenter.register.RegistrationPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import rx.Observable;
