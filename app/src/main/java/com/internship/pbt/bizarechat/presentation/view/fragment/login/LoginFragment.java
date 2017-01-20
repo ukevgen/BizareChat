@@ -93,6 +93,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginPresenter.destroy();
     }
 
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        TextView txtView = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        txtView.setText(R.string.sign_in);
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GetTokenUseCase getToken= new GetTokenUseCase(
@@ -110,6 +116,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .replace(R.id.activityLayoutFragmentContainer, new RegistrationFragment())
                 .addToBackStack(null)
                 .commit();
+
+
+
     }
 
     @Override public void showForgotPassword() {

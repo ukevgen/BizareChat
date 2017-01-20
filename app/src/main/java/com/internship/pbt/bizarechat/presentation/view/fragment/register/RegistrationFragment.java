@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
@@ -65,6 +66,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mButton.setOnClickListener(this);
 
         return v;
+    }
+
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        TextView txtView = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        txtView.setText(R.string.sign_up);
     }
 
     @Override public void onDestroy() {
