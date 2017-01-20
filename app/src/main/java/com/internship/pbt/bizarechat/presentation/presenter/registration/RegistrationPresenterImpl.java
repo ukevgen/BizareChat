@@ -6,7 +6,7 @@ import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
-import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegisterView;
+import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -18,15 +18,15 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private Validator mValidator;
 
-    private RegisterView mRegisterView;
+    private RegistrationView mRegisterView;
 
-    private ThreadExecutor mThreadExecutor;
+    private ThreadExecutor mThreadExecutor; //TODO Instance of thread managers
     private PostExecutorThread mPostExecutorThread;
 
     private Subscriber mSubscriber;
 
 
-    public RegistrationPresenterImpl(RegisterView registerView) {
+    public RegistrationPresenterImpl(RegistrationView registerView) {
         mSubscriber = new ValidInformation();
         mRegisterView = registerView;
     }
@@ -43,6 +43,12 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPhone();
     }
 
+    @Override public void hideErrorsInvalid() {
+        mRegisterView.hideErrorInvalidEmail();
+        mRegisterView.hideErrorInvalidPassword();
+        mRegisterView.hideErrorInvalidPhone();
+    }
+
     @Override public void showViewLoading() {
         mRegisterView.showLoading();
     }
@@ -55,9 +61,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         validationInformationObservable
                 .subscribeOn(Schedulers.from(mThreadExecutor))
                 .observeOn(mPostExecutorThread.getSheduler())
-                .doOnRequest(a -> this.showViewLoading())
-                .doOnUnsubscribe(() -> this.hideViewLoading())
+                .doOnRequest(a -> {
+                    this.hideErrorsInvalid();
+                    this.showViewLoading();
+                })
+                .doOnUnsubscribe(this::hideViewLoading)
                 .subscribe(new ValidInformation());
+    }
+
+    @Override public void onRegistrationSuccess() {
+        mRegisterView.onRegistrationSuccess();
     }
 
     @Override public void saveUserAccInformation(ValidationInformation validationInformation) {

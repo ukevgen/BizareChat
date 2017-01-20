@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 public class MainFragment extends BaseFragment { //TODO Change to better name
 

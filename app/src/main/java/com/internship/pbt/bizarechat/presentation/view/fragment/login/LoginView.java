@@ -18,5 +18,7 @@ public interface LoginView extends LoadDataView{
 
     void setPresenter(LoginPresenter presenter);
 
+    void onLoginSuccess();
+
     Context getContext();
 }

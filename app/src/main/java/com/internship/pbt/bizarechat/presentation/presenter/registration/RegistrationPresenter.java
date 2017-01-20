@@ -13,8 +13,12 @@ public interface RegistrationPresenter extends Presenter {
 
     void showErrorInvalidPhoneNumber();
 
+    void hideErrorsInvalid();
+
     void validateInformation(Observable<ValidationInformation> validationInformationObservable);
 
     void saveUserAccInformation(ValidationInformation validationInformationObservable);
+
+    void onRegistrationSuccess();
 
 }

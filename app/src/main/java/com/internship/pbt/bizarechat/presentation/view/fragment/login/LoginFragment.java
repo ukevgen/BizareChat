@@ -1,10 +1,28 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
 
+import android.content.Context;
+
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 public class LoginFragment extends BaseFragment implements LoginView{
+
+
+
+    public interface OnLoginSuccess {
+        void onLoginSuccess();
+    }
+
+    private OnLoginSuccess mOnLoginSuccess;
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof OnLoginSuccess)
+            mOnLoginSuccess = (OnLoginSuccess) context;
+
+    }
 
     @Override public void showError(String message) {
 
@@ -44,5 +62,9 @@ public class LoginFragment extends BaseFragment implements LoginView{
 
     @Override public void hideRetry() {
 
+    }
+
+    @Override public void onLoginSuccess() {
+        mOnLoginSuccess.onLoginSuccess();
     }
 }

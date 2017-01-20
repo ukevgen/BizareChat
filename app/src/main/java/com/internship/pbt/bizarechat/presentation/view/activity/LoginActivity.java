@@ -5,10 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.presentation.view.BasicActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements LoginFragment.OnLoginSuccess{
 
     public static Intent getCollingIntent(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -22,5 +21,9 @@ public class LoginActivity extends BaseActivity {
 
 
         addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
+    }
+
+    @Override public void onLoginSuccess() {
+        mNavigator.navigateToMainActivity(this);
     }
 }
