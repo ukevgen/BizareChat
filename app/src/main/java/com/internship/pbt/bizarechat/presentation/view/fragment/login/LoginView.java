@@ -12,6 +12,8 @@ public interface LoginView extends LoadDataView{
 
     void setPresenter(LoginPresenter presenter);
 
+    void onLoginSuccess();
+
     Context getContext();
 
     void setButtonSignInEnabled(boolean enabled);

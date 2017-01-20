@@ -31,4 +31,10 @@ public class ValidationInformation {
     public void setPhone(String phone) {
         mPhone = phone;
     }
+
+    @Override public String toString() {
+        return  mEmail + " /n" +
+                mPassword + " /n" +
+                mPhone + " /n";
+    }
 }

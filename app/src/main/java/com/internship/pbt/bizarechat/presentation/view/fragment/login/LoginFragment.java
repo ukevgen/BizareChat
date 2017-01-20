@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -20,6 +19,7 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
+<<<<<<< HEAD
 <<<<<<< HEAD:app/src/main/java/com/internship/pbt/bizarechat/presentation/view/fragment/login/LoginFragment.java
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
@@ -27,8 +27,13 @@ public class LoginFragment extends BaseFragment implements LoginView{
 =======
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
+=======
+import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
-public class LoginFragment extends BasicFragment implements LoginView{
+>>>>>>> romanK
+
+public class LoginFragment extends BaseFragment implements LoginView {
     private LoginPresenter loginPresenter;
 
     private Button signIn;
@@ -47,14 +52,17 @@ public class LoginFragment extends BasicFragment implements LoginView{
         emailEditText = (EditText)view.findViewById(R.id.email);
         passwordEditText = (EditText)view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView)view.findViewById(R.id.forgot_password);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+       // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
 
         addTextListener();
         setButtonListeners();
 
         return view;
     }
+<<<<<<< HEAD
 >>>>>>> d6af311b4f57f2fee08f9e88754af6457cf4c904:app/src/main/java/com/internship/pbt/bizarechat/presentation/view/login/LoginFragment.java
+=======
+>>>>>>> romanK
 
     private void addTextListener(){
         TextWatcher textWatcher = new TextWatcher() {
@@ -135,8 +143,14 @@ public class LoginFragment extends BasicFragment implements LoginView{
 
     }
 
+    @Override public void onLoginSuccess() {
+
+    }
+
     @Override public void hideRetry() {
 
     }
+
+
 
 }

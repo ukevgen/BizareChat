@@ -2,11 +2,13 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.util.Log;
 
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
-import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegisterView;
+import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -16,9 +18,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final String TAG = "RegistrPresenterImpl";
 
-    private Validator mValidator;
-
-    private RegisterView mRegisterView;
+    private RegistrationView mRegisterView;
 
     private ThreadExecutor mThreadExecutor;
     private PostExecutorThread mPostExecutorThread;
@@ -26,9 +26,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private Subscriber mSubscriber;
 
 
-    public RegistrationPresenterImpl(RegisterView registerView) {
+    public RegistrationPresenterImpl(RegistrationView registerView) {
         mSubscriber = new ValidInformation();
         mRegisterView = registerView;
+        mThreadExecutor = JobExecutor.getInstance();
+        mPostExecutorThread = new UiThread();
     }
 
     @Override public void showErrorInvalidPassword() {
@@ -43,6 +45,12 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPhone();
     }
 
+    @Override public void hideErrorsInvalid() {
+        mRegisterView.hideErrorInvalidEmail();
+        mRegisterView.hideErrorInvalidPassword();
+        mRegisterView.hideErrorInvalidPhone();
+    }
+
     @Override public void showViewLoading() {
         mRegisterView.showLoading();
     }
@@ -54,10 +62,17 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override public void validateInformation(Observable<ValidationInformation> validationInformationObservable) {
         validationInformationObservable
                 .subscribeOn(Schedulers.from(mThreadExecutor))
-                .observeOn(mPostExecutorThread.getSheduler())
-                .doOnRequest(a -> this.showViewLoading())
-                .doOnUnsubscribe(() -> this.hideViewLoading())
+                .observeOn(mPostExecutorThread.getScheduler())
+                .doOnRequest(a -> {
+                    this.hideErrorsInvalid();
+                    this.showViewLoading();
+                })
+                .doOnUnsubscribe(this::hideViewLoading)
                 .subscribe(new ValidInformation());
+    }
+
+    @Override public void onRegistrationSuccess() {
+        mRegisterView.onRegistrationSuccess();
     }
 
     @Override public void saveUserAccInformation(ValidationInformation validationInformation) {
@@ -80,6 +95,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final class ValidInformation extends Subscriber<ValidationInformation> {
 
+        private Validator mValidator = new Validator();;
+
         @Override public void onCompleted() {
             Log.d(TAG, this.getClass().getSimpleName() +
                     " Validation of income information completed");
@@ -91,14 +108,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         }
 
         @Override public void onNext(ValidationInformation validationInformation) {
-            if (!mValidator.isValidEmail(validationInformation.getMail()))
+            if (!mValidator.isValidEmail(validationInformation.getEmail()))
                 showErrorInvalidEmail();
             if (!mValidator.isValidPassword(validationInformation.getPassword()))
                 showErrorInvalidPassword();
             if (!mValidator.isValidPhoneNumber(validationInformation.getPhone()))
                 showErrorInvalidPhoneNumber();
 
-            if (mValidator.isValidEmail(validationInformation.getMail()) &
+            if (mValidator.isValidEmail(validationInformation.getEmail()) &
                     mValidator.isValidPassword(validationInformation.getPassword()) &
                     mValidator.isValidPhoneNumber(validationInformation.getPhone()))
                 saveUserAccInformation(validationInformation);

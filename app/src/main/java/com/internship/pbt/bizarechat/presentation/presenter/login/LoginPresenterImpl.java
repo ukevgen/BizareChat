@@ -32,6 +32,14 @@ public class LoginPresenterImpl implements LoginPresenter {
         });
     }
 
+    @Override public void showViewLoading() {
+
+    }
+
+    @Override public void hideViewLoading() {
+
+    }
+
     @Override public void setLoginView(LoginView view) {
         loginView = view;
     }
@@ -63,13 +71,6 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     }
 
-    @Override public void showViewLoading() {
-
-    }
-
-    @Override public void hideViewLoading() {
-
-    }
 
     @Override public void destroy() {
         loginView = null;

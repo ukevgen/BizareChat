@@ -1,5 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -17,7 +18,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import rx.Observable;
 
-public class RegisterFragment extends BaseFragment implements RegisterView, View.OnClickListener {
+public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -31,6 +32,18 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
 
     private Button mButton;
 
+    public interface OnRegisterSuccess {
+        void onRegisterSuccess();
+    }
+
+    private OnRegisterSuccess mOnRegisterSuccess;
+
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof OnRegisterSuccess)
+            mOnRegisterSuccess = (OnRegisterSuccess) context;
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +64,7 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
         mButton = (Button) v.findViewById(R.id.register_sign_up);
         mButton.setOnClickListener(this);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return v;
     }
 
     @Override public void onDestroy() {
@@ -109,6 +122,9 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
 
     }
 
+    @Override public void onRegistrationSuccess() {
+        mOnRegisterSuccess.onRegisterSuccess();
+    }
 
     @Override public void onClick(View view) {
         switch (view.getId()) {

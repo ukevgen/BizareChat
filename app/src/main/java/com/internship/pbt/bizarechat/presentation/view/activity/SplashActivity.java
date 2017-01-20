@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.presentation.AuthStore;
 
-
 public class SplashActivity extends BaseActivity {
 
     private AuthStore mAuthStore;
@@ -20,11 +19,7 @@ public class SplashActivity extends BaseActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        if (mAuthStore.isAuthorized())
-            mNavigator.navigateToMainActivity(this);
-        else
-            mNavigator.navigateToLoginActivity(this);
+            mNavigator.navigateToRegistrationActivity(this);
 
         finish();
     }

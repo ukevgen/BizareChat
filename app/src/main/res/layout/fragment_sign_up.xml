@@ -87,6 +87,7 @@
                 android:layout_height="48dp"
                 android:layout_below="@+id/invalid_email"
                 android:layout_centerHorizontal="true"
+                app:errorEnabled="true"
                 android:textColorHint="#8fb4b9">
 
                 <EditText
@@ -155,6 +156,7 @@
                 android:layout_height="48dp"
                 android:layout_below="@+id/text_input_full_name"
                 android:layout_centerHorizontal="true"
+                app:errorEnabled="true"
                 android:textColorHint="#8fb4b9">
 
                 <EditText

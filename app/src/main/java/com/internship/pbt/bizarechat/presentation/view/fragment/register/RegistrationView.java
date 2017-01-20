@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
-public interface RegisterView extends LoadDataView {
+public interface RegistrationView extends LoadDataView {
 
     void loginFacebook();
 
@@ -19,4 +19,6 @@ public interface RegisterView extends LoadDataView {
     void hideErrorInvalidPhone();
 
     void getInformationForValidation();
+
+    void onRegistrationSuccess();
 }
