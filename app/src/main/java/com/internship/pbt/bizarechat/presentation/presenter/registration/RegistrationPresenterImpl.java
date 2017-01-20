@@ -30,6 +30,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPhone();
     }
 
+    @Override public void showErrorPasswordLength() {
+        mRegisterView.showErrorPasswordLength();
+    }
+
     @Override public void hideErrorsInvalid() {
         mRegisterView.hideErrorInvalidEmail();
         mRegisterView.hideErrorInvalidPassword();
@@ -83,4 +87,5 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if(mSubscription.isUnsubscribed())
             mSubscription.unsubscribe();
     }
+
 }

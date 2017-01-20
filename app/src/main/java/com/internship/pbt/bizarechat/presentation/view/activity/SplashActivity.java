@@ -19,7 +19,7 @@ public class SplashActivity extends BaseActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-            mNavigator.navigateToRegistrationActivity(this);
+            mNavigator.navigateToLoginActivity(this);
 
         finish();
     }

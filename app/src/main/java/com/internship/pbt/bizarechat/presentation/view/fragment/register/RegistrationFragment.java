@@ -3,12 +3,12 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
@@ -26,9 +26,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private TextInputLayout mPasswordLayout;
     private TextInputLayout mPhoneLayout;
 
-    private EditText mEmailEditText;
-    private EditText mPasswordEditText;
-    private EditText mPhoneEditText;
+    private TextInputEditText mEmailEditText;
+    private TextInputEditText mPasswordEditText;
+    private TextInputEditText mPhoneEditText;
 
     private Button mButton;
 
@@ -55,15 +55,15 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_sign_up, null);
+        View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
 
-        mEmailEditText = (EditText) v.findViewById(R.id.register_email);
-        mPasswordEditText = (EditText) v.findViewById(R.id.register_password);
-        mPhoneEditText = (EditText) v.findViewById(R.id.register_phone);
+        mEmailEditText = (TextInputEditText) v.findViewById(R.id.register_email);
+        mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
+        mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
 
         mButton = (Button) v.findViewById(R.id.register_sign_up);
         mButton.setOnClickListener(this);
@@ -108,7 +108,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void showErrorInvalidEmail() {
+<<<<<<< HEAD
         mPhoneLayout.setErrorEnabled(false);
+=======
+        mEmailLayout.setError(getString(R.string.invalid_email));
+>>>>>>> 2658ed0acdfa244e59f650c1fcabb044a315b327
     }
 
     @Override public void showErrorInvalidPassword() {
@@ -117,6 +121,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override public void showErrorInvalidPhone() {
         mPhoneLayout.setError(getString(R.string.invalid_phone));
+    }
+
+    @Override public void showErrorPasswordLength() {
+        mPasswordLayout.setError(getString(R.string.error_password_length));
     }
 
     @Override public void loginFacebook() {

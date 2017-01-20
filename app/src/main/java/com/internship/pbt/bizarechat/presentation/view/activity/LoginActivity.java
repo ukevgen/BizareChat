@@ -23,7 +23,8 @@ public class LoginActivity extends BaseActivity{
         Toolbar toolbar = (Toolbar)findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
 
-        addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
+        if(savedInstanceState == null)
+            addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
     }
 
 }

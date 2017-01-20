@@ -24,4 +24,6 @@ public interface RegistrationPresenter extends Presenter {
 
     void onRegistrationSuccess();
 
+    void showErrorPasswordLength();
+
 }
