@@ -2,18 +2,18 @@ package com.internship.pbt.bizarechat.presentation.model;
 
 public class ValidationInformation {
 
-    private String mMail;
+    private String mEmail;
 
     private String mPassword;
 
     private String mPhone;
 
-    public String getMail() {
-        return mMail;
+    public String getEmail() {
+        return mEmail;
     }
 
-    public void setMail(String mail) {
-        mMail = mail;
+    public void setEmail(String email) {
+        mEmail = email;
     }
 
     public String getPassword() {

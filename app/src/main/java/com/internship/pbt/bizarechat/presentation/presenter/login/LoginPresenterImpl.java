@@ -36,8 +36,23 @@ public class LoginPresenterImpl implements LoginPresenter {
         loginView = view;
     }
 
-    @Override public void requestLogin(String email, String password) {
+    @Override public void goToRegistration() {
+        loginView.navigateToRegistration();
+    }
 
+    @Override public void onPasswordForgot() {
+        loginView.showForgotPassword();
+    }
+
+    @Override public void checkFieldsAndSetButtonState(String email, String password) {
+        if(email.isEmpty() || password.isEmpty())
+            loginView.setButtonSignInEnabled(false);
+        else
+            loginView.setButtonSignInEnabled(true);
+    }
+
+    @Override public void requestLogin(String email, String password) {
+        //TODO implement login request
     }
 
     @Override public void resume() {
@@ -45,6 +60,14 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override public void pause() {
+
+    }
+
+    @Override public void showViewLoading() {
+
+    }
+
+    @Override public void hideViewLoading() {
 
     }
 

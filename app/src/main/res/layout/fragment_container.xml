@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/activityLayoutFragmentContainer"
+<FrameLayout android:id="@+id/activityLayoutFragmentContain"
              xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerHorizontal="true"
+             android:layout_below="@+id/appbar"
+             tools:context=".presentation.view.activity.LoginActivity"
+             xmlns:tools="http://schemas.android.com/tools">
 
 </FrameLayout>

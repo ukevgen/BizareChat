@@ -10,4 +10,10 @@ public interface LoginPresenter extends Presenter {
     void setLoginView(LoginView view);
 
     void requestLogin(String email, String password);
+
+    void goToRegistration();
+
+    void onPasswordForgot();
+
+    void checkFieldsAndSetButtonState(String email, String password);
 }

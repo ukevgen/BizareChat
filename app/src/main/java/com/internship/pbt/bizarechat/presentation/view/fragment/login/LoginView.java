@@ -8,15 +8,13 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
 public interface LoginView extends LoadDataView{
 
-    void showEmailError();
-
-    void showPasswordError();
-
-    void setButtonSignInEnabled(boolean enabled);
-
     void showForgotPassword();
 
     void setPresenter(LoginPresenter presenter);
 
     Context getContext();
+
+    void setButtonSignInEnabled(boolean enabled);
+
+    void navigateToRegistration();
 }

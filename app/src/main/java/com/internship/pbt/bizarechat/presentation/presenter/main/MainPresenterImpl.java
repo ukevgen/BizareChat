@@ -13,4 +13,12 @@ public class MainPresenterImpl implements MainPresenter {
     @Override public void destroy() {
 
     }
+
+    @Override public void showViewLoading() {
+
+    }
+
+    @Override public void hideViewLoading() {
+
+    }
 }

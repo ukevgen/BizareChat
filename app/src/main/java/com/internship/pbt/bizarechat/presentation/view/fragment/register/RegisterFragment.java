@@ -120,7 +120,7 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
 
     @Override public void getInformationForValidation() {
         ValidationInformation validationInformation = new ValidationInformation();
-        validationInformation.setMail(mEmailEditText.getText().toString());
+        validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());
         validationInformation.setPhone(mPhoneEditText.getText().toString());
         mRegistrationPresenter.validateInformation(Observable.just(validationInformation));
