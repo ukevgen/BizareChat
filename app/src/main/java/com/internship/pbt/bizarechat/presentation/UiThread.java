@@ -7,7 +7,7 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class UiThread implements PostExecutorThread {
 
-    @Override public Scheduler getSheduler() {
+    @Override public Scheduler getScheduler() {
         return AndroidSchedulers.mainThread();
     }
 }

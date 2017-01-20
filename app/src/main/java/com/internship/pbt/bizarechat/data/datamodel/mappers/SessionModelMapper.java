@@ -11,10 +11,10 @@ public class SessionModelMapper {
         Session session = null;
         if(sessionModel !=null){
             session = new Session();
-            session.setApplicationId(sessionModel.getApplicationId());
-            session.setId(sessionModel.getId());
-            session.setToken(sessionModel.getToken());
-            session.setUserId(sessionModel.getUserId());
+            session.setApplicationId(sessionModel.getSession().getApplicationId());
+            session.setId(sessionModel.getSession().getId());
+            session.setToken(sessionModel.getSession().getToken());
+            session.setUserId(sessionModel.getSession().getUserId());
         }
         return session;
     }

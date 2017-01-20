@@ -4,4 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="app_bar_height">80dp</dimen>
     <dimen name="cardCornerRadius">2dp</dimen>
+    <dimen name="login_card_width">280dp</dimen>
+    <dimen name="login_card_height">467dp</dimen>
+    <dimen name="login_element_default_width">216dp</dimen>
+    <dimen name="login_element_default_height">48dp</dimen>
+    <dimen name="login_card_elevation">20dp</dimen>
+    <dimen name="login_email_margin_top">32dp</dimen>
+    <dimen name="login_signin_margin_top">58dp</dimen>
+    <dimen name="login_signup_margin_top">11dp</dimen>
+    <dimen name="login_forgot_margin_top">40dp</dimen>
+    <dimen name="login_password_margin_top">33dp</dimen>
 </resources>
