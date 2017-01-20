@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import rx.Observable;
@@ -33,6 +34,7 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRegistrationPresenter = new RegistrationPresenterImpl(this);
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +52,11 @@ public class RegisterFragment extends BaseFragment implements RegisterView, View
         mButton.setOnClickListener(this);
 
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        mRegistrationPresenter.destroy();
     }
 
     @Override public void showLoading() {

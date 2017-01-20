@@ -17,10 +17,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private final String TAG = "RegistrPresenterImpl";
 
     private Validator mValidator;
+
     private RegisterView mRegisterView;
+
     private ThreadExecutor mThreadExecutor;
     private PostExecutorThread mPostExecutorThread;
 
+    private Subscriber mSubscriber;
+
+
+    public RegistrationPresenterImpl(RegisterView registerView) {
+        mSubscriber = new ValidInformation();
+        mRegisterView = registerView;
+    }
 
     @Override public void showErrorInvalidPassword() {
         mRegisterView.showErrorInvalidPassword();
@@ -64,7 +73,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override public void destroy() {
-
+        mSubscriber.unsubscribe();
+        mSubscriber = null;
     }
 
 
