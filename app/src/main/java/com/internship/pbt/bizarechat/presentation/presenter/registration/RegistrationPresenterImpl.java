@@ -56,15 +56,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         boolean isSuccess = true;
         if (!mValidator.isValidEmail(validationInformation.getEmail())){
             isSuccess = false;
-            showErrorInvalidEmail();
+            this.showErrorInvalidEmail();
         }
         if (!mValidator.isValidPassword(validationInformation.getPassword())){
             isSuccess = false;
-            showErrorInvalidPassword();
+            this.showErrorInvalidPassword();
         }
         if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())){
             isSuccess = false;
-            showErrorInvalidPhoneNumber();
+            this.showErrorInvalidPhoneNumber();
+        }
+        if(!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
+            isSuccess = false;
+            this.showErrorPasswordLength();
         }
         if (isSuccess)
             onRegistrationSuccess();

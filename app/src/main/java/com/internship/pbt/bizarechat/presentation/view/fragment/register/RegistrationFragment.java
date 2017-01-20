@@ -108,11 +108,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void showErrorInvalidEmail() {
-<<<<<<< HEAD
         mPhoneLayout.setErrorEnabled(false);
-=======
-        mEmailLayout.setError(getString(R.string.invalid_email));
->>>>>>> 2658ed0acdfa244e59f650c1fcabb044a315b327
+
     }
 
     @Override public void showErrorInvalidPassword() {
