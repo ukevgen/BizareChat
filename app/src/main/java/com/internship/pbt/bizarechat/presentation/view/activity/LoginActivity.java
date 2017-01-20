@@ -22,6 +22,9 @@ public class LoginActivity extends BaseActivity{
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if(savedInstanceState == null)
             addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
