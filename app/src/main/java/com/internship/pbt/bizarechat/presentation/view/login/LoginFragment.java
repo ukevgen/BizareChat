@@ -11,9 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.BasicFragment;
@@ -26,6 +31,7 @@ public class LoginFragment extends BasicFragment implements LoginView{
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView forgotPasswordTextView;
+    private ProgressBar progressBar;
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class LoginFragment extends BasicFragment implements LoginView{
         emailEditText = (EditText)view.findViewById(R.id.email);
         passwordEditText = (EditText)view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView)view.findViewById(R.id.forgot_password);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         addTextListener();
         setButtonListeners();
@@ -48,8 +55,8 @@ public class LoginFragment extends BasicFragment implements LoginView{
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                loginPresenter.checkFieldsAndSetButtonState(emailEditText.getText(),
-                        passwordEditText.getText());
+                loginPresenter.checkFieldsAndSetButtonState(emailEditText.getText().toString(),
+                        passwordEditText.getText().toString());
             }
             @Override public void afterTextChanged(Editable s) {}
         };
@@ -76,7 +83,12 @@ public class LoginFragment extends BasicFragment implements LoginView{
 
     @Override public void onStart() {
         super.onResume();
-        loginPresenter = new LoginPresenterImpl();
+        GetTokenUseCase getToken= new GetTokenUseCase(
+                new SessionDataRepository(),
+                JobExecutor.getInstance(),
+                new UiThread()
+        );
+        loginPresenter = new LoginPresenterImpl(getToken);
         loginPresenter.setLoginView(this);
     }
 
@@ -106,11 +118,11 @@ public class LoginFragment extends BasicFragment implements LoginView{
     }
 
     @Override public void showLoading() {
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoading() {
-
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override public void showRetry() {

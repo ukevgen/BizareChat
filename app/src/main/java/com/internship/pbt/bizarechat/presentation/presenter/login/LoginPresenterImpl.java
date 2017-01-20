@@ -1,13 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
-import android.text.Editable;
-import android.text.TextUtils;
-
-import com.internship.pbt.bizarechat.data.executor.JobExecutor;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
-import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.view.login.LoginView;
 
@@ -17,10 +11,8 @@ public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private GetTokenUseCase getTokenUseCase;
 
-    public LoginPresenterImpl(){
-        getTokenUseCase = new GetTokenUseCase(new SessionDataRepository(),
-                JobExecutor.getInstance(),
-                new UiThread());
+    public LoginPresenterImpl(GetTokenUseCase getTokenUseCase){
+        this.getTokenUseCase = getTokenUseCase;
     }
 
     @Override public void requestSession() {
@@ -52,10 +44,8 @@ public class LoginPresenterImpl implements LoginPresenter {
         loginView.showForgotPassword();
     }
 
-    @Override public void checkFieldsAndSetButtonState(Editable email, Editable password) {
-        boolean isEmailEmpty = TextUtils.isEmpty(email);
-        boolean isPasswordEmpty = TextUtils.isEmpty(password);
-        if(isEmailEmpty || isPasswordEmpty)
+    @Override public void checkFieldsAndSetButtonState(String email, String password) {
+        if(email.isEmpty() || password.isEmpty())
             loginView.setButtonSignInEnabled(false);
         else
             loginView.setButtonSignInEnabled(true);

@@ -1,8 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
 
-import android.text.Editable;
-
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.login.LoginView;
 
@@ -17,5 +15,5 @@ public interface LoginPresenter extends Presenter {
 
     void onPasswordForgot();
 
-    void checkFieldsAndSetButtonState(Editable email, Editable password);
+    void checkFieldsAndSetButtonState(String email, String password);
 }
