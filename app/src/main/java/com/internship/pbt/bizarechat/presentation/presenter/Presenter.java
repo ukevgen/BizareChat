@@ -2,10 +2,14 @@ package com.internship.pbt.bizarechat.presentation.presenter;
 
 public interface Presenter {
 
-    public void resume();
+    void resume();
 
-    public void pause();
+    void pause();
 
-    public void destroy();
+    void destroy();
+
+    void showViewLoading();
+
+    void hideViewLoading();
 
 }

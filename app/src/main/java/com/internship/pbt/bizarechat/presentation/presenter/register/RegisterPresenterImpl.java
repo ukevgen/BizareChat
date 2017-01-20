@@ -2,35 +2,53 @@ package com.internship.pbt.bizarechat.presentation.presenter.register;
 
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
+import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
+import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegisterView;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 public class RegisterPresenterImpl implements RegistrationPresenter {
 
     private final String TAG = "RegisterPresenterImpl";
 
     private Validator mValidator;
-    private UseCase mValidateUseCase;
+    private RegisterView mRegisterView;
+    private ThreadExecutor mThreadExecutor;
+    private PostExecutorThread mPostExecutorThread;
 
 
     @Override public void showErrorInvalidPassword() {
-
+        mRegisterView.showErrorInvalidPassword();
     }
 
     @Override public void showErrorInvalidEmail() {
-
+        mRegisterView.showErrorInvalidEmail();
     }
 
     @Override public void showErrorInvalidPhoneNumber() {
+        mRegisterView.showErrorInvalidPhone();
+    }
 
+    @Override public void showViewLoading() {
+        mRegisterView.showLoading();
+    }
+
+    @Override public void hideViewLoading() {
+        mRegisterView.hideLoading();
     }
 
     @Override public void validateInformation(Observable<ValidationInformation> validationInformationObservable) {
-        mValidateUseCase.execute(new ValidInformation());
+        validationInformationObservable
+                .subscribeOn(Schedulers.from(mThreadExecutor))
+                .observeOn(mPostExecutorThread.getSheduler())
+                .doOnRequest(a -> this.showViewLoading())
+                .doOnUnsubscribe(() -> this.hideViewLoading())
+                .subscribe(new ValidInformation());
     }
 
     @Override public void saveUserAccInformation(ValidationInformation validationInformation) {
@@ -63,7 +81,6 @@ public class RegisterPresenterImpl implements RegistrationPresenter {
         }
 
         @Override public void onNext(ValidationInformation validationInformation) {
-
             if (!mValidator.isValidEmail(validationInformation.getMail()))
                 showErrorInvalidEmail();
             if (!mValidator.isValidPassword(validationInformation.getPassword()))

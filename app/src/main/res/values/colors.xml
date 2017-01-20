@@ -12,4 +12,6 @@
     <color name="email_hint">#8fb4b9</color>
     <color name="facebook_btn">#3a579a</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="red">#FF0000</color>
 </resources>

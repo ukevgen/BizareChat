@@ -4,15 +4,19 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
 public interface RegisterView extends LoadDataView {
 
-    void saveUser();
-
     void loginFacebook();
 
-    void loginTwitter();
+    void showErrorInvalidEmail();
 
-    String getEmailForValidation();
+    void showErrorInvalidPassword();
 
-    String getPasswordForValidation();
+    void showErrorInvalidPhone();
 
-    String getPhoneForValidation();
+    void hideErrorInvalidEmail();
+
+    void hideErrorInvalidPassword();
+
+    void hideErrorInvalidPhone();
+
+    void getInformationForValidation();
 }
