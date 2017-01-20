@@ -1,15 +1,15 @@
 package com.internship.pbt.bizarechat.presentation.view;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 
-public class BasicActivity extends Activity {
+public class BasicActivity extends AppCompatActivity {
 
-    protected Navigator mNavigator;
+    protected Navigator mNavigator = Navigator.getInstance();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,9 +17,6 @@ public class BasicActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
-
-        if (mNavigator == null)
-            mNavigator = Navigator.getInstance();
     }
 
     protected void addFragment(int containerViewId, Fragment fragment){

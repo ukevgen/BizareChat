@@ -26,7 +26,8 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override public Observable<Session> getSession() {
         int nonce = randomizer.nextInt();
-        long timestamp = System.currentTimeMillis();
+        if(nonce < 0) nonce = -nonce;
+        long timestamp = System.currentTimeMillis()/1000;
         String signature = HmacSha1Signature.calculateSignature(nonce, timestamp);
 
         SessionRequest request = new SessionRequest(

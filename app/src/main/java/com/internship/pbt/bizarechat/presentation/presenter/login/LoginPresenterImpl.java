@@ -1,7 +1,13 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
+import android.text.Editable;
+import android.text.TextUtils;
+
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.view.login.LoginView;
 
@@ -11,8 +17,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private GetTokenUseCase getTokenUseCase;
 
-    public LoginPresenterImpl(GetTokenUseCase getTokenUseCase){
-        this.getTokenUseCase = getTokenUseCase;
+    public LoginPresenterImpl(){
+        getTokenUseCase = new GetTokenUseCase(new SessionDataRepository(),
+                JobExecutor.getInstance(),
+                new UiThread());
     }
 
     @Override public void requestSession() {
@@ -36,8 +44,25 @@ public class LoginPresenterImpl implements LoginPresenter {
         loginView = view;
     }
 
-    @Override public void requestLogin(String email, String password) {
+    @Override public void goToRegistration() {
+        loginView.navigateToRegistration();
+    }
 
+    @Override public void onPasswordForgot() {
+        loginView.showForgotPassword();
+    }
+
+    @Override public void checkFieldsAndSetButtonState(Editable email, Editable password) {
+        boolean isEmailEmpty = TextUtils.isEmpty(email);
+        boolean isPasswordEmpty = TextUtils.isEmpty(password);
+        if(isEmailEmpty || isPasswordEmpty)
+            loginView.setButtonSignInEnabled(false);
+        else
+            loginView.setButtonSignInEnabled(true);
+    }
+
+    @Override public void requestLogin(String email, String password) {
+        //TODO implement login request
     }
 
     @Override public void resume() {
