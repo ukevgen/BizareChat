@@ -11,15 +11,17 @@ public class BaseActivity extends Activity {
 
     protected Navigator mNavigator;
 
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (mNavigator == null)
+            mNavigator = Navigator.getInstance();
     }
 
     @Override protected void onResume() {
         super.onResume();
 
-        if (mNavigator == null)
-            mNavigator = Navigator.getInstance();
     }
 
     protected void addFragment(int containerViewId, Fragment fragment){

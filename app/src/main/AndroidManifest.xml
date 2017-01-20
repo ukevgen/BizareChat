@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.internship.pbt.bizarechat">
+<manifest package="com.internship.pbt.bizarechat"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 
     <application
@@ -15,21 +15,26 @@
         <activity
             android:name=".presentation.view.activity.LoginActivity"
             android:theme="@style/Theme.Design.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.view.activity.SplashActivity"
-            android:theme="@style/SplashTheme"></activity>
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.view.activity.RegistrationActivity"/>
 
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="edfe45eebce7eaa464a2bc0837d7279b5f9dbee7" />
+            android:value="edfe45eebce7eaa464a2bc0837d7279b5f9dbee7"/>
     </application>
 
 </manifest>

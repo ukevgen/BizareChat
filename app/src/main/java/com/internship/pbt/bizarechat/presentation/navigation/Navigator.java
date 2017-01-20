@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.internship.pbt.bizarechat.presentation.view.activity.LoginActivity;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
+import com.internship.pbt.bizarechat.presentation.view.activity.RegistrationActivity;
 
 public class Navigator {
 
@@ -23,10 +24,17 @@ public class Navigator {
     //TODO Navigate method`s
 
     public void navigateToLoginActivity(Context context) {
-        context.startActivity(LoginActivity.getCollingIntent(context));
+        if(context != null)
+            context.startActivity(LoginActivity.getCollingIntent(context));
     }
 
     public void navigateToMainActivity(Context context){
-        context.startActivity(MainActivity.getCallingIntent(context));
+        if(context != null)
+            context.startActivity(MainActivity.getCallingIntent(context));
+    }
+
+    public void navigateToRegistrationActivity(Context context){
+        if(context != null)
+            context.startActivity(RegistrationActivity.getCallingIntent(context));
     }
 }

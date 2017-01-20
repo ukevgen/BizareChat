@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.data.executor;
 
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -29,10 +29,10 @@ public class JobExecutor implements ThreadExecutor {
 
     private JobExecutor() {
         mThreadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
-                Runtime.getRuntime().availableProcessors() * 2,
+                Runtime.getRuntime().availableProcessors(),
                 40,
                 TimeUnit.SECONDS,
-                new LinkedBlockingDeque<Runnable>(),
+                new LinkedBlockingQueue<>(),
                 new JobThreadFactory());
     }
 

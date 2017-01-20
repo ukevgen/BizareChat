@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.f2prateek.rx.preferences.RxSharedPreferences;
-
 import rx.Observable;
 
 public class CacheSharedPreferences {

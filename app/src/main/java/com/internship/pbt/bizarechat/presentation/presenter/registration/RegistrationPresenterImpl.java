@@ -2,8 +2,10 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.util.Log;
 
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
@@ -16,11 +18,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final String TAG = "RegistrPresenterImpl";
 
-    private Validator mValidator;
-
     private RegistrationView mRegisterView;
 
-    private ThreadExecutor mThreadExecutor; //TODO Instance of thread managers
+    private ThreadExecutor mThreadExecutor;
     private PostExecutorThread mPostExecutorThread;
 
     private Subscriber mSubscriber;
@@ -29,6 +29,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public RegistrationPresenterImpl(RegistrationView registerView) {
         mSubscriber = new ValidInformation();
         mRegisterView = registerView;
+        mThreadExecutor = JobExecutor.getInstance();
+        mPostExecutorThread = new UiThread();
     }
 
     @Override public void showErrorInvalidPassword() {
@@ -93,6 +95,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final class ValidInformation extends Subscriber<ValidationInformation> {
 
+        private Validator mValidator = new Validator();;
+
         @Override public void onCompleted() {
             Log.d(TAG, this.getClass().getSimpleName() +
                     " Validation of income information completed");
@@ -104,14 +108,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         }
 
         @Override public void onNext(ValidationInformation validationInformation) {
-            if (!mValidator.isValidEmail(validationInformation.getMail()))
+            if (!mValidator.isValidEmail(validationInformation.getEmail()))
                 showErrorInvalidEmail();
             if (!mValidator.isValidPassword(validationInformation.getPassword()))
                 showErrorInvalidPassword();
             if (!mValidator.isValidPhoneNumber(validationInformation.getPhone()))
                 showErrorInvalidPhoneNumber();
 
-            if (mValidator.isValidEmail(validationInformation.getMail()) &
+            if (mValidator.isValidEmail(validationInformation.getEmail()) &
                     mValidator.isValidPassword(validationInformation.getPassword()) &
                     mValidator.isValidPhoneNumber(validationInformation.getPhone()))
                 saveUserAccInformation(validationInformation);

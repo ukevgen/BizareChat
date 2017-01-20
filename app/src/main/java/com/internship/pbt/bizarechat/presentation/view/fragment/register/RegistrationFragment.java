@@ -64,7 +64,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mButton = (Button) v.findViewById(R.id.register_sign_up);
         mButton.setOnClickListener(this);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return v;
     }
 
     @Override public void onDestroy() {
@@ -136,7 +136,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override public void getInformationForValidation() {
         ValidationInformation validationInformation = new ValidationInformation();
-        validationInformation.setMail(mEmailEditText.getText().toString());
+        validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());
         validationInformation.setPhone(mPhoneEditText.getText().toString());
         mRegistrationPresenter.validateInformation(Observable.just(validationInformation));
