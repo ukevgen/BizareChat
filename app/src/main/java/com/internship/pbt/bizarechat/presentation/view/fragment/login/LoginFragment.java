@@ -19,9 +19,9 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
-
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
 
 public class LoginFragment extends BaseFragment implements LoginView {
@@ -34,6 +34,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private TextView forgotPasswordTextView;
     private ProgressBar progressBar;
 
+    public LoginFragment(){
+        setRetainInstance(true);
+    }
+
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_login, container, false);
@@ -44,6 +48,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         passwordEditText = (EditText)view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView)view.findViewById(R.id.forgot_password);
        // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
+
+        loginPresenter.setLoginView(this);
 
         addTextListener();
         setButtonListeners();
@@ -82,28 +88,28 @@ public class LoginFragment extends BaseFragment implements LoginView {
             Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override public void onStart() {
-        super.onResume();
+    @Override public void onDestroy() {
+        super.onDestroy();
+        loginPresenter.destroy();
+    }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         GetTokenUseCase getToken= new GetTokenUseCase(
                 new SessionDataRepository(),
                 JobExecutor.getInstance(),
                 new UiThread()
         );
         loginPresenter = new LoginPresenterImpl(getToken);
-        loginPresenter.setLoginView(this);
-    }
-
-    @Override public void onStop() {
-        super.onStop();
-        loginPresenter.destroy();
-        loginPresenter = null;
     }
 
     @Override public void navigateToRegistration() {
-        //TODO after registration fragment creation need to be implemented
-//        getActivity().getFragmentManager().beginTransaction()
-//                .replace(R.id.activityLayoutFragmentContainer, new RegistrationFragment())
-//                .commit();
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right,
+                        R.animator.enter_from_right, R.animator.exit_to_left)
+                .replace(R.id.activityLayoutFragmentContainer, new RegistrationFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override public void showForgotPassword() {

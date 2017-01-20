@@ -37,14 +37,22 @@
         android:indeterminate="true"
         android:visibility="gone"/>
 
-    <FrameLayout
-        android:id="@+id/activityLayoutFragmentContainer"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/progress_bar">
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_bar"
+        android:layout_centerHorizontal="true">
+
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/activityLayoutFragmentContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/card_login_margin">
+        </FrameLayout>
+    </ScrollView>
 
 
 </RelativeLayout>
