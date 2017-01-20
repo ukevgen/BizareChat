@@ -1,10 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
-import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 public class RegistrationPresenterImpl implements RegistrationPresenter {
@@ -23,6 +24,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override public void showErrorInvalidEmail() {
+        Log.d("123", "Presenter showErrorInvalidEmail");
         mRegisterView.showErrorInvalidEmail();
     }
 
@@ -48,27 +50,27 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideLoading();
     }
 
-    @Override public void validateInformation(Observable<ValidationInformation> validationInformationObservable) {
-
-    }
-
     @Override public void validateInformation(ValidationInformation validationInformation) {
+        Log.d("123", "Presenter validateInf" + validationInformation.toString());
+
         boolean isSuccess = true;
-        if (!mValidator.isValidEmail(validationInformation.getEmail())){
-            isSuccess = false;
-            this.showErrorInvalidEmail();
-        }
-        if (!mValidator.isValidPassword(validationInformation.getPassword())){
-            isSuccess = false;
-            this.showErrorInvalidPassword();
-        }
-        if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())){
-            isSuccess = false;
-            this.showErrorInvalidPhoneNumber();
-        }
-        if(!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
-            isSuccess = false;
-            this.showErrorPasswordLength();
+        if (validationInformation != null) {
+            if (!mValidator.isValidEmail(validationInformation.getEmail())) {
+                isSuccess = false;
+                this.showErrorInvalidEmail();
+            }
+            if (!mValidator.isValidPassword(validationInformation.getPassword())) {
+                isSuccess = false;
+                this.showErrorInvalidPassword();
+            }
+            if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
+                isSuccess = false;
+                this.showErrorInvalidPhoneNumber();
+            }
+            if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
+                isSuccess = false;
+                this.showErrorPasswordLength();
+            }
         }
         if (isSuccess)
             onRegistrationSuccess();
@@ -88,7 +90,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override public void destroy() {
-        if(mSubscription.isUnsubscribed())
+        if (mSubscription.isUnsubscribed())
             mSubscription.unsubscribe();
     }
 

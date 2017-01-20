@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import com.internship.pbt.bizarechat.presentation.presenter.registration.Registr
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
-import rx.Observable;
 
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
@@ -31,31 +31,38 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private TextInputEditText mPhoneEditText;
 
     private Button mButton;
+    private OnRegisterSuccess mOnRegisterSuccess;
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
 
-    private OnRegisterSuccess mOnRegisterSuccess;
-
     @Override public void onAttach(Context context) {
         super.onAttach(context);
 
-        if(context instanceof OnRegisterSuccess)
+        if (context instanceof OnRegisterSuccess)
             mOnRegisterSuccess = (OnRegisterSuccess) context;
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mRegistrationPresenter = new RegistrationPresenterImpl();
+        Log.d("123", "Fragment OnCreate");
     }
 
     @Override public void onStart() {
-        mRegistrationPresenter = new RegistrationPresenterImpl();
-        mRegistrationPresenter.setRegistrationView(this);
+        super.onStart();
+        Log.d("123", "Fragment OnStart");
+
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("123", "Fragment OnCreateView");
+
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
+
+        mRegistrationPresenter.setRegistrationView(this);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
@@ -133,11 +140,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.register_sign_up:
-                this.getInformationForValidation();
-                break;
-        }
+        if (view.getId() == R.id.register_sign_up)
+            getInformationForValidation();
     }
 
     @Override public void getInformationForValidation() {
@@ -145,6 +149,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());
         validationInformation.setPhone(mPhoneEditText.getText().toString());
-        mRegistrationPresenter.validateInformation(Observable.just(validationInformation));
+        Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
+        mRegistrationPresenter.validateInformation(validationInformation);
     }
+
 }

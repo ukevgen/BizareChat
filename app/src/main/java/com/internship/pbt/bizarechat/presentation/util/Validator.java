@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
+import android.util.Log;
 import android.util.Patterns;
 
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ public class Validator {
     private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
 
     public boolean isValidEmail(String email){
+        Log.d("123", "VALIDATOR" + email);
         return Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches();
     }
 

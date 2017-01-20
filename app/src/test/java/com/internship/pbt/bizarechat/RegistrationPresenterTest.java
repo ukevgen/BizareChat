@@ -11,9 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import rx.Observable;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterTest {
@@ -27,7 +25,8 @@ public class RegistrationPresenterTest {
 
     @Before
     public void prepareData(){
-        registrationPresenter = new RegistrationPresenterImpl(registrationView);
+        registrationPresenter = new RegistrationPresenterImpl();
+        registrationPresenter.setRegistrationView(registrationView);
     }
 
     @Test
@@ -38,6 +37,6 @@ public class RegistrationPresenterTest {
                 "aaaaaaaaaaa",
                 "aaaaaaaaaaaa");
 
-        registrationPresenter.validateInformation(Observable.just(validationInformation));
+        registrationPresenter.validateInformation(validationInformation);
     }
 }
