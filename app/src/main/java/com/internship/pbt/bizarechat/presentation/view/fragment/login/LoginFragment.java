@@ -87,7 +87,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         GetTokenUseCase getToken= new GetTokenUseCase(
                 new SessionDataRepository(),
                 JobExecutor.getInstance(),
-                new UiThread()
+                UiThread.getInstance()
         );
         loginPresenter = new LoginPresenterImpl(getToken);
         loginPresenter.setLoginView(this);

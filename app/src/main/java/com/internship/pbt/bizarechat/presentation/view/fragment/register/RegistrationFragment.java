@@ -47,7 +47,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRegistrationPresenter = new RegistrationPresenterImpl(this);
+    }
+
+    @Override public void onStart() {
+        mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter.setRegistrationView(this);
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,18 +100,15 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void hideErrorInvalidPassword() {
-        mPasswordLayout.setError("");
-
+        mPasswordLayout.setErrorEnabled(false);
     }
 
     @Override public void hideErrorInvalidPhone() {
-        mPhoneLayout.setError("");
-
+        mPhoneLayout.setErrorEnabled(false);
     }
 
     @Override public void showErrorInvalidEmail() {
-        mEmailLayout.setError(getString(R.string.invalid_email));
-
+        mPhoneLayout.setErrorEnabled(false);
     }
 
     @Override public void showErrorInvalidPassword() {

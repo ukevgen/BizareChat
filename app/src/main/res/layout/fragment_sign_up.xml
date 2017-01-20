@@ -57,7 +57,6 @@
                 android:layout_below="@+id/user_pic"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                app:errorEnabled="true"
                 android:textColorHint="#8fb4b9">
 
                 <EditText
