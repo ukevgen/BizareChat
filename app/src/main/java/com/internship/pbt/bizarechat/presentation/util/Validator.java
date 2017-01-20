@@ -11,7 +11,7 @@ public class Validator {
     private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
 
     public boolean isValidEmail(String email){
-        return Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches();
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public boolean isValidPhoneNumber(String phoneNumber){
