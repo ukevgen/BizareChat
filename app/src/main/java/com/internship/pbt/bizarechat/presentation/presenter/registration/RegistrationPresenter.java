@@ -4,8 +4,6 @@ import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
-import rx.Observable;
-
 public interface RegistrationPresenter extends Presenter {
 
     void showErrorInvalidPassword();
@@ -17,8 +15,6 @@ public interface RegistrationPresenter extends Presenter {
     void showErrorInvalidPhoneNumber();
 
     void hideErrorsInvalid();
-
-    void validateInformation(Observable<ValidationInformation> validationInformationObservable);
 
     void validateInformation(ValidationInformation validationInformation);
 

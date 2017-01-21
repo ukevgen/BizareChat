@@ -8,7 +8,8 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context=".presentation.view.activity.LoginActivity">
+                tools:context=".presentation.view.activity.LoginActivity"
+                android:scrollbars="vertical">
 
     <include layout="@layout/fragment_container"/>
 

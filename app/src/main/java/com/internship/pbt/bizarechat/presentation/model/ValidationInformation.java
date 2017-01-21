@@ -33,8 +33,8 @@ public class ValidationInformation {
     }
 
     @Override public String toString() {
-        return  mEmail + " /n" +
-                mPassword + " /n" +
-                mPhone + " /n";
+        return  mEmail + " \n" +
+                mPassword + " \n" +
+                mPhone + " \n";
     }
 }

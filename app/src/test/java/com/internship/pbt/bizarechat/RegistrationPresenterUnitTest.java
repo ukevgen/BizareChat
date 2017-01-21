@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import rx.Observable;
-
 import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,12 +25,12 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private RegistrationView mRegistrationFragment;
 
-    private RegistrationPresenterImpl registrationPresenter;
+    private RegistrationPresenterImpl mRegistrationPresenter;
 
     @Before
     public void prepareData(){
-        registrationPresenter = new RegistrationPresenterImpl();
-        registrationPresenter.setRegistrationView(mRegistrationFragment);
+        mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
     }
 
     @Test
@@ -42,7 +40,7 @@ public class RegistrationPresenterUnitTest {
 
         for(String value : positiveTestPasswordLengthData){
             when(validationInformation.getPassword()).thenReturn(value);
-            registrationPresenter.validateInformation(validationInformation);
+            mRegistrationPresenter.validateInformation(validationInformation);
             verify(mRegistrationFragment).showErrorPasswordLength();
         }
     }
@@ -54,7 +52,7 @@ public class RegistrationPresenterUnitTest {
 
         for(String value : negativeTestPasswordLengthData){
             when(validationInformation.getPassword()).thenReturn(value);
-            registrationPresenter.validateInformation(validationInformation);
+            mRegistrationPresenter.validateInformation(validationInformation);
             verify(mRegistrationFragment, calls(0)).showErrorPasswordLength();
         }
     }
@@ -65,10 +63,9 @@ public class RegistrationPresenterUnitTest {
         validationInformation.setEmail("Example@gmail.com");
         validationInformation.setPassword("QW12qwer");
         validationInformation.setPhone("380797878796");
-        registrationPresenter.validateInformation(Observable.just(validationInformation));
 
         verify(mRegistrationFragment).showErrorInvalidEmail();
-
+        mRegistrationPresenter.validateInformation(validationInformation);
     }
 
 
