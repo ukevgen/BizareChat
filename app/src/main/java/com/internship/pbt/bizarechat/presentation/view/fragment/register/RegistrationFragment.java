@@ -51,6 +51,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void onStart() {
+        super.onStart();
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(this);
     }

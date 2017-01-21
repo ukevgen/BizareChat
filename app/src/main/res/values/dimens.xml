@@ -13,6 +13,6 @@
     <dimen name="login_signin_margin_top">58dp</dimen>
     <dimen name="login_signup_margin_top">11dp</dimen>
     <dimen name="login_forgot_margin_top">40dp</dimen>
-    <dimen name="login_password_margin_top">33dp</dimen>
+    <dimen name="login_password_margin_top">24dp</dimen>
     <dimen name="card_login_margin">24dp</dimen>
 </resources>

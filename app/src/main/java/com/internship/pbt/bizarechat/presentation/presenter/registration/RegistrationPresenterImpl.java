@@ -88,8 +88,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override public void destroy() {
-        if(mSubscription.isUnsubscribed())
-            mSubscription.unsubscribe();
+
     }
 
 }
