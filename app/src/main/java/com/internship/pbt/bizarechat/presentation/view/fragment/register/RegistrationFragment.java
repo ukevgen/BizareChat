@@ -28,9 +28,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordLayout,
             mPhoneLayout;
 
+    private EditText mEmailEditText;
 
-    private TextInputEditText mEmailEditText,
-            mPasswordEditText,
+    private TextInputEditText mPasswordEditText,
             mPhoneEditText;
 
     private Button mButton;
@@ -40,11 +40,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         void onRegisterSuccess();
     }
 
-public interface OnRegisterSuccess {
-        void onRegisterSuccess();
-    }
 
-    @Override public void onAttach(Context context) {
+    @Override
+    public void onAttach(Context context) {
         super.onAttach(context);
 
         if (context instanceof OnRegisterSuccess)
@@ -59,20 +57,17 @@ public interface OnRegisterSuccess {
         Log.d("123", "Fragment OnCreate");
     }
 
-@Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        mRegistrationPresenter = new RegistrationPresenterImpl();
-        Log.d("123", "Fragment OnCreate");
-    }
-
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
         super.onStart();
         Log.d("123", "Fragment OnStart");
 
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreateView");
 
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
@@ -130,55 +125,66 @@ public interface OnRegisterSuccess {
     public void showError(String message) {
     }
 
-    @Override public void hideErrorInvalidEmail() {
+    @Override
+    public void hideErrorInvalidEmail() {
         mEmailLayout.setError(null);
         mEmailLayout.setErrorEnabled(false);
     }
 
-    @Override public void hideErrorInvalidPassword() {
+    @Override
+    public void hideErrorInvalidPassword() {
         mPasswordLayout.setError(null);
         mPasswordLayout.setErrorEnabled(false);
     }
 
-    @Override public void hideErrorInvalidPhone() {
+    @Override
+    public void hideErrorInvalidPhone() {
         mPhoneLayout.setError(null);
         mPhoneLayout.setErrorEnabled(false);
     }
 
-    @Override public void showErrorInvalidEmail() {
+    @Override
+    public void showErrorInvalidEmail() {
         mEmailLayout.setErrorEnabled(true);
         mEmailLayout.setError(getString(R.string.invalid_email));
 
     }
 
-    @Override public void showErrorInvalidPassword() {
+    @Override
+    public void showErrorInvalidPassword() {
         mPasswordLayout.setErrorEnabled(true);
         mPasswordLayout.setError(getString(R.string.invalid_weak_password));
     }
 
-    @Override public void showErrorInvalidPhone() {
+    @Override
+    public void showErrorInvalidPhone() {
         mPhoneLayout.setErrorEnabled(true);
         mPhoneLayout.setError(getString(R.string.invalid_phone));
     }
 
-    @Override public void showErrorPasswordLength() {
+    @Override
+    public void showErrorPasswordLength() {
         mPasswordLayout.setError(getString(R.string.error_password_length));
     }
 
-    @Override public void loginFacebook() {
+    @Override
+    public void loginFacebook() {
 
     }
 
-    @Override public void onRegistrationSuccess() {
+    @Override
+    public void onRegistrationSuccess() {
         mOnRegisterSuccess.onRegisterSuccess();
     }
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         if (view.getId() == R.id.register_sign_up)
             getInformationForValidation();
     }
 
-    @Override public void getInformationForValidation() {
+    @Override
+    public void getInformationForValidation() {
         ValidationInformation validationInformation = new ValidationInformation();
         validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());
@@ -186,4 +192,5 @@ public interface OnRegisterSuccess {
         Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
         mRegistrationPresenter.validateInformation(validationInformation);
 
+    }
 }
