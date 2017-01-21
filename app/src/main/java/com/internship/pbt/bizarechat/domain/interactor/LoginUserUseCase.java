@@ -10,11 +10,13 @@ import rx.Observable;
 
 public class LoginUserUseCase extends UseCase {
 
-    SessionRepository sessionRepository;
+    private SessionRepository sessionRepository;
     private UserRequestModel requestModel;
-    protected LoginUserUseCase(ThreadExecutor threadExecutor,
+    protected LoginUserUseCase(SessionRepository sessionRepository,
+            ThreadExecutor threadExecutor,
                                PostExecutorThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
+        sessionRepository = sessionRepository;
     }
 
     @Override
