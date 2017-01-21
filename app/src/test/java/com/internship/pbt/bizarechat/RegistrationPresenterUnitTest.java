@@ -34,5 +34,8 @@ public class RegistrationPresenterUnitTest {
         mRegistrationPresenter.validateInformation(validationInformation);
     }
 
+    @Test
+    public void passwordMatch(){}
+
 
 }

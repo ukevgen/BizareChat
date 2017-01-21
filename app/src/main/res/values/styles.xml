@@ -61,4 +61,8 @@
         <item name="android:textColor">#EE6767</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+
+    </style>
+
 </resources>

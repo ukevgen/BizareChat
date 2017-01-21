@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 public class Validator {
 
+    private static final int SIX = 6;
+    private static final int TWELVE = 12;
     private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private final String PHONE_REGEX =  "(\\+[0-9]+[\\- \\.]*)?"
@@ -35,6 +37,10 @@ public class Validator {
     }
 
     public boolean isPasswordLengthMatches(String password) {
-        return password.length() >= 6 && password.length() <= 12;
+        return password.length() >= SIX && password.length() <= TWELVE;
+    }
+
+    public boolean isPasswordMatch (String password, String confirmPsw){
+        return password.equals(confirmPsw);
     }
 }
