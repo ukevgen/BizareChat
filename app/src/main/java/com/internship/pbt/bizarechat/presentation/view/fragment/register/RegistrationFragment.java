@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
@@ -27,7 +28,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private TextInputLayout mPasswordLayout;
     private TextInputLayout mPhoneLayout;
 
-    private TextInputEditText mEmailEditText;
+    private EditText mEmailEditText;
     private TextInputEditText mPasswordEditText;
     private TextInputEditText mPhoneEditText;
 
@@ -69,7 +70,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
 
-        mEmailEditText = (TextInputEditText) v.findViewById(R.id.register_email);
+        mEmailEditText = (EditText) v.findViewById(R.id.register_email);
         mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
         mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
 
@@ -110,27 +111,33 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override public void hideErrorInvalidEmail() {
-        mEmailLayout.setError("");
+        mEmailLayout.setError(null);
+        mEmailLayout.setErrorEnabled(false);
     }
 
     @Override public void hideErrorInvalidPassword() {
+        mPasswordLayout.setError(null);
         mPasswordLayout.setErrorEnabled(false);
     }
 
     @Override public void hideErrorInvalidPhone() {
+        mPhoneLayout.setError(null);
         mPhoneLayout.setErrorEnabled(false);
     }
 
     @Override public void showErrorInvalidEmail() {
-        mPhoneLayout.setErrorEnabled(false);
+        mEmailLayout.setErrorEnabled(true);
+        mEmailLayout.setError(getString(R.string.invalid_email));
 
     }
 
     @Override public void showErrorInvalidPassword() {
+        mPasswordLayout.setErrorEnabled(true);
         mPasswordLayout.setError(getString(R.string.invalid_weak_password));
     }
 
     @Override public void showErrorInvalidPhone() {
+        mPhoneLayout.setErrorEnabled(true);
         mPhoneLayout.setError(getString(R.string.invalid_phone));
     }
 
