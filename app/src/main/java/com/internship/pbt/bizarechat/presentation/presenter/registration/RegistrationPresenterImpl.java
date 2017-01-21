@@ -51,27 +51,25 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override public void validateInformation(ValidationInformation validationInformation) {
-        Log.d("123", "Presenter validateInf" + validationInformation.toString());
 
         boolean isSuccess = true;
-        if (validationInformation != null) {
-            if (!mValidator.isValidEmail(validationInformation.getEmail())) {
-                isSuccess = false;
-                this.showErrorInvalidEmail();
-            }
-            if (!mValidator.isValidPassword(validationInformation.getPassword())) {
-                isSuccess = false;
-                this.showErrorInvalidPassword();
-            }
-            if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
-                isSuccess = false;
-                this.showErrorInvalidPhoneNumber();
-            }
-            if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
-                isSuccess = false;
-                this.showErrorPasswordLength();
-            }
+        if (!mValidator.isValidEmail(validationInformation.getEmail())) {
+            isSuccess = false;
+            this.showErrorInvalidEmail();
         }
+        if (!mValidator.isValidPassword(validationInformation.getPassword())) {
+            isSuccess = false;
+            this.showErrorInvalidPassword();
+        }
+        if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
+            isSuccess = false;
+            this.showErrorInvalidPhoneNumber();
+        }
+        if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
+            isSuccess = false;
+            this.showErrorPasswordLength();
+        }
+
         if (isSuccess)
             onRegistrationSuccess();
     }

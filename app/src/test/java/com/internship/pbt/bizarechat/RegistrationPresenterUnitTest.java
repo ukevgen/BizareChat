@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.verify;
-
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterUnitTest {
 
@@ -34,9 +32,6 @@ public class RegistrationPresenterUnitTest {
         validationInformation.setPassword("QW12qwer");
         validationInformation.setPhone("380797878796");
         mRegistrationPresenter.validateInformation(validationInformation);
-
-        verify(mRegistrationFragment).showErrorInvalidEmail();
-
     }
 
 
