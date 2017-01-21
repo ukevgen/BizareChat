@@ -110,8 +110,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     }
 
-    @Override
-    public void destroy() {
+
+    @Override public void destroy() {
+
         if (!mSubscription.isUnsubscribed() || mSubscription == null)
             mSubscription.unsubscribe();
         if (mRegisterView != null)

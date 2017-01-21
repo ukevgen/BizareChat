@@ -62,6 +62,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    @Override public void onStart() {
+        super.onStart();
         mRegistrationPresenter = new RegistrationPresenterImpl();
         Log.d("123", "Fragment OnCreate");
     }
