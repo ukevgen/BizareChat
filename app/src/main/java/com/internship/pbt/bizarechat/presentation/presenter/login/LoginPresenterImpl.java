@@ -33,11 +33,11 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override public void showViewLoading() {
-
+        loginView.showLoading();
     }
 
     @Override public void hideViewLoading() {
-
+        loginView.hideLoading();
     }
 
     @Override public void setLoginView(LoginView view) {

@@ -48,4 +48,10 @@ public class LoginPresenterUnitTest {
         loginPresenter.checkFieldsAndSetButtonState("", "1234");
         verify(loginView, times(3)).setButtonSignInEnabled(false);
     }
+
+    @Test
+    public void navigateToRegistrationTest(){
+        loginPresenter.goToRegistration();
+        verify(loginView, times(1)).navigateToRegistration();
+    }
 }
