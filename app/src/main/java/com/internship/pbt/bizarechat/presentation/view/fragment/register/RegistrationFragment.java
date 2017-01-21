@@ -24,18 +24,23 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private RegistrationPresenter mRegistrationPresenter;
 
-    private TextInputLayout mEmailLayout;
-    private TextInputLayout mPasswordLayout;
-    private TextInputLayout mPhoneLayout;
+    private TextInputLayout mEmailLayout,
+            mPasswordLayout,
+            mPhoneLayout;
 
-    private EditText mEmailEditText;
-    private TextInputEditText mPasswordEditText;
-    private TextInputEditText mPhoneEditText;
+
+    private TextInputEditText mEmailEditText,
+            mPasswordEditText,
+            mPhoneEditText;
 
     private Button mButton;
     private OnRegisterSuccess mOnRegisterSuccess;
 
     public interface OnRegisterSuccess {
+        void onRegisterSuccess();
+    }
+
+public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
 
@@ -46,7 +51,15 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mOnRegisterSuccess = (OnRegisterSuccess) context;
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mRegistrationPresenter = new RegistrationPresenterImpl();
+        Log.d("123", "Fragment OnCreate");
+    }
+
+@Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mRegistrationPresenter = new RegistrationPresenterImpl();
@@ -80,34 +93,41 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TextView txtView = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
         txtView.setText(R.string.sign_up);
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         mRegistrationPresenter.destroy();
     }
 
-    @Override public void showLoading() {
+    @Override
+    public void showLoading() {
 
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
 
     }
 
-    @Override public void showRetry() {
+    @Override
+    public void showRetry() {
 
     }
 
-    @Override public void hideRetry() {
+    @Override
+    public void hideRetry() {
 
     }
 
-    @Override public void showError(String message) {
+    @Override
+    public void showError(String message) {
     }
 
     @Override public void hideErrorInvalidEmail() {
@@ -165,6 +185,5 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         validationInformation.setPhone(mPhoneEditText.getText().toString());
         Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
         mRegistrationPresenter.validateInformation(validationInformation);
-    }
 
 }
