@@ -23,13 +23,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private RegistrationPresenter mRegistrationPresenter;
 
-    private TextInputLayout mEmailLayout;
-    private TextInputLayout mPasswordLayout;
-    private TextInputLayout mPhoneLayout;
+    private TextInputLayout mEmailLayout,
+            mPasswordLayout,
+            mPhoneLayout;
 
-    private TextInputEditText mEmailEditText;
-    private TextInputEditText mPasswordEditText;
-    private TextInputEditText mPhoneEditText;
+    private TextInputEditText mEmailEditText,
+            mPasswordEditText,
+            mPhoneEditText;
 
     private Button mButton;
 
@@ -39,23 +39,29 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private OnRegisterSuccess mOnRegisterSuccess;
 
-    @Override public void onAttach(Context context) {
+    @Override
+    public void onAttach(Context context) {
         super.onAttach(context);
 
-        if(context instanceof OnRegisterSuccess)
+        if (context instanceof OnRegisterSuccess)
             mOnRegisterSuccess = (OnRegisterSuccess) context;
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override public void onStart() {
+    @Override
+    public void onStart() {
+        super.onStart();
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(this);
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
@@ -72,82 +78,100 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TextView txtView = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
         txtView.setText(R.string.sign_up);
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         mRegistrationPresenter.destroy();
     }
 
-    @Override public void showLoading() {
+    @Override
+    public void showLoading() {
 
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
 
     }
 
-    @Override public void showRetry() {
+    @Override
+    public void showRetry() {
 
     }
 
-    @Override public void hideRetry() {
+    @Override
+    public void hideRetry() {
 
     }
 
-    @Override public void showError(String message) {
+    @Override
+    public void showError(String message) {
     }
 
-    @Override public void hideErrorInvalidEmail() {
+    @Override
+    public void hideErrorInvalidEmail() {
         mEmailLayout.setError("");
     }
 
-    @Override public void hideErrorInvalidPassword() {
+    @Override
+    public void hideErrorInvalidPassword() {
         mPasswordLayout.setErrorEnabled(false);
     }
 
-    @Override public void hideErrorInvalidPhone() {
+    @Override
+    public void hideErrorInvalidPhone() {
         mPhoneLayout.setErrorEnabled(false);
     }
 
-    @Override public void showErrorInvalidEmail() {
+    @Override
+    public void showErrorInvalidEmail() {
         mPhoneLayout.setErrorEnabled(false);
 
     }
 
-    @Override public void showErrorInvalidPassword() {
+    @Override
+    public void showErrorInvalidPassword() {
         mPasswordLayout.setError(getString(R.string.invalid_weak_password));
     }
 
-    @Override public void showErrorInvalidPhone() {
+    @Override
+    public void showErrorInvalidPhone() {
         mPhoneLayout.setError(getString(R.string.invalid_phone));
     }
 
-    @Override public void showErrorPasswordLength() {
+    @Override
+    public void showErrorPasswordLength() {
         mPasswordLayout.setError(getString(R.string.error_password_length));
     }
 
-    @Override public void loginFacebook() {
+    @Override
+    public void loginFacebook() {
 
     }
 
-    @Override public void onRegistrationSuccess() {
+    @Override
+    public void onRegistrationSuccess() {
         mOnRegisterSuccess.onRegisterSuccess();
     }
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_sign_up:
-                this.getInformationForValidation();
+                getInformationForValidation();
                 break;
         }
     }
 
-    @Override public void getInformationForValidation() {
+    @Override
+    public void getInformationForValidation() {
         ValidationInformation validationInformation = new ValidationInformation();
         validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());

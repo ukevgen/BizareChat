@@ -34,20 +34,21 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private TextView forgotPasswordTextView;
     private ProgressBar progressBar;
 
-    public LoginFragment(){
+    public LoginFragment() {
         setRetainInstance(true);
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        signIn = (Button)view.findViewById(R.id.sign_in);
-        signUp = (Button)view.findViewById(R.id.sign_up);
-        emailEditText = (EditText)view.findViewById(R.id.email);
-        passwordEditText = (EditText)view.findViewById(R.id.password);
-        forgotPasswordTextView = (TextView)view.findViewById(R.id.forgot_password);
-       // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
+        signIn = (Button) view.findViewById(R.id.sign_in);
+        signUp = (Button) view.findViewById(R.id.sign_up);
+        emailEditText = (EditText) view.findViewById(R.id.email);
+        passwordEditText = (EditText) view.findViewById(R.id.password);
+        forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
+        // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
 
         loginPresenter.setLoginView(this);
 
@@ -57,22 +58,28 @@ public class LoginFragment extends BaseFragment implements LoginView {
         return view;
     }
 
-    private void addTextListener(){
+    private void addTextListener() {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 loginPresenter.checkFieldsAndSetButtonState(emailEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
-            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
     }
 
-    private void setButtonListeners(){
+    private void setButtonListeners() {
         signIn.setOnClickListener(
                 v -> loginPresenter.requestLogin(
                         emailEditText.getText().toString(),
@@ -83,25 +90,29 @@ public class LoginFragment extends BaseFragment implements LoginView {
         forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onPasswordForgot());
     }
 
-    @Override public void showError(String message) {
-        if(getView() != null)
+    @Override
+    public void showError(String message) {
+        if (getView() != null)
             Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         loginPresenter.destroy();
     }
 
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TextView txtView = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
         txtView.setText(R.string.sign_in);
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GetTokenUseCase getToken= new GetTokenUseCase(
+        GetTokenUseCase getToken = new GetTokenUseCase(
                 new SessionDataRepository(),
                 JobExecutor.getInstance(),
                 UiThread.getInstance()
@@ -109,7 +120,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginPresenter = new LoginPresenterImpl(getToken);
     }
 
-    @Override public void navigateToRegistration() {
+    @Override
+    public void navigateToRegistration() {
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right,
                         R.animator.enter_from_right, R.animator.exit_to_left)
@@ -118,41 +130,47 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .commit();
 
 
-
     }
 
-    @Override public void showForgotPassword() {
+    @Override
+    public void showForgotPassword() {
         //TODO need to be implemented
     }
 
-    @Override public void setButtonSignInEnabled(boolean enabled) {
+    @Override
+    public void setButtonSignInEnabled(boolean enabled) {
         signIn.setEnabled(enabled);
     }
 
-    @Override public void setPresenter(LoginPresenter presenter) {
+    @Override
+    public void setPresenter(LoginPresenter presenter) {
         this.loginPresenter = presenter;
     }
 
-    @Override public void showLoading() {
+    @Override
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override public void hideLoading() {
+    @Override
+    public void hideLoading() {
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override public void showRetry() {
+    @Override
+    public void showRetry() {
 
     }
 
-    @Override public void onLoginSuccess() {
+    @Override
+    public void onLoginSuccess() {
 
     }
 
-    @Override public void hideRetry() {
+    @Override
+    public void hideRetry() {
 
     }
-
 
 
 }
