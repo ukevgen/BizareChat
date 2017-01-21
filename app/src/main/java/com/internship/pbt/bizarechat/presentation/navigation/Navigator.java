@@ -21,8 +21,6 @@ public class Navigator {
         return mInstance;
     }
 
-    //TODO Navigate method`s
-
     public void navigateToLoginActivity(Context context) {
         if(context != null)
             context.startActivity(LoginActivity.getCollingIntent(context));

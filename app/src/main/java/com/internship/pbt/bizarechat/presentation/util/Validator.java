@@ -1,37 +1,28 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
-import android.util.Log;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Validator {
 
-    private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
+    private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
+            "(?=(.*d){2,})|" +
+            "(.*\\[a-z])|" +
+            "(?=(.*[A-Z]){2,})" +
+            ")";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-    private final String PHONE_REGEX =  "(\\+[0-9]+[\\- \\.]*)?"
+    private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
             + "([0-9][0-9\\- \\.]+[0-9])";
 
     public boolean isValidEmail(String email) {
-        Log.d("123", "Validator " + email);
-
-        Log.d("123", "Validator " + email.matches(EMAIL_REGEX));
-
         return email.matches(EMAIL_REGEX);
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
-        Pattern pattern = Pattern.compile(PHONE_REGEX);
-        Matcher matcher = pattern.matcher(phoneNumber);
-        return matcher.matches();
+        return phoneNumber.matches(PHONE_REGEX);
     }
 
     public boolean isValidPassword(String password) {
-        Pattern patterns = Pattern.compile(PASSWORD_REGEX);
-        Matcher matcher = patterns.matcher(password);
-        return matcher.matches();
+        return password.matches(PASSWORD_REGEX);
     }
 
     public boolean isPasswordLengthMatches(String password) {

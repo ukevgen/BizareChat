@@ -11,7 +11,8 @@ public class SplashActivity extends BaseActivity {
     private AuthStore mAuthStore;
 
 
-    @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
@@ -19,7 +20,7 @@ public class SplashActivity extends BaseActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-            mNavigator.navigateToRegistrationActivity(this);
+        mNavigator.navigateToLoginActivity(this);
 
         finish();
     }

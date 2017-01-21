@@ -1,78 +1,33 @@
-package com.internship.pbt.bizarechat.data.datamodel.response;
+package com.internship.pbt.bizarechat.domain.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+public class UserLoginResponce {
 
-/*
-*
-* THIS IS MODEL TO
-*
- */
-
-public class SignInResponse {
-
-    @SerializedName("blob_id")
-    @Expose
     private Integer blobId;
 
-    @SerializedName("created_at")
-    @Expose
     private String createdAt;
 
-    @SerializedName("custom_parameters")
-    @Expose
     private Object customParameters;
 
-    @SerializedName("email")
-    @Expose
     private String email;
 
-    @SerializedName("external_user_id")
-    @Expose
     private Integer externalUserId;
 
-    @SerializedName("facebook_id")
-    @Expose
     private Integer facebookId;
 
-    @SerializedName("full_name")
-    @Expose
     private String fullName;
 
-    @SerializedName("id")
-    @Expose
     private Integer id;
 
-    @SerializedName("last_request_at")
-    @Expose
     private String lastRequestAt;
 
-    @SerializedName("login")
-    @Expose
     private String login;
 
-    @SerializedName("phone")
-    @Expose
     private String phone;
 
-    @SerializedName("twitter_id")
-    @Expose
-    private String twitterId;
-
-    @SerializedName("twitter_digits_id")
-    @Expose
-    private Integer twitterDigitsId;
-
-    @SerializedName("updated_at")
-    @Expose
     private String updatedAt;
 
-    @SerializedName("website")
-    @Expose
     private String website;
 
-    @SerializedName("user_tags")
-    @Expose
     private String userTags;
 
 
@@ -164,22 +119,6 @@ public class SignInResponse {
         this.phone = phone;
     }
 
-    public String getTwitterId() {
-        return twitterId;
-    }
-
-    public void setTwitterId(String twitterId) {
-        this.twitterId = twitterId;
-    }
-
-    public Integer getTwitterDigitsId() {
-        return twitterDigitsId;
-    }
-
-    public void setTwitterDigitsId(Integer twitterDigitsId) {
-        this.twitterDigitsId = twitterDigitsId;
-    }
-
     public String getUpdatedAt() {
         return updatedAt;
     }
@@ -203,5 +142,4 @@ public class SignInResponse {
     public void setUserTags(String userTags) {
         this.userTags = userTags;
     }
-
 }

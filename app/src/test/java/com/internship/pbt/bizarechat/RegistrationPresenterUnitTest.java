@@ -11,28 +11,59 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterUnitTest {
 
     @Mock
-    RegistrationView mRegistrationFragment;
+    private RegistrationView mRegistrationFragment;
 
     private RegistrationPresenter mRegistrationPresenter;
 
+    private ValidationInformation mValidationInformation;
     @Before
     public void prepareData() {
+        mValidationInformation = new ValidationInformation();
+        mValidationInformation.setEmail("Example@gmail.com");
+        mValidationInformation.setPassword("QA1we2");
+        mValidationInformation.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
     }
 
     @Test
     public void checkIfUserEnteredInvalidEmail() {
-        ValidationInformation validationInformation = new ValidationInformation();
-        validationInformation.setEmail("Example@gmail.com");
-        validationInformation.setPassword("QW12qwer");
-        validationInformation.setPhone("380797878796");
-        mRegistrationPresenter.validateInformation(validationInformation);
+        mValidationInformation.setEmail("Invalid");
+        mRegistrationPresenter.validateInformation(mValidationInformation);
+
+        verify(mRegistrationFragment).showErrorInvalidEmail();
+        verify(mRegistrationFragment, never()).showErrorInvalidPassword();
+        verify(mRegistrationFragment, never()).showErrorInvalidPhone();
     }
+
+    @Test
+    public void checkIfUserEnteredInvalidPassword(){
+        mValidationInformation.setPassword("Invalid");
+        mRegistrationPresenter.validateInformation(mValidationInformation);
+
+        verify(mRegistrationFragment).showErrorInvalidPassword();
+        verify(mRegistrationFragment, never()).showErrorInvalidEmail();
+        verify(mRegistrationFragment, never()).showErrorInvalidPhone();
+    }
+
+    @Test
+    public void checkIfUserEnteredInvalidPhone(){
+        mValidationInformation.setPhone("Invalid");
+        mRegistrationPresenter.validateInformation(mValidationInformation);
+
+        verify(mRegistrationFragment).showErrorInvalidPhone();
+        verify(mRegistrationFragment, never()).showErrorInvalidPassword();
+        verify(mRegistrationFragment, never()).showErrorInvalidEmail();
+    }
+
+
 
 
 }
