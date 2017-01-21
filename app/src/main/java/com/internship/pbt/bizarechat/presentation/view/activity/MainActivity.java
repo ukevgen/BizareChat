@@ -16,6 +16,6 @@ public class MainActivity extends BaseActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_base_layout);
-        addFragment(R.id.activityLayoutFragmentContainer, new MainFragment());
+        addFragment(R.id.activity_layout_fragment_container, new MainFragment());
     }
 }

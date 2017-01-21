@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat;
 
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
@@ -9,8 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import rx.Observable;
 
 import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.verify;
@@ -27,12 +26,12 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private RegistrationView mRegistrationFragment;
 
-    private RegistrationPresenterImpl registrationPresenter;
+    private RegistrationPresenter mRegistrationPresenter;
 
     @Before
     public void prepareData(){
-        registrationPresenter = new RegistrationPresenterImpl();
-        registrationPresenter.setRegistrationView(mRegistrationFragment);
+        mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
     }
 
     @Test
@@ -42,19 +41,19 @@ public class RegistrationPresenterUnitTest {
 
         for(String value : positiveTestPasswordLengthData){
             when(validationInformation.getPassword()).thenReturn(value);
-            registrationPresenter.validateInformation(validationInformation);
+            mRegistrationPresenter.validateInformation(validationInformation);
             verify(mRegistrationFragment).showErrorPasswordLength();
         }
     }
 
     @Test
-    public void checkPasswordLengthMatches(){
+    public void checkPasswordLengthMatches() {
         when(validationInformation.getEmail()).thenReturn("email");
         when(validationInformation.getPhone()).thenReturn("phone");
 
-        for(String value : negativeTestPasswordLengthData){
+        for (String value : negativeTestPasswordLengthData) {
             when(validationInformation.getPassword()).thenReturn(value);
-            registrationPresenter.validateInformation(validationInformation);
+            mRegistrationPresenter.validateInformation(validationInformation);
             verify(mRegistrationFragment, calls(0)).showErrorPasswordLength();
         }
     }
@@ -65,10 +64,8 @@ public class RegistrationPresenterUnitTest {
         validationInformation.setEmail("Example@gmail.com");
         validationInformation.setPassword("QW12qwer");
         validationInformation.setPhone("380797878796");
-        registrationPresenter.validateInformation(Observable.just(validationInformation));
-
+        mRegistrationPresenter.validateInformation(validationInformation);
         verify(mRegistrationFragment).showErrorInvalidEmail();
-
     }
 
 

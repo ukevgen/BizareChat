@@ -10,18 +10,18 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 public class RegistrationActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess {
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_base_layout);
-
-
-        addFragment(R.id.activityLayoutFragmentContainer, new RegistrationFragment());
-    }
-
     public static Intent getCallingIntent(Context context){
         return new Intent(context, RegistrationActivity.class);
     }
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        if(savedInstanceState == null)
+            addFragment(R.id.activity_layout_fragment_container, new RegistrationFragment());
+    }
+
+
     @Override public void onRegisterSuccess() {
         mNavigator.navigateToMainActivity(this);
     }

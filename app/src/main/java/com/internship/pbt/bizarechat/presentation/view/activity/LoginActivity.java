@@ -28,7 +28,7 @@ public class LoginActivity extends BaseActivity{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if(savedInstanceState == null)
-            addFragment(R.id.activityLayoutFragmentContainer, new LoginFragment());
+            addFragment(R.id.activity_layout_fragment_container, new LoginFragment());
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
