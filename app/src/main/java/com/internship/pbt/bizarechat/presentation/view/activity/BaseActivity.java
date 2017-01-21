@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 
@@ -24,8 +25,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void addFragment(int containerViewId, Fragment fragment){
-        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+        Log.d("123", "Fragment Transaction");
+        final FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+        Log.d("123", "Fragment Begin Transaction");
+
         fragmentTransaction.add(containerViewId, fragment);
+        Log.d("123", "Fragment ADD Transaction");
+
         fragmentTransaction.commit();
+        Log.d("123", "Fragment commit Transaction");
+
     }
 }

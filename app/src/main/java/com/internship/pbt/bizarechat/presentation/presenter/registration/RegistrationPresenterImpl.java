@@ -1,10 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
-import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 public class RegistrationPresenterImpl implements RegistrationPresenter {
@@ -24,8 +25,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPassword();
     }
 
-    @Override
-    public void showErrorInvalidEmail() {
+  @Override public void showErrorInvalidEmail() {
+        Log.d("123", "Presenter showErrorInvalidEmail");
         mRegisterView.showErrorInvalidEmail();
     }
 
@@ -56,13 +57,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideLoading();
     }
 
-    @Override
-    public void validateInformation(Observable<ValidationInformation> validationInformationObservable) {
+ @Override public void validateInformation(ValidationInformation validationInformation) {
 
-    }
-
-    @Override
-    public void validateInformation(ValidationInformation validationInformation) {
         boolean isSuccess = true;
         if (!mValidator.isValidEmail(validationInformation.getEmail())) {
             isSuccess = false;
@@ -80,6 +76,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             isSuccess = false;
             this.showErrorPasswordLength();
         }
+
         if (isSuccess)
             onRegistrationSuccess();
     }
@@ -100,10 +97,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     }
 
-    @Override
-    public void destroy() {
-        if (mSubscription.isUnsubscribed())
+@Override public void destroy() {
+        if (!mSubscription.isUnsubscribed() || mSubscription == null)
             mSubscription.unsubscribe();
+        if (mRegisterView != null)
+            mRegisterView = null;
     }
 
 }
