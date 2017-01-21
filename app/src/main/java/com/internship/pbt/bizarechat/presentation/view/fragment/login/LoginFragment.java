@@ -107,7 +107,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right,
                         R.animator.enter_from_right, R.animator.exit_to_left)
-                .replace(R.id.activityLayoutFragmentContainer, new RegistrationFragment())
+                .replace(R.id.activity_layout_fragment_container, new RegistrationFragment())
                 .addToBackStack(null)
                 .commit();
     }
