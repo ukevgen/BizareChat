@@ -8,7 +8,7 @@ import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
 
-public class GetTokenUseCase extends UseCase{
+public class GetTokenUseCase extends UseCase<Session>{
     private SessionRepository sessionRepository;
 
     public GetTokenUseCase(SessionRepository sessionRepository,
