@@ -12,12 +12,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
+
+import ru.tinkoff.decoro.MaskImpl;
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
+import ru.tinkoff.decoro.slots.Slot;
+import ru.tinkoff.decoro.watchers.FormatWatcher;
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
 
 
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
@@ -26,11 +33,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private TextInputLayout mEmailLayout,
             mPasswordLayout,
+            mPasswordConfLayout,
             mPhoneLayout;
 
     private EditText mEmailEditText;
 
     private TextInputEditText mPasswordEditText,
+            mPasswordConfirm,
             mPhoneEditText;
 
     private Button mButton;
@@ -78,16 +87,28 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
+        mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
 
         mEmailEditText = (EditText) v.findViewById(R.id.register_email);
         mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
+        mPasswordConfirm = (TextInputEditText) v.findViewById(R.id.register_confirm_password);
         mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
-
+        addPhoneNumberFormatting();
         mButton = (Button) v.findViewById(R.id.register_sign_up);
         mButton.setOnClickListener(this);
 
         return v;
+    }
+
+    private void addPhoneNumberFormatting() {
+        Slot[] slots = new UnderscoreDigitSlotsParser().parseSlots(getActivity().getResources().
+                getString(R.string.phone_format));
+        FormatWatcher formatWatcher = new MaskFormatWatcher(
+                MaskImpl.createTerminated(slots)
+        );
+        formatWatcher.installOn(mPhoneEditText);
+        mPhoneEditText.setSelection(mPhoneEditText.getText().length());
     }
 
     @Override
@@ -140,6 +161,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
+    public void hideErrorPasswordConfirm() {
+        mPasswordConfLayout.setError(null);
+        mPasswordConfLayout.setErrorEnabled(false);
+    }
+
+    @Override
     public void hideErrorInvalidPhone() {
         mPhoneLayout.setError(null);
         mPhoneLayout.setErrorEnabled(false);
@@ -149,6 +176,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void showErrorInvalidEmail() {
         mEmailLayout.setErrorEnabled(true);
         mEmailLayout.setError(getString(R.string.invalid_email));
+        mPasswordEditText.setText("");
 
     }
 
@@ -156,17 +184,20 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void showErrorInvalidPassword() {
         mPasswordLayout.setErrorEnabled(true);
         mPasswordLayout.setError(getString(R.string.invalid_weak_password));
+        mPasswordEditText.setText("");
     }
 
     @Override
     public void showErrorInvalidPhone() {
         mPhoneLayout.setErrorEnabled(true);
         mPhoneLayout.setError(getString(R.string.invalid_phone));
+        mPhoneEditText.setText("");
     }
 
     @Override
     public void showErrorPasswordLength() {
         mPasswordLayout.setError(getString(R.string.error_password_length));
+        mPasswordEditText.setText("");
     }
 
     @Override
@@ -177,6 +208,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void onRegistrationSuccess() {
         mOnRegisterSuccess.onRegisterSuccess();
+    }
+
+    @Override
+    public void showErrorPasswordConfirm() {
+        mPasswordConfirm.setText("");
+        Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -191,6 +228,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         validationInformation.setEmail(mEmailEditText.getText().toString());
         validationInformation.setPassword(mPasswordEditText.getText().toString());
         validationInformation.setPhone(mPhoneEditText.getText().toString());
+        validationInformation.setPasswordConf(mPasswordConfirm.getText().toString());
         Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
         mRegistrationPresenter.validateInformation(validationInformation);
 
