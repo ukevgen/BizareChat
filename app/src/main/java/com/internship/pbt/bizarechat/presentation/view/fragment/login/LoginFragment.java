@@ -136,6 +136,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 UiThread.getInstance()
         );
         loginPresenter = new LoginPresenterImpl(getToken, resetPassword);
+        loginPresenter.requestSession();
     }
 
     @Override

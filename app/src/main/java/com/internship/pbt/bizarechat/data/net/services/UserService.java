@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.data.net.services;
 
 
+import com.internship.pbt.bizarechat.data.net.ApiConstants;
+
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -12,5 +14,7 @@ public interface UserService {
 
     @GET("/users/password/reset.json")
     @Headers("QuickBlox-REST-API-Version: 0.1.0")
-    Observable<Response<Void>> resetUserPassword(@Header("QB-Token") String token, @Query("email") String email);
+    Observable<Response<Void>> resetUserPassword(@Header(ApiConstants.TOKEN_HEADER_NAME) String token,
+                                                 @Query("email") String email);
+
 }
