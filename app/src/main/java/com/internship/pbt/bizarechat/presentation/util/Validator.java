@@ -52,6 +52,7 @@ public class Validator {
             return true;
         else
             return false;
+
         } catch (IOException ex) {
             Log.d(TAG, ex.getMessage(), ex);
             return false;
