@@ -82,8 +82,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onStart() {
+  
+    @Override public void onStart() {
+
         super.onStart();
     }
 

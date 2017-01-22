@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -46,15 +45,11 @@ public class Validator {
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        if ((bitmap.getByteCount() / 1000000) < 1){
-            Log.d("123", "Validation size of pic true");
+        if (bitmap.getByteCount() / 10000000 < 1)
             return true;
-        }
         else
             return false;
         } catch (IOException e) {
-            Log.d("123", "Validation size of pic catch");
-
             return false;
         }
 
