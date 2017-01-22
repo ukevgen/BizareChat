@@ -5,10 +5,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.IOException;
 
 public class Validator {
+
+    private static final String TAG = "Validator";
 
     private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
             "(?=(.*d){2,})|" +
@@ -49,7 +52,8 @@ public class Validator {
             return true;
         else
             return false;
-        } catch (IOException e) {
+        } catch (IOException ex) {
+            Log.d(TAG, ex.getMessage(), ex);
             return false;
         }
 
