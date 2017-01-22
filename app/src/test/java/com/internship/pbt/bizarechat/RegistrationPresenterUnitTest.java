@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 
 
 
+
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};

@@ -1,7 +1,8 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.content.Context;
 import android.net.Uri;
+import android.content.Context;
+import android.util.Log;
 
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;

@@ -8,12 +8,13 @@ import rx.android.schedulers.AndroidSchedulers;
 public class UiThread implements PostExecutorThread {
 
     private static UiThread mUiThread;
+
     private UiThread() {
 
     }
 
-    public static UiThread getInstance(){
-        if(mUiThread == null)
+    public static UiThread getInstance() {
+        if (mUiThread == null)
             mUiThread = new UiThread();
 
         return mUiThread;
