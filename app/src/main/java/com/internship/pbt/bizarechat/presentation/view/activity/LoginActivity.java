@@ -11,33 +11,35 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragm
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
 
-public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess{
+public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess {
 
     public static Intent getCollingIntent(Context context) {
         return new Intent(context, LoginActivity.class);
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.appbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if(savedInstanceState == null)
+        if (savedInstanceState == null)
             addFragment(R.id.activity_layout_fragment_container, new LoginFragment());
     }
 
-<<<<<<< HEAD
     @Override
     public void onRegisterSuccess() {
         mNavigator.navigateToMainActivity(this);
-=======
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -45,6 +47,6 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
             default:
                 return super.onOptionsItemSelected(item);
         }
->>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
     }
 }
+

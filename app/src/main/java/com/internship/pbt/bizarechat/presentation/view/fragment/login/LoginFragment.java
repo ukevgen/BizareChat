@@ -137,9 +137,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showForgotPassword() {
-<<<<<<< HEAD
-        //TODO need to be implemented
-=======
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         builder.setTitle(R.string.restore_password);
 
@@ -185,8 +182,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     buttonSend.setEnabled(false);
             }
         });
-
->>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
     }
 
     @Override

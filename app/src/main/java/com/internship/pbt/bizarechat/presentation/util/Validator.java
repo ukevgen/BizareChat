@@ -5,22 +5,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.IOException;
 
 public class Validator {
 
-<<<<<<< HEAD
     private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
             "(?=(.*d){2,})|" +
             "(.*\\[a-z])|" +
             "(?=(.*[A-Z]){2,})" +
             ")";
-=======
     private static final int SIX = 6;
     private static final int TWELVE = 12;
-    private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
->>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
@@ -49,11 +46,15 @@ public class Validator {
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        if (bitmap.getByteCount() / 1000000 < 1)
+        if ((bitmap.getByteCount() / 1000000) < 1){
+            Log.d("123", "Validation size of pic true");
             return true;
+        }
         else
             return false;
         } catch (IOException e) {
+            Log.d("123", "Validation size of pic catch");
+
             return false;
         }
 
