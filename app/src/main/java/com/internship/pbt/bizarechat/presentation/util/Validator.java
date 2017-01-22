@@ -12,6 +12,7 @@ import java.io.IOException;
 public class Validator {
 
     private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
+    private static final String TAG = "Validator";
     private static final int SIX = 6;
     private static final int TWELVE = 12;
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -42,15 +43,13 @@ public class Validator {
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        if ((bitmap.getByteCount() / 1000000) < 1){
-            Log.d("123", "Validation size of pic true");
+        if (bitmap.getByteCount() / 10000000 < 1)
             return true;
-        }
         else
             return false;
-        } catch (IOException e) {
-            Log.d("123", "Validation size of pic catch");
 
+        } catch (IOException ex) {
+            Log.d(TAG, ex.getMessage(), ex);
             return false;
         }
 
