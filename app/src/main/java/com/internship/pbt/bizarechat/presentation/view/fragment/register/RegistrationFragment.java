@@ -39,6 +39,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
+    private static final String PACKAGE_PATH = "com.internship.pbt.bizarechat.presentation.view.fragment.register";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
 
@@ -340,5 +341,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    public void setPermission(Uri uri) {
+        getActivity().grantUriPermission(PACKAGE_PATH, uri,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    }
 }

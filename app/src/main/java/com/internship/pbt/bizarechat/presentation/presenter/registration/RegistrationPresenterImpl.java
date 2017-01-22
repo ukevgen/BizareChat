@@ -52,6 +52,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
+
     }
 
     @Override
@@ -99,6 +100,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void verifyAndLoadAvatar(Context context, Uri uri) {
+       // mRegisterView.setPermission(uri);
         if (mValidator.isValidAvatarSize(context, uri))
             mRegisterView.loadAvatar(uri);
         else

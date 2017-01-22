@@ -45,4 +45,6 @@ public interface RegistrationView extends LoadDataView {
     void showErrorPasswordConfirm();
 
     void hideErrorPasswordConfirm();
+
+    void setPermission(Uri uri);
 }

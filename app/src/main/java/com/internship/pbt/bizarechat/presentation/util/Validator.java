@@ -22,6 +22,7 @@ public class Validator {
     private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
             + "([0-9][0-9\\- \\.]+[0-9])";
+    private Bitmap bitmap;
 
     public boolean isValidEmail(String email) {
         return email.matches(EMAIL_REGEX);
@@ -45,7 +46,7 @@ public class Validator {
 
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
         if ((bitmap.getByteCount() / 1000000) < 1){
             Log.d("123", "Validation size of pic true");
             return true;
