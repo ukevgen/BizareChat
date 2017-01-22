@@ -7,7 +7,6 @@ import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
 import com.internship.pbt.bizarechat.data.net.requests.SessionWithAuthRequest;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
-import com.internship.pbt.bizarechat.data.repository.datasource.UserToken;
 import com.internship.pbt.bizarechat.data.util.HmacSha1Signature;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
@@ -21,7 +20,6 @@ import rx.Observable;
 public class SessionDataRepository implements SessionRepository {
     private SessionService sessionService;
     private Random randomizer;
-    private UserToken userToken;
 
     public SessionDataRepository() {
         sessionService = RetrofitApi.getRetrofitApi().getSessionService();
@@ -67,7 +65,7 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<UserLoginResponce> loginUser(UserRequestModel requestModel) {
-        return sessionService.loginUser(userToken.getToken(), requestModel)
+        return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
                 .map(SessionModelMapper::transform);
     }
 }

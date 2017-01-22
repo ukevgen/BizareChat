@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
@@ -40,6 +41,8 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        UserToken.getInstance().initSharedPreferences(this);
 
         if (savedInstanceState == null)
             addFragment(R.id.activity_layout_fragment_container, new LoginFragment());

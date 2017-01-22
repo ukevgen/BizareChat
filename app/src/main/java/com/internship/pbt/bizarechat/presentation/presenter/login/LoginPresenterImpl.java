@@ -1,5 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
@@ -32,13 +33,14 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onError(Throwable e) {
-                String message = ErrorMessageFactory.createMessage(loginView.getContextActivity(), e);
+                String message = ErrorMessageFactory.
+                        createMessageOnLogin(loginView.getContextActivity(), e);
                 loginView.showError(message);
             }
 
             @Override
             public void onNext(Session session) {
-                //TODO   here we should save session token
+                UserToken.getInstance().saveToken(session.getToken());
             }
         });
     }
@@ -54,7 +56,8 @@ public class LoginPresenterImpl implements LoginPresenter {
                 }
 
                 @Override public void onError(Throwable e) {
-                    String message = ErrorMessageFactory.createMessage(loginView.getContextActivity(), e);
+                    String message = ErrorMessageFactory.
+                            createMessageOnLogin(loginView.getContextActivity(), e);
                     loginView.showError(message);
                 }
 
