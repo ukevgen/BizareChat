@@ -79,9 +79,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mRegistrationPresenter = new RegistrationPresenterImpl();
         super.onCreate(savedInstanceState);
     }
-
-    @Override
-    public void onStart() {
+  
+    @Override public void onStart() {
         super.onStart();
     }
 
@@ -111,7 +110,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mAvatarImage.setOnClickListener(this);
         mFacebookLinkButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-
+        addPhoneNumberFormatting();
         this.setAnimation();
         return v;
     }
@@ -305,6 +304,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
             mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
         }
+
 
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
             mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
