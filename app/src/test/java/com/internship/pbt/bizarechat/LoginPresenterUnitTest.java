@@ -26,19 +26,19 @@ public class LoginPresenterUnitTest {
     LoginFragment loginView;
 
     @Before
-    public void prepareData(){
+    public void prepareData() {
         loginPresenter = new LoginPresenterImpl(getTokenUseCase);
         loginPresenter.setLoginView(loginView);
     }
 
     @Test
-    public void checkFieldsAndSetButtonStateEnabled(){
+    public void checkFieldsAndSetButtonStateEnabled() {
         loginPresenter.checkFieldsAndSetButtonState("1234", "1234");
         verify(loginView, times(1)).setButtonSignInEnabled(true);
     }
 
     @Test
-    public void checkFieldsAndSetButtonStateDisabled(){
+    public void checkFieldsAndSetButtonStateDisabled() {
         loginPresenter.checkFieldsAndSetButtonState("", "");
         verify(loginView, times(1)).setButtonSignInEnabled(false);
 
@@ -50,8 +50,18 @@ public class LoginPresenterUnitTest {
     }
 
     @Test
-    public void navigateToRegistrationTest(){
+    public void navigateToRegistrationTest() {
         loginPresenter.goToRegistration();
         verify(loginView, times(1)).navigateToRegistration();
+    }
+
+    @Test
+    public void showForgotPasswordDialog() {
+        loginPresenter.onPasswordForgot();
+
+    }
+
+    @Test
+    public void sendButtonDisabled() {
     }
 }

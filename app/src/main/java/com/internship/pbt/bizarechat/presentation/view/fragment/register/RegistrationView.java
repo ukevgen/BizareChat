@@ -23,4 +23,8 @@ public interface RegistrationView extends LoadDataView {
     void onRegistrationSuccess();
 
     void showErrorPasswordLength();
+
+    void showErrorPasswordConfirm();
+
+    void hideErrorPasswordConfirm();
 }

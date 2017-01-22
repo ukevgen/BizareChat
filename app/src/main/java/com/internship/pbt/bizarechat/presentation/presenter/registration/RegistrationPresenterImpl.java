@@ -25,7 +25,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidPassword();
     }
 
-  @Override public void showErrorInvalidEmail() {
+    @Override
+    public void showErrorInvalidEmail() {
         Log.d("123", "Presenter showErrorInvalidEmail");
         mRegisterView.showErrorInvalidEmail();
     }
@@ -41,10 +42,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+    public void showErrorPasswordConfirm() {
+        mRegisterView.showErrorPasswordConfirm();
+    }
+
+    @Override
     public void hideErrorsInvalid() {
         mRegisterView.hideErrorInvalidEmail();
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
+        mRegisterView.hideErrorPasswordConfirm();
     }
 
     @Override
@@ -57,7 +64,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideLoading();
     }
 
- @Override public void validateInformation(ValidationInformation validationInformation) {
+    @Override
+    public void validateInformation(ValidationInformation validationInformation) {
 
         boolean isSuccess = true;
         if (!mValidator.isValidEmail(validationInformation.getEmail())) {
@@ -75,6 +83,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
             isSuccess = false;
             this.showErrorPasswordLength();
+        }
+        if (!mValidator.isPasswordMatch(validationInformation.getPassword(),
+                validationInformation.getPasswordConf())) {
+            isSuccess = false;
+            this.showErrorPasswordConfirm();
         }
 
         if (isSuccess)
@@ -96,6 +109,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void pause() {
 
     }
+
 
     @Override public void destroy() {
         if (mRegisterView != null)

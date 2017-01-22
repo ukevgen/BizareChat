@@ -68,5 +68,8 @@ public class RegistrationPresenterUnitTest {
         verify(mRegistrationFragment).showErrorInvalidEmail();
     }
 
+    @Test
+    public void passwordMatch(){}
+
 
 }
