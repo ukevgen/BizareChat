@@ -1,5 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
+import android.net.Uri;
+
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
 public interface RegistrationView extends LoadDataView {
@@ -35,5 +37,9 @@ public interface RegistrationView extends LoadDataView {
     void startFailedSignUpAnim();
 
     void showPictureChooser();
+
+    void loadAvatar(Uri uri);
+
+    void makeAvatarSizeToast();
 
 }

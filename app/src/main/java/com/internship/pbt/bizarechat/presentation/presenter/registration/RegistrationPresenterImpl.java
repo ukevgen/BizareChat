@@ -1,5 +1,8 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
+import android.content.Context;
+import android.net.Uri;
+
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
@@ -79,6 +82,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             this.registrationRequest(validationInformation);
     }
 
+    @Override
+    public void verifyAndLoadAvatar(Context context, Uri uri) {
+        if(mValidator.isValidAvatarSize(context, uri))
+            mRegisterView.loadAvatar(uri);
+        else
+            mRegisterView.makeAvatarSizeToast();
+    }
 
     @Override
     public void registrationRequest(ValidationInformation validationInformation) {

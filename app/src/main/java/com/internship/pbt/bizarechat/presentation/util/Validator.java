@@ -1,6 +1,13 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+
+import java.io.IOException;
+
 public class Validator {
 
     private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
@@ -27,5 +34,18 @@ public class Validator {
 
     public boolean isPasswordLengthMatches(String password) {
         return password.length() >= 6 && password.length() <= 12;
+    }
+
+    public boolean isValidAvatarSize(Context context, Uri uri){
+        try {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        if (bitmap.getByteCount() / 1000000 < 1)
+            return true;
+        else
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+
     }
 }

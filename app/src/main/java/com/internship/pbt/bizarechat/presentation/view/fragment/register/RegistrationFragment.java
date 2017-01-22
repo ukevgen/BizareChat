@@ -2,7 +2,6 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,8 +26,6 @@ import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
-
-import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -284,28 +281,25 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
-                    this.verifyAndLoadAvatar(data.getData());
+                    mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
                 }
                 break;
             case 1:
                 if (resultCode == RESULT_OK) {
-                    this.verifyAndLoadAvatar(data.getData());
+                    mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
                 }
                 break;
         }
     }
 
-    private void verifyAndLoadAvatar(Uri uri){
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-            if (bitmap.getByteCount() / 1000000 < 1)
-                Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
-            else
-                Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb),
-                        Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
+    @Override
+    public void loadAvatar(Uri uri) {
+        Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
+    }
 
-        }
+    @Override
+    public void makeAvatarSizeToast() {
+        Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
     }
 
     public interface OnRegisterSuccess {
