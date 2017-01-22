@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.presentation;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 
 import rx.Scheduler;
-import rx.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class UiThread implements PostExecutorThread {
 
@@ -20,6 +20,6 @@ public class UiThread implements PostExecutorThread {
     }
 
     @Override public Scheduler getScheduler() {
-        return Schedulers.immediate();
+        return AndroidSchedulers.mainThread();
     }
 }

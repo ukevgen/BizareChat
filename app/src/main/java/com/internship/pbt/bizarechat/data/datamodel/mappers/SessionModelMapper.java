@@ -9,7 +9,7 @@ public class SessionModelMapper {
 
     public static Session transform(SessionModel sessionModel){
         Session session = null;
-        if(sessionModel !=null){
+        if(sessionModel != null){
             session = new Session();
             session.setApplicationId(sessionModel.getSession().getApplicationId());
             session.setId(sessionModel.getSession().getId());

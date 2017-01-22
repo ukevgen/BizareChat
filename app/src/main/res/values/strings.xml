@@ -8,6 +8,7 @@
     <string name="forgot_password">Forgot password</string>
     <string name="message_session_expired">Your session has expired</string>
     <string name="message_no_connection">Check your internet connection</string>
+    <string name="password_recovery_sent">Password recovery email was sent</string>
 
 
     <string name="email_com">email@com</string>
