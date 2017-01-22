@@ -47,11 +47,12 @@ public class Validator {
 
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-            if (bitmap.getByteCount() / 10000000 < 1)
-                return true;
-            else
-                return false;
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        if (bitmap.getByteCount() / 10000000 < 1)
+            return true;
+        else
+            return false;
+
         } catch (IOException ex) {
             Log.d(TAG, ex.getMessage(), ex);
             return false;

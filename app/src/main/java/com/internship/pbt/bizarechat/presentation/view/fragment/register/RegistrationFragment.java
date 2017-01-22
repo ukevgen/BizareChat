@@ -36,7 +36,6 @@ import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
 
 import static android.app.Activity.RESULT_OK;
 
-
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
     private static final String PACKAGE_PATH = "com.internship.pbt.bizarechat.presentation.view.fragment.register";
@@ -66,7 +65,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private Animation mFailButtonAnim;
     private Animation getmSuccessSignUpAnim;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -82,10 +80,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mRegistrationPresenter = new RegistrationPresenterImpl();
         super.onCreate(savedInstanceState);
     }
-
   
     @Override public void onStart() {
-
         super.onStart();
     }
 
@@ -148,7 +144,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     }
 
-
     @Override
     public void startFailedSignUpAnim() {
 
@@ -188,7 +183,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void showRetry() {
     }
-
 
     @Override
     public void showError(String message) {
@@ -308,18 +302,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
+            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
+        }
 
-        switch (requestCode) {
-            case 0:
-                if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
-                    mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
-                }
-                break;
-            case 1:
-                if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
-                    mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
-                }
-                break;
+
+        if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
+            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
         }
     }
 
@@ -333,18 +322,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
     }
 
-    public interface OnRegisterSuccess {
-        void onRegisterSuccess();
-    }
-
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
         Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void setPermission(Uri uri) {
-        getActivity().grantUriPermission(PACKAGE_PATH, uri,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+    public interface OnRegisterSuccess {
+        void onRegisterSuccess();
     }
 }
