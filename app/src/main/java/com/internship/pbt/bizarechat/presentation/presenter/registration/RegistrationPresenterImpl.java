@@ -26,8 +26,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void showErrorInvalidEmail() {
-        Log.d("123", "Presenter showErrorInvalidEmail");
-
         mRegisterView.showErrorInvalidEmail();
     }
 
@@ -100,11 +98,12 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void verifyAndLoadAvatar(Context context, Uri uri) {
-       // mRegisterView.setPermission(uri);
-        if (mValidator.isValidAvatarSize(context, uri))
+        // mRegisterView.setPermission(uri);
+        if (mValidator.isValidAvatarSize(context, uri)) {
             mRegisterView.loadAvatar(uri);
-        else
+        } else {
             mRegisterView.makeAvatarSizeToast();
+        }
     }
 
     @Override
@@ -125,7 +124,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void pause() {
-
     }
 
     @Override

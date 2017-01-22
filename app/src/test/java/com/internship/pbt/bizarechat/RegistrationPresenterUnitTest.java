@@ -1,8 +1,9 @@
 package com.internship.pbt.bizarechat;
 
-
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
-
+import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
+import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private RegistrationView mRegistrationFragment;
 
-    private RegistrationPresenterImpl mRegistrationPresenter;
+    private RegistrationPresenter mRegistrationPresenter;
 
     private InformationOnCheck mInformationOnCheck;
     @Before
