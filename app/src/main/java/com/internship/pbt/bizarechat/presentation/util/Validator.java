@@ -1,39 +1,38 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
 
 public class Validator {
 
+    private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
+            "(?=(.*d){2,})|" +
+            "(.*\\[a-z])|" +
+            "(?=(.*[A-Z]){2,})" +
+            ")";
     private static final int SIX = 6;
     private static final int TWELVE = 12;
-    private final String PASSWORD_REGEX = "((?=.*\\d).{2,})((?=.*[a-z]))((?=.*[A-Z]).{2,})";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-    private final String PHONE_REGEX =  "(\\+[0-9]+[\\- \\.]*)?"
+    private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
             + "([0-9][0-9\\- \\.]+[0-9])";
 
     public boolean isValidEmail(String email) {
-        Log.d("123", "Validator " + email);
-
-        Log.d("123", "Validator " + email.matches(EMAIL_REGEX));
-
         return email.matches(EMAIL_REGEX);
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
-        Pattern pattern = Pattern.compile(PHONE_REGEX);
-        Matcher matcher = pattern.matcher(phoneNumber);
-        return matcher.matches();
+        return phoneNumber.matches(PHONE_REGEX);
     }
 
     public boolean isValidPassword(String password) {
-        Pattern patterns = Pattern.compile(PASSWORD_REGEX);
-        Matcher matcher = patterns.matcher(password);
-        return matcher.matches();
+        return password.matches(PASSWORD_REGEX);
     }
 
     public boolean isPasswordLengthMatches(String password) {
@@ -42,5 +41,22 @@ public class Validator {
 
     public boolean isPasswordMatch (String password, String confirmPsw){
         return password.equals(confirmPsw);
+    }
+
+    public boolean isValidAvatarSize(Context context, Uri uri){
+        try {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        if ((bitmap.getByteCount() / 1000000) < 1){
+            Log.d("123", "Validation size of pic true");
+            return true;
+        }
+        else
+            return false;
+        } catch (IOException e) {
+            Log.d("123", "Validation size of pic catch");
+
+            return false;
+        }
+
     }
 }

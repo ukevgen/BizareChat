@@ -1,6 +1,9 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
+import android.content.Context;
+import android.net.Uri;
+
+import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
@@ -16,11 +19,17 @@ public interface RegistrationPresenter extends Presenter {
 
     void hideErrorsInvalid();
 
-    void validateInformation(ValidationInformation validationInformation);
+    void validateInformation(InformationOnCheck informationOnCheck);
 
     void onRegistrationSuccess();
 
+    void facebookLink();
+
+    void registrationRequest(InformationOnCheck informationOnCheck);
+
     void showErrorPasswordLength();
+
+    void verifyAndLoadAvatar(Context context, Uri uri);
 
     void showErrorPasswordConfirm();
 

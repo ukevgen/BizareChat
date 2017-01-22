@@ -182,7 +182,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     buttonSend.setEnabled(false);
             }
         });
-
     }
 
     @Override

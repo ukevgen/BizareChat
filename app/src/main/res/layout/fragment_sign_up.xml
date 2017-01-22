@@ -17,14 +17,14 @@
         android:background="@color/cardSignBackground"
         android:paddingBottom="24dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
-            android:background="@drawable/userpic"/>
+            android:src="@drawable/userpic"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_email"

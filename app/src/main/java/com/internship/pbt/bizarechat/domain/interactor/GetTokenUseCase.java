@@ -13,12 +13,13 @@ public class GetTokenUseCase extends UseCase<Session>{
 
     public GetTokenUseCase(SessionRepository sessionRepository,
                            ThreadExecutor threadExecutor,
-                           PostExecutorThread postExecutionThread){
+                           PostExecutorThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.sessionRepository = sessionRepository;
     }
 
-    @Override protected Observable<Session> buildUseCaseObservable() {
+    @Override
+    protected Observable<Session> buildUseCaseObservable() {
         return sessionRepository.getSession();
     }
 }

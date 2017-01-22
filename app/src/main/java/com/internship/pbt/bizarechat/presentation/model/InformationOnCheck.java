@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.model;
 
-public class ValidationInformation {
+public class InformationOnCheck {
 
     private String mEmail;
 
