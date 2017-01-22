@@ -21,9 +21,19 @@
     <string name="password_don_t_match">Password don\'t match</string>
     <string name="invalid_phone">Invalid Phone</string>
     <string name="link_facebook">Link Facebook</string>
+    <string name="linked">Linked</string>
 
     <string name="invalid_weak_password">Password is weak. Please use at least two digits and two capitalized letters</string>
     <string name="error_password_length">Password length should be 6-12 symbols</string>
+
+    <string name="choose_source_for_getting_image">Choose source for getting image</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="back">Back</string>
+
+    <string name="device_camera">Device Camera</string>
+    <string name="photo_gallery">Photo Gallery</string>
+    <string name="too_large_picture_max_size_1mb">Too large picture max size 1mb</string>
     <string name="restore_password">Restore Password</string>
     <string name="send_email">SEND</string>
     <string name="cancel">Cancel</string>

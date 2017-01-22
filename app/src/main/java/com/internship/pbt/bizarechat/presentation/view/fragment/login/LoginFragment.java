@@ -157,7 +157,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         emailEditTextInPasswordRecovery.setHintTextColor(getActivity().getResources().getColor(R.color.email_hint));
         emailEditTextInPasswordRecovery.setTextColor(getActivity().getResources().getColor(R.color.black));
         emailEditTextInPasswordRecovery.setHint(R.string.email_address);
-        builder.setView(emailEditTextInPasswordRecovery);
 
         builder.setPositiveButton(R.string.send_email, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -171,7 +170,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
             }
         });
 
-        dialog = builder.show();
+        dialog = builder.create();
+        dialog.setView(emailEditTextInPasswordRecovery, 30, 30, 30, 0);
+        dialog.show();
 
         Button buttonSend = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         buttonSend.setOnClickListener(
@@ -199,7 +200,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     buttonSend.setEnabled(false);
             }
         });
-
     }
 
     @Override public void showErrorOnPasswordRecovery() {

@@ -1,17 +1,15 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.util.Log;
+import android.content.Context;
+import android.net.Uri;
 
-import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
+import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
-
-import rx.subscriptions.CompositeSubscription;
 
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final String TAG = "RegistrPresenterImpl";
-    private CompositeSubscription mSubscription;
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
 
@@ -27,7 +25,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void showErrorInvalidEmail() {
-        Log.d("123", "Presenter showErrorInvalidEmail");
+
         mRegisterView.showErrorInvalidEmail();
     }
 
@@ -65,53 +63,72 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void validateInformation(ValidationInformation validationInformation) {
+    public void validateInformation(InformationOnCheck informationOnCheck) {
 
-        boolean isSuccess = true;
-        if (!mValidator.isValidEmail(validationInformation.getEmail())) {
-            isSuccess = false;
+        this.hideErrorsInvalid();
+
+
+        boolean isValidationSuccess = true;
+        if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
+            isValidationSuccess = false;
             this.showErrorInvalidEmail();
         }
-        if (!mValidator.isValidPassword(validationInformation.getPassword())) {
-            isSuccess = false;
+        if (!mValidator.isValidPassword(informationOnCheck.getPassword())) {
+            isValidationSuccess = false;
             this.showErrorInvalidPassword();
         }
-        if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
-            isSuccess = false;
+        if (!mValidator.isValidPhoneNumber(informationOnCheck.getPhone())) {
+            isValidationSuccess = false;
             this.showErrorInvalidPhoneNumber();
         }
-        if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
-            isSuccess = false;
+        if (!mValidator.isPasswordLengthMatches(informationOnCheck.getPassword())) {
+            isValidationSuccess = false;
             this.showErrorPasswordLength();
         }
-        if (!mValidator.isPasswordMatch(validationInformation.getPassword(),
-                validationInformation.getPasswordConf())) {
-            isSuccess = false;
+        if (!mValidator.isPasswordMatch(informationOnCheck.getPassword(),
+                informationOnCheck.getPasswordConf())) {
+            isValidationSuccess = false;
             this.showErrorPasswordConfirm();
         }
 
-        if (isSuccess)
-            onRegistrationSuccess();
+        if (isValidationSuccess)
+            this.registrationRequest(informationOnCheck);
+    }
+
+    @Override
+    public void verifyAndLoadAvatar(Context context, Uri uri) {
+        if (mValidator.isValidAvatarSize(context, uri))
+            mRegisterView.loadAvatar(uri);
+        else
+            mRegisterView.makeAvatarSizeToast();
+    }
+
+    @Override
+    public void registrationRequest(InformationOnCheck informationOnCheck) {
+
+    }
+
+    @Override
+    public void facebookLink() {
+
     }
 
     @Override
     public void onRegistrationSuccess() {
 
-        //mRegisterView.onRegistrationSuccess(); TODO Make registration request
-    }
-
-    @Override
-    public void resume() {
-
+        mRegisterView.onRegistrationSuccess();
     }
 
     @Override
     public void pause() {
-
     }
 
+    @Override
+    public void resume() {
+    }
 
-    @Override public void destroy() {
+    @Override
+    public void destroy() {
         if (mRegisterView != null)
             mRegisterView = null;
     }
