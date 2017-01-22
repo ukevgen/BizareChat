@@ -22,6 +22,7 @@ public interface SessionService {
     @POST("/session.json")
     Observable<SessionModel> getSessionWithAuth(@Body SessionWithAuthRequest body);
 
+    @POST("/login.json")
     Observable<SignInResponseModel> loginUser(@Header("QB-Token: ") String tokenHeader,
                                               @Body UserRequestModel requestModel);
 }
