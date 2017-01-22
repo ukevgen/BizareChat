@@ -29,6 +29,10 @@ public interface RegistrationPresenter extends Presenter {
 
     void showErrorPasswordLength();
 
+<<<<<<< HEAD
     void verifyAndLoadAvatar(Context context, Uri uri);
+=======
+    void showErrorPasswordConfirm();
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
 
 }

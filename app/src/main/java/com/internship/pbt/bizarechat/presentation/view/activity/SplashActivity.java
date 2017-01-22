@@ -20,8 +20,12 @@ public class SplashActivity extends BaseActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
 
         mNavigator.navigateToLoginActivity(this);
+=======
+            mNavigator.navigateToLoginActivity(this);
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
 
         finish();
     }

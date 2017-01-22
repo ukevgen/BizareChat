@@ -5,6 +5,7 @@ public class InformationOnCheck {
     private String mEmail;
 
     private String mPassword;
+    private String passwordConf;
 
     private String mPhone;
 
@@ -32,9 +33,21 @@ public class InformationOnCheck {
         mPhone = phone;
     }
 
-    @Override public String toString() {
-        return  mEmail + " \n" +
-                mPassword + " \n" +
-                mPhone + " \n";
+    public String getPasswordConf() {
+        return passwordConf;
+    }
+
+    public void setPasswordConf(String passwordConf) {
+        this.passwordConf = passwordConf;
+    }
+
+    @Override
+    public String toString() {
+        return "ValidationInformation{" +
+                "mEmail='" + mEmail + '\'' +
+                ", mPassword='" + mPassword + '\'' +
+                ", passwordConf='" + passwordConf + '\'' +
+                ", mPhone='" + mPhone + '\'' +
+                '}';
     }
 }

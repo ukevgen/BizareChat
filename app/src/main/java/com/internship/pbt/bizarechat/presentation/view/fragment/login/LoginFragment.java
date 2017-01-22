@@ -1,8 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -134,7 +137,56 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showForgotPassword() {
+<<<<<<< HEAD
         //TODO need to be implemented
+=======
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle(R.string.restore_password);
+
+        final TextInputEditText email = new TextInputEditText(getActivity());
+        email.setHintTextColor(getActivity().getResources().getColor(R.color.email_hint));
+        email.setTextColor(getActivity().getResources().getColor(R.color.black));
+        email.setHint(R.string.email_address);
+        builder.setView(email);
+
+        builder.setPositiveButton(R.string.send_email, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String userEmail = String.valueOf(email.getText());
+                // Do something with value!
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.show();
+
+        Button buttonSend = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        buttonSend.setEnabled(false);
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() != 0)
+                    buttonSend.setEnabled(true);
+                if (email.getText().length() == 0)
+                    buttonSend.setEnabled(false);
+            }
+        });
+
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
     }
 
     @Override

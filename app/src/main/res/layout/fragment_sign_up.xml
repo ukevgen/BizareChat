@@ -109,6 +109,8 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:inputType="phone"
+                android:text="@string/ukr_phone"
                 android:hint="@string/phone"/>
         </android.support.design.widget.TextInputLayout>
 

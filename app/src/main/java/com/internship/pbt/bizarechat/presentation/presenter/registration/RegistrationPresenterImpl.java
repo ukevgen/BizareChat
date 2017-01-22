@@ -25,6 +25,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void showErrorInvalidEmail() {
+<<<<<<< HEAD
+=======
+        Log.d("123", "Presenter showErrorInvalidEmail");
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
         mRegisterView.showErrorInvalidEmail();
     }
 
@@ -39,10 +43,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+<<<<<<< HEAD
+=======
+    public void showErrorPasswordConfirm() {
+        mRegisterView.showErrorPasswordConfirm();
+    }
+
+    @Override
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
     public void hideErrorsInvalid() {
         mRegisterView.hideErrorInvalidEmail();
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
+        mRegisterView.hideErrorPasswordConfirm();
     }
 
     @Override
@@ -56,9 +69,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+<<<<<<< HEAD
     public void validateInformation(InformationOnCheck informationOnCheck) {
 
         this.hideErrorsInvalid();
+=======
+    public void validateInformation(ValidationInformation validationInformation) {
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
 
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
@@ -77,6 +94,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             isValidationSuccess = false;
             this.showErrorPasswordLength();
         }
+        if (!mValidator.isPasswordMatch(validationInformation.getPassword(),
+                validationInformation.getPasswordConf())) {
+            isSuccess = false;
+            this.showErrorPasswordConfirm();
+        }
 
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
@@ -91,12 +113,17 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+<<<<<<< HEAD
     public void registrationRequest(InformationOnCheck informationOnCheck) {
+=======
+    public void onRegistrationSuccess() {
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
 
     }
     @Override
     public void facebookLink() {
 
+<<<<<<< HEAD
     }
 
     @Override
@@ -104,6 +131,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
         mRegisterView.onRegistrationSuccess();
     }
+=======
+    @Override
+    public void resume() {
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
 
     @Override
     public void resume() {
@@ -114,8 +145,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     }
 
+<<<<<<< HEAD
     @Override
     public void destroy() {
+=======
+
+    @Override public void destroy() {
+
+        if (!mSubscription.isUnsubscribed() || mSubscription == null)
+            mSubscription.unsubscribe();
+>>>>>>> f2f1036637a61266c145f35c86c07cac350f944c
         if (mRegisterView != null)
             mRegisterView = null;
     }

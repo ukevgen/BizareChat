@@ -42,4 +42,7 @@ public interface RegistrationView extends LoadDataView {
 
     void makeAvatarSizeToast();
 
+    void showErrorPasswordConfirm();
+
+    void hideErrorPasswordConfirm();
 }

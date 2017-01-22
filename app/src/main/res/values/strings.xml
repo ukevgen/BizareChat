@@ -1,4 +1,4 @@
-<resources tools:ignore="TypographyDashes" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
     <string name="app_name">BizareChat</string>
     <string name="sign_in">SIGN IN</string>
     <string name="email_address">Email Address</string>
@@ -24,6 +24,7 @@
 
     <string name="invalid_weak_password">Password is weak. Please use at least two digits and two capitalized letters</string>
     <string name="error_password_length">Password length should be 6-12 symbols</string>
+
     <string name="choose_source_for_getting_image">Choose source for getting image</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
@@ -32,5 +33,12 @@
     <string name="device_camera">Device Camera</string>
     <string name="photo_gallery">Photo Gallery</string>
     <string name="too_large_picture_max_size_1mb">Too large picture max size 1mb</string>
+    <string name="restore_password">Restore Password</string>
+    <string name="send_email">SEND</string>
+    <string name="cancel">Cancel</string>
+    <string name="do_not_match_password">Passwords do not match</string>
+
+    <string name="phone_format">+38 (0__) ___-__-__</string>
+    <string name="ukr_phone">+38 (0</string>
 
 </resources>
