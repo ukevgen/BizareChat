@@ -1,7 +1,7 @@
 package com.internship.pbt.bizarechat.data.repository;
 
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
-import com.internship.pbt.bizarechat.data.datamodel.request.UserRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;

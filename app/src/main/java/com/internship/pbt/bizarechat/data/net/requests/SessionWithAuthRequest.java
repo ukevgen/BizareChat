@@ -1,7 +1,5 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
-import com.internship.pbt.bizarechat.data.datamodel.request.UserRequestModel;
-
 public class SessionWithAuthRequest {
 
     private String application_id;

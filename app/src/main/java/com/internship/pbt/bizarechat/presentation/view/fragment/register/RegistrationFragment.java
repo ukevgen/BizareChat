@@ -1,16 +1,23 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
@@ -19,8 +26,13 @@ import com.internship.pbt.bizarechat.presentation.presenter.registration.Registr
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
+
+    private final int DEVICE_CAMERA = 0;
+    private final int PHOTO_GALLERY = 1;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -32,15 +44,22 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private TextInputEditText mPasswordEditText;
     private TextInputEditText mPhoneEditText;
 
-    private Button mButton;
+    private Button mSignUpButton;
+    private Button mFacebookLinkButton;
     private OnRegisterSuccess mOnRegisterSuccess;
 
+
+    private ImageView mAvatarImage;
+    private Animation mSuccessFacebookButtonAnim;
+    private Animation mFailButtonAnim;
+    private Animation getmSuccessSignUpAnim;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnRegisterSuccess)
+        if (context instanceof OnRegisterSuccess && context != null) {
             mOnRegisterSuccess = (OnRegisterSuccess) context;
+        }
     }
 
     @Override
@@ -64,8 +83,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Log.d("123", "Fragment OnCreateView");
 
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
-
         mRegistrationPresenter.setRegistrationView(this);
+
+        mAvatarImage = (ImageView) v.findViewById(R.id.user_pic);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
@@ -75,8 +95,14 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
         mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
 
-        mButton = (Button) v.findViewById(R.id.register_sign_up);
-        mButton.setOnClickListener(this);
+        mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
+        mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
+
+        mAvatarImage.setOnClickListener(this);
+        mFacebookLinkButton.setOnClickListener(this);
+        mSignUpButton.setOnClickListener(this);
+
+        this.setAnimation();
 
         return v;
     }
@@ -92,6 +118,33 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onDestroy() {
         super.onDestroy();
         mRegistrationPresenter.destroy();
+    }
+
+    @Override
+    public void setAnimation() {
+
+    }
+
+
+    @Override
+    public void startOnFacebookLinkSuccessAnim() {
+        mFacebookLinkButton.setEnabled(false);
+        mFacebookLinkButton.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.disappear));
+        mFacebookLinkButton.setText(getText(R.string.linked));
+        mFacebookLinkButton.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.appear));
+    }
+
+    @Override
+    public void startOnFailedFacebooLinkkAnim() {
+    }
+
+    @Override
+    public void startSuccessSignUpAnim() {
+
+    }
+
+    @Override
+    public void startFailedSignUpAnim() {
     }
 
     @Override
@@ -172,8 +225,41 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.register_sign_up)
-            getInformationForValidation();
+       switch (view.getId())
+       {
+           case R.id.register_sign_up:
+               this.getInformationForValidation();
+               break;
+           case R.id.login_facebook_button:
+               mRegistrationPresenter.facebookLink();
+               break;
+           case R.id.user_pic:
+               this.showPictureChooser();
+               break;
+       }
+    }
+
+
+
+    @Override
+    public void showPictureChooser() {
+        final String[] items = {"Device Camera", "Photo Gallery"};
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
+        builder.setTitle(getText(R.string.choose_source_for_getting_image));
+        builder.setNegativeButton(R.string.back, null);
+        builder.setItems(items, (dialogInterface, i) -> {
+            if(items[i].equals("Device Camera")){
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, DEVICE_CAMERA);
+            }
+            else if(items[i].equals("Photo Gallery")){
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, PHOTO_GALLERY);
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -184,6 +270,27 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         validationInformation.setPhone(mPhoneEditText.getText().toString());
         Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
         mRegistrationPresenter.validateInformation(validationInformation);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case 0:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    mAvatarImage.setImageURI(selectedImage);
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    mAvatarImage.setImageURI(selectedImage);
+                }
+                break;
+        }
     }
 
     public interface OnRegisterSuccess {

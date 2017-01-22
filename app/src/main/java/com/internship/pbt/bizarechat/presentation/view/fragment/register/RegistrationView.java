@@ -23,4 +23,17 @@ public interface RegistrationView extends LoadDataView {
     void onRegistrationSuccess();
 
     void showErrorPasswordLength();
+
+    void setAnimation();
+
+    void startOnFacebookLinkSuccessAnim();
+
+    void startOnFailedFacebooLinkkAnim();
+
+    void startSuccessSignUpAnim();
+
+    void startFailedSignUpAnim();
+
+    void showPictureChooser();
+
 }

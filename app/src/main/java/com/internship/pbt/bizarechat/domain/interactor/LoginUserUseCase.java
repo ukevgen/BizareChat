@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import com.internship.pbt.bizarechat.data.datamodel.request.UserRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
@@ -12,11 +12,12 @@ public class LoginUserUseCase extends UseCase {
 
     private SessionRepository sessionRepository;
     private UserRequestModel requestModel;
+
     protected LoginUserUseCase(SessionRepository sessionRepository,
-            ThreadExecutor threadExecutor,
+                               ThreadExecutor threadExecutor,
                                PostExecutorThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        sessionRepository = sessionRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override

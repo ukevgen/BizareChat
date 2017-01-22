@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.data.net.services;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
-import com.internship.pbt.bizarechat.data.datamodel.request.UserRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
 import com.internship.pbt.bizarechat.data.net.requests.SessionWithAuthRequest;

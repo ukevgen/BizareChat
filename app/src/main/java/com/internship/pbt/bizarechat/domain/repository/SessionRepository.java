@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.domain.repository;
 
-import com.internship.pbt.bizarechat.data.datamodel.request.UserRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
 

@@ -55,37 +55,48 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void validateInformation(ValidationInformation validationInformation) {
 
-        boolean isSuccess = true;
+        this.hideErrorsInvalid();
+
+        boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(validationInformation.getEmail())) {
-            isSuccess = false;
+            isValidationSuccess = false;
             this.showErrorInvalidEmail();
         }
         if (!mValidator.isValidPassword(validationInformation.getPassword())) {
-            isSuccess = false;
+            isValidationSuccess = false;
             this.showErrorInvalidPassword();
         }
         if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
-            isSuccess = false;
+            isValidationSuccess = false;
             this.showErrorInvalidPhoneNumber();
         }
         if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
-            isSuccess = false;
+            isValidationSuccess = false;
             this.showErrorPasswordLength();
         }
 
-        if (isSuccess)
-            onRegistrationSuccess();
+        if (isValidationSuccess)
+            this.registrationRequest(validationInformation);
+    }
+
+
+    @Override
+    public void registrationRequest(ValidationInformation validationInformation) {
+
+    }
+    @Override
+    public void facebookLink() {
+
     }
 
     @Override
     public void onRegistrationSuccess() {
 
-        //mRegisterView.onRegistrationSuccess(); TODO Make registration request
+        mRegisterView.onRegistrationSuccess();
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override

@@ -20,6 +20,10 @@ public interface RegistrationPresenter extends Presenter {
 
     void onRegistrationSuccess();
 
+    void facebookLink();
+
+    void registrationRequest(ValidationInformation validationInformation);
+
     void showErrorPasswordLength();
 
 }

@@ -1,7 +1,6 @@
-package com.internship.pbt.bizarechat.data.datamodel.request;
+package com.internship.pbt.bizarechat.data.net.requests;
 
 public class UserRequestModel {
-
     private String login;
     private String password;
 
