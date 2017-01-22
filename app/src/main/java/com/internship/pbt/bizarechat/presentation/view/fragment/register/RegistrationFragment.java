@@ -37,7 +37,6 @@ import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
 import static android.app.Activity.RESULT_OK;
 
 
-
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
     private final int DEVICE_CAMERA = 0;
@@ -71,7 +70,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnRegisterSuccess ) {
+        if (context instanceof OnRegisterSuccess) {
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
@@ -82,7 +81,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mRegistrationPresenter = new RegistrationPresenterImpl();
         super.onCreate(savedInstanceState);
     }
-    @Override public void onStart() {
+
+    @Override
+    public void onStart() {
         super.onStart();
     }
 
@@ -112,7 +113,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mAvatarImage.setOnClickListener(this);
         mFacebookLinkButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-
+        addPhoneNumberFormatting();
         this.setAnimation();
         return v;
     }
@@ -174,7 +175,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void showLoading() {}
+    public void showLoading() {
+    }
 
 
     @Override
@@ -182,7 +184,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void showRetry() {}
+    public void showRetry() {
+    }
 
 
     @Override
@@ -306,12 +309,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         switch (requestCode) {
             case 0:
-                if (resultCode == RESULT_OK) {
+                if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
                     mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
                 }
                 break;
             case 1:
-                if (resultCode == RESULT_OK) {
+                if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
                     mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
                 }
                 break;
@@ -331,6 +334,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
+
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
         Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
