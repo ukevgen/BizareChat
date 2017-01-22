@@ -7,8 +7,15 @@ import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
+import ru.tinkoff.decoro.MaskImpl;
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
+import ru.tinkoff.decoro.slots.Slot;
+import ru.tinkoff.decoro.watchers.FormatWatcher;
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
+
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
+    private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
@@ -41,6 +48,15 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void showErrorPasswordConfirm() {
         mRegisterView.showErrorPasswordConfirm();
+    }
+
+    @Override
+    public void createFormatWatcher() {
+        Slot[] slots = new UnderscoreDigitSlotsParser().parseSlots(PHONE_FORMAT);
+        FormatWatcher formatWatcher = new MaskFormatWatcher(
+                MaskImpl.createTerminated(slots)
+        );
+        mRegisterView.addPhoneNumberFormatting(formatWatcher);
     }
 
     @Override
@@ -109,6 +125,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void registrationRequest(InformationOnCheck informationOnCheck) {
 
     }
+
 
     @Override
     public void facebookLink() {
