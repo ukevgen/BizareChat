@@ -28,14 +28,13 @@ import com.internship.pbt.bizarechat.presentation.presenter.registration.Registr
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.app.Activity.RESULT_OK;
-
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
 import ru.tinkoff.decoro.slots.Slot;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
+
+import static android.app.Activity.RESULT_OK;
 
 
 
@@ -72,7 +71,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnRegisterSuccess && context != null) {
+        if (context instanceof OnRegisterSuccess ) {
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
@@ -296,6 +295,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         informationOnCheck.setEmail(mEmailEditText.getText().toString());
         informationOnCheck.setPassword(mPasswordEditText.getText().toString());
         informationOnCheck.setPhone(mPhoneEditText.getText().toString());
+        informationOnCheck.setPasswordConf(mPasswordConfirm.getText().toString());
         Log.d("123", "Fragment GetValidInf" + informationOnCheck.toString());
         mRegistrationPresenter.validateInformation(informationOnCheck);
     }
