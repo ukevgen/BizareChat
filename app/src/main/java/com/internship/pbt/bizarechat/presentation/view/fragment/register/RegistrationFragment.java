@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
+import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
@@ -266,12 +266,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void getInformationForValidation() {
-        ValidationInformation validationInformation = new ValidationInformation();
-        validationInformation.setEmail(mEmailEditText.getText().toString());
-        validationInformation.setPassword(mPasswordEditText.getText().toString());
-        validationInformation.setPhone(mPhoneEditText.getText().toString());
-        Log.d("123", "Fragment GetValidInf" + validationInformation.toString());
-        mRegistrationPresenter.validateInformation(validationInformation);
+        InformationOnCheck informationOnCheck = new InformationOnCheck();
+        informationOnCheck.setEmail(mEmailEditText.getText().toString());
+        informationOnCheck.setPassword(mPasswordEditText.getText().toString());
+        informationOnCheck.setPhone(mPhoneEditText.getText().toString());
+        Log.d("123", "Fragment GetValidInf" + informationOnCheck.toString());
+        mRegistrationPresenter.validateInformation(informationOnCheck);
     }
 
     @Override

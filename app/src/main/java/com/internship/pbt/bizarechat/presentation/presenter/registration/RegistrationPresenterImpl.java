@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 import android.content.Context;
 import android.net.Uri;
 
-import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
+import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
@@ -56,30 +56,30 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void validateInformation(ValidationInformation validationInformation) {
+    public void validateInformation(InformationOnCheck informationOnCheck) {
 
         this.hideErrorsInvalid();
 
         boolean isValidationSuccess = true;
-        if (!mValidator.isValidEmail(validationInformation.getEmail())) {
+        if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
             this.showErrorInvalidEmail();
         }
-        if (!mValidator.isValidPassword(validationInformation.getPassword())) {
+        if (!mValidator.isValidPassword(informationOnCheck.getPassword())) {
             isValidationSuccess = false;
             this.showErrorInvalidPassword();
         }
-        if (!mValidator.isValidPhoneNumber(validationInformation.getPhone())) {
+        if (!mValidator.isValidPhoneNumber(informationOnCheck.getPhone())) {
             isValidationSuccess = false;
             this.showErrorInvalidPhoneNumber();
         }
-        if (!mValidator.isPasswordLengthMatches(validationInformation.getPassword())) {
+        if (!mValidator.isPasswordLengthMatches(informationOnCheck.getPassword())) {
             isValidationSuccess = false;
             this.showErrorPasswordLength();
         }
 
         if (isValidationSuccess)
-            this.registrationRequest(validationInformation);
+            this.registrationRequest(informationOnCheck);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void registrationRequest(ValidationInformation validationInformation) {
+    public void registrationRequest(InformationOnCheck informationOnCheck) {
 
     }
     @Override
