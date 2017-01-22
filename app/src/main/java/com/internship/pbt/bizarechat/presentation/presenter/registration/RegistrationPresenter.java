@@ -33,4 +33,7 @@ public interface RegistrationPresenter extends Presenter {
 
     void showErrorPasswordConfirm();
 
+    void createFormatWatcher();
+
+
 }
