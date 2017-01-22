@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.net;
 
 
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
+import com.internship.pbt.bizarechat.data.net.services.UserService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +15,7 @@ public class RetrofitApi {
     private volatile static RetrofitApi INSTANCE;
 
     private SessionService sessionService;
+    private UserService userService;
 
     private RetrofitApi(){
         OkHttpClient okHttpClient = createClient();
@@ -45,11 +47,14 @@ public class RetrofitApi {
      */
     private void buildServices(Retrofit retrofit){
         sessionService = retrofit.create(SessionService.class);
+        userService = retrofit.create(UserService.class);
     }
 
     public SessionService getSessionService() {
         return sessionService;
     }
+
+    public UserService getUserService(){ return userService; }
 
     private static OkHttpClient createClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

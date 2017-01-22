@@ -124,7 +124,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void pause() {
-
     }
 
     @Override
