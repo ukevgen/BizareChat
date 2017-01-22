@@ -2,14 +2,20 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
+import ru.tinkoff.decoro.MaskImpl;
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
+import ru.tinkoff.decoro.slots.Slot;
+import ru.tinkoff.decoro.watchers.FormatWatcher;
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
+
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
+    private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
@@ -45,11 +51,21 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+    public void createFormatWatcher() {
+        Slot[] slots = new UnderscoreDigitSlotsParser().parseSlots(PHONE_FORMAT);
+        FormatWatcher formatWatcher = new MaskFormatWatcher(
+                MaskImpl.createTerminated(slots)
+        );
+        mRegisterView.addPhoneNumberFormatting(formatWatcher);
+    }
+
+    @Override
     public void hideErrorsInvalid() {
         mRegisterView.hideErrorInvalidEmail();
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
+
     }
 
     @Override
@@ -97,11 +113,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void verifyAndLoadAvatar(Context context, Uri uri) {
-        if (mValidator.isValidAvatarSize(context, uri)){
+        // mRegisterView.setPermission(uri);
+        if (mValidator.isValidAvatarSize(context, uri)) {
             mRegisterView.loadAvatar(uri);
-
-        }
-        else {
+        } else {
             mRegisterView.makeAvatarSizeToast();
         }
     }
@@ -110,6 +125,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void registrationRequest(InformationOnCheck informationOnCheck) {
 
     }
+
 
     @Override
     public void facebookLink() {

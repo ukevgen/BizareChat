@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
+import ru.tinkoff.decoro.watchers.FormatWatcher;
+
 public interface RegistrationView extends LoadDataView {
 
     void loginFacebook();
@@ -45,4 +47,7 @@ public interface RegistrationView extends LoadDataView {
     void showErrorPasswordConfirm();
 
     void hideErrorPasswordConfirm();
+
+    void addPhoneNumberFormatting(FormatWatcher formatWatcher);
+
 }

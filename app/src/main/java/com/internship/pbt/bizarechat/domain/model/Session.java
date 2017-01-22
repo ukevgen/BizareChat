@@ -8,6 +8,7 @@ public class Session {
     private Integer id;
     private String token;
     private Integer userId;
+    private String expirationDate;
 
     public Integer getApplicationId() {
         return applicationId;
@@ -39,5 +40,13 @@ public class Session {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }

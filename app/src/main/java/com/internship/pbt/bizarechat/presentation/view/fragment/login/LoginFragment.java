@@ -1,5 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +20,9 @@ import android.widget.TextView;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
@@ -35,6 +38,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView forgotPasswordTextView;
+    private AlertDialog dialog;
+    private TextInputEditText emailEditTextInPasswordRecovery;
     private ProgressBar progressBar;
 
     public LoginFragment() {
@@ -105,6 +110,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginPresenter.destroy();
     }
 
+    @Override public Context getContextActivity() {
+        return getActivity();
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -120,7 +129,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 JobExecutor.getInstance(),
                 UiThread.getInstance()
         );
-        loginPresenter = new LoginPresenterImpl(getToken);
+
+        ResetPasswordUseCase resetPassword = new ResetPasswordUseCase(
+                new UserDataRepository(),
+                JobExecutor.getInstance(),
+                UiThread.getInstance()
+        );
+        loginPresenter = new LoginPresenterImpl(getToken, resetPassword);
+        loginPresenter.requestSession();
     }
 
     @Override
@@ -131,8 +147,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .replace(R.id.activity_layout_fragment_container, new RegistrationFragment())
                 .addToBackStack(null)
                 .commit();
-
-
     }
 
     @Override
@@ -140,31 +154,36 @@ public class LoginFragment extends BaseFragment implements LoginView {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         builder.setTitle(R.string.restore_password);
 
-        final TextInputEditText email = new TextInputEditText(getActivity());
-        email.setHintTextColor(getActivity().getResources().getColor(R.color.email_hint));
-        email.setTextColor(getActivity().getResources().getColor(R.color.black));
-        email.setHint(R.string.email_address);
-        builder.setView(email);
+        emailEditTextInPasswordRecovery = new TextInputEditText(getActivity());
+        emailEditTextInPasswordRecovery.setHintTextColor(getActivity().getResources().getColor(R.color.email_hint));
+        emailEditTextInPasswordRecovery.setTextColor(getActivity().getResources().getColor(R.color.black));
+        emailEditTextInPasswordRecovery.setHint(R.string.email_address);
 
         builder.setPositiveButton(R.string.send_email, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                String userEmail = String.valueOf(email.getText());
-                // Do something with value!
+
             }
         });
 
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-
+                dialog.dismiss();
             }
         });
 
-        AlertDialog dialog = builder.show();
+        dialog = builder.create();
+        dialog.setView(emailEditTextInPasswordRecovery, 30, 30, 30, 0);
+        dialog.show();
 
         Button buttonSend = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        buttonSend.setOnClickListener(
+                v -> loginPresenter
+                        .checkIsEmailValid(emailEditTextInPasswordRecovery
+                        .getText().toString())
+        );
         buttonSend.setEnabled(false);
 
-        email.addTextChangedListener(new TextWatcher() {
+        emailEditTextInPasswordRecovery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -178,10 +197,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
             public void afterTextChanged(Editable editable) {
                 if (editable.length() != 0)
                     buttonSend.setEnabled(true);
-                if (email.getText().length() == 0)
+                if (emailEditTextInPasswordRecovery.getText().length() == 0)
                     buttonSend.setEnabled(false);
             }
         });
+    }
+
+    @Override public void showErrorOnPasswordRecovery() {
+        emailEditTextInPasswordRecovery.setError(getString(R.string.invalid_email));
+    }
+
+    @Override public void showSuccessOnPasswordRecovery() {
+        dialog.cancel();
+        if(getView() != null)
+            Snackbar.make(getView(), R.string.password_recovery_sent, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

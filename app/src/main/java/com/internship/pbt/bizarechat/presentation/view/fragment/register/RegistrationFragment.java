@@ -28,16 +28,13 @@ import com.internship.pbt.bizarechat.presentation.presenter.registration.Registr
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ru.tinkoff.decoro.MaskImpl;
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
-import ru.tinkoff.decoro.slots.Slot;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
-import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
 
 import static android.app.Activity.RESULT_OK;
 
 public class RegistrationFragment extends BaseFragment implements RegistrationView, View.OnClickListener {
 
+    private static final String PACKAGE_PATH = "com.internship.pbt.bizarechat.presentation.view.fragment.register";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
 
@@ -79,8 +76,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mRegistrationPresenter = new RegistrationPresenterImpl();
         super.onCreate(savedInstanceState);
     }
-  
-    @Override public void onStart() {
+
+    @Override
+    public void onStart() {
         super.onStart();
     }
 
@@ -106,21 +104,26 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
         mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
-
+        mRegistrationPresenter.createFormatWatcher();
         mAvatarImage.setOnClickListener(this);
         mFacebookLinkButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-        addPhoneNumberFormatting();
         this.setAnimation();
         return v;
     }
 
-    private void addPhoneNumberFormatting() {
+   /* private void addPhoneNumberFormatting() {
         Slot[] slots = new UnderscoreDigitSlotsParser().parseSlots(getActivity().getResources().
                 getString(R.string.phone_format));
         FormatWatcher formatWatcher = new MaskFormatWatcher(
                 MaskImpl.createTerminated(slots)
         );
+        formatWatcher.installOn(mPhoneEditText);
+        mPhoneEditText.setSelection(mPhoneEditText.getText().length());
+    }*/
+
+    @Override
+    public void addPhoneNumberFormatting(FormatWatcher formatWatcher) {
         formatWatcher.installOn(mPhoneEditText);
         mPhoneEditText.setSelection(mPhoneEditText.getText().length());
     }
@@ -305,7 +308,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
         }
 
-
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
             mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
         }
@@ -325,6 +327,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mPasswordConfirm.setText("");
         Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
+
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();

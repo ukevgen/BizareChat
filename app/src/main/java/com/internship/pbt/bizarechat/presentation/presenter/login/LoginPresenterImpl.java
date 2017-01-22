@@ -1,18 +1,26 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
 
+import retrofit2.Response;
 import rx.Subscriber;
 
 public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private GetTokenUseCase getTokenUseCase;
+    private ResetPasswordUseCase resetPasswordUseCase;
+    private Validator validator = new Validator();
 
-    public LoginPresenterImpl(GetTokenUseCase getTokenUseCase) {
+    public LoginPresenterImpl(GetTokenUseCase getTokenUseCase,
+                              ResetPasswordUseCase resetPasswordUseCase) {
         this.getTokenUseCase = getTokenUseCase;
+        this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
     @Override
@@ -25,15 +33,41 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onError(Throwable e) {
-                String message = ErrorMessageFactory.createMessage(loginView.getContext(), e);
+                String message = ErrorMessageFactory.
+                        createMessageOnLogin(loginView.getContextActivity(), e);
                 loginView.showError(message);
             }
 
             @Override
             public void onNext(Session session) {
-                //TODO   here we should save session token
+                UserToken.getInstance().saveToken(session.getToken());
             }
         });
+    }
+
+    @Override
+    public void checkIsEmailValid(String email){
+        if(validator.isValidEmail(email)){
+            resetPasswordUseCase.setEmail(email);
+
+            resetPasswordUseCase.execute(new Subscriber<Response<Void>>() {
+                @Override public void onCompleted() {
+
+                }
+
+                @Override public void onError(Throwable e) {
+                    String message = ErrorMessageFactory.
+                            createMessageOnLogin(loginView.getContextActivity(), e);
+                    loginView.showError(message);
+                }
+
+                @Override public void onNext(Response<Void> o) {
+                    loginView.showSuccessOnPasswordRecovery();
+                }
+            });
+        } else {
+            loginView.showErrorOnPasswordRecovery();
+        }
     }
 
     @Override

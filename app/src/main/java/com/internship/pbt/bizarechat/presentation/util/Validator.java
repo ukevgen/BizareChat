@@ -13,9 +13,9 @@ public class Validator {
 
     private static final String TAG = "Validator";
 
-    private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private static final int SIX = 6;
     private static final int TWELVE = 12;
+    private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
@@ -48,6 +48,7 @@ public class Validator {
             return true;
         else
             return false;
+
         } catch (IOException ex) {
             Log.d(TAG, ex.getMessage(), ex);
             return false;

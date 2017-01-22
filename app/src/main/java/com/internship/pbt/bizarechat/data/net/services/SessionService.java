@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.net.services;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
+import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
@@ -24,6 +25,6 @@ public interface SessionService {
 
     @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
     @POST("/login.json")
-    Observable<SignInResponseModel> loginUser(@Header("QB-Token: ") String tokenHeader,
+    Observable<SignInResponseModel> loginUser(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                               @Body UserRequestModel requestModel);
 }
