@@ -14,9 +14,13 @@ public interface LoginView extends LoadDataView{
 
     void onLoginSuccess();
 
-    Context getContext();
+    Context getContextActivity();
 
     void setButtonSignInEnabled(boolean enabled);
 
     void navigateToRegistration();
+
+    void showErrorOnPasswordRecovery();
+
+    void showSuccessOnPasswordRecovery();
 }

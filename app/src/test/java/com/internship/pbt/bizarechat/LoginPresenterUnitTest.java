@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat;
 
 
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
@@ -23,11 +24,14 @@ public class LoginPresenterUnitTest {
     GetTokenUseCase getTokenUseCase;
 
     @Mock
+    ResetPasswordUseCase resetPasswordUseCase;
+
+    @Mock
     LoginFragment loginView;
 
     @Before
     public void prepareData() {
-        loginPresenter = new LoginPresenterImpl(getTokenUseCase);
+        loginPresenter = new LoginPresenterImpl(getTokenUseCase, resetPasswordUseCase);
         loginPresenter.setLoginView(loginView);
     }
 

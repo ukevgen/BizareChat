@@ -47,17 +47,17 @@
     <style name="RegisterInfo">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">Roboto-Regular</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="EmailTextInput">
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#8fb4b9</item>
 
     </style>
 
     <style name="InvalidInfo">
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#EE6767</item>
     </style>
 
@@ -69,7 +69,8 @@
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-
+        <item name="android:layout_width">280dp</item>
+        <item name="android:layout_height">100dp</item>
     </style>
 
 </resources>

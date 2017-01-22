@@ -16,7 +16,7 @@ public class UserDataRepository implements UserRepository {
     }
 
     public Observable<Response<Void>> resetUserPassword(String email){
-//        return userService.resetUserPassword(token, email);
+//        return userService.resetUserPassword(UserToken.getInstance().getSessionToken(), email);
 // TODO need to be implemented after choosing session save variant
         return null;
     }

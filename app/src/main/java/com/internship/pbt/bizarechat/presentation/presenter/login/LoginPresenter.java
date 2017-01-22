@@ -16,4 +16,6 @@ public interface LoginPresenter extends Presenter {
     void onPasswordForgot();
 
     void checkFieldsAndSetButtonState(String email, String password);
+
+    void checkIsEmailValid(String email);
 }

@@ -11,13 +11,8 @@ import java.io.IOException;
 
 public class Validator {
 
+    private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private static final String TAG = "Validator";
-
-    private final String PASSWORD_REGEX = "(" + // TODO Password REGEX
-            "(?=(.*d){2,})|" +
-            "(.*\\[a-z])|" +
-            "(?=(.*[A-Z]){2,})" +
-            ")";
     private static final int SIX = 6;
     private static final int TWELVE = 12;
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
