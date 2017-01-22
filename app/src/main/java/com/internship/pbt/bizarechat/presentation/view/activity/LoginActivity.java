@@ -80,24 +80,25 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
     private void checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(LoginActivity.this,
-                    Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(LoginActivity.this,
-                        new String[]{Manifest.permission.CAMERA},
-                        RC_USE_CAMERA);
-            }
-        }
-    }
-
-    private void checkCameraPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(LoginActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
                 ActivityCompat.requestPermissions(LoginActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         RC_STORAGE_PERMS);
+            }
+        }
+
+    }
+
+    private void checkCameraPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(LoginActivity.this,
+                    Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(LoginActivity.this,
+                        new String[]{Manifest.permission.CAMERA},
+                        RC_USE_CAMERA);
             }
         }
     }
