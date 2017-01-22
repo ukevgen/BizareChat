@@ -29,4 +29,8 @@
     <string name="gallery">Gallery</string>
     <string name="back">Back</string>
 
+    <string name="device_camera">Device Camera</string>
+    <string name="photo_gallery">Photo Gallery</string>
+    <string name="too_large_picture_max_size_1mb">Too large picture max size 1mb</string>
+
 </resources>

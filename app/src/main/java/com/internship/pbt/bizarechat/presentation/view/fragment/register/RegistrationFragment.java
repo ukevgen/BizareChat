@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,14 +18,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.ValidationInformation;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
+
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,10 +55,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private OnRegisterSuccess mOnRegisterSuccess;
 
 
-    private ImageView mAvatarImage;
+    private CircleImageView mAvatarImage;
     private Animation mSuccessFacebookButtonAnim;
     private Animation mFailButtonAnim;
     private Animation getmSuccessSignUpAnim;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -85,7 +92,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
         mRegistrationPresenter.setRegistrationView(this);
 
-        mAvatarImage = (ImageView) v.findViewById(R.id.user_pic);
+        mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
@@ -225,35 +232,33 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void onClick(View view) {
-       switch (view.getId())
-       {
-           case R.id.register_sign_up:
-               this.getInformationForValidation();
-               break;
-           case R.id.login_facebook_button:
-               mRegistrationPresenter.facebookLink();
-               break;
-           case R.id.user_pic:
-               this.showPictureChooser();
-               break;
-       }
+        switch (view.getId()) {
+            case R.id.register_sign_up:
+                this.getInformationForValidation();
+                break;
+            case R.id.login_facebook_button:
+                mRegistrationPresenter.facebookLink();
+                break;
+            case R.id.user_pic:
+                this.showPictureChooser();
+                break;
+        }
     }
-
 
 
     @Override
     public void showPictureChooser() {
-        final String[] items = {"Device Camera", "Photo Gallery"};
+        final CharSequence[] items = {getText(R.string.device_camera),
+                getText(R.string.photo_gallery)};
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
         builder.setTitle(getText(R.string.choose_source_for_getting_image));
         builder.setNegativeButton(R.string.back, null);
         builder.setItems(items, (dialogInterface, i) -> {
-            if(items[i].equals("Device Camera")){
+            if (items[i].equals(getText(R.string.device_camera))) {
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePicture, DEVICE_CAMERA);
-            }
-            else if(items[i].equals("Photo Gallery")){
+            } else if (items[i].equals(getText(R.string.photo_gallery))) {
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(pickPhoto, PHOTO_GALLERY);
@@ -276,25 +281,34 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case 0:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    mAvatarImage.setImageURI(selectedImage);
+                if (resultCode == RESULT_OK) {
+                    this.verifyAndLoadAvatar(data.getData());
                 }
-
                 break;
             case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    mAvatarImage.setImageURI(selectedImage);
+                if (resultCode == RESULT_OK) {
+                    this.verifyAndLoadAvatar(data.getData());
                 }
                 break;
+        }
+    }
+
+    private void verifyAndLoadAvatar(Uri uri){
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            if (bitmap.getByteCount() / 1000000 < 1)
+                Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
+            else
+                Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb),
+                        Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+
         }
     }
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
-
 }
