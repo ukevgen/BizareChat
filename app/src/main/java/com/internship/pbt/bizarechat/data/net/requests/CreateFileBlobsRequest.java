@@ -2,43 +2,20 @@ package com.internship.pbt.bizarechat.data.net.requests;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.internship.pbt.bizarechat.data.datamodel.CreateFileBlobRequestModel;
 
 public class CreateFileBlobsRequest {
 
     @SerializedName("blob")
     @Expose
-    private Blob blob;
+    private CreateFileBlobRequestModel blob;
 
-    public Blob getBlob() {
+    public CreateFileBlobRequestModel getBlob() {
         return blob;
     }
 
-    public void setBlob(Blob blob) {
+    public void setBlob(CreateFileBlobRequestModel blob) {
         this.blob = blob;
     }
 
-    public class Blob {
-        @SerializedName("content_type")
-        @Expose
-        private String contentType;
-        @SerializedName("name")
-        @Expose
-        private String name;
-
-        public String getContentType() {
-            return contentType;
-        }
-
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
 }

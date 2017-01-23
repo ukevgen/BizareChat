@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.datamodel.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.internship.pbt.bizarechat.data.datamodel.BlobObjectAccessModel;
 
 public class CreateFileBlobsResponse {
 
@@ -60,7 +61,7 @@ public class CreateFileBlobsResponse {
         private String updatedAt;
         @SerializedName("blob_object_access")
         @Expose
-        private BlobObjectAccess blobObjectAccess;
+        private BlobObjectAccessModel blobObjectAccess;
 
         public Object getBlobStatus() {
             return blobStatus;
@@ -166,74 +167,14 @@ public class CreateFileBlobsResponse {
             this.updatedAt = updatedAt;
         }
 
-        public BlobObjectAccess getBlobObjectAccess() {
+        public BlobObjectAccessModel getBlobObjectAccess() {
             return blobObjectAccess;
         }
 
-        public void setBlobObjectAccess(BlobObjectAccess blobObjectAccess) {
+        public void setBlobObjectAccess(BlobObjectAccessModel blobObjectAccess) {
             this.blobObjectAccess = blobObjectAccess;
         }
 
     }
 
-
-    public class BlobObjectAccess {
-
-        @SerializedName("blob_id")
-        @Expose
-        private Integer blobId;
-        @SerializedName("expires")
-        @Expose
-        private String expires;
-        @SerializedName("id")
-        @Expose
-        private Integer id;
-        @SerializedName("object_access_type")
-        @Expose
-        private String objectAccessType;
-        @SerializedName("params")
-        @Expose
-        private String params;
-
-        public Integer getBlobId() {
-            return blobId;
-        }
-
-        public void setBlobId(Integer blobId) {
-            this.blobId = blobId;
-        }
-
-        public String getExpires() {
-            return expires;
-        }
-
-        public void setExpires(String expires) {
-            this.expires = expires;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getObjectAccessType() {
-            return objectAccessType;
-        }
-
-        public void setObjectAccessType(String objectAccessType) {
-            this.objectAccessType = objectAccessType;
-        }
-
-        public String getParams() {
-            return params;
-        }
-
-        public void setParams(String params) {
-            this.params = params;
-        }
-
-    }
 }
