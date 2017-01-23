@@ -45,5 +45,7 @@
 
     <string name="phone_format">+38 (0__) ___-__-__</string>
     <string name="ukr_phone">+38 (0</string>
+    <string name="forgot_to_authorize">Seems like you forgot to authorize the app?</string>
+    <string name="bizare_chat">BizareChat</string>
 
 </resources>

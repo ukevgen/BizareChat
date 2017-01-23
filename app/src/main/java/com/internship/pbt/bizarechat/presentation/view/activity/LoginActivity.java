@@ -1,11 +1,14 @@
 package com.internship.pbt.bizarechat.presentation.view.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +18,7 @@ import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
+import com.internship.pbt.bizarechat.service.AlertReceiver;
 
 import java.util.List;
 
@@ -26,6 +30,9 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
 
     private static final int RC_USE_CAMERA = 104;
     private static final int RC_STORAGE_PERMS = 103;
+    private static final int LANDSCAPE = 2;
+    private static final long REMIND_ME = 900000;
+
 
     public static Intent getCollingIntent(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -48,6 +55,18 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
             addFragment(R.id.activity_layout_fragment_container, new LoginFragment());
         checkStoragePermission();
         checkCameraPermission();
+
+    }
+
+
+    private void setNotification() {
+        if (getResources().getConfiguration().orientation != LANDSCAPE) {
+            long alertTime = SystemClock.elapsedRealtime() + REMIND_ME;
+            Intent alertIntent = new Intent(this, AlertReceiver.class);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, alertTime,
+                    PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        }
     }
 
     @Override
@@ -102,5 +121,13 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
             }
         }
     }
+
+
+    protected void onPause() {
+        super.onPause();
+        setNotification();
+    }
+
+
 }
 
