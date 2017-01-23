@@ -1,5 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 public class LoginFragment extends BaseFragment implements LoginView {
     private LoginPresenter loginPresenter;
-
+    public static final int notifID = 33;
     private Button signIn;
     private Button signUp;
     private EditText emailEditText;
@@ -41,6 +42,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private AlertDialog dialog;
     private TextInputEditText emailEditTextInPasswordRecovery;
     private ProgressBar progressBar;
+    private NotificationManager notificationManager;
 
     public LoginFragment() {
         setRetainInstance(true);
@@ -50,13 +52,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
         signIn = (Button) view.findViewById(R.id.sign_in);
         signUp = (Button) view.findViewById(R.id.sign_up);
         emailEditText = (EditText) view.findViewById(R.id.email);
         passwordEditText = (EditText) view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
         // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
         loginPresenter.setLoginView(this);
 
@@ -110,7 +112,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginPresenter.destroy();
     }
 
-    @Override public Context getContextActivity() {
+    @Override
+    public Context getContextActivity() {
         return getActivity();
     }
 
@@ -179,7 +182,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         buttonSend.setOnClickListener(
                 v -> loginPresenter
                         .checkIsEmailValid(emailEditTextInPasswordRecovery
-                        .getText().toString())
+                                .getText().toString())
         );
         buttonSend.setEnabled(false);
 
@@ -203,13 +206,15 @@ public class LoginFragment extends BaseFragment implements LoginView {
         });
     }
 
-    @Override public void showErrorOnPasswordRecovery() {
+    @Override
+    public void showErrorOnPasswordRecovery() {
         emailEditTextInPasswordRecovery.setError(getString(R.string.invalid_email));
     }
 
-    @Override public void showSuccessOnPasswordRecovery() {
+    @Override
+    public void showSuccessOnPasswordRecovery() {
         dialog.cancel();
-        if(getView() != null)
+        if (getView() != null)
             Snackbar.make(getView(), R.string.password_recovery_sent, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -248,5 +253,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     }
 
+    private void stopNotification() {
+        notificationManager.cancel(notifID);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        stopNotification();
+    }
 }
