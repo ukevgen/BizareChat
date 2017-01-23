@@ -74,6 +74,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onCreate(Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreate");
         mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter.setRegistrationView(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -88,7 +89,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Log.d("123", "Fragment OnCreateView");
 
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        mRegistrationPresenter.setRegistrationView(this);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
 
@@ -305,29 +305,34 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
-            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
+            mRegistrationPresenter.verifyAndLoadAvatar(this.getContextActivity(), data.getData());
         }
 
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
-            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
+            mRegistrationPresenter.verifyAndLoadAvatar(this.getContextActivity(), data.getData());
         }
     }
 
     @Override
-    public void loadAvatar(Uri uri) {
+    public void loadAvatarToImageView(Uri uri) {
         Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
     }
 
     @Override
     public void makeAvatarSizeToast() {
-        Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
     }
 
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
-        Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
+
+    @Override
+    public Context getContextActivity() {
+        return getActivity();
+    }
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();

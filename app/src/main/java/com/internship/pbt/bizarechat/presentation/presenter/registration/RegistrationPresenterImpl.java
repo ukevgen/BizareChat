@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
@@ -79,11 +80,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+    public void loadAvatar(ImageView view) {
+        if(mValidator.isThereSomeImage(view)){
+            
+        }
+    }
+
+    @Override
     public void validateInformation(InformationOnCheck informationOnCheck) {
 
         this.hideErrorsInvalid();
-
-
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
@@ -110,12 +116,12 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
-
+    
     @Override
     public void verifyAndLoadAvatar(Context context, Uri uri) {
         // mRegisterView.setPermission(uri);
         if (mValidator.isValidAvatarSize(context, uri)) {
-            mRegisterView.loadAvatar(uri);
+            mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.makeAvatarSizeToast();
         }
@@ -123,7 +129,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void registrationRequest(InformationOnCheck informationOnCheck) {
-
     }
 
 

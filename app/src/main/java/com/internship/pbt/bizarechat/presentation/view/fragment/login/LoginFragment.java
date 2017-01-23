@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private AlertDialog dialog;
     private TextInputEditText emailEditTextInPasswordRecovery;
     private ProgressBar progressBar;
+    private CheckBox keepMeSignIn;
 
     public LoginFragment() {
         setRetainInstance(true);
@@ -57,6 +59,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         passwordEditText = (EditText) view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
         // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
+        keepMeSignIn = (CheckBox) view.findViewById(R.id.keep_me_check);
 
         loginPresenter.setLoginView(this);
 
@@ -96,6 +99,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
         signUp.setOnClickListener(v -> loginPresenter.goToRegistration());
 
         forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onPasswordForgot());
+
+        keepMeSignIn.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(!isChecked)
+                loginPresenter.onKeepMeSignInFalse();
+        });
     }
 
     @Override
@@ -147,6 +155,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 .replace(R.id.activity_layout_fragment_container, new RegistrationFragment())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void showCheckBoxModalDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        builder.setTitle(R.string.keep_me_sign_in);
+        builder.setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
     }
 
     @Override

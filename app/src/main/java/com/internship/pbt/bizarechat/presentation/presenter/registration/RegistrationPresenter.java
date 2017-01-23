@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.ImageView;
 
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
@@ -35,5 +36,5 @@ public interface RegistrationPresenter extends Presenter {
 
     void createFormatWatcher();
 
-
+    void loadAvatar(ImageView imageView);
 }

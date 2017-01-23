@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 
@@ -54,5 +55,9 @@ public class Validator {
             return false;
         }
 
+    }
+
+    public boolean isThereSomeImage(ImageView view){
+        return (view.getDrawable() != null);
     }
 }

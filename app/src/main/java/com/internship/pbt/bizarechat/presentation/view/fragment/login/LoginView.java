@@ -23,4 +23,6 @@ public interface LoginView extends LoadDataView{
     void showErrorOnPasswordRecovery();
 
     void showSuccessOnPasswordRecovery();
+
+    void showCheckBoxModalDialog();
 }

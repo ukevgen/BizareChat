@@ -16,8 +16,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 
-
-
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
@@ -38,6 +36,7 @@ public class RegistrationPresenterUnitTest {
         mInformationOnCheck.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
+
     }
 
     @Test
@@ -90,6 +89,7 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void passwordMatch(){}
+
 
 
 }

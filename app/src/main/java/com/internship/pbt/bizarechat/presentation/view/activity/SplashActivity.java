@@ -5,15 +5,17 @@ import android.support.annotation.Nullable;
 
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.presentation.AuthStore;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 public class SplashActivity extends BaseActivity {
 
     private AuthStore mAuthStore;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long timeMillis = System.currentTimeMillis();
+        mAuthStore = CurrentUser.getINSTANCE();
 
         try {
             Thread.sleep(BuildConfig.SPLASH_DELAY);
@@ -21,8 +23,13 @@ public class SplashActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+        if (mAuthStore.isAuthorized())
+            mNavigator.navigateToMainActivity(this);
+        else
             mNavigator.navigateToLoginActivity(this);
 
         finish();
+
     }
 }
+
