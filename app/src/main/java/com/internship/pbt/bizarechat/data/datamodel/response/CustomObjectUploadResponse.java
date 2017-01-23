@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.data.datamodel.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FileUploadResponce {
+public class CustomObjectUploadResponse {
 
     @SerializedName("_id")
     @Expose
