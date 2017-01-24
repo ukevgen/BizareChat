@@ -123,6 +123,8 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
 
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
     //Permission
@@ -131,7 +133,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
 
-    androidTestCompile 'com.android.support:support-annotations:24.2.1'
+    androidTestCompile 'com.android.support:support-annotations:25.0.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
