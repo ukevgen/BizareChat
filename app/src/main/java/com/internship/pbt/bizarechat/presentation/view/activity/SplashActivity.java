@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.internship.pbt.bizarechat.BuildConfig;
@@ -15,13 +16,9 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            Thread.sleep(BuildConfig.SPLASH_DELAY);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-            mNavigator.navigateToLoginActivity(this);
+        new Handler().postDelayed(
+                () -> mNavigator.navigateToLoginActivity(this),
+                BuildConfig.SPLASH_DELAY);
 
         finish();
     }

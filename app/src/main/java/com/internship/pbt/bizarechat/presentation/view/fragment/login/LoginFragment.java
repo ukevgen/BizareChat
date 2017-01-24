@@ -19,12 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.SchedulersFactory;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
-import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
@@ -129,14 +128,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
         super.onCreate(savedInstanceState);
         GetTokenUseCase getToken = new GetTokenUseCase(
                 new SessionDataRepository(),
-                JobExecutor.getInstance(),
-                UiThread.getInstance()
+                SchedulersFactory.getThreadExecutor(),
+                SchedulersFactory.getPostExecutor()
         );
 
         ResetPasswordUseCase resetPassword = new ResetPasswordUseCase(
                 new UserDataRepository(),
-                JobExecutor.getInstance(),
-                UiThread.getInstance()
+                SchedulersFactory.getThreadExecutor(),
+                SchedulersFactory.getPostExecutor()
         );
         loginPresenter = new LoginPresenterImpl(getToken, resetPassword);
         loginPresenter.requestSession();
