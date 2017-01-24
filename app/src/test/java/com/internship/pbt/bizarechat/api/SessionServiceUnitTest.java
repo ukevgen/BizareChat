@@ -32,12 +32,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
+import rx.Subscriber;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -90,17 +92,17 @@ public class SessionServiceUnitTest {
         when(retrofitApi.getSessionService()).thenReturn(sessionService);
         when(session.getToken()).thenReturn("");
 
-        sessionRepository = new SessionDataRepository();
-        getTokenUseCase = new GetTokenUseCase(
+        sessionRepository = spy(new SessionDataRepository());
+        getTokenUseCase = spy(new GetTokenUseCase(
                 sessionRepository,
                 SchedulersFactory.getThreadExecutor(),
-                SchedulersFactory.getPostExecutor());
+                SchedulersFactory.getPostExecutor()));
         presenter = new LoginPresenterImpl(getTokenUseCase, resetPasswordUseCase);
         presenter.setLoginView(view);
     }
 
     @Test
-    public void checkSuccessSessionRequestBehavior(){
+    public void checkSuccessSessionRequestBehavior() throws Exception{
         PowerMockito.mockStatic(UserToken.class);
         when(UserToken.getInstance()).thenReturn(userToken);
 
@@ -111,6 +113,9 @@ public class SessionServiceUnitTest {
         doNothing().when(userToken).saveToken(anyString());
 
         presenter.requestSession();
+
+        verify(getTokenUseCase).execute(any(Subscriber.class));
+        verify(sessionRepository).getSession();
         verify(sessionService).getSession(any(SessionRequest.class));
         verify(userToken).saveToken(anyString());
     }
@@ -127,6 +132,9 @@ public class SessionServiceUnitTest {
                 ));
 
         presenter.requestSession();
+
+        verify(getTokenUseCase).execute(any(Subscriber.class));
+        verify(sessionRepository).getSession();
         verify(sessionService).getSession(any(SessionRequest.class));
         verify(view).showError(anyString());
     }
