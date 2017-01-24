@@ -94,6 +94,7 @@ public class RetrofitApi {
                         .post(RequestBody.create(null, new byte[0]))
                         .build();
             }
+
             SessionRepository sessionRepository = new SessionDataRepository();
             sessionRepository.getSession()
                     .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
