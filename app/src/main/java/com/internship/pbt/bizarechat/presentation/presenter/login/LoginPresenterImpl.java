@@ -109,6 +109,11 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
+    public void onKeepMeSignInFalse() {
+        loginView.showCheckBoxModalDialog();
+    }
+
+    @Override
     public void resume() {
 
     }

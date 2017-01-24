@@ -1,8 +1,6 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
-import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
-import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
@@ -14,10 +12,7 @@ public class GetTokenWithAuthResponce extends UseCase {
     private UserRequestModel requestModel;
 
     public GetTokenWithAuthResponce(SessionRepository sessionRepository,
-                                    UserRequestModel requestModel,
-                                    ThreadExecutor threadExecutor,
-                                    PostExecutorThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+                                    UserRequestModel requestModel) {
         this.sessionRepository = sessionRepository;
         this.requestModel = requestModel;
     }

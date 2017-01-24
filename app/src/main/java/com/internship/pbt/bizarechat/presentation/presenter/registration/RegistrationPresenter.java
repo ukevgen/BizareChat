@@ -2,7 +2,10 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.ImageView;
 
+import com.facebook.login.LoginResult;
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
@@ -23,7 +26,9 @@ public interface RegistrationPresenter extends Presenter {
 
     void onRegistrationSuccess();
 
-    void facebookLink();
+    void facebookLink(LoginResult loginResult);
+
+    void refreshLinkedInfInView(FacebookLinkInform linkInform);
 
     void registrationRequest(InformationOnCheck informationOnCheck);
 
@@ -35,5 +40,6 @@ public interface RegistrationPresenter extends Presenter {
 
     void createFormatWatcher();
 
+    void loadAvatar(ImageView imageView);
 
 }

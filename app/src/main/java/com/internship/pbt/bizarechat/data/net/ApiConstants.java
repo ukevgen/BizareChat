@@ -12,4 +12,6 @@ public class ApiConstants {
     public static final String API_END_POINT = "https://api.quickblox.com";
     public static final String CHAT_END_POINT = "chat.quickblox.com";
     public static final String TOKEN_HEADER_NAME = "QB-Token";
+
+    public static final String CONTENT_TYPE_IMAGE_JPEG = "image/jpeg";
 }

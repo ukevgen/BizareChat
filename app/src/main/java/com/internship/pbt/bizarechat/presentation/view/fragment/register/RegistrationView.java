@@ -1,14 +1,16 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
+import android.content.Context;
 import android.net.Uri;
 
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
 public interface RegistrationView extends LoadDataView {
 
-    void loginFacebook();
+    void refreshInfAfterFacebookLink(FacebookLinkInform linkInform);
 
     void showErrorInvalidEmail();
 
@@ -30,6 +32,8 @@ public interface RegistrationView extends LoadDataView {
 
     void setAnimation();
 
+    Context getContextActivity();
+
     void startOnFacebookLinkSuccessAnim();
 
     void startOnFailedFacebooLinkkAnim();
@@ -40,7 +44,7 @@ public interface RegistrationView extends LoadDataView {
 
     void showPictureChooser();
 
-    void loadAvatar(Uri uri);
+    void loadAvatarToImageView(Uri uri);
 
     void makeAvatarSizeToast();
 

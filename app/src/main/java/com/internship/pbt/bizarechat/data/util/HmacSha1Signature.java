@@ -30,6 +30,24 @@ public class HmacSha1Signature {
         return formatter.toString();
     }
 
+
+    public static String calculateSignatureWithAuth(String login, String pass, int nonce, long timestamp){
+
+        String data = composeParametersToString(login, pass, nonce, timestamp);
+
+        try {
+            SecretKeySpec signingKey = new SecretKeySpec(ApiConstants.AUTH_SECRET.getBytes(),
+                    HMAC_SHA1_ALGORITHM);
+            Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+            Log.d("123", "RequestInf + " + data + " Signature " + toHexString(mac.doFinal(data.getBytes())));
+            return toHexString(mac.doFinal(data.getBytes()));
+        } catch(NoSuchAlgorithmException | InvalidKeyException ex){
+            Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
+        }
+        return null;
+    }
+
     public static String calculateSignature(int nonce, long timestamp)
     {
         String data = composeParametersToString(nonce, timestamp);
@@ -39,6 +57,7 @@ public class HmacSha1Signature {
                                                             HMAC_SHA1_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
+            Log.d("123", "RequestInf + " + data + " Signature " + toHexString(mac.doFinal(data.getBytes())));
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
@@ -55,6 +74,18 @@ public class HmacSha1Signature {
         sb.append("&auth_key=").append(AUTH_KEY);
         sb.append("&nonce=").append(nonce);
         sb.append("&timestamp=").append(timestamp);
+
+        return sb.toString();
+    }
+
+    private static String composeParametersToString(String login, String pass, int nonce, long timestamp){
+        StringBuilder sb = new StringBuilder("");
+        sb.append("application_id=").append(APP_ID);
+        sb.append("&auth_key=").append(AUTH_KEY);
+        sb.append("&nonce=").append(nonce);
+        sb.append("&timestamp=").append(timestamp);
+        sb.append("&user[login]=").append(login);
+        sb.append("&user[password]=").append(pass);
 
         return sb.toString();
     }
