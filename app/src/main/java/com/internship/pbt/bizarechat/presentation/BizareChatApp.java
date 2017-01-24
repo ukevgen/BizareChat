@@ -14,6 +14,9 @@ public class BizareChatApp extends Application {
         super.onCreate();
         if (BuildConfig.CRASH_REPORTS)
             Fabric.with(this, new Crashlytics());
+//        if(LeakCanary.isInAnalyzerProcess(this))
+//            return;
+//        LeakCanary.install(this);
     }
 
     //TODO App class handle
