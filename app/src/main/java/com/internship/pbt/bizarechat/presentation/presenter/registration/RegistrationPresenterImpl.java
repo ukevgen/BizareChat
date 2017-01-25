@@ -1,11 +1,13 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.content.Context;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
+
+import java.io.File;
 
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
@@ -19,6 +21,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
+    private File fileToUpload;
 
     @Override
     public void setRegistrationView(RegistrationView registerView) {
@@ -112,9 +115,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void verifyAndLoadAvatar(Context context, Uri uri) {
+    public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        if (mValidator.isValidAvatarSize(context, uri)) {
+        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
+            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatar(uri);
         } else {
             mRegisterView.makeAvatarSizeToast();

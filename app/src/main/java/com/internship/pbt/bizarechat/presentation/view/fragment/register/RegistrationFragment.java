@@ -305,13 +305,15 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
-            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
+            mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
 
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
-            mRegistrationPresenter.verifyAndLoadAvatar(getActivity(), data.getData());
+            mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
     }
+
+
 
     @Override
     public void loadAvatar(Uri uri) {
@@ -321,6 +323,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void makeAvatarSizeToast() {
         Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getContextActivity() {
+        return getActivity();
     }
 
     public void showErrorPasswordConfirm() {

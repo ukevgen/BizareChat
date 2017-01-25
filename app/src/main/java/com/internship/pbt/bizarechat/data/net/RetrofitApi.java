@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.data.net;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -23,6 +24,7 @@ import okhttp3.Route;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
@@ -31,6 +33,7 @@ public class RetrofitApi {
 
     private SessionService sessionService;
     private UserService userService;
+    private ContentService contentService;
 
     private RetrofitApi(){
         OkHttpClient okHttpClient = createClient();
@@ -38,7 +41,10 @@ public class RetrofitApi {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiConstants.API_END_POINT)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(new QualifiedTypeConverterFactory(
+                        GsonConverterFactory.create(),
+                        SimpleXmlConverterFactory.create()
+                ))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
@@ -63,6 +69,7 @@ public class RetrofitApi {
     private void buildServices(Retrofit retrofit){
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
+        contentService = retrofit.create(ContentService.class);
     }
 
     public SessionService getSessionService() {
@@ -70,6 +77,10 @@ public class RetrofitApi {
     }
 
     public UserService getUserService(){ return userService; }
+
+    public ContentService getContentService() {
+        return contentService;
+    }
 
     private OkHttpClient createClient() {
         SessionTokenAuthenticator authenticator = new SessionTokenAuthenticator();
@@ -118,6 +129,7 @@ public class RetrofitApi {
                     });
 
             return response.request().newBuilder()
+                    .removeHeader(ApiConstants.TOKEN_HEADER_NAME)
                     .addHeader(ApiConstants.TOKEN_HEADER_NAME, newToken)
                     .build();
         }
