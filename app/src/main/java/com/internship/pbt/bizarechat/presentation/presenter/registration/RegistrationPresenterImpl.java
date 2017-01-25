@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
@@ -8,10 +7,13 @@ import android.widget.ImageView;
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.model.SignUpModel;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
+
+import java.io.File;
 
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
@@ -25,6 +27,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
+    private File fileToUpload;
     private SignUpModel mRegistrationModel;
 
     public RegistrationPresenterImpl() {
@@ -130,9 +133,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
     
     @Override
-    public void verifyAndLoadAvatar(Context context, Uri uri) {
+    public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        if (mValidator.isValidAvatarSize(context, uri)) {
+        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
+            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.makeAvatarSizeToast();

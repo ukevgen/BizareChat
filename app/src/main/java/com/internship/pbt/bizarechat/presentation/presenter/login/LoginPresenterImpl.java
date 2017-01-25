@@ -119,7 +119,6 @@ public class LoginPresenterImpl implements LoginPresenter {
                 Log.d("321", "Logged with inf " + userLoginResponse.getId() + " " + userLoginResponse.getFullName());
             }
         });
-
     }
 
     @Override
