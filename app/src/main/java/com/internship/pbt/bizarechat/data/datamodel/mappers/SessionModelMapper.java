@@ -24,20 +24,20 @@ public class SessionModelMapper {
     public static UserLoginResponce transform(SignInResponseModel response){
         UserLoginResponce userLoginResponce = null;
         if(response != null){
-            userLoginResponce.setEmail(response.getEmail());
-            userLoginResponce.setBlobId(response.getBlobId());
-            userLoginResponce.setPhone(response.getPhone());
-            userLoginResponce.setCreatedAt(response.getCreatedAt());
-            userLoginResponce.setCustomParameters(response.getCustomParameters());
-            userLoginResponce.setExternalUserId(response.getExternalUserId());
-            userLoginResponce.setFacebookId(response.getFacebookId());
-            userLoginResponce.setFullName(response.getFullName());
-            userLoginResponce.setId(response.getId());
-            userLoginResponce.setUpdatedAt(response.getUpdatedAt());
-            userLoginResponce.setWebsite(response.getWebsite());
-            userLoginResponce.setUserTags(response.getUserTags());
-            userLoginResponce.setLastRequestAt(response.getLastRequestAt());
-            userLoginResponce.setLogin(response.getLogin());
+            userLoginResponce.setEmail(response.getUser().getEmail());
+            userLoginResponce.setBlobId(response.getUser().getBlobId());
+            userLoginResponce.setPhone(response.getUser().getPhone());
+            userLoginResponce.setCreatedAt(response.getUser().getCreatedAt());
+            userLoginResponce.setCustomParameters(response.getUser().getCustomData());
+            userLoginResponce.setExternalUserId(response.getUser().getExternalUserId());
+            userLoginResponce.setFacebookId(response.getUser().getFacebookId());
+            userLoginResponce.setFullName(response.getUser().getFullName());
+            userLoginResponce.setId(response.getUser().getId());
+            userLoginResponce.setUpdatedAt(response.getUser().getUpdatedAt());
+            userLoginResponce.setWebsite(response.getUser().getWebsite());
+            userLoginResponce.setUserTags(response.getUser().getUserTags());
+            userLoginResponce.setLastRequestAt(response.getUser().getLastRequestAt());
+            userLoginResponce.setLogin(response.getUser().getLogin());
         }
         return userLoginResponce;
     }

@@ -31,7 +31,7 @@ public class RegistrationModel implements SignUpModel {
                 });
         gr.setParameters(bundle);
         gr.executeAsync();
-        Log.d("123", "After Task Profile " + Profile.getCurrentProfile().getId());
+        Log.d("123", "After Task Profile " + Profile.getCurrentProfile().getLinkUri().toString() + " And FULL NAME " + Profile.getCurrentProfile().getName());
         Log.d("123", "AfterTask " + inform.toString());
 
     }

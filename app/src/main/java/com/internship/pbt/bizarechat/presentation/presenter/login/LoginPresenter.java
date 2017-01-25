@@ -5,7 +5,7 @@ import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
 
 public interface LoginPresenter extends Presenter {
-    void requestSession();
+    void requestSession(String email, String password);
 
     void setLoginView(LoginView view);
 

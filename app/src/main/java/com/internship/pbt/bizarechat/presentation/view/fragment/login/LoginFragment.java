@@ -20,9 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
-import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
@@ -31,8 +29,8 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 
 public class LoginFragment extends BaseFragment implements LoginView {
-    private LoginPresenter loginPresenter;
     public static final int notifID = 33;
+    private LoginPresenter loginPresenter;
     private Button signIn;
     private Button signUp;
     private EditText emailEditText;
@@ -92,7 +90,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     private void setButtonListeners() {
         signIn.setOnClickListener(
-                v -> loginPresenter.requestLogin(
+                v -> loginPresenter.requestSession(
                         emailEditText.getText().toString(),
                         passwordEditText.getText().toString()));
 
@@ -101,7 +99,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onPasswordForgot());
 
         keepMeSignIn.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if(!isChecked)
+            if (!isChecked)
                 loginPresenter.onKeepMeSignInFalse();
         });
     }
@@ -133,12 +131,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GetTokenUseCase getToken = new GetTokenUseCase(new SessionDataRepository());
-
         ResetPasswordUseCase resetPassword = new ResetPasswordUseCase(
                 new UserDataRepository());
-        loginPresenter = new LoginPresenterImpl(getToken, resetPassword);
-        loginPresenter.requestSession();
+        loginPresenter = new LoginPresenterImpl(resetPassword);
     }
 
     @Override

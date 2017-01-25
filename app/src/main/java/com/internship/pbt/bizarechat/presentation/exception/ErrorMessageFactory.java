@@ -18,6 +18,9 @@ public class ErrorMessageFactory {
             HttpException httpException = (HttpException)throwable;
             int code = httpException.code();
             switch (code){
+                case 400:
+                    message = context.getString(R.string.malformed_request_parameters);
+                    break;
                 case 401:
                     message = context.getString(R.string.message_session_expired);
                     break;
@@ -46,6 +49,9 @@ public class ErrorMessageFactory {
             HttpException httpException = (HttpException)throwable;
             int code = httpException.code();
             switch (code){
+                case 400:
+                    message = context.getString(R.string.malformed_request_parameters);
+                    break;
                 case 401:
                     message = context.getString(R.string.message_session_expired);
                     break;

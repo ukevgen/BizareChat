@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.data.net;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.net.requests.User;
 import com.internship.pbt.bizarechat.data.net.services.FileManagerService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
@@ -39,7 +40,7 @@ public class RetrofitApi {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiConstants.API_END_POINT)
-                .client(okHttpClient)
+           //     .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
@@ -88,7 +89,7 @@ public class RetrofitApi {
         return builder.build();
     }
 
-    private class SessionTokenAuthenticator implements Authenticator{
+    private class SessionTokenAuthenticator implements Authenticator{ // TODO Fix expired session
         private final String LOG_TAG = SessionTokenAuthenticator.class.getSimpleName();
         private String newToken;
 
@@ -103,7 +104,8 @@ public class RetrofitApi {
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
-            sessionRepository.getSession()
+            User user = new User("roman-kapshuk@ukr.net", "1234QWer");
+            sessionRepository.getSessionWithAuth(user)
                     .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
                     .observeOn(Schedulers.newThread())
                     .subscribe(new Subscriber<Session>() {

@@ -1,27 +1,48 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class SessionWithAuthRequest {
 
+    @SerializedName("application_id")
+    @Expose
     private String application_id;
+
+    @SerializedName("auth_key")
+    @Expose
     private String auth_key;
+
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
+
+    @SerializedName("nonce")
+    @Expose
     private String nonce;
+
+    @SerializedName("signature")
+    @Expose
     private String signature;
-    private UserRequestModel userModel;
+
+    @SerializedName("user")
+    @Expose
+    private User user;
+
 
     public SessionWithAuthRequest(String application_id,
                                   String auth_key,
                                   String timestamp,
                                   String nonce,
                                   String signature,
-                                  UserRequestModel userModel) {
+                                  User user) {
 
         this.application_id = application_id;
         this.auth_key = auth_key;
         this.timestamp = timestamp;
         this.nonce = nonce;
         this.signature = signature;
-        this.userModel = userModel;
+        this.user = user;
     }
 
     public String getApplication_id() {
@@ -64,12 +85,12 @@ public class SessionWithAuthRequest {
         this.signature = signature;
     }
 
-    public UserRequestModel getUserModel() {
-        return userModel;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserModel(UserRequestModel userModel) {
-        this.userModel = userModel;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -80,8 +101,8 @@ public class SessionWithAuthRequest {
                 ", timestamp='" + timestamp + '\'' +
                 ", nonce='" + nonce + '\'' +
                 ", signature='" + signature + '\'' +
-                ", username='" + userModel.getLogin() + "\'" +
-                ", userpassword='" + userModel.getPassword() + "\'" +
+                ", username='" + user.getLogin() + "\'" +
+                ", userpassword='" + user.getPassword() + "\'" +
                 '}';
     }
 }

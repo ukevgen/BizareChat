@@ -1,11 +1,13 @@
 package com.internship.pbt.bizarechat.data.repository;
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
-import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
 import com.internship.pbt.bizarechat.data.net.requests.SessionWithAuthRequest;
+import com.internship.pbt.bizarechat.data.net.requests.User;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.util.HmacSha1Signature;
 import com.internship.pbt.bizarechat.domain.model.Session;
@@ -45,11 +47,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<Session> getSessionWithAuth(UserRequestModel requestModel) {
+    public Observable<Session> getSessionWithAuth(User requestModel) {
+        Log.d("321", "get SessionWithAuth()");
         int nonce = randomizer.nextInt();
         if (nonce < 0) nonce = -nonce;
         long timestamp = System.currentTimeMillis() / 1000;
-        String signature = HmacSha1Signature.calculateSignature(nonce, timestamp);
+        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getLogin(), requestModel.getPassword(),nonce, timestamp);
 
         SessionWithAuthRequest request = new SessionWithAuthRequest(
                 ApiConstants.APP_ID,
@@ -60,11 +63,13 @@ public class SessionDataRepository implements SessionRepository {
                 requestModel
         );
 
+        Log.d("321", "getSessionWithAuth " + request.toString());
         return sessionService.getSessionWithAuth(request).map(SessionModelMapper::transform);
     }
 
     @Override
-    public Observable<UserLoginResponce> loginUser(UserRequestModel requestModel) {
+    public Observable<UserLoginResponce> loginUser(User requestModel) {
+        Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
         return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
                 .map(SessionModelMapper::transform);
     }

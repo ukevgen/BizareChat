@@ -36,7 +36,7 @@ public class RegistrationPresenterUnitTest {
     @Before
     public void prepareData() {
         mInformationOnCheck = new InformationOnCheck();
-        mInformationOnCheck.setEmail("Example@gmail.com");
+        mInformationOnCheck.setEmail("roman-kapshuk@ukr.net");
         mInformationOnCheck.setPassword("QA1we2");
         mInformationOnCheck.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl();

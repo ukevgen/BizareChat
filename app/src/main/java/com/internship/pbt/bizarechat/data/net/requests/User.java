@@ -1,10 +1,19 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
-public class UserRequestModel {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class User {
+
+    @SerializedName("login")
+    @Expose
     private String login;
+
+    @SerializedName("password")
+    @Expose
     private String password;
 
-    public UserRequestModel(String login, String password) {
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
     }
@@ -23,5 +32,11 @@ public class UserRequestModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Login " + login + "\n" +
+                "Password " + password + "\n";
     }
 }

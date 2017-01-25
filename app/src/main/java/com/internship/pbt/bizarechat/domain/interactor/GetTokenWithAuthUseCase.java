@@ -1,18 +1,18 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.User;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
 
-public class GetTokenWithAuthResponce extends UseCase {
+public class GetTokenWithAuthUseCase extends UseCase {
 
     private SessionRepository sessionRepository;
-    private UserRequestModel requestModel;
+    private User requestModel;
 
-    public GetTokenWithAuthResponce(SessionRepository sessionRepository,
-                                    UserRequestModel requestModel) {
+    public GetTokenWithAuthUseCase(SessionRepository sessionRepository,
+                                   User requestModel) {
         this.sessionRepository = sessionRepository;
         this.requestModel = requestModel;
     }
