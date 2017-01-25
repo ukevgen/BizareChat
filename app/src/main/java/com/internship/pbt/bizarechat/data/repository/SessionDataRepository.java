@@ -7,11 +7,11 @@ import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
 import com.internship.pbt.bizarechat.data.net.requests.SessionWithAuthRequest;
-import com.internship.pbt.bizarechat.data.net.requests.User;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.util.HmacSha1Signature;
 import com.internship.pbt.bizarechat.domain.model.Session;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import java.util.Random;
@@ -47,12 +47,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<Session> getSessionWithAuth(User requestModel) {
+    public Observable<Session> getSessionWithAuth(UserRequestModel requestModel) {
         Log.d("321", "get SessionWithAuth()");
         int nonce = randomizer.nextInt();
         if (nonce < 0) nonce = -nonce;
         long timestamp = System.currentTimeMillis() / 1000;
-        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getLogin(), requestModel.getPassword(),nonce, timestamp);
+        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
 
         SessionWithAuthRequest request = new SessionWithAuthRequest(
                 ApiConstants.APP_ID,
@@ -68,9 +68,9 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<UserLoginResponce> loginUser(User requestModel) {
+    public Observable<UserLoginResponse> loginUser(UserRequestModel requestModel) {
         Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
-        return sessionService.loginUser(requestModel)
+        return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
                 .map(SessionModelMapper::transform);
     }
 }

@@ -1,8 +1,8 @@
 package com.internship.pbt.bizarechat.domain.repository;
 
-import com.internship.pbt.bizarechat.data.net.requests.User;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.domain.model.Session;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 
 import rx.Observable;
 
@@ -10,7 +10,7 @@ import rx.Observable;
 public interface SessionRepository {
     Observable<Session> getSession();
 
-    Observable<Session> getSessionWithAuth(User requestModel);
+    Observable<Session> getSessionWithAuth(UserRequestModel requestModel);
 
-    Observable<UserLoginResponce> loginUser(User requestModel);
+    Observable<UserLoginResponse> loginUser(UserRequestModel requestModel);
 }

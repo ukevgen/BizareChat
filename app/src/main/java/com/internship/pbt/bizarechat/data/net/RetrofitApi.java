@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Retrofit;
@@ -98,9 +97,7 @@ public class RetrofitApi {
             if (response.body().string().contains("Unauthorized")) {
                 // Here we force the server return 422 code to us in next response.
                 // This code we will catch in our LoginPresenter to show correct message.
-                return response.request().newBuilder()
-                        .post(RequestBody.create(null, new byte[0]))
-                        .build();
+                return null;
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
@@ -128,8 +125,7 @@ public class RetrofitApi {
 
 
             return response.request().newBuilder()
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("QuickBlox-REST-API-Version", "0.1.0")
+                    .removeHeader(ApiConstants.TOKEN_HEADER_NAME)
                     .addHeader(ApiConstants.TOKEN_HEADER_NAME, newToken)
                     .build();
         }

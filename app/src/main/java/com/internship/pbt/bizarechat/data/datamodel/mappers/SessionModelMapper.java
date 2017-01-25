@@ -4,7 +4,7 @@ package com.internship.pbt.bizarechat.data.datamodel.mappers;
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.domain.model.Session;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 
 public class SessionModelMapper {
     private SessionModelMapper(){}
@@ -21,24 +21,24 @@ public class SessionModelMapper {
         return session;
     }
 
-    public static UserLoginResponce transform(SignInResponseModel response){
-        UserLoginResponce userLoginResponce = null;
+    public static UserLoginResponse transform(SignInResponseModel response){
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
         if(response != null){
-            userLoginResponce.setEmail(response.getUser().getEmail());
-            userLoginResponce.setBlobId(response.getUser().getBlobId());
-            userLoginResponce.setPhone(response.getUser().getPhone());
-            userLoginResponce.setCreatedAt(response.getUser().getCreatedAt());
-            userLoginResponce.setCustomParameters(response.getUser().getCustomData());
-            userLoginResponce.setExternalUserId(response.getUser().getExternalUserId());
-            userLoginResponce.setFacebookId(response.getUser().getFacebookId());
-            userLoginResponce.setFullName(response.getUser().getFullName());
-            userLoginResponce.setId(response.getUser().getId());
-            userLoginResponce.setUpdatedAt(response.getUser().getUpdatedAt());
-            userLoginResponce.setWebsite(response.getUser().getWebsite());
-            userLoginResponce.setUserTags(response.getUser().getUserTags());
-            userLoginResponce.setLastRequestAt(response.getUser().getLastRequestAt());
-            userLoginResponce.setLogin(response.getUser().getLogin());
+            userLoginResponse.setEmail(response.getUser().getEmail());
+            userLoginResponse.setBlobId(response.getUser().getBlobId());
+            userLoginResponse.setPhone(response.getUser().getPhone());
+            userLoginResponse.setCreatedAt(response.getUser().getCreatedAt());
+            userLoginResponse.setCustomParameters(response.getUser().getCustomData());
+            userLoginResponse.setExternalUserId(response.getUser().getExternalUserId());
+            userLoginResponse.setFacebookId(response.getUser().getFacebookId());
+            userLoginResponse.setFullName(response.getUser().getFullName());
+            userLoginResponse.setId(response.getUser().getId());
+            userLoginResponse.setUpdatedAt(response.getUser().getUpdatedAt());
+            userLoginResponse.setWebsite(response.getUser().getWebsite());
+            userLoginResponse.setUserTags(response.getUser().getUserTags());
+            userLoginResponse.setLastRequestAt(response.getUser().getLastRequestAt());
+            userLoginResponse.setLogin(response.getUser().getLogin());
         }
-        return userLoginResponce;
+        return userLoginResponse;
     }
 }

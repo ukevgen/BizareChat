@@ -2,8 +2,8 @@ package com.internship.pbt.bizarechat.domain.interactor;
 
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.net.requests.User;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
@@ -11,15 +11,15 @@ import rx.Observable;
 public class LoginUserUseCase extends UseCase {
 
     private SessionRepository sessionRepository;
-    private User requestModel;
+    private UserRequestModel requestModel;
 
-    public LoginUserUseCase(SessionRepository sessionRepository, User user) {
+    public LoginUserUseCase(SessionRepository sessionRepository, UserRequestModel userRequestModel) {
         this.sessionRepository = sessionRepository;
-        this.requestModel = user;
+        this.requestModel = userRequestModel;
     }
 
     @Override
-    protected Observable<UserLoginResponce> buildUseCaseObservable() {
+    protected Observable<UserLoginResponse> buildUseCaseObservable() {
         Log.d("321", "buildUseCaseObservable() LoginUseCase");
         return sessionRepository.loginUser(requestModel);
     }

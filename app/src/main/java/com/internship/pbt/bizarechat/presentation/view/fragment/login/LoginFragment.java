@@ -90,7 +90,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     private void setButtonListeners() {
         signIn.setOnClickListener(
-                v -> loginPresenter.requestSession(
+                v -> loginPresenter.requestLogin(
                         emailEditText.getText().toString(),
                         passwordEditText.getText().toString()));
 

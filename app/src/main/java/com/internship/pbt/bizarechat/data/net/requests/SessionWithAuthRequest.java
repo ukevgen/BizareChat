@@ -25,9 +25,9 @@ public class SessionWithAuthRequest {
     @Expose
     private String signature;
 
-    @SerializedName("user")
+    @SerializedName("userRequestModel")
     @Expose
-    private User user;
+    private UserRequestModel userRequestModel;
 
 
     public SessionWithAuthRequest(String application_id,
@@ -35,14 +35,14 @@ public class SessionWithAuthRequest {
                                   String timestamp,
                                   String nonce,
                                   String signature,
-                                  User user) {
+                                  UserRequestModel userRequestModel) {
 
         this.application_id = application_id;
         this.auth_key = auth_key;
         this.timestamp = timestamp;
         this.nonce = nonce;
         this.signature = signature;
-        this.user = user;
+        this.userRequestModel = userRequestModel;
     }
 
     public String getApplication_id() {
@@ -85,12 +85,12 @@ public class SessionWithAuthRequest {
         this.signature = signature;
     }
 
-    public User getUser() {
-        return user;
+    public UserRequestModel getUserRequestModel() {
+        return userRequestModel;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserRequestModel(UserRequestModel userRequestModel) {
+        this.userRequestModel = userRequestModel;
     }
 
     @Override
@@ -101,8 +101,8 @@ public class SessionWithAuthRequest {
                 ", timestamp='" + timestamp + '\'' +
                 ", nonce='" + nonce + '\'' +
                 ", signature='" + signature + '\'' +
-                ", username='" + user.getLogin() + "\'" +
-                ", userpassword='" + user.getPassword() + "\'" +
+                ", username='" + userRequestModel.getEmail() + "\'" +
+                ", userpassword='" + userRequestModel.getPassword() + "\'" +
                 '}';
     }
 }

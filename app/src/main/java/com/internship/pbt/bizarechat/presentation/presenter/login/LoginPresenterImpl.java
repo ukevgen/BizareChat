@@ -2,13 +2,13 @@ package com.internship.pbt.bizarechat.presentation.presenter.login;
 
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.net.requests.User;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
@@ -27,35 +27,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
-    @Override
-    public void requestSession(String email, String password) {
-        Log.d("321", "requestSession()");
-   /*   getTokenUseCase = new GetTokenWithAuthUseCase(new SessionDataRepository(), new User(email, password));
-        getTokenUseCase.execute(new Subscriber<Session>() {
-            @Override
-            public void onCompleted() {
-                Log.d("321", "requestSession() OnCompleted()");
-                requestLogin(email, password);
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.d("321", "requestSession() OnError()");
-
-                String message = ErrorMessageFactory.
-                        createMessageOnLogin(loginView.getContextActivity(), e);
-                loginView.showError(message);
-            }
-
-            @Override
-            public void onNext(Session session) {
-                Log.d("321", "requestSession() OnNext. Session= " + session.getId() + " Token " + session.getToken());
-                UserToken.getInstance().saveToken(session.getToken());
-            }
-        });*/
-        requestLogin(email, password);
-
-    }
 
     @Override
     public void checkIsEmailValid(String email) {
@@ -121,11 +93,11 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void requestLogin(String email, String password) {
         this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
-                new User(email, password));
+                new UserRequestModel(email, password));
 
         Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
 
-        loginUseCase.execute(new Subscriber<UserLoginResponce>() {
+        loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
@@ -137,13 +109,14 @@ public class LoginPresenterImpl implements LoginPresenter {
                 String message = ErrorMessageFactory.
                         createMessageOnLogin(loginView.getContextActivity(), e);
                 loginView.showError(message);
+                e.printStackTrace();
                 Log.d("321", "request Login OnError() + " + e.toString());
 
             }
 
             @Override
-            public void onNext(UserLoginResponce userLoginResponce) {
-                Log.d("321", "Logged with inf " + userLoginResponce.getId() + " " + userLoginResponce.getFullName());
+            public void onNext(UserLoginResponse userLoginResponse) {
+                Log.d("321", "Logged with inf " + userLoginResponse.getId() + " " + userLoginResponse.getFullName());
             }
         });
 

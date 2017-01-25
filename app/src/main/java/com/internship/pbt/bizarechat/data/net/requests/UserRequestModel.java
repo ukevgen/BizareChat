@@ -3,27 +3,27 @@ package com.internship.pbt.bizarechat.data.net.requests;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class UserRequestModel {
 
-    @SerializedName("login")
+    @SerializedName("email")
     @Expose
-    private String login;
+    private String email;
 
     @SerializedName("password")
     @Expose
     private String password;
 
-    public User(String login, String password) {
-        this.login = login;
+    public UserRequestModel(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -36,7 +36,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Login " + login + "\n" +
+        return "Login " + email + "\n" +
                 "Password " + password + "\n";
     }
 }
