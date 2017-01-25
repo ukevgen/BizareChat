@@ -30,7 +30,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void requestSession(String email, String password) {
         Log.d("321", "requestSession()");
-     /*   getTokenUseCase = new GetTokenWithAuthUseCase(new SessionDataRepository(), new User(email, password));
+   /*   getTokenUseCase = new GetTokenWithAuthUseCase(new SessionDataRepository(), new User(email, password));
         getTokenUseCase.execute(new Subscriber<Session>() {
             @Override
             public void onCompleted() {
@@ -54,6 +54,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             }
         });*/
         requestLogin(email, password);
+
     }
 
     @Override
@@ -136,7 +137,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 String message = ErrorMessageFactory.
                         createMessageOnLogin(loginView.getContextActivity(), e);
                 loginView.showError(message);
-                Log.d("321", "request Login OnError() + " + message.toString());
+                Log.d("321", "request Login OnError() + " + e.toString());
 
             }
 

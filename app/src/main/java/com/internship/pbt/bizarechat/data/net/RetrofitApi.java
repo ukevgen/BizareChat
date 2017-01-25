@@ -34,7 +34,7 @@ public class RetrofitApi {
     private UserService userService;
     private FileManagerService fileManagerService;
 
-    private RetrofitApi(){
+    private RetrofitApi() {
         OkHttpClient okHttpClient = createClient();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -62,7 +62,7 @@ public class RetrofitApi {
     /**
      * All API services should be implemented here
      */
-    private void buildServices(Retrofit retrofit){
+    private void buildServices(Retrofit retrofit) {
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
         fileManagerService = retrofit.create(FileManagerService.class);
@@ -72,9 +72,11 @@ public class RetrofitApi {
         return sessionService;
     }
 
-    public UserService getUserService(){ return userService; }
+    public UserService getUserService() {
+        return userService;
+    }
 
-    public FileManagerService getFileManagerService(){
+    public FileManagerService getFileManagerService() {
         return fileManagerService;
     }
 
@@ -87,13 +89,13 @@ public class RetrofitApi {
         return builder.build();
     }
 
-    private class SessionTokenAuthenticator implements Authenticator{
+    private class SessionTokenAuthenticator implements Authenticator {
         private final String LOG_TAG = SessionTokenAuthenticator.class.getSimpleName();
         private String newToken;
 
         @Override
-        public Request authenticate(Route route, Response response) throws IOException{
-            if(response.body().string().contains("Unauthorized")){
+        public Request authenticate(Route route, Response response) throws IOException {
+            if (response.body().string().contains("Unauthorized")) {
                 // Here we force the server return 422 code to us in next response.
                 // This code we will catch in our LoginPresenter to show correct message.
                 return response.request().newBuilder()
@@ -102,6 +104,7 @@ public class RetrofitApi {
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
+
             sessionRepository.getSession()
                     .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
                     .observeOn(Schedulers.newThread())
@@ -123,7 +126,10 @@ public class RetrofitApi {
                         }
                     });
 
+
             return response.request().newBuilder()
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("QuickBlox-REST-API-Version", "0.1.0")
                     .addHeader(ApiConstants.TOKEN_HEADER_NAME, newToken)
                     .build();
         }

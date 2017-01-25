@@ -34,6 +34,7 @@ public class ErrorMessageFactory {
                     message = context.getString(R.string.server_is_busy);
                     break;
                 default:
+                    message = "UNKNOWN. CODE " + code;
                     break;
             }
         } else if(throwable instanceof IOException){

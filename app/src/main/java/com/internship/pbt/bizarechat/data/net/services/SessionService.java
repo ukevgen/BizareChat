@@ -21,7 +21,6 @@ public interface SessionService {
     @POST("/session.json")
     Observable<SessionModel> getSessionWithAuth(@Body SessionWithAuthRequest body);
 
-    @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
     @POST("/login.json")
     Observable<SignInResponseModel> loginUser(@Body User requestModel);
 }
