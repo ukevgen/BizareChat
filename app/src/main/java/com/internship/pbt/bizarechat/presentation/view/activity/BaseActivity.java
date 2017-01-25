@@ -25,15 +25,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void addFragment(int containerViewId, Fragment fragment){
-        Log.d("123", "Fragment Transaction");
         final FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
-        Log.d("123", "Fragment Begin Transaction");
-
         fragmentTransaction.add(containerViewId, fragment);
-        Log.d("123", "Fragment ADD Transaction");
-
         fragmentTransaction.commit();
-        Log.d("123", "Fragment commit Transaction");
-
     }
 }

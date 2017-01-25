@@ -21,11 +21,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
+
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
@@ -37,6 +46,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private static final String PACKAGE_PATH = "com.internship.pbt.bizarechat.presentation.view.fragment.register";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
+
+    private CallbackManager callbackManager;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -61,6 +72,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private Animation mFailButtonAnim;
     private Animation getmSuccessSignUpAnim;
 
+    private LoginButton mFacebookButton;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -74,6 +87,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onCreate(Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreate");
         mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter.setRegistrationView(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -88,9 +102,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Log.d("123", "Fragment OnCreateView");
 
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        mRegistrationPresenter.setRegistrationView(this);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
@@ -105,11 +119,43 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
         mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
         mRegistrationPresenter.createFormatWatcher();
+
+        LoginManager.getInstance().logOut();
+        this.setCallbackToLoginFacebookButton();
+        mFacebookLinkButton.setOnClickListener(l -> LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile")));
         mAvatarImage.setOnClickListener(this);
-        mFacebookLinkButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         this.setAnimation();
+
         return v;
+    }
+
+    private void setCallbackToLoginFacebookButton (){
+        Log.d("123", "OnSuccess " + "setCallBack");
+
+        callbackManager = CallbackManager.Factory.create();
+
+            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Bundle param = new Bundle();
+                    param.putString("fields", "id, email");
+                    Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
+                    mRegistrationPresenter.facebookLink(loginResult);
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.d("123", "OnCancel");
+
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    Log.d("123", error.toString());
+                }
+            });
+
     }
 
    /* private void addPhoneNumberFormatting() {
@@ -244,8 +290,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void loginFacebook() {
+    public void refreshInfAfterFacebookLink(FacebookLinkInform linkInform) {
+        Log.d("123", "RegistrationFragment" + linkInform.toString());
 
+        mEmailEditText.setText(linkInform.getEmail());
+        mPhoneEditText.setText(linkInform.getPhoneNum());
     }
 
     @Override
@@ -258,9 +307,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         switch (view.getId()) {
             case R.id.register_sign_up:
                 this.getInformationForValidation();
-                break;
-            case R.id.login_facebook_button:
-                mRegistrationPresenter.facebookLink();
                 break;
             case R.id.user_pic:
                 this.showPictureChooser();
@@ -311,18 +357,21 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
+
+        if(resultCode == RESULT_OK)
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 
 
     @Override
-    public void loadAvatar(Uri uri) {
+    public void loadAvatarToImageView(Uri uri) {
         Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
     }
 
     @Override
     public void makeAvatarSizeToast() {
-        Toast.makeText(getActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -332,9 +381,14 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
-        Toast.makeText(this.getActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
+
+    @Override
+    public Context getContextActivity() {
+        return getActivity();
+    }
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();

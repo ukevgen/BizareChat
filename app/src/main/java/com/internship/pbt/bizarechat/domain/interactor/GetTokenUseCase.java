@@ -1,8 +1,6 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
 
-import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
-import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
@@ -11,10 +9,7 @@ import rx.Observable;
 public class GetTokenUseCase extends UseCase<Session>{
     private SessionRepository sessionRepository;
 
-    public GetTokenUseCase(SessionRepository sessionRepository,
-                           ThreadExecutor threadExecutor,
-                           PostExecutorThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public GetTokenUseCase(SessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
     }
 

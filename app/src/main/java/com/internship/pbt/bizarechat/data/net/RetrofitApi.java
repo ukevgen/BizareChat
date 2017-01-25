@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
+import com.internship.pbt.bizarechat.data.net.services.FileManagerService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -33,6 +34,7 @@ public class RetrofitApi {
     private SessionService sessionService;
     private UserService userService;
     private ContentService contentService;
+    private FileManagerService fileManagerService;
 
     private RetrofitApi(){
         OkHttpClient okHttpClient = createClient();
@@ -69,6 +71,7 @@ public class RetrofitApi {
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
         contentService = retrofit.create(ContentService.class);
+        fileManagerService = retrofit.create(FileManagerService.class);
     }
 
     public SessionService getSessionService() {
@@ -79,6 +82,10 @@ public class RetrofitApi {
 
     public ContentService getContentService() {
         return contentService;
+    }
+  
+    public FileManagerService getFileManagerService(){
+        return fileManagerService;
     }
 
     private OkHttpClient createClient() {

@@ -1,7 +1,9 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -15,10 +17,9 @@ public abstract class UseCase<T> {
     private PostExecutorThread mPostExecutorThread;
     private Subscription mSubscription = Subscriptions.empty();
 
-    protected UseCase(ThreadExecutor threadExecutor,
-                      PostExecutorThread postExecutionThread) {
-        this.mThreadExecutor = threadExecutor;
-        this.mPostExecutorThread = postExecutionThread;
+    protected UseCase() {
+        this.mThreadExecutor = JobExecutor.getInstance();
+        this.mPostExecutorThread = UiThread.getInstance();
     }
 
     protected abstract Observable<T> buildUseCaseObservable();

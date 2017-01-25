@@ -6,15 +6,17 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 
 public class Validator {
 
-    private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private static final String TAG = "Validator";
+
     private static final int SIX = 6;
     private static final int TWELVE = 12;
+    private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
             + "(\\([0-9]+\\)[\\- \\.]*)?"
@@ -42,7 +44,9 @@ public class Validator {
 
     public boolean isValidAvatarSize(Context context, Uri uri){
         try {
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                context.getContentResolver(),
+                uri);
         if (bitmap.getByteCount() / 10000000 < 1)
             return true;
         else
@@ -53,5 +57,9 @@ public class Validator {
             return false;
         }
 
+    }
+
+    public boolean isThereSomeImage(ImageView view){
+        return (view.getDrawable() != null);
     }
 }

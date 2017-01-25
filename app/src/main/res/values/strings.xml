@@ -48,4 +48,5 @@
     <string name="forgot_to_authorize">Seems like you forgot to authorize the app?</string>
     <string name="bizare_chat">BizareChat</string>
 
+    <string name="facebook_app_id">233083370481962</string>
 </resources>

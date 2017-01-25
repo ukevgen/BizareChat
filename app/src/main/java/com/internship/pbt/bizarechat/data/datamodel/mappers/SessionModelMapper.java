@@ -39,7 +39,6 @@ public class SessionModelMapper {
             userLoginResponce.setLastRequestAt(response.getLastRequestAt());
             userLoginResponce.setLogin(response.getLogin());
         }
-
         return userLoginResponce;
     }
 }

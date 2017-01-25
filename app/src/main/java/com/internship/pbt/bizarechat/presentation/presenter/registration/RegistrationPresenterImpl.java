@@ -1,9 +1,15 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 
+import com.facebook.login.LoginResult;
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
+import com.internship.pbt.bizarechat.presentation.model.SignUpModel;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
@@ -22,6 +28,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
     private File fileToUpload;
+    private SignUpModel mRegistrationModel;
+
+    public RegistrationPresenterImpl() {
+        super();
+        mRegistrationModel = new RegistrationModel();
+        mRegistrationModel.setPresenter(this);
+    }
 
     @Override
     public void setRegistrationView(RegistrationView registerView) {
@@ -82,11 +95,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
+    public void loadAvatar(ImageView view) {
+        if(mValidator.isThereSomeImage(view)){
+            
+        }
+    }
+
+    @Override
     public void validateInformation(InformationOnCheck informationOnCheck) {
 
         this.hideErrorsInvalid();
-
-
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
@@ -113,13 +131,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
-
+    
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
         if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
             fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
-            mRegisterView.loadAvatar(uri);
+            mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.makeAvatarSizeToast();
         }
@@ -127,18 +145,17 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void registrationRequest(InformationOnCheck informationOnCheck) {
-
     }
 
 
     @Override
-    public void facebookLink() {
-
+    public void facebookLink(LoginResult loginResult) {
+        Log.d("123", "Presenter Facebook request");
+        mRegistrationModel.getFacebookLink(loginResult);
     }
 
     @Override
     public void onRegistrationSuccess() {
-
         mRegisterView.onRegistrationSuccess();
     }
 
@@ -156,4 +173,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             mRegisterView = null;
     }
 
+    @Override
+    public void refreshLinkedInfInView(FacebookLinkInform linkInform) {
+        Log.d("123", "callback " + linkInform.toString());
+
+        mRegisterView.refreshInfAfterFacebookLink(linkInform);
+    }
 }
