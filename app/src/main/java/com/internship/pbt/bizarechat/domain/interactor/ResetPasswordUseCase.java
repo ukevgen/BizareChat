@@ -6,7 +6,7 @@ import com.internship.pbt.bizarechat.domain.repository.UserRepository;
 import retrofit2.Response;
 import rx.Observable;
 
-public class ResetPasswordUseCase extends UseCase{
+public class ResetPasswordUseCase extends UseCase {
     private UserRepository userRepository;
     private String email;
 
@@ -14,11 +14,12 @@ public class ResetPasswordUseCase extends UseCase{
         this.userRepository = userRepository;
     }
 
-    @Override protected Observable<Response<Void>> buildUseCaseObservable() {
+    @Override
+    protected Observable<Response<Void>> buildUseCaseObservable() {
         return userRepository.resetUserPassword(email);
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 

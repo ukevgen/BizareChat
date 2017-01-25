@@ -3,15 +3,18 @@ package com.internship.pbt.bizarechat.data.datamodel.mappers;
 
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
+import com.internship.pbt.bizarechat.data.datamodel.response.SignUpResponseModel;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
 
 public class SessionModelMapper {
-    private SessionModelMapper(){}
+    private SessionModelMapper() {
+    }
 
-    public static Session transform(SessionModel sessionModel){
+    public static Session transform(SessionModel sessionModel) {
         Session session = null;
-        if(sessionModel != null){
+        if (sessionModel != null) {
             session = new Session();
             session.setApplicationId(sessionModel.getSession().getApplicationId());
             session.setId(sessionModel.getSession().getId());
@@ -21,9 +24,9 @@ public class SessionModelMapper {
         return session;
     }
 
-    public static UserLoginResponce transform(SignInResponseModel response){
+    public static UserLoginResponce transform(SignInResponseModel response) {
         UserLoginResponce userLoginResponce = null;
-        if(response != null){
+        if (response != null) {
             userLoginResponce.setEmail(response.getEmail());
             userLoginResponce.setBlobId(response.getBlobId());
             userLoginResponce.setPhone(response.getPhone());
@@ -41,4 +44,26 @@ public class SessionModelMapper {
         }
         return userLoginResponce;
     }
+
+    public static UserSignUpResponce transform(SignUpResponseModel response) {
+        UserSignUpResponce userSignUpResponce = null;
+        if (response != null) {
+            userSignUpResponce.setEmail(response.getEmail());
+            userSignUpResponce.setBlobId(response.getBlobId());
+            userSignUpResponce.setPhone(response.getPhone());
+            userSignUpResponce.setCreatedAt(response.getCreatedAt());
+            userSignUpResponce.setCustomParameters(response.getCustomParameters());
+            userSignUpResponce.setExternalUserId(response.getExternalUserId());
+            userSignUpResponce.setFacebookId(response.getFacebookId());
+            userSignUpResponce.setFullName(response.getFullName());
+            userSignUpResponce.setId(response.getId());
+            userSignUpResponce.setUpdatedAt(response.getUpdatedAt());
+            userSignUpResponce.setWebsite(response.getWebsite());
+            userSignUpResponce.setUserTags(response.getUserTags());
+            userSignUpResponce.setLastRequestAt(response.getLastRequestAt());
+            userSignUpResponce.setLogin(response.getLogin());
+        }
+        return userSignUpResponce;
+    }
+
 }

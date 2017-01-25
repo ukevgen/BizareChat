@@ -6,6 +6,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.facebook.login.LoginResult;
+import com.internship.pbt.bizarechat.data.net.requests.SignUpRequestModel;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
@@ -18,6 +23,7 @@ import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
 import ru.tinkoff.decoro.slots.Slot;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
+import rx.Subscriber;
 
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
@@ -26,6 +32,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
     private SignUpModel mRegistrationModel;
+    private UseCase signUpUseCase;
 
     public RegistrationPresenterImpl() {
         super();
@@ -93,8 +100,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void loadAvatar(ImageView view) {
-        if(mValidator.isThereSomeImage(view)){
-            
+        if (mValidator.isThereSomeImage(view)) {
+
         }
     }
 
@@ -125,10 +132,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             this.showErrorPasswordConfirm();
         }
 
-        if (isValidationSuccess)
+        //if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
-    
+
     @Override
     public void verifyAndLoadAvatar(Context context, Uri uri) {
         // mRegisterView.setPermission(uri);
@@ -141,6 +148,27 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void registrationRequest(InformationOnCheck informationOnCheck) {
+        SignUpRequestModel model = new SignUpRequestModel("password123", "ukevgen@gmail.com",
+                0, "myfullname", "+380630573927", null);
+        Log.d(TAG, model.toString());
+        signUpUseCase = new SignUpUseCase(new SessionDataRepository(), model);
+        signUpUseCase.execute(new Subscriber<UserSignUpResponce>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(UserSignUpResponce userSignUpResponce) {
+
+            }
+        });
+
     }
 
 
