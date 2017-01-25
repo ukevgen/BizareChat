@@ -292,9 +292,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void refreshInfAfterFacebookLink(FacebookLinkInform linkInform) {
         Log.d("123", "RegistrationFragment" + linkInform.toString());
-
-        mEmailEditText.setText(linkInform.getEmail());
-        mPhoneEditText.setText(linkInform.getPhoneNum());
+        this.startOnFacebookLinkSuccessAnim();
     }
 
     @Override
