@@ -70,7 +70,7 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<UserLoginResponce> loginUser(User requestModel) {
         Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
-        return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
+        return sessionService.loginUser(requestModel)
                 .map(SessionModelMapper::transform);
     }
 }

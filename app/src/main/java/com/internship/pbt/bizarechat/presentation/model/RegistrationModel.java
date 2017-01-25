@@ -16,6 +16,8 @@ public class RegistrationModel implements SignUpModel {
     public void getFacebookLink(LoginResult loginResult) {
         Bundle bundle = new Bundle();
         bundle.putString("fields", "first_name, email, id");
+        Log.d("123", "loginResult " + loginResult.getAccessToken().getToken() + "  " + loginResult.getAccessToken().getUserId() + "\n");
+        Log.d("123", "Profile " + Profile.getCurrentProfile().getId() + " ");
         FacebookLinkInform inform = new FacebookLinkInform();
         GraphRequest gr = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(), (me, response) -> {
@@ -31,8 +33,6 @@ public class RegistrationModel implements SignUpModel {
                 });
         gr.setParameters(bundle);
         gr.executeAsync();
-        Log.d("123", "After Task Profile " + Profile.getCurrentProfile().getLinkUri().toString() + " And FULL NAME " + Profile.getCurrentProfile().getName());
-        Log.d("123", "AfterTask " + inform.toString());
 
     }
 

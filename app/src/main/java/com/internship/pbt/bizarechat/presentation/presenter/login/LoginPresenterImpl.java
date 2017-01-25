@@ -5,11 +5,9 @@ import android.util.Log;
 import com.internship.pbt.bizarechat.data.net.requests.User;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
-import com.internship.pbt.bizarechat.domain.interactor.GetTokenWithAuthUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
-import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
@@ -32,7 +30,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void requestSession(String email, String password) {
         Log.d("321", "requestSession()");
-        getTokenUseCase = new GetTokenWithAuthUseCase(new SessionDataRepository(), new User(email, password));
+     /*   getTokenUseCase = new GetTokenWithAuthUseCase(new SessionDataRepository(), new User(email, password));
         getTokenUseCase.execute(new Subscriber<Session>() {
             @Override
             public void onCompleted() {
@@ -54,7 +52,8 @@ public class LoginPresenterImpl implements LoginPresenter {
                 Log.d("321", "requestSession() OnNext. Session= " + session.getId() + " Token " + session.getToken());
                 UserToken.getInstance().saveToken(session.getToken());
             }
-        });
+        });*/
+        requestLogin(email, password);
     }
 
     @Override
