@@ -31,7 +31,7 @@ public interface SessionService {
                                               @Body UserRequestModel requestModel);
 
     @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
-    @POST("/user.json")
+    @POST("/users.json")
     Observable<SignUpResponseModel> signUpUser(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                                @Body SignUpRequestModel signUpRequestModel);
 

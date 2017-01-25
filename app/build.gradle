@@ -117,6 +117,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:converter-simplexml:2.1.0'
 
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
@@ -126,6 +127,9 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
 
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"

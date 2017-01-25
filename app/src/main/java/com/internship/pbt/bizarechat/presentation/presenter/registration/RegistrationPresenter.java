@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.content.Context;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -34,7 +33,7 @@ public interface RegistrationPresenter extends Presenter {
 
     void showErrorPasswordLength();
 
-    void verifyAndLoadAvatar(Context context, Uri uri);
+    void verifyAndLoadAvatar(Uri uri);
 
     void showErrorPasswordConfirm();
 

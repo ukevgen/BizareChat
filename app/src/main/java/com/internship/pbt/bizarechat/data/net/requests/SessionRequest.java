@@ -1,19 +1,36 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Use this POJO to create session request to API.
  */
 
 public class SessionRequest {
-    private String application_id;
-    private String auth_key;
+    @SerializedName("application_id")
+    @Expose
+    private String applicationId;
+
+    @SerializedName("auth_key")
+    @Expose
+    private String authKey;
+
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
+
+    @SerializedName("nonce")
+    @Expose
     private String nonce;
+
+    @SerializedName("signature")
+    @Expose
     private String signature;
 
-    public SessionRequest(String application_id, String auth_key, String timestamp, String nonce, String signature) {
-        this.application_id = application_id;
-        this.auth_key = auth_key;
+    public SessionRequest(String applicationId, String authKey, String timestamp, String nonce, String signature) {
+        this.applicationId = applicationId;
+        this.authKey = authKey;
         this.timestamp = timestamp;
         this.nonce = nonce;
         this.signature = signature;
@@ -23,8 +40,8 @@ public class SessionRequest {
         return signature;
     }
 
-    public String getAuth_key() {
-        return auth_key;
+    public String getAuthKey() {
+        return authKey;
     }
 
     public String getTimestamp() {
@@ -35,14 +52,14 @@ public class SessionRequest {
         return nonce;
     }
 
-    public String getApplication_id() {
-        return application_id;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     @Override public String toString() {
         return "SessionRequest{" +
-                "application_id='" + application_id + '\'' +
-                ", auth_key='" + auth_key + '\'' +
+                "applicationId='" + applicationId + '\'' +
+                ", authKey='" + authKey + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", nonce='" + nonce + '\'' +
                 ", signature='" + signature + '\'' +

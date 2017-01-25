@@ -1,20 +1,46 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ukevgen on 24.01.2017.
  */
 
 public class SignUpRequestModel {
+
+    @SerializedName("login")
+    @Expose
+    private String login;
+
+    @SerializedName("password")
+    @Expose
     private String password;
+
+    @SerializedName("email")
+    @Expose
     private String email;
+
+    @SerializedName("blob_id")
+    @Expose
     private int blob_id;
+
+    @SerializedName("full_name")
+    @Expose
     private String full_name;
+
+    @SerializedName("phone")
+    @Expose
     private String phone;
+
+    @SerializedName("website")
+    @Expose
     private String website;
 
 
-    public SignUpRequestModel(String password, String email, int blob_id, String full_name,
-                              String phone, String website) {
+    public SignUpRequestModel(String login, String password, String email,
+                              int blob_id, String full_name, String phone, String website) {
+        this.login = login;
         this.password = password;
         this.email = email;
         this.blob_id = blob_id;
@@ -71,10 +97,19 @@ public class SignUpRequestModel {
         this.website = website;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     @Override
     public String toString() {
-        return "SignUpRequest{" +
-                "password='" + password + '\'' +
+        return "SignUpRequestModel{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", blob_id=" + blob_id +
                 ", full_name='" + full_name + '\'' +

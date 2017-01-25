@@ -47,7 +47,7 @@ public class UserModel {
 
     @SerializedName("facebook_id")
     @Expose
-    private String facebookId;
+    private Integer facebookId;
 
     @SerializedName("twitter_id")
     @Expose
@@ -59,7 +59,7 @@ public class UserModel {
 
     @SerializedName("blob_id")
     @Expose
-    private Object blobId;
+    private Integer blobId;
 
     @SerializedName("custom_data")
     @Expose
@@ -149,11 +149,11 @@ public class UserModel {
         this.externalUserId = externalUserId;
     }
 
-    public String getFacebookId() {
+    public Integer getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(String facebookId) {
+    public void setFacebookId(Integer facebookId) {
         this.facebookId = facebookId;
     }
 
@@ -173,11 +173,11 @@ public class UserModel {
         this.twitterDigitsId = twitterDigitsId;
     }
 
-    public Object getBlobId() {
+    public Integer getBlobId() {
         return blobId;
     }
 
-    public void setBlobId(Object blobId) {
+    public void setBlobId(Integer blobId) {
         this.blobId = blobId;
     }
 

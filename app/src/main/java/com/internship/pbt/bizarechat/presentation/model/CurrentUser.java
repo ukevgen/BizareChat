@@ -9,6 +9,8 @@ public class CurrentUser implements AuthStore {
 
     private boolean isAuthorized;
 
+    private String facebookToken;
+
     private CurrentUser() {
         super();
     }
@@ -27,5 +29,13 @@ public class CurrentUser implements AuthStore {
 
     public void setAuthorized(boolean authorized) {
         isAuthorized = authorized;
+    }
+
+    public String getFacebookToken() {
+        return facebookToken;
+    }
+
+    public void setFacebookToken(String facebookToken) {
+        this.facebookToken = facebookToken;
     }
 }

@@ -1,7 +1,6 @@
 package com.internship.pbt.bizarechat.api;
 
 
-import com.internship.pbt.bizarechat.data.SchedulersFactory;
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
@@ -94,10 +93,8 @@ public class SessionServiceUnitTest {
 
         sessionRepository = spy(new SessionDataRepository());
         getTokenUseCase = spy(new GetTokenUseCase(
-                sessionRepository,
-                SchedulersFactory.getThreadExecutor(),
-                SchedulersFactory.getPostExecutor()));
-        presenter = new LoginPresenterImpl(getTokenUseCase, resetPasswordUseCase);
+                sessionRepository));
+        presenter = new LoginPresenterImpl(resetPasswordUseCase);
         presenter.setLoginView(view);
     }
 
@@ -112,7 +109,7 @@ public class SessionServiceUnitTest {
 
         doNothing().when(userToken).saveToken(anyString());
 
-        presenter.requestSession();
+        //presenter.requestSession();
 
         verify(getTokenUseCase).execute(any(Subscriber.class));
         verify(sessionRepository).getSession();
@@ -131,7 +128,7 @@ public class SessionServiceUnitTest {
                         Response.error(422, ResponseBody.create(null, new byte[0])))
                 ));
 
-        presenter.requestSession();
+        //presenter.requestSession();
 
         verify(getTokenUseCase).execute(any(Subscriber.class));
         verify(sessionRepository).getSession();

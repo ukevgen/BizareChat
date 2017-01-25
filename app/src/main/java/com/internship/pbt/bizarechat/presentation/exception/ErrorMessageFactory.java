@@ -18,6 +18,9 @@ public class ErrorMessageFactory {
             HttpException httpException = (HttpException)throwable;
             int code = httpException.code();
             switch (code){
+                case 400:
+                    message = context.getString(R.string.malformed_request_parameters);
+                    break;
                 case 401:
                     message = context.getString(R.string.message_session_expired);
                     break;
@@ -31,6 +34,7 @@ public class ErrorMessageFactory {
                     message = context.getString(R.string.server_is_busy);
                     break;
                 default:
+                    message = "UNKNOWN. CODE " + code;
                     break;
             }
         } else if(throwable instanceof IOException){
@@ -46,11 +50,11 @@ public class ErrorMessageFactory {
             HttpException httpException = (HttpException)throwable;
             int code = httpException.code();
             switch (code){
+                case 400:
+                    message = context.getString(R.string.malformed_request_parameters);
+                    break;
                 case 401:
                     message = context.getString(R.string.message_session_expired);
-                    break;
-                case 422:
-                    message = context.getString(R.string.invalid_login_or_password);
                     break;
                 case 500:
                     message = context.getString(R.string.server_common_error);
@@ -63,6 +67,8 @@ public class ErrorMessageFactory {
             }
         } else if(throwable instanceof IOException){
             message = context.getString(R.string.message_no_connection);
+        } else if(throwable instanceof IllegalStateException){
+            message = context.getString(R.string.invalid_login_or_password);
         }
 
         return message;

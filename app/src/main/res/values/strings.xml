@@ -10,7 +10,7 @@
     <string name="user_already_exists">User with given email already exists</string>
     <string name="invalid_login_or_password">Invalid email or password!</string>
     <string name="server_common_error">Server encountered an error, try again later</string>
-    <string name="server_is_busy">Server encountered an error, try again later</string>
+    <string name="server_is_busy">Server is at capacity, try again later</string>
     <string name="message_no_connection">Check your internet connection</string>
     <string name="password_recovery_sent">Password recovery email was sent</string>
 
@@ -49,4 +49,7 @@
     <string name="bizare_chat">BizareChat</string>
 
     <string name="facebook_app_id">233083370481962</string>
+
+    <string name="malformed_request_parameters">malformed request parameters</string>
+
 </resources>

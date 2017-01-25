@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
@@ -15,8 +14,11 @@ import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.model.SignUpModel;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
+
+import java.io.File;
 
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
@@ -31,6 +33,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
+    private File fileToUpload;
     private SignUpModel mRegistrationModel;
     private UseCase signUpUseCase;
 
@@ -108,7 +111,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void validateInformation(InformationOnCheck informationOnCheck) {
 
-        this.hideErrorsInvalid();
+        /*this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
@@ -132,14 +135,15 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             this.showErrorPasswordConfirm();
         }
 
-        //if (isValidationSuccess)
-            this.registrationRequest(informationOnCheck);
+        if (isValidationSuccess)*/
+        this.registrationRequest(informationOnCheck);
     }
 
     @Override
-    public void verifyAndLoadAvatar(Context context, Uri uri) {
+    public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        if (mValidator.isValidAvatarSize(context, uri)) {
+        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
+            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.makeAvatarSizeToast();
@@ -148,8 +152,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void registrationRequest(InformationOnCheck informationOnCheck) {
-        SignUpRequestModel model = new SignUpRequestModel("password123", "ukevgen@gmail.com",
-                0, "myfullname", "+380630573927", null);
+        SignUpRequestModel model = new SignUpRequestModel("lena", "password123", "ukevgen@gmail.com",
+                0, "myfullname", "+380630573927", "web");
         Log.d(TAG, model.toString());
         signUpUseCase = new SignUpUseCase(new SessionDataRepository(), model);
         signUpUseCase.execute(new Subscriber<UserSignUpResponce>() {
@@ -160,12 +164,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(Throwable e) {
+                System.out.println(e);
 
             }
 
             @Override
             public void onNext(UserSignUpResponce userSignUpResponce) {
-
+                Log.d(TAG, "Logged with inf " + userSignUpResponce.getId() + " "
+                        + userSignUpResponce.getFullName());
             }
         });
 
@@ -175,7 +181,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void facebookLink(LoginResult loginResult) {
         Log.d("123", "Presenter Facebook request");
+
         mRegistrationModel.getFacebookLink(loginResult);
+
     }
 
     @Override

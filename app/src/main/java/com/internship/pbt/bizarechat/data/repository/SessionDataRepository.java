@@ -1,5 +1,7 @@
 package com.internship.pbt.bizarechat.data.repository;
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignUpResponseModel;
@@ -12,8 +14,9 @@ import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.util.HmacSha1Signature;
 import com.internship.pbt.bizarechat.domain.model.Session;
-import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
+//import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
 import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import java.util.Random;
@@ -51,10 +54,11 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<Session> getSessionWithAuth(UserRequestModel requestModel) {
+        Log.d("321", "get SessionWithAuth()");
         int nonce = randomizer.nextInt();
         if (nonce < 0) nonce = -nonce;
         long timestamp = System.currentTimeMillis() / 1000;
-        String signature = HmacSha1Signature.calculateSignature(nonce, timestamp);
+        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
 
         SessionWithAuthRequest request = new SessionWithAuthRequest(
                 ApiConstants.APP_ID,
@@ -65,15 +69,17 @@ public class SessionDataRepository implements SessionRepository {
                 requestModel
         );
 
+        Log.d("321", "getSessionWithAuth " + request.toString());
         return sessionService.getSessionWithAuth(request).map(SessionModelMapper::transform);
     }
 
     @Override
-    public Observable<UserLoginResponce> loginUser(UserRequestModel requestModel) {
+    public Observable<UserLoginResponse> loginUser(UserRequestModel requestModel) {
+        Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
         return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
-                .map(new Func1<SignInResponseModel, UserLoginResponce>() {
+                .map(new Func1<SignInResponseModel, UserLoginResponse>() {
                     @Override
-                    public UserLoginResponce call(SignInResponseModel response) {
+                    public UserLoginResponse call(SignInResponseModel response) {
                         return SessionModelMapper.transform(response);
                     }
                 });
