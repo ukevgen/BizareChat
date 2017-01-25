@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Retrofit;
@@ -85,8 +84,8 @@ public class RetrofitApi {
     private OkHttpClient createClient() {
         SessionTokenAuthenticator authenticator = new SessionTokenAuthenticator();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(10000, TimeUnit.MILLISECONDS);
-        builder.connectTimeout(15000, TimeUnit.MILLISECONDS);
+        builder.readTimeout(20000, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(20000, TimeUnit.MILLISECONDS);
         builder.authenticator(authenticator);
 
         return builder.build();
@@ -98,12 +97,10 @@ public class RetrofitApi {
 
         @Override
         public Request authenticate(Route route, Response response) throws IOException{
+            // Check whether response is wrong login or password
             if(response.body().string().contains("Unauthorized")){
-                // Here we force the server return 422 code to us in next response.
-                // This code we will catch in our LoginPresenter to show correct message.
-                return response.request().newBuilder()
-                        .post(RequestBody.create(null, new byte[0]))
-                        .build();
+                // Closing connection...
+                return null;
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
