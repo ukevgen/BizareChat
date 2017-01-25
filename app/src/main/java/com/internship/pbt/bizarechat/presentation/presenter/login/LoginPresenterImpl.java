@@ -105,7 +105,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void requestLogin(String email, String password) {
-        //TODO implement login request
+        //TODO implement login
     }
 
     @Override
