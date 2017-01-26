@@ -1,7 +1,7 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import com.internship.pbt.bizarechat.data.net.requests.SignUpRequestModel;
-import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
@@ -13,16 +13,16 @@ import rx.Observable;
 public class SignUpUseCase extends UseCase {
 
     private SessionRepository sessionRepository;
-    private SignUpRequestModel signUpRequestModel;
+    private SignUpRequestM signUpRequestM;
 
 
-    public SignUpUseCase(SessionRepository sessionRepository, SignUpRequestModel signUpRequestModel) {
+    public SignUpUseCase(SessionRepository sessionRepository, SignUpRequestM signUpRequestM) {
         this.sessionRepository = sessionRepository;
-        this.signUpRequestModel = signUpRequestModel;
+        this.signUpRequestM = signUpRequestM;
     }
 
     @Override
-    protected Observable<UserSignUpResponce> buildUseCaseObservable() {
-        return sessionRepository.signUpUser(signUpRequestModel);
+    protected Observable<ResponseSignUpModel> buildUseCaseObservable() {
+        return sessionRepository.signUpUser(signUpRequestM);
     }
 }

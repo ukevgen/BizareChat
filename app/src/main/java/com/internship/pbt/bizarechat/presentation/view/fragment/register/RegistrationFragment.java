@@ -130,31 +130,31 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
-    private void setCallbackToLoginFacebookButton (){
+    private void setCallbackToLoginFacebookButton() {
         Log.d("123", "OnSuccess " + "setCallBack");
 
         callbackManager = CallbackManager.Factory.create();
 
-            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    Bundle param = new Bundle();
-                    param.putString("fields", "id, email");
-                    Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
-                    mRegistrationPresenter.facebookLink(loginResult);
-                }
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Bundle param = new Bundle();
+                param.putString("fields", "id, email");
+                Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
+                mRegistrationPresenter.facebookLink(loginResult);
+            }
 
-                @Override
-                public void onCancel() {
-                    Log.d("123", "OnCancel");
+            @Override
+            public void onCancel() {
+                Log.d("123", "OnCancel");
 
-                }
+            }
 
-                @Override
-                public void onError(FacebookException error) {
-                    Log.d("123", error.toString());
-                }
-            });
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("123", error.toString());
+            }
+        });
 
     }
 
@@ -347,10 +347,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
 
-        if(resultCode == RESULT_OK)
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+            callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 
 
     @Override
@@ -359,8 +358,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void makeAvatarSizeToast() {
-        Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+    public void makeToast(String msg) {
+        //Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContextActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -5,11 +5,12 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.facebook.login.LoginResult;
-import com.internship.pbt.bizarechat.data.net.requests.SignUpRequestModel;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
-import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
@@ -30,6 +31,8 @@ import rx.Subscriber;
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
+    private static final String USER_EXIST = "Sorry, this email already exist";
+    private static final String AVATAR = "Select image to large";
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
@@ -88,7 +91,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
-
     }
 
     @Override
@@ -146,17 +148,28 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatarToImageView(uri);
         } else {
-            mRegisterView.makeAvatarSizeToast();
+            mRegisterView.makeToast(AVATAR);
         }
     }
 
     @Override
     public void registrationRequest(InformationOnCheck informationOnCheck) {
-        SignUpRequestModel model = new SignUpRequestModel("lena", "password123", "ukevgen@gmail.com",
-                0, "myfullname", "+380630573927", "web");
-        Log.d(TAG, model.toString());
-        signUpUseCase = new SignUpUseCase(new SessionDataRepository(), model);
-        signUpUseCase.execute(new Subscriber<UserSignUpResponce>() {
+
+        SignUpUserM userM = new SignUpUserM();
+        userM.setPhone("0630573927");
+        userM.setWebsite("website");
+        userM.setPassword("testpassword");
+        userM.setEmail("teset4@mail.com");
+        userM.setBlobId(null);
+        userM.setFullName("myfullname");
+        SignUpRequestM signUpRequestM = new SignUpRequestM();
+        signUpRequestM.setUser(userM);
+
+        Log.d(TAG, signUpRequestM.getUser().toString());
+
+        signUpUseCase = new SignUpUseCase(new SessionDataRepository(), signUpRequestM);
+
+        signUpUseCase.execute(new Subscriber<ResponseSignUpModel>() {
             @Override
             public void onCompleted() {
 
@@ -164,14 +177,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(Throwable e) {
-                System.out.println(e);
+                mRegisterView.makeToast(USER_EXIST);
 
             }
 
             @Override
-            public void onNext(UserSignUpResponce userSignUpResponce) {
-                Log.d(TAG, "Logged with inf " + userSignUpResponce.getId() + " "
-                        + userSignUpResponce.getFullName());
+            public void onNext(ResponseSignUpModel userSignUpResponce) {
+                Log.d(TAG, "Logged with inf " + userSignUpResponce.getUser().toString());
             }
         });
 
@@ -181,7 +193,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void facebookLink(LoginResult loginResult) {
         Log.d("123", "Presenter Facebook request");
-
         mRegistrationModel.getFacebookLink(loginResult);
 
     }

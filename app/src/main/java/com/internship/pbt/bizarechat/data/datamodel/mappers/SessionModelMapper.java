@@ -1,13 +1,9 @@
 package com.internship.pbt.bizarechat.data.datamodel.mappers;
-
-
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
-import com.internship.pbt.bizarechat.data.datamodel.response.SignUpResponseModel;
 import com.internship.pbt.bizarechat.domain.model.Session;
-//import com.internship.pbt.bizarechat.domain.model.UserLoginResponce;
-import com.internship.pbt.bizarechat.domain.model.UserSignUpResponce;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
+
 
 public class SessionModelMapper {
     private SessionModelMapper() {
@@ -44,27 +40,6 @@ public class SessionModelMapper {
             userLoginResponse.setLogin(response.getUser().getLogin());
         }
         return userLoginResponse;
-    }
-
-    public static UserSignUpResponce transform(SignUpResponseModel response) {
-        UserSignUpResponce userSignUpResponce = null;
-        if (response != null) {
-            userSignUpResponce.setEmail(response.getUser().getEmail());
-            userSignUpResponce.setBlobId(response.getUser().getBlobId());
-            userSignUpResponce.setPhone(response.getUser().getPhone());
-            userSignUpResponce.setCreatedAt(response.getUser().getCreatedAt());
-            userSignUpResponce.setCustomParameters(response.getUser().getCustomData());
-            userSignUpResponce.setExternalUserId(response.getUser().getExternalUserId());
-            userSignUpResponce.setFacebookId(response.getUser().getFacebookId());
-            userSignUpResponce.setFullName(response.getUser().getFullName());
-            userSignUpResponce.setId(response.getUser().getId());
-            userSignUpResponce.setUpdatedAt(response.getUser().getUpdatedAt());
-            userSignUpResponce.setWebsite(response.getUser().getWebsite());
-            userSignUpResponce.setUserTags(response.getUser().getUserTags());
-            userSignUpResponce.setLastRequestAt(response.getUser().getLastRequestAt());
-            userSignUpResponce.setLogin(response.getUser().getLogin());
-        }
-        return userSignUpResponce;
     }
 
 }

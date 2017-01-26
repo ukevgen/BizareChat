@@ -46,7 +46,7 @@ public interface RegistrationView extends LoadDataView {
 
     void loadAvatarToImageView(Uri uri);
 
-    void makeAvatarSizeToast();
+    void makeToast(String msg);
 
     void showErrorPasswordConfirm();
 
