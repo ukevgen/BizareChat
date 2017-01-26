@@ -101,7 +101,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
-
+                onLoginSuccess();
             }
 
             @Override
@@ -140,5 +140,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void destroy() {
         loginView = null;
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        loginView.onLoginSuccess();
     }
 }

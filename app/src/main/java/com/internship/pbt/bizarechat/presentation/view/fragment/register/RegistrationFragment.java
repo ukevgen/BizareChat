@@ -383,11 +383,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
 
-    @Override
-    public Context getContextActivity() {
-        return getActivity();
-    }
-
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }

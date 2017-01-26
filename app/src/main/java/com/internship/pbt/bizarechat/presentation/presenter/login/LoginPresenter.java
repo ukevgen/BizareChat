@@ -19,4 +19,6 @@ public interface LoginPresenter extends Presenter {
     void checkIsEmailValid(String email);
 
     void onKeepMeSignInFalse();
+
+    void onLoginSuccess();
 }
