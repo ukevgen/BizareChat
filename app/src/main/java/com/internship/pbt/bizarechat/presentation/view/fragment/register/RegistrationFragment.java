@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -234,6 +235,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void showError(String message) {
+        if (getView() != null)
+            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -367,10 +370,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
     }
 
-    @Override
-    public void makeAvatarSizeToast() {
-        Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public Context getContextActivity() {

@@ -18,6 +18,9 @@ repositories {
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    jcenter {
+        url "http://jcenter.bintray.com/"
+    }
     mavenCentral()
 }
 

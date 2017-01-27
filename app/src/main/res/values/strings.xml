@@ -51,5 +51,5 @@
     <string name="facebook_app_id">233083370481962</string>
 
     <string name="malformed_request_parameters">malformed request parameters</string>
-
+    <string name="avatar_uploaded">avatar uploaded</string>
 </resources>

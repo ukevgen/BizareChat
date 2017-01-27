@@ -5,9 +5,13 @@ import com.internship.pbt.bizarechat.presentation.AuthStore;
 
 public class CurrentUser implements AuthStore {
 
+    public static final String CURRENT_AVATAR = "AVATAR";
+
     private static CurrentUser INSTANCE;
 
     private boolean isAuthorized;
+
+    private String avatarBlobId;
 
     private String facebookToken;
 
@@ -37,5 +41,13 @@ public class CurrentUser implements AuthStore {
 
     public void setFacebookToken(String facebookToken) {
         this.facebookToken = facebookToken;
+    }
+
+    public String getAvatarBlobId() {
+        return avatarBlobId;
+    }
+
+    public void setAvatarBlobId(String avatarBlobId) {
+        this.avatarBlobId = avatarBlobId;
     }
 }

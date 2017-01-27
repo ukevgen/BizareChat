@@ -21,10 +21,7 @@ public class BizareChatApp extends Application {
 //            return;
 //        LeakCanary.install(this);
 
-        FacebookSdk.sdkInitialize(this);
         AppEventsLogger.activateApp(this);
 
     }
-
-
 }

@@ -1,7 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.net.Uri;
-import android.widget.ImageView;
 
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
@@ -39,6 +38,6 @@ public interface RegistrationPresenter extends Presenter {
 
     void createFormatWatcher();
 
-    void loadAvatar(ImageView imageView);
+    void uploadAvatar();
 
 }

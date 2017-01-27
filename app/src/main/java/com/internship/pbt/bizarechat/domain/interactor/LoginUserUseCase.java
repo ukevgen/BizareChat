@@ -8,7 +8,7 @@ import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
 
-public class LoginUserUseCase extends UseCase {
+public class LoginUserUseCase extends UseCase<UserLoginResponse> {
 
     private SessionRepository sessionRepository;
     private UserRequestModel requestModel;
