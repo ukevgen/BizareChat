@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordLayout,
             mPasswordConfLayout,
             mPhoneLayout;
+    private FrameLayout mImageWrapper;
 
     private EditText mEmailEditText;
 
@@ -104,6 +106,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
 
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
@@ -123,7 +126,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
         mFacebookLinkButton.setOnClickListener(l -> LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile")));
-        mAvatarImage.setOnClickListener(this);
+        mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         this.setAnimation();
 
@@ -306,7 +309,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.register_sign_up:
                 this.getInformationForValidation();
                 break;
-            case R.id.user_pic:
+            case R.id.image_wrapper:
                 this.showPictureChooser();
                 break;
         }
@@ -380,12 +383,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public Context getContextActivity() {
-        return getActivity();
     }
 
     public interface OnRegisterSuccess {
