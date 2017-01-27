@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordLayout,
             mPasswordConfLayout,
             mPhoneLayout;
+    private FrameLayout mImageWrapper;
 
     private EditText mEmailEditText;
 
@@ -105,6 +107,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
 
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
@@ -126,6 +129,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         mFacebookLinkButton.setOnClickListener(this);
         mAvatarImage.setOnClickListener(this);
+        mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
 
         return v;
@@ -304,7 +308,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.register_sign_up:
                 this.getInformationForValidation();
                 break;
-            case R.id.user_pic:
+            case R.id.image_wrapper:
                 this.showPictureChooser();
                 break;
             case R.id.login_facebook_button:

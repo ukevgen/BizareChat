@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_gravity="center_horizontal"
-    android:layout_width="@dimen/login_card_width"
-    android:layout_height="@dimen/login_card_height"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     app:cardElevation="@dimen/login_card_elevation"
     app:cardCornerRadius="@dimen/cardCornerRadius"
     android:clipToPadding="false"
@@ -15,6 +15,7 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/login_root_element_padding"
         android:background="@color/cardSignBackground">
 
         <EditText
@@ -24,7 +25,6 @@
             android:layout_height="@dimen/login_element_default_height"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/login_email_margin_top"
             android:hint="@string/email_address"/>
 
         <EditText
@@ -43,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:layout_marginStart="-5dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/login_checkbox_margin_start"
+            android:layout_marginTop="@dimen/login_checkbox_margin_top"
             android:layout_below="@id/password"
             android:layout_alignStart="@id/password"
             android:text="@string/keep_me_sign_in"
@@ -66,7 +66,7 @@
             style="@style/SignUpButton"
             android:layout_width="@dimen/login_element_default_width"
             android:layout_height="@dimen/login_element_default_height"
-            android:layout_alignStart="@id/sign_in"
+            android:layout_alignStart="@id/password"
             android:layout_below="@id/sign_in"
             android:layout_marginTop="@dimen/login_signup_margin_top"
             android:text="@string/sign_up"/>
@@ -78,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/sign_up"
             android:layout_centerHorizontal="true"
+            android:padding="@dimen/login_forgot_password_padding"
             android:layout_marginTop="@dimen/login_forgot_margin_top"
             android:text="@string/forgot_password"/>
 

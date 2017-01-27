@@ -100,7 +100,7 @@ public class RetrofitApi {
 
         @Override
         public Request authenticate(Route route, Response response) throws IOException{
-            // Check whether response is wrong login or password
+            // Check whether response is "wrong login or password"
             if(response.body().string().contains("Unauthorized")){
                 // Closing connection...
 
