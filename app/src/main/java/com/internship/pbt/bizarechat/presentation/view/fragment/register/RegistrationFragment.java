@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordLayout,
             mPasswordConfLayout,
             mPhoneLayout;
+    private FrameLayout mImageWrapper;
 
     private EditText mEmailEditText;
 
@@ -91,6 +93,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mRegistrationPresenter.setRegistrationView(this);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
@@ -105,7 +108,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
         mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
         mRegistrationPresenter.createFormatWatcher();
-        mAvatarImage.setOnClickListener(this);
+        mImageWrapper.setOnClickListener(this);
         mFacebookLinkButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         this.setAnimation();
@@ -124,7 +127,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void addPhoneNumberFormatting(FormatWatcher formatWatcher) {
-        formatWatcher.installOn(mPhoneEditText);
+        formatWatcher.installOnAndFill(mPhoneEditText);
         mPhoneEditText.setSelection(mPhoneEditText.getText().length());
     }
 
@@ -262,7 +265,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.login_facebook_button:
                 mRegistrationPresenter.facebookLink();
                 break;
-            case R.id.user_pic:
+            case R.id.image_wrapper:
                 this.showPictureChooser();
                 break;
         }
