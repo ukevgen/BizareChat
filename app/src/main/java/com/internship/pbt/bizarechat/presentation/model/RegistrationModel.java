@@ -13,12 +13,14 @@ public class RegistrationModel implements SignUpModel {
 
     @Override
     public void getFacebookLink(LoginResult loginResult) {
-        Log.d("123", "loginResult " + loginResult.getAccessToken().getToken() + "  " + loginResult.getAccessToken().getUserId() + "\n");
+        Log.d("123", "loginResult " + loginResult.getAccessToken().getToken() +
+                "  " + loginResult.getAccessToken().getUserId() + "\n");
         Log.d("123", "Profile " + Profile.getCurrentProfile().getId() + " ");
         FacebookLinkInform inform = new FacebookLinkInform();
-        inform.setToken(AccessToken.getCurrentAccessToken().getUserId());
-
-        if(inform.getToken() != null)
+        inform.setToken(AccessToken.getCurrentAccessToken().getToken());
+        inform.setUserId(AccessToken.getCurrentAccessToken().getUserId());
+        inform.setFullName(Profile.getCurrentProfile().getName());
+        if(inform.getToken() != null && inform.getUserId() != null)
             presenter.refreshLinkedInfInView(inform);
     }
 

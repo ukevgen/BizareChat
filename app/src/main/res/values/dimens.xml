@@ -14,5 +14,20 @@
     <dimen name="login_signup_margin_top">11dp</dimen>
     <dimen name="login_forgot_margin_top">40dp</dimen>
     <dimen name="login_password_margin_top">24dp</dimen>
+    <dimen name="login_checkbox_margin_start">-5dp</dimen>
     <dimen name="card_login_margin">24dp</dimen>
+    <dimen name="sing_up_element_width">216dp</dimen>
+    <dimen name="sing_up_element_height">48dp</dimen>
+    <dimen name="sing_up_fb_padding">20dp</dimen>
+    <dimen name="sing_up_root_element_padding">32dp</dimen>
+    <dimen name="sing_up_avatar_size">68dp</dimen>
+    <dimen name="sing_up_email_margin_top">20dp</dimen>
+    <dimen name="sign_up_fb_margin_top">24dp</dimen>
+    <dimen name="sing_up_btn_sign_up_margin_top">12dp</dimen>
+    <dimen name="login_checkbox_margin_top">8dp</dimen>
+    <dimen name="login_root_element_padding">32dp</dimen>
+    <dimen name="login_forgot_password_padding">4dp</dimen>
+    <dimen name="sign_up_btn_sign_up_margin_bottom">12dp</dimen>
+    <dimen name="forgot_password_width">280dp</dimen>
+    <dimen name="forgot_password_height">100dp</dimen>
 </resources>

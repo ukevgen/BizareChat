@@ -31,8 +31,6 @@ public interface RegistrationView extends LoadDataView {
 
     void showErrorPasswordLength();
 
-    void setAnimation();
-
     Context getContextActivity();
 
     void startOnFacebookLinkSuccessAnim();
@@ -46,8 +44,6 @@ public interface RegistrationView extends LoadDataView {
     void showPictureChooser();
 
     void loadAvatarToImageView(Uri uri);
-
-    void makeToast(String msg);
 
     void showErrorPasswordConfirm();
 

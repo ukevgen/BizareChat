@@ -18,9 +18,7 @@ import rx.Subscriber;
 
 public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
-    private UseCase getTokenUseCase;
     private ResetPasswordUseCase resetPasswordUseCase;
-    private UseCase loginUseCase;
     private Validator validator = new Validator();
 
     public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase) {
@@ -92,7 +90,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void requestLogin(String email, String password) {
-        this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+        UseCase loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
                 new UserRequestModel(email, password));
 
         Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
@@ -101,7 +99,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
-
+                onLoginSuccess();
             }
 
             @Override
@@ -140,5 +138,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void destroy() {
         loginView = null;
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        loginView.onLoginSuccess();
     }
 }

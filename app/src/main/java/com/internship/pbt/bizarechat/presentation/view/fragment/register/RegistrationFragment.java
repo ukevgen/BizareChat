@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +60,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordLayout,
             mPasswordConfLayout,
             mPhoneLayout;
+    private FrameLayout mImageWrapper;
 
     private EditText mEmailEditText,
             mFullName,
@@ -117,9 +120,15 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mFacebookLinkButton.setOnClickListener(l ->
                 LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this,
                         Arrays.asList("public_profile")));
+     
+
+        LoginManager.getInstance().logOut();
+        this.setCallbackToLoginFacebookButton();
+
+        mFacebookLinkButton.setOnClickListener(this);
         mAvatarImage.setOnClickListener(this);
+        mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-        this.setAnimation();
 
         return v;
     }
@@ -180,11 +189,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void setAnimation() {
-
-    }
-
-    @Override
     public void startFailedSignUpAnim() {
 
     }
@@ -226,6 +230,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void showError(String message) {
+        if (getView() != null)
+            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -298,12 +304,14 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.register_sign_up:
                 this.getInformationForValidation();
                 break;
-            case R.id.user_pic:
+            case R.id.image_wrapper:
                 this.showPictureChooser();
+                break;
+            case R.id.login_facebook_button:
+                this.facebookLoginWithPermissions();
                 break;
         }
     }
-
 
     @Override
     public void showPictureChooser() {
@@ -328,13 +336,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void getInformationForValidation() {
-        /*if (informationOnCheck == null)
-            informationOnCheck = new InformationOnCheck();
-        informationOnCheck.setEmail(mEmailEditText.getText().toString());
-        informationOnCheck.setPassword(mPasswordEditText.getText().toString());
-        informationOnCheck.setPhone(mPhoneEditText.getText().toString());
-        informationOnCheck.setPasswordConf(mPasswordConfirm.getText().toString());
-        Log.d("123", "Fragment GetValidInf" + informationOnCheck.toString());*/
         if (userModel == null)
             userModel = new SignUpUserM();
         userModel.setEmail(mEmailEditText.getText().toString());
@@ -362,16 +363,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-
     @Override
     public void loadAvatarToImageView(Uri uri) {
         Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
-    }
-
-    @Override
-    public void makeToast(String msg) {
-
-        Toast.makeText(this.getContextActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -384,6 +378,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
+  private void facebookLoginWithPermissions(){
+        LoginManager.getInstance()
+                .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
+    }
+  
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }

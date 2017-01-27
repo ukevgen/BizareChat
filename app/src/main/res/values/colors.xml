@@ -4,14 +4,23 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ffffff</color>
 
-    <color name="steelBlue">#327780</color>
     <color name="background">#2bbc9b</color>
     <color name="cardSignBackground">#327780</color>
     <color name="button_sign_in">#004951</color>
-    <color name="button_sign_up">#165258</color>
+    <color name="button_disabled_text">#42ffffff</color>
+    <color name="button_sign_in_disabled">#1f004951</color>
+    <color name="button_sign_in_pressed">#00383e</color>
+    <color name="button_sing_up_pressed">#113e43</color>
+    <color name="button_sign_up">#27686f</color>
+    <color name="forgot_password_pressed">#205d64</color>
     <color name="email_hint">#8fb4b9</color>
     <color name="facebook_btn">#3a579a</color>
+    <color name="facebook_btn_pressed">#294381</color>
+    <color name="login_avatar_pressed">#7fffffff</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="invalid_info_test_color">#EE6767</color>
+    <color name="image_chooser_dialog_accent">#FFCC00</color>
+    <color name="image_chooser_dialog_background">#5fa3d0</color>
 </resources>

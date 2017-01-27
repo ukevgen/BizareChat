@@ -25,7 +25,7 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess,
+public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess,LoginFragment.onLoginSuccess,
         EasyPermissions.PermissionCallbacks {
 
     private static final int RC_USE_CAMERA = 104;
@@ -128,6 +128,9 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
         setNotification();
     }
 
-
+    @Override
+    public void onLoginSuccess() {
+        mNavigator.navigateToMainActivity(this);
+    }
 }
 

@@ -1,7 +1,9 @@
 package com.internship.pbt.bizarechat.data.repository;
 
+import android.content.Context;
 import android.net.UrlQuerySanitizer;
 
+import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
@@ -10,6 +12,7 @@ import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,18 +27,17 @@ import rx.functions.Func1;
 
 
 public class ContentDataRepository implements ContentRepository {
+
     private ContentService contentService;
+    private String name;
     private volatile String blobId = "";
-
-    public ContentDataRepository(){
+    private CacheSharedPreferences cache;
+    public ContentDataRepository(Context context) {
         contentService = RetrofitApi.getRetrofitApi().getContentService();
+        cache = CacheSharedPreferences.getInstance(context);
     }
 
-    public String getBlobId() {
-        return blobId;
-    }
-
-    public Observable<Response<Void>> uploadFile(String contentType, File file){
+    public Observable<Response<Void>> uploadFile(String contentType, File file, String name) {
         FileCreateRequest.Blob createBlob = new FileCreateRequest.Blob();
         createBlob.setContentType(contentType);
         createBlob.setName(file.getName());
@@ -45,18 +47,18 @@ public class ContentDataRepository implements ContentRepository {
 
         return contentService.createFile(UserToken.getInstance().getToken(), fileCreateRequest)
                 .flatMap(new Func1<CreateFileResponse, Observable<UploadFileResponse>>() {
-            @Override
-            public Observable<UploadFileResponse> call(CreateFileResponse createFileResponse) {
-                blobId = createFileResponse.getBlob().getId();
-                String params = createFileResponse.getBlob().getBlobObjectAccess().getParams();
-                params = params.replaceAll("&amp;", "&");
+                    @Override
+                    public Observable<UploadFileResponse> call(CreateFileResponse createFileResponse) {
+                        blobId = createFileResponse.getBlob().getId();
+                        String params = createFileResponse.getBlob().getBlobObjectAccess().getParams();
+                        params = params.replaceAll("&amp;", "&");
 
-                Map<String, RequestBody> paramsMap = composeFormParamsMap(params);
-                MultipartBody.Part filePart = prepareFilePart(file, contentType);
+                        Map<String, RequestBody> paramsMap = composeFormParamsMap(params);
+                        MultipartBody.Part filePart = prepareFilePart(file, contentType, name);
 
-                return contentService.uploadFile(ApiConstants.AMAZON_END_POINT, paramsMap, filePart);
-            }
-        })
+                        return contentService.uploadFile(ApiConstants.AMAZON_END_POINT, paramsMap, filePart);
+                    }
+                })
                 .flatMap(new Func1<UploadFileResponse, Observable<Response<Void>>>() {
                     @Override
                     public Observable<Response<Void>> call(UploadFileResponse uploadFileResponse) {
@@ -67,6 +69,9 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
+                        if(name == CurrentUser.CURRENT_AVATAR)
+                        cache.putAccountAvatarBlobId(blobId);
+
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
                                 blobId,
@@ -75,11 +80,11 @@ public class ContentDataRepository implements ContentRepository {
                 });
     }
 
-    private RequestBody createPartFromString(String source){
+    private RequestBody createPartFromString(String source) {
         return RequestBody.create(MediaType.parse("text/plain"), source);
     }
 
-    private Map<String, RequestBody> composeFormParamsMap(String source){
+    private Map<String, RequestBody> composeFormParamsMap(String source) {
         UrlQuerySanitizer sanitizer = new UrlQuerySanitizer();
         sanitizer.registerParameter(ApiConstants.AMAZON_EXPIRES, UrlQuerySanitizer.getSpaceLegal());
         sanitizer.setAllowUnregisteredParamaters(true);
@@ -110,12 +115,15 @@ public class ContentDataRepository implements ContentRepository {
         return result;
     }
 
-    private MultipartBody.Part prepareFilePart(File file, String contentType) {
+    private MultipartBody.Part prepareFilePart(File file, String contentType, String name) {
         RequestBody requestFile = RequestBody.create(MediaType.parse(contentType), file);
-
+        if (name == null)
+            this.name = file.getName();
+        else
+            this.name = name;
         return MultipartBody.Part.createFormData(
                 ApiConstants.AMAZON_FILE,
-                file.getName(),
+                this.name,
                 requestFile);
     }
 }

@@ -2,7 +2,6 @@ package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
 import android.net.Uri;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
@@ -12,6 +11,15 @@ import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
+import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
+import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.model.SignUpModel;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
@@ -20,6 +28,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 import java.io.File;
 
+import retrofit2.Response;
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
 import ru.tinkoff.decoro.slots.Slot;
@@ -104,15 +113,33 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void loadAvatar(ImageView view) {
-        if (mValidator.isThereSomeImage(view)) {
+    public void uploadAvatar() {
+        if(fileToUpload != null){
+            UseCase uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
+           uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
+               @Override
+               public void onCompleted() {
+                   mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
+               }
 
+               @Override
+               public void onError(Throwable e) {
+                   String message = ErrorMessageFactory.
+                           createMessageOnLogin(mRegisterView.getContextActivity(), e);
+                   mRegisterView.showError(message);
+               }
+
+               @Override
+               public void onNext(Response<Void> response) {
+
+               }
+           });
         }
     }
 
     @Override
     public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
-
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
@@ -147,7 +174,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatarToImageView(uri);
         } else {
-            mRegisterView.makeToast(AVATAR);
+            mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.too_large_picture_max_size_1mb));
         }
     }
 
@@ -174,10 +201,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onNext(ResponseSignUpModel signUpModel) {
                 Log.d(TAG, signUpModel.toString());
+                this.uploadAvatar();
                 onRegistrationSuccess(signUpModel);
             }
         });
-
+        
     }
 
 
@@ -211,7 +239,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void refreshLinkedInfInView(FacebookLinkInform linkInform) {
         Log.d("123", "callback " + linkInform.toString());
-
+        mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
+                + linkInform.getFullName() + " Id " + linkInform.getUserId());
+        CurrentUser.getInstance().setFacebookToken(linkInform.getToken());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);
     }
 }

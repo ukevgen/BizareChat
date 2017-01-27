@@ -24,6 +24,7 @@ import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.view.activity.LoginActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
@@ -41,9 +42,17 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private ProgressBar progressBar;
     private CheckBox keepMeSignIn;
     private NotificationManager notificationManager;
-
+    private onLoginSuccess onLoginSuccess;
     public LoginFragment() {
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof LoginActivity)
+            this.onLoginSuccess = (LoginActivity) context;
     }
 
     @Nullable
@@ -253,7 +262,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void onLoginSuccess() {
-
+        this.onLoginSuccess.onLoginSuccess();
     }
 
     @Override
@@ -269,5 +278,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onResume() {
         super.onResume();
         stopNotification();
+    }
+
+    public interface onLoginSuccess {
+        void onLoginSuccess();
     }
 }
