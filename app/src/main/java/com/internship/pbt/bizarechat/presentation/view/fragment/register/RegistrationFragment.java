@@ -311,9 +311,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.register_sign_up:
                 this.getInformationForValidation();
                 break;
-            case R.id.login_facebook_button:
-                mRegistrationPresenter.facebookLink();
-                break;
             case R.id.image_wrapper:
                 this.showPictureChooser();
                 break;
@@ -388,12 +385,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public Context getContextActivity() {
-        return getActivity();
     }
 
     public interface OnRegisterSuccess {
