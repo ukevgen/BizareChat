@@ -1,27 +1,48 @@
 package com.internship.pbt.bizarechat.data.net.requests;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class SessionWithAuthRequest {
 
+    @SerializedName("application_id")
+    @Expose
     private String application_id;
+
+    @SerializedName("auth_key")
+    @Expose
     private String auth_key;
+
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
+
+    @SerializedName("nonce")
+    @Expose
     private String nonce;
+
+    @SerializedName("signature")
+    @Expose
     private String signature;
-    private UserRequestModel userModel;
+
+    @SerializedName("userRequestModel")
+    @Expose
+    private UserRequestModel userRequestModel;
+
 
     public SessionWithAuthRequest(String application_id,
                                   String auth_key,
                                   String timestamp,
                                   String nonce,
                                   String signature,
-                                  UserRequestModel userModel) {
+                                  UserRequestModel userRequestModel) {
 
         this.application_id = application_id;
         this.auth_key = auth_key;
         this.timestamp = timestamp;
         this.nonce = nonce;
         this.signature = signature;
-        this.userModel = userModel;
+        this.userRequestModel = userRequestModel;
     }
 
     public String getApplication_id() {
@@ -64,12 +85,12 @@ public class SessionWithAuthRequest {
         this.signature = signature;
     }
 
-    public UserRequestModel getUserModel() {
-        return userModel;
+    public UserRequestModel getUserRequestModel() {
+        return userRequestModel;
     }
 
-    public void setUserModel(UserRequestModel userModel) {
-        this.userModel = userModel;
+    public void setUserRequestModel(UserRequestModel userRequestModel) {
+        this.userRequestModel = userRequestModel;
     }
 
     @Override
@@ -80,8 +101,8 @@ public class SessionWithAuthRequest {
                 ", timestamp='" + timestamp + '\'' +
                 ", nonce='" + nonce + '\'' +
                 ", signature='" + signature + '\'' +
-                ", username='" + userModel.getLogin() + "\'" +
-                ", userpassword='" + userModel.getPassword() + "\'" +
+                ", username='" + userRequestModel.getEmail() + "\'" +
+                ", userpassword='" + userRequestModel.getPassword() + "\'" +
                 '}';
     }
 }

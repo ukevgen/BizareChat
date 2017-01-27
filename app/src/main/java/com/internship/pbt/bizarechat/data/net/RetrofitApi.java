@@ -36,7 +36,7 @@ public class RetrofitApi {
     private ContentService contentService;
     private FileManagerService fileManagerService;
 
-    private RetrofitApi(){
+    private RetrofitApi() {
         OkHttpClient okHttpClient = createClient();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -67,7 +67,7 @@ public class RetrofitApi {
     /**
      * All API services should be implemented here
      */
-    private void buildServices(Retrofit retrofit){
+    private void buildServices(Retrofit retrofit) {
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
         contentService = retrofit.create(ContentService.class);
@@ -78,15 +78,15 @@ public class RetrofitApi {
         return sessionService;
     }
 
-    public UserService getUserService(){ return userService; }
+    public UserService getUserService() {
+        return userService;
+    }
+
 
     public ContentService getContentService() {
         return contentService;
     }
-  
-    public FileManagerService getFileManagerService(){
-        return fileManagerService;
-    }
+
 
     private OkHttpClient createClient() {
         SessionTokenAuthenticator authenticator = new SessionTokenAuthenticator();
@@ -94,11 +94,10 @@ public class RetrofitApi {
         builder.readTimeout(20000, TimeUnit.MILLISECONDS);
         builder.connectTimeout(20000, TimeUnit.MILLISECONDS);
         builder.authenticator(authenticator);
-
         return builder.build();
     }
 
-    private class SessionTokenAuthenticator implements Authenticator{
+    private class SessionTokenAuthenticator implements Authenticator {
         private final String LOG_TAG = SessionTokenAuthenticator.class.getSimpleName();
         private String newToken;
 
@@ -107,10 +106,12 @@ public class RetrofitApi {
             // Check whether response is "wrong login or password"
             if(response.body().string().contains("Unauthorized")){
                 // Closing connection...
+
                 return null;
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
+
             sessionRepository.getSession()
                     .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
                     .observeOn(Schedulers.newThread())
@@ -131,6 +132,7 @@ public class RetrofitApi {
                             UserToken.getInstance().saveToken(newToken);
                         }
                     });
+
 
             return response.request().newBuilder()
                     .removeHeader(ApiConstants.TOKEN_HEADER_NAME)

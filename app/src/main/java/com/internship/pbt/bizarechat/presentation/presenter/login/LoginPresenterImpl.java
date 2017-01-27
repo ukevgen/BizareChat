@@ -1,9 +1,14 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
+import android.util.Log;
+
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
-import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
-import com.internship.pbt.bizarechat.domain.model.Session;
+import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
@@ -13,55 +18,37 @@ import rx.Subscriber;
 
 public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
-    private GetTokenUseCase getTokenUseCase;
+    private UseCase getTokenUseCase;
     private ResetPasswordUseCase resetPasswordUseCase;
+    private UseCase loginUseCase;
     private Validator validator = new Validator();
 
-    public LoginPresenterImpl(GetTokenUseCase getTokenUseCase,
-                              ResetPasswordUseCase resetPasswordUseCase) {
-        this.getTokenUseCase = getTokenUseCase;
+    public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase) {
         this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
-    @Override
-    public void requestSession() {
-        getTokenUseCase.execute(new Subscriber<Session>() {
-            @Override
-            public void onCompleted() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                String message = ErrorMessageFactory.
-                        createMessageOnLogin(loginView.getContextActivity(), e);
-                loginView.showError(message);
-            }
-
-            @Override
-            public void onNext(Session session) {
-                UserToken.getInstance().saveToken(session.getToken());
-            }
-        });
-    }
 
     @Override
-    public void checkIsEmailValid(String email){
-        if(validator.isValidEmail(email)){
+    public void checkIsEmailValid(String email) {
+        if (validator.isValidEmail(email)) {
             resetPasswordUseCase.setEmail(email);
 
             resetPasswordUseCase.execute(new Subscriber<Response<Void>>() {
-                @Override public void onCompleted() {
+                @Override
+                public void onCompleted() {
 
                 }
 
-                @Override public void onError(Throwable e) {
+                @Override
+                public void onError(Throwable e) {
                     String message = ErrorMessageFactory.
                             createMessageOnLogin(loginView.getContextActivity(), e);
                     loginView.showError(message);
                 }
 
-                @Override public void onNext(Response<Void> o) {
+                @Override
+                public void onNext(Response<Void> o) {
                     loginView.showSuccessOnPasswordRecovery();
                 }
             });
@@ -105,7 +92,33 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void requestLogin(String email, String password) {
-        //TODO implement login
+        this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+                new UserRequestModel(email, password));
+
+        Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
+
+        loginUseCase.execute(new Subscriber<UserLoginResponse>() {
+            @Override
+            public void onCompleted() {
+                Log.d("321", "request Login OnCompleted()");
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                String message = ErrorMessageFactory.
+                        createMessageOnLogin(loginView.getContextActivity(), e);
+                loginView.showError(message);
+                e.printStackTrace();
+                Log.d("321", "request Login OnError() + " + e.toString());
+
+            }
+
+            @Override
+            public void onNext(UserLoginResponse userLoginResponse) {
+                Log.d("321", "Logged with inf " + userLoginResponse.getId() + " " + userLoginResponse.getFullName());
+            }
+        });
     }
 
     @Override

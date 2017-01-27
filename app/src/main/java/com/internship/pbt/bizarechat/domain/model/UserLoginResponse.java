@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.domain.model;
 
-public class UserLoginResponce {
+public class UserLoginResponse {
 
     private Integer blobId;
 

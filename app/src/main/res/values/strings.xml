@@ -49,4 +49,7 @@
     <string name="bizare_chat">BizareChat</string>
 
     <string name="facebook_app_id">233083370481962</string>
+
+    <string name="malformed_request_parameters">malformed request parameters</string>
+
 </resources>

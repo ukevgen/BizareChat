@@ -151,7 +151,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void facebookLink(LoginResult loginResult) {
         Log.d("123", "Presenter Facebook request");
+
         mRegistrationModel.getFacebookLink(loginResult);
+
     }
 
     @Override
