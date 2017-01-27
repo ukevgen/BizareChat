@@ -28,10 +28,13 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 import java.util.Arrays;
@@ -56,14 +59,16 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordConfLayout,
             mPhoneLayout;
 
-    private EditText mEmailEditText;
+    private EditText mEmailEditText,
+            mFullName,
+            mWebSite;
 
     private TextInputEditText mPasswordEditText,
             mPasswordConfirm,
             mPhoneEditText;
 
-    private Button mSignUpButton;
-    private Button mFacebookLinkButton;
+    private Button mSignUpButton,
+            mFacebookLinkButton;
     private OnRegisterSuccess mOnRegisterSuccess;
 
 
@@ -73,6 +78,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private Animation getmSuccessSignUpAnim;
 
     private LoginButton mFacebookButton;
+    private InformationOnCheck informationOnCheck;
+    private SignUpUserM userModel;
 
     @Override
     public void onAttach(Context context) {
@@ -103,26 +110,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
-
-
-        mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
-        mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
-        mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
-        mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
-
-        mEmailEditText = (EditText) v.findViewById(R.id.register_email);
-        mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
-        mPasswordConfirm = (TextInputEditText) v.findViewById(R.id.register_confirm_password);
-        mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
-
-        mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
-        mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
-        mRegistrationPresenter.createFormatWatcher();
+        init(v);
 
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
-        mFacebookLinkButton.setOnClickListener(l -> LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile")));
+        mFacebookLinkButton.setOnClickListener(l ->
+                LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this,
+                        Arrays.asList("public_profile")));
         mAvatarImage.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
         this.setAnimation();
@@ -163,6 +157,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void addPhoneNumberFormatting(FormatWatcher formatWatcher) {
         formatWatcher.installOn(mPhoneEditText);
         mPhoneEditText.setSelection(mPhoneEditText.getText().length());
+    }
+
+    @Override
+    public void goToMainActivity(ResponseSignUpModel signUpModel) {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
@@ -327,13 +328,23 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void getInformationForValidation() {
-        InformationOnCheck informationOnCheck = new InformationOnCheck();
+        /*if (informationOnCheck == null)
+            informationOnCheck = new InformationOnCheck();
         informationOnCheck.setEmail(mEmailEditText.getText().toString());
         informationOnCheck.setPassword(mPasswordEditText.getText().toString());
         informationOnCheck.setPhone(mPhoneEditText.getText().toString());
         informationOnCheck.setPasswordConf(mPasswordConfirm.getText().toString());
-        Log.d("123", "Fragment GetValidInf" + informationOnCheck.toString());
-        mRegistrationPresenter.validateInformation(informationOnCheck);
+        Log.d("123", "Fragment GetValidInf" + informationOnCheck.toString());*/
+        if (userModel == null)
+            userModel = new SignUpUserM();
+        userModel.setEmail(mEmailEditText.getText().toString());
+        userModel.setFullName(mFullName.getText().toString());
+        userModel.setPassword(mPasswordEditText.getText().toString());
+        userModel.setWebsite(mWebSite.getText().toString());
+        userModel.setPhone(mPhoneEditText.getText().toString());
+        String passwordConf = mPasswordConfirm.getText().toString();
+
+        mRegistrationPresenter.validateInformation(userModel, passwordConf);
     }
 
     @Override
@@ -359,7 +370,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void makeToast(String msg) {
-        //Toast.makeText(this.getContextActivity(), getText(R.string.too_large_picture_max_size_1mb), Toast.LENGTH_SHORT).show();
+
         Toast.makeText(this.getContextActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -376,4 +387,28 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
+
+
+    private void init(View v) {
+        mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+
+        mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
+        mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
+        mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
+        mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
+
+        mEmailEditText = (EditText) v.findViewById(R.id.register_email);
+        mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
+        mPasswordConfirm = (TextInputEditText) v.findViewById(R.id.register_confirm_password);
+        mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);
+
+        mFullName = (EditText) v.findViewById(R.id.register_full_name);
+        mWebSite = (EditText) v.findViewById(R.id.register_website);
+
+        mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
+        mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
+        mRegistrationPresenter.createFormatWatcher();
+
+    }
+
 }
