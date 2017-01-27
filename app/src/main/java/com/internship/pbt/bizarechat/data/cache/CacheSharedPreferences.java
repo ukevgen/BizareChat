@@ -3,8 +3,6 @@ package com.internship.pbt.bizarechat.data.cache;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import rx.Observable;
-
 public class CacheSharedPreferences {
 
     private static volatile CacheSharedPreferences INSTANCE;
@@ -12,6 +10,7 @@ public class CacheSharedPreferences {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private String FILE_NAME = "CurrenAccount";
+
     private CacheSharedPreferences(Context context){
         mSharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
@@ -35,8 +34,8 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
-    Observable<String> getToken(){
-        return Observable.just(mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, "NoN"));
+    public String getToken(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, "NoN");
     }
 
     public void putAccountAvatarBlobId(String value){
@@ -44,8 +43,17 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
-    Observable<String> getAccountAvatarBlobId(){
-        return Observable.just(mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, "NoN"));
+    public String getAccountAvatarBlobId(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, "NoN");
     }
+
+    public void putIsUserAuthorized(boolean status){
+        mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, status);
+    }
+
+    public boolean isAuthorized(){
+        return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, false);
+    }
+
 
 }

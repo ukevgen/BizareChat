@@ -12,6 +12,7 @@ import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.io.File;
 import java.util.HashMap;
@@ -67,7 +68,10 @@ public class ContentDataRepository implements ContentRepository {
 
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
+
+                        if(name == CurrentUser.CURRENT_AVATAR)
                         cache.putAccountAvatarBlobId(blobId);
+
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
                                 blobId,

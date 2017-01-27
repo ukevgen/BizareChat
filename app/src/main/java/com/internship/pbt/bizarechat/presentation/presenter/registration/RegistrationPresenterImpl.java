@@ -206,7 +206,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void refreshLinkedInfInView(FacebookLinkInform linkInform) {
         Log.d("123", "callback " + linkInform.toString());
-
+        mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
+                + linkInform.getFullName() + " Id " + linkInform.getUserId());
+        CurrentUser.getInstance().setFacebookToken(linkInform.getToken());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);
     }
 }

@@ -123,10 +123,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
-        mFacebookLinkButton.setOnClickListener(l -> LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile")));
+
+        mFacebookLinkButton.setOnClickListener(this);
         mAvatarImage.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
-        this.setAnimation();
 
         return v;
     }
@@ -186,11 +186,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onDestroy() {
         super.onDestroy();
         mRegistrationPresenter.destroy();
-    }
-
-    @Override
-    public void setAnimation() {
-
     }
 
     @Override
@@ -312,9 +307,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             case R.id.user_pic:
                 this.showPictureChooser();
                 break;
+            case R.id.login_facebook_button:
+                this.facebookLoginWithPermissions();
+                break;
         }
     }
-
 
     @Override
     public void showPictureChooser() {
@@ -363,13 +360,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-
-
     @Override
     public void loadAvatarToImageView(Uri uri) {
         Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
     }
-
 
     @Override
     public Context getContextActivity() {
@@ -381,6 +375,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
+    private void facebookLoginWithPermissions(){
+        LoginManager.getInstance()
+                .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
+    }
 
     public interface OnRegisterSuccess {
         void onRegisterSuccess();

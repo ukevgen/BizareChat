@@ -30,8 +30,6 @@ public interface RegistrationView extends LoadDataView {
 
     void showErrorPasswordLength();
 
-    void setAnimation();
-
     Context getContextActivity();
 
     void startOnFacebookLinkSuccessAnim();

@@ -26,6 +26,8 @@
     <string name="invalid_phone">Invalid Phone</string>
     <string name="link_facebook">Link Facebook</string>
     <string name="linked">Linked</string>
+    <string name="avatar_uploaded">Avatar uploaded</string>
+
 
     <string name="invalid_weak_password">Password is weak. Please use at least two digits and two capitalized letters</string>
     <string name="error_password_length">Password length should be 6-12 symbols</string>
@@ -49,7 +51,7 @@
     <string name="bizare_chat">BizareChat</string>
 
     <string name="facebook_app_id">233083370481962</string>
+    <string name="linked_with_facebook_user">Linked with facebook user</string>
 
-    <string name="malformed_request_parameters">malformed request parameters</string>
-    <string name="avatar_uploaded">avatar uploaded</string>
+    <string name="malformed_request_parameters">mMlformed request parameters</string>
 </resources>
