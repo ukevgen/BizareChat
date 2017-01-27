@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 import android.content.Context;
 import android.net.Uri;
 
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
 
@@ -49,5 +50,7 @@ public interface RegistrationView extends LoadDataView {
     void hideErrorPasswordConfirm();
 
     void addPhoneNumberFormatting(FormatWatcher formatWatcher);
+
+    void goToMainActivity(ResponseSignUpModel signUpModel);
 
 }

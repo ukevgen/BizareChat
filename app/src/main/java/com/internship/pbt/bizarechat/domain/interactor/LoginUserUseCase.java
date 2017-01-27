@@ -20,7 +20,6 @@ public class LoginUserUseCase extends UseCase<UserLoginResponse> {
 
     @Override
     protected Observable<UserLoginResponse> buildUseCaseObservable() {
-        Log.d("321", "buildUseCaseObservable() LoginUseCase");
         return sessionRepository.loginUser(requestModel);
     }
 }

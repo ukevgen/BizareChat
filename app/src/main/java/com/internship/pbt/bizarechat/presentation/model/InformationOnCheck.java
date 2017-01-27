@@ -3,10 +3,8 @@ package com.internship.pbt.bizarechat.presentation.model;
 public class InformationOnCheck {
 
     private String mEmail;
-
     private String mPassword;
     private String passwordConf;
-
     private String mPhone;
 
     public String getEmail() {

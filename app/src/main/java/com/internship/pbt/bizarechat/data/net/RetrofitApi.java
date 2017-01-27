@@ -137,4 +137,8 @@ public class RetrofitApi {
                     .build();
         }
     }
+
+    public FileManagerService getFileManagerService() {
+        return fileManagerService;
+    }
 }

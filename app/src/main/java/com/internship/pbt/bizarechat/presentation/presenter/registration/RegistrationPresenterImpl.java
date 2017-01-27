@@ -4,6 +4,13 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.facebook.login.LoginResult;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
+import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
@@ -32,11 +39,15 @@ import rx.Subscriber;
 public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
+    private static final String USER_EXIST = "Sorry, this email already exist";
+    private static final String AVATAR = "Too large picture max size 1mb";
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
     private File fileToUpload;
     private SignUpModel mRegistrationModel;
+    private UseCase signUpUseCase;
+    private SignUpRequestM signUpRequestM;
 
     public RegistrationPresenterImpl() {
         super();
@@ -89,7 +100,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
-
     }
 
     @Override
@@ -129,7 +139,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void validateInformation(InformationOnCheck informationOnCheck) {
+    public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
@@ -149,7 +159,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             this.showErrorPasswordLength();
         }
         if (!mValidator.isPasswordMatch(informationOnCheck.getPassword(),
-                informationOnCheck.getPasswordConf())) {
+                passwordConf)) {
             isValidationSuccess = false;
             this.showErrorPasswordConfirm();
         }
@@ -157,10 +167,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
-    
+
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
-        // mRegisterView.setPermission(uri);
         if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
             fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
             mRegisterView.loadAvatarToImageView(uri);
@@ -170,23 +179,47 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void registrationRequest(InformationOnCheck informationOnCheck) {
-        //TODO SignUp request
-        this.uploadAvatar();
+    public void registrationRequest(SignUpUserM userM) {
+        userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
+        if (signUpRequestM == null)
+            signUpRequestM = new SignUpRequestM();
+        signUpRequestM.setUser(userM);
+
+        signUpUseCase = new SignUpUseCase(new SessionDataRepository(), signUpRequestM);
+        signUpUseCase.execute(new Subscriber<ResponseSignUpModel>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, e.toString());
+                mRegisterView.makeToast(USER_EXIST);
+            }
+
+            @Override
+            public void onNext(ResponseSignUpModel signUpModel) {
+                Log.d(TAG, signUpModel.toString());
+                this.uploadAvatar();
+                onRegistrationSuccess(signUpModel);
+            }
+        });
+        
     }
 
 
     @Override
     public void facebookLink(LoginResult loginResult) {
         Log.d("123", "Presenter Facebook request");
-
         mRegistrationModel.getFacebookLink(loginResult);
 
     }
 
     @Override
-    public void onRegistrationSuccess() {
-        mRegisterView.onRegistrationSuccess();
+    public void onRegistrationSuccess(ResponseSignUpModel signUpModel) {
+        mRegisterView.goToMainActivity(signUpModel);
+        //mRegisterView.onRegistrationSuccess();
     }
 
     @Override
