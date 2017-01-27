@@ -1,8 +1,6 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
 
-import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
-import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.domain.repository.UserRepository;
 
 import retrofit2.Response;
@@ -12,10 +10,7 @@ public class ResetPasswordUseCase extends UseCase{
     private UserRepository userRepository;
     private String email;
 
-    public ResetPasswordUseCase(UserRepository userRepository,
-                                ThreadExecutor threadExecutor,
-                                PostExecutorThread postExecutionThread) {
-        super(threadExecutor, postExecutionThread);
+    public ResetPasswordUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

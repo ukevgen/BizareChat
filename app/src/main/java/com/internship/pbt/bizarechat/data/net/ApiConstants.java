@@ -26,5 +26,5 @@ public class ApiConstants {
     public static final String AMAZON_DATE = "x-amz-date";
     public static final String AMAZON_SIGNATURE = "x-amz-signature";
     public static final String AMAZON_FILE = "file";
-
+    public static final String CONTENT_TYPE_IMAGE_JPEG = "image/jpeg";
 }

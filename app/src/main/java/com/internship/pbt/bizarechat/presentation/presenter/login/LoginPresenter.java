@@ -18,4 +18,6 @@ public interface LoginPresenter extends Presenter {
     void checkFieldsAndSetButtonState(String email, String password);
 
     void checkIsEmailValid(String email);
+
+    void onKeepMeSignInFalse();
 }

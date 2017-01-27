@@ -124,4 +124,10 @@ public class LoginPresenterUnitTest {
     @Test
     public void sendButtonDisabled() {
     }
+
+    @Test
+    public void ifKeepMeSignInUncheckShowDialog(){
+        loginPresenter.onKeepMeSignInFalse();
+        verify(loginView).showCheckBoxModalDialog();
+    }
 }

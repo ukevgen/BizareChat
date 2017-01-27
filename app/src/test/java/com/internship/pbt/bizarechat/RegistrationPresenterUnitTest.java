@@ -1,5 +1,7 @@
 package com.internship.pbt.bizarechat;
 
+import android.content.Context;
+
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
@@ -16,8 +18,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 
-
-
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
@@ -25,6 +25,9 @@ public class RegistrationPresenterUnitTest {
 
     @Mock
     private RegistrationView mRegistrationFragment;
+
+    @Mock
+    private Context context;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -38,6 +41,7 @@ public class RegistrationPresenterUnitTest {
         mInformationOnCheck.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
+
     }
 
     @Test
@@ -90,6 +94,4 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void passwordMatch(){}
-
-
 }

@@ -35,6 +35,10 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="edfe45eebce7eaa464a2bc0837d7279b5f9dbee7" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <receiver android:name=".service.AlertReceiver" />
     </application>
 
