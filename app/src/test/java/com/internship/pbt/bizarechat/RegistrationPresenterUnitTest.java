@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat;
 
 import android.content.Context;
 
-import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
@@ -31,14 +31,14 @@ public class RegistrationPresenterUnitTest {
 
     private RegistrationPresenter mRegistrationPresenter;
 
-    private InformationOnCheck mInformationOnCheck;
+    private SignUpUserM SignUpUserM;
 
     @Before
     public void prepareData() {
-        mInformationOnCheck = new InformationOnCheck();
-        mInformationOnCheck.setEmail("roman-kapshuk@ukr.net");
-        mInformationOnCheck.setPassword("QA1we2");
-        mInformationOnCheck.setPhone("0797878796");
+        SignUpUserM = new SignUpUserM();
+        SignUpUserM.setEmail("roman-kapshuk@ukr.net");
+        SignUpUserM.setPassword("QA1we2");
+        SignUpUserM.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
@@ -47,8 +47,8 @@ public class RegistrationPresenterUnitTest {
     @Test
     public void checkPasswordLengthNotMatches(){
         for(String value : negativeTestPasswordLengthData){
-            mInformationOnCheck.setPassword(value);
-            mRegistrationPresenter.validateInformation(mInformationOnCheck);
+            SignUpUserM.setPassword(value);
+            mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
             verify(mRegistrationFragment, atLeastOnce()).showErrorPasswordLength();
         }
     }
@@ -56,16 +56,16 @@ public class RegistrationPresenterUnitTest {
     @Test
     public void checkPasswordLengthMatches(){
         for(String value : positiveTestPasswordLengthData){
-            mInformationOnCheck.setPassword(value);
-            mRegistrationPresenter.validateInformation(mInformationOnCheck);
+            SignUpUserM.setPassword(value);
+            mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
             verify(mRegistrationFragment, never()).showErrorPasswordLength();
         }
     }
 
     @Test
     public void checkIfUserEnteredInvalidEmail() {
-        mInformationOnCheck.setEmail("Invalid");
-        mRegistrationPresenter.validateInformation(mInformationOnCheck);
+        SignUpUserM.setEmail("Invalid");
+        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
 
         verify(mRegistrationFragment).showErrorInvalidEmail();
         verify(mRegistrationFragment, never()).showErrorInvalidPassword();
@@ -74,8 +74,8 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void checkIfUserEnteredInvalidPassword(){
-        mInformationOnCheck.setPassword("Invalid");
-        mRegistrationPresenter.validateInformation(mInformationOnCheck);
+        SignUpUserM.setPassword("Invalid");
+        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
 
         verify(mRegistrationFragment).showErrorInvalidPassword();
         verify(mRegistrationFragment, never()).showErrorInvalidEmail();
@@ -84,8 +84,8 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void checkIfUserEnteredInvalidPhone(){
-        mInformationOnCheck.setPhone("Invalid");
-        mRegistrationPresenter.validateInformation(mInformationOnCheck);
+        SignUpUserM.setPhone("Invalid");
+        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
 
         verify(mRegistrationFragment).showErrorInvalidPhone();
         verify(mRegistrationFragment, never()).showErrorInvalidPassword();

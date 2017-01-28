@@ -14,11 +14,12 @@ public class ResetPasswordUseCase extends UseCase<Response<Void>>{
         this.userRepository = userRepository;
     }
 
-    @Override protected Observable<Response<Void>> buildUseCaseObservable() {
+    @Override
+    protected Observable<Response<Void>> buildUseCaseObservable() {
         return userRepository.resetUserPassword(email);
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 

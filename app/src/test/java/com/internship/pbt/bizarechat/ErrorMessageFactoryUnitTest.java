@@ -53,7 +53,7 @@ public class ErrorMessageFactoryUnitTest {
     public void checkLoginErrorMessages(){
         String message = ErrorMessageFactory.createMessageOnLogin(
                 context,
-                new HttpException(Response.error(422, ResponseBody.create(null, new byte[0]))));
+                new IllegalStateException());
         Assert.assertEquals(message, wrongLoginOrPassword);
 
         message = ErrorMessageFactory.createMessageOnLogin(

@@ -80,7 +80,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         emailEditText = (EditText) view.findViewById(R.id.email);
         passwordEditText = (EditText) view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
-        // progressBar = (ProgressBar) view.findViewById(R.id.progress_bar); TODO Find this
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progress_bar);
         keepMeSignIn = (CheckBox) view.findViewById(R.id.keep_me_check);
         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
