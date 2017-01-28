@@ -126,7 +126,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         this.setCallbackToLoginFacebookButton();
 
         mFacebookLinkButton.setOnClickListener(this);
-        mAvatarImage.setOnClickListener(this);
         mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
 
@@ -390,6 +389,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private void init(View v) {
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
+        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
