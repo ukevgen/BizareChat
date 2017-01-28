@@ -86,7 +86,7 @@ android {
         debug {
             testCoverageEnabled = true
             buildConfigField BOOLEAN, CRASH_REPORTS, FALSE
-            buildConfigField INT, SPLASH_DELAY, '200'
+            buildConfigField INT, SPLASH_DELAY, '0'
         }
 
         debugDev {

@@ -25,8 +25,6 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
-
-
     @Override
     public void checkIsEmailValid(String email) {
         if (validator.isValidEmail(email)) {
@@ -133,7 +131,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void pause() {
 
     }
-
 
     @Override
     public void destroy() {

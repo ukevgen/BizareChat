@@ -40,7 +40,6 @@ public class HmacSha1Signature {
                     HMAC_SHA1_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
-            Log.d("123", "RequestInf + " + data + " Signature " + toHexString(mac.doFinal(data.getBytes())));
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
@@ -57,7 +56,6 @@ public class HmacSha1Signature {
                                                             HMAC_SHA1_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
-            Log.d("123", "RequestInf + " + data + " Signature " + toHexString(mac.doFinal(data.getBytes())));
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
