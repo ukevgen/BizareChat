@@ -120,13 +120,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mFacebookLinkButton.setOnClickListener(l ->
                 LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this,
                         Arrays.asList("public_profile")));
-     
+
 
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
 
         mFacebookLinkButton.setOnClickListener(this);
-        mAvatarImage.setOnClickListener(this);
         mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
 
@@ -171,7 +170,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void goToMainActivity(ResponseSignUpModel signUpModel) {
         Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
     }
@@ -379,11 +378,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
-  private void facebookLoginWithPermissions(){
+    private void facebookLoginWithPermissions() {
         LoginManager.getInstance()
                 .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
     }
-  
+
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
@@ -393,11 +392,14 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
+
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
 
         mEmailEditText = (EditText) v.findViewById(R.id.register_email);
+        //mEmailEditText.requestFocus(View.VISIBLE);
+
         mPasswordEditText = (TextInputEditText) v.findViewById(R.id.register_password);
         mPasswordConfirm = (TextInputEditText) v.findViewById(R.id.register_confirm_password);
         mPhoneEditText = (TextInputEditText) v.findViewById(R.id.register_phone);

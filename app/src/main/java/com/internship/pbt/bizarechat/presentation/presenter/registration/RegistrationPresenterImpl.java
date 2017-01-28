@@ -111,27 +111,27 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void uploadAvatar() {
-        if(fileToUpload != null){
+        if (fileToUpload != null) {
             UseCase uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
-           uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
-               @Override
-               public void onCompleted() {
-                   mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
-               }
+            uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
+                @Override
+                public void onCompleted() {
+                    mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
+                }
 
-               @Override
-               public void onError(Throwable e) {
-                   String message = ErrorMessageFactory.
-                           createMessageOnLogin(mRegisterView.getContextActivity(), e);
-                   mRegisterView.showError(message);
-               }
+                @Override
+                public void onError(Throwable e) {
+                    String message = ErrorMessageFactory.
+                            createMessageOnLogin(mRegisterView.getContextActivity(), e);
+                    mRegisterView.showError(message);
+                }
 
-               @Override
-               public void onNext(Response<Void> response) {
+                @Override
+                public void onNext(Response<Void> response) {
 
-               }
-           });
+                }
+            });
         }
     }
 
@@ -192,7 +192,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, e.toString());
-                mRegisterView.showError(USER_EXIST);
+                mRegisterView.showError(ErrorMessageFactory.
+                        createMessageOnRegistration(mRegisterView.getContextActivity(), e));
             }
 
             @Override
@@ -202,7 +203,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 onRegistrationSuccess(signUpModel);
             }
         });
-        
+
     }
 
 
