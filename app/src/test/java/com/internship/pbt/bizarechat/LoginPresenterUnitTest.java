@@ -48,7 +48,7 @@ public class LoginPresenterUnitTest {
 
     @Before
     public void prepareData() {
-        loginPresenter = new LoginPresenterImpl(getTokenUseCase, resetPasswordUseCase);
+        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase);
         loginPresenter.setLoginView(loginView);
     }
 

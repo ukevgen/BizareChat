@@ -17,7 +17,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.anyInt
 
 @RunWith(AndroidJUnit4.class)
 public class SplashScreenTest {
-
+    
     @Rule
     public ActivityTestRule<SplashActivity> mActivityRule = new ActivityTestRule<>(
             SplashActivity.class);

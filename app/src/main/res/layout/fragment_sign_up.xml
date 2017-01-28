@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_sign_up"
-    android:layout_gravity="center_horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardElevation="@dimen/login_card_elevation"
-    app:cardCornerRadius="@dimen/cardCornerRadius"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/card_login_margin"
     android:clipToPadding="false"
-    android:layout_margin="@dimen/card_login_margin">
+    app:cardCornerRadius="@dimen/cardCornerRadius"
+    app:cardElevation="@dimen/login_card_elevation">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,22 +18,24 @@
 
         <FrameLayout
             android:id="@+id/image_wrapper"
-            android:foreground="@drawable/sign_up_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:foreground="@drawable/sign_up_avatar">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_pic"
                 android:layout_width="@dimen/sing_up_avatar_size"
                 android:layout_height="@dimen/sing_up_avatar_size"
-                android:src="@drawable/userpic"/>
+                android:src="@drawable/userpic" />
         </FrameLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_email"
+            style="@style/Theme.AppCompat"
             android:layout_width="@dimen/sing_up_element_width"
             android:layout_height="@dimen/sing_up_element_height"
             android:layout_below="@id/image_wrapper"
@@ -49,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/email_address"
                 android:inputType="textEmailAddress"
-                android:text="@string/email_com"/>
+                android:text="@string/email_com" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -66,8 +67,9 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword"
-                android:hint="@string/password"/>
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -83,8 +85,8 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword"
-                android:hint="@string/confirm_password"/>
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -100,7 +102,7 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/full_name"/>
+                android:hint="@string/full_name" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -116,9 +118,9 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:hint="@string/phone"
                 android:inputType="phone"
-                android:text="@string/ukr_phone"
-                android:hint="@string/phone"/>
+                android:text="@string/ukr_phone" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -134,7 +136,7 @@
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/website"/>
+                android:hint="@string/website" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
@@ -142,12 +144,12 @@
             style="@style/FbButton"
             android:layout_width="@dimen/sing_up_element_width"
             android:layout_height="@dimen/sing_up_element_height"
-            android:layout_marginTop="@dimen/sign_up_fb_margin_top"
             android:layout_below="@id/text_input_website"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/sign_up_fb_margin_top"
             android:paddingLeft="@dimen/sing_up_fb_padding"
             android:paddingRight="@dimen/sing_up_fb_padding"
-            android:text="@string/link_facebook"/>
+            android:text="@string/link_facebook" />
 
         <Button
             android:id="@+id/register_sign_up"
@@ -156,9 +158,9 @@
             android:layout_height="@dimen/sing_up_element_height"
             android:layout_below="@id/login_facebook_button"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/sing_up_btn_sign_up_margin_top"
             android:layout_marginBottom="@dimen/sign_up_btn_sign_up_margin_bottom"
-            android:text="@string/sign_up"/>
+            android:layout_marginTop="@dimen/sing_up_btn_sign_up_margin_top"
+            android:text="@string/sign_up" />
 
     </RelativeLayout>
 

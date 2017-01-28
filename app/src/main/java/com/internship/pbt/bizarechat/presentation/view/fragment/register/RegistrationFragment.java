@@ -1,8 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -14,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +30,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
@@ -71,20 +72,26 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
 
     private CircleImageView mAvatarImage;
-    private Animation mSuccessFacebookButtonAnim;
-    private Animation mFailButtonAnim;
-    private Animation getmSuccessSignUpAnim;
 
-    private LoginButton mFacebookButton;
-
+    @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         if (context instanceof OnRegisterSuccess) {
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < 23)
+            if (activity instanceof OnRegisterSuccess) {
+                mOnRegisterSuccess = (OnRegisterSuccess) activity;
+            }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,7 +114,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
-        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
+        mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
@@ -127,6 +134,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
 
+
         mFacebookLinkButton.setOnClickListener(this);
         mAvatarImage.setOnClickListener(this);
         mImageWrapper.setOnClickListener(this);
@@ -135,31 +143,31 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
-    private void setCallbackToLoginFacebookButton (){
+    private void setCallbackToLoginFacebookButton() {
         Log.d("123", "OnSuccess " + "setCallBack");
 
         callbackManager = CallbackManager.Factory.create();
 
-            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    Bundle param = new Bundle();
-                    param.putString("fields", "id, email");
-                    Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
-                    mRegistrationPresenter.facebookLink(loginResult);
-                }
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Bundle param = new Bundle();
+                param.putString("fields", "id, email");
+                Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
+                mRegistrationPresenter.facebookLink(loginResult);
+            }
 
-                @Override
-                public void onCancel() {
-                    Log.d("123", "OnCancel");
+            @Override
+            public void onCancel() {
+                Log.d("123", "OnCancel");
 
-                }
+            }
 
-                @Override
-                public void onError(FacebookException error) {
-                    Log.d("123", error.toString());
-                }
-            });
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("123", error.toString());
+            }
+        });
 
     }
 
@@ -241,54 +249,44 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
 
     public void hideErrorInvalidEmail() {
-        mEmailLayout.setError(null);
-        mEmailLayout.setErrorEnabled(false);
+        mEmailEditText.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPassword() {
-        mPasswordLayout.setError(null);
-        mPasswordLayout.setErrorEnabled(false);
+        mPasswordEditText.setError(null);
     }
 
 
     public void hideErrorPasswordConfirm() {
-        mPasswordConfLayout.setError(null);
-        mPasswordConfLayout.setErrorEnabled(false);
+        mPasswordConfirm.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPhone() {
-        mPhoneLayout.setError(null);
-        mPhoneLayout.setErrorEnabled(false);
+        mPhoneEditText.setError(null);
     }
 
     @Override
     public void showErrorInvalidEmail() {
-        mEmailLayout.setErrorEnabled(true);
-        mEmailLayout.setError(getString(R.string.invalid_email));
-        mPasswordEditText.setText("");
+        mEmailEditText.setError(getString(R.string.invalid_email));
 
     }
 
     @Override
     public void showErrorInvalidPassword() {
-        mPasswordLayout.setErrorEnabled(true);
-        mPasswordLayout.setError(getString(R.string.invalid_weak_password));
-        mPasswordEditText.setText("");
+        mPasswordEditText.setError(getString(R.string.invalid_weak_password));
+
     }
 
     @Override
     public void showErrorInvalidPhone() {
-        mPhoneLayout.setErrorEnabled(true);
-        mPhoneLayout.setError(getString(R.string.invalid_phone));
-        mPhoneEditText.setText("");
+        mPhoneEditText.setError(getString(R.string.invalid_phone));
     }
 
     @Override
     public void showErrorPasswordLength() {
-        mPasswordLayout.setError(getString(R.string.error_password_length));
-        mPasswordEditText.setText("");
+        mPasswordEditText.setError(getString(R.string.error_password_length));
     }
 
     @Override
@@ -352,6 +350,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
@@ -360,8 +360,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
 
-        if(resultCode == RESULT_OK)
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+            callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -379,7 +379,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
     }
 
-    private void facebookLoginWithPermissions(){
+    private void facebookLoginWithPermissions() {
         LoginManager.getInstance()
                 .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
     }

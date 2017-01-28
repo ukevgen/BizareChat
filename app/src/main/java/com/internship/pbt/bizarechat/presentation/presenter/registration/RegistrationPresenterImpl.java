@@ -37,7 +37,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private RegistrationView mRegisterView;
     private File fileToUpload;
     private SignUpModel mRegistrationModel;
-
+    private UseCase uploadFileUseCase;
     public RegistrationPresenterImpl() {
         super();
         mRegistrationModel = new RegistrationModel();
@@ -105,7 +105,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void uploadAvatar() {
         if(fileToUpload != null){
-            UseCase uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+            this.uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
            uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
                @Override
@@ -130,7 +130,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void validateInformation(InformationOnCheck informationOnCheck) {
-        this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
@@ -161,8 +160,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
-            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        if (mValidator.isValidAvatarSize(fileToUpload)) {
             mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.too_large_picture_max_size_1mb));
@@ -201,6 +200,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void destroy() {
         if (mRegisterView != null)
             mRegisterView = null;
+        if (uploadFileUseCase != null)
+            uploadFileUseCase.unsubscribe();
     }
 
     @Override

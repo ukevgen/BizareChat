@@ -49,10 +49,29 @@ public class CacheSharedPreferences {
 
     public void putIsUserAuthorized(boolean status){
         mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, status);
+        mEditor.apply();
     }
 
     public boolean isAuthorized(){
         return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, false);
+    }
+
+    public void putCurrentPassword(String password){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, password);
+        mEditor.apply();
+    }
+
+    public String getCurrentPassword(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, "NoN");
+    }
+
+    public void putCurrentEmail(String email){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_EMAIL, email);
+        mEditor.apply();
+    }
+
+    public String getCurrentEmail(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_EMAIL, "NoN");
     }
 
 
