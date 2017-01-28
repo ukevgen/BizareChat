@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -27,6 +28,7 @@ public class BizareChatApp extends Application {
 
         FacebookSdk.sdkInitialize(this);
         AppEventsLogger.activateApp(this);
+        UserToken.getInstance().initSharedPreferences(this);
     }
 
     public static BizareChatApp getInstance(){

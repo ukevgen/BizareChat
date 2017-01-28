@@ -113,7 +113,7 @@ public class RetrofitApi {
                     .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
                     .observeOn(Schedulers.newThread())
                     .subscribe(new Subscriber<Session>() {
-                        @Overrid
+                        @Override
                         public void onCompleted() {
 
                         }

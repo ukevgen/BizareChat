@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
-import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
@@ -52,8 +51,6 @@ public class SplashPresenter implements SplashScreenPresenter {
     private void loginUseCase(String email, String password) {
         this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
                 new UserRequestModel(email, password));
-
-        Log.d("54321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
 
         this.loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override

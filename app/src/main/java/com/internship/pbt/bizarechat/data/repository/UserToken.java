@@ -13,7 +13,6 @@ public class UserToken {
 
 
     private UserToken(){
-
     }
 
     public static UserToken getInstance() {

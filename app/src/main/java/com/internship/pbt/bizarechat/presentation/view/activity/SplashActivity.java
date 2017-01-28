@@ -19,13 +19,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         presenter = new SplashPresenter(this);
-        if (!UserToken.getInstance().isTokenExists())
+        if (!UserToken.getInstance().isTokenExists() || !CurrentUser.getInstance().isAuthorized())
             presenter.reSignIn();
         else if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
             navigateToMainActivity();
         else
             navigateToLoginActivity();
-        finish();
     }
 
     public void navigateToMainActivity() {
@@ -44,4 +43,3 @@ public class SplashActivity extends BaseActivity {
         presenter.destroy();
     }
 }
-
