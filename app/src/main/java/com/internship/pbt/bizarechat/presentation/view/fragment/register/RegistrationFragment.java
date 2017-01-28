@@ -170,6 +170,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void goToMainActivity(ResponseSignUpModel signUpModel) {
         Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
     }
@@ -407,6 +408,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mFacebookLinkButton = (Button) v.findViewById(R.id.login_facebook_button);
         mSignUpButton = (Button) v.findViewById(R.id.register_sign_up);
         mRegistrationPresenter.createFormatWatcher();
+
+        mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
     }
 
