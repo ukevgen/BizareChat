@@ -138,7 +138,4 @@ public class RetrofitApi {
         }
     }
 
-    public FileManagerService getFileManagerService() {
-        return fileManagerService;
-    }
 }

@@ -4,22 +4,19 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.facebook.login.LoginResult;
-import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
-import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
-import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
-import com.internship.pbt.bizarechat.domain.interactor.UseCase;
-import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
-import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
+import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
-import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.model.SignUpModel;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
@@ -195,13 +192,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, e.toString());
-                mRegisterView.makeToast(USER_EXIST);
+                mRegisterView.showError(USER_EXIST);
             }
 
             @Override
             public void onNext(ResponseSignUpModel signUpModel) {
                 Log.d(TAG, signUpModel.toString());
-                this.uploadAvatar();
+                uploadAvatar();
                 onRegistrationSuccess(signUpModel);
             }
         });
