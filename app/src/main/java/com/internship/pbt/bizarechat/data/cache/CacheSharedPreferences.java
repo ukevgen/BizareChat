@@ -35,7 +35,7 @@ public class CacheSharedPreferences {
     }
 
     public String getToken(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, "NoN");
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, null);
     }
 
     public void putAccountAvatarBlobId(String value){
@@ -44,7 +44,7 @@ public class CacheSharedPreferences {
     }
 
     public String getAccountAvatarBlobId(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, "NoN");
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, null);
     }
 
     public void putIsUserAuthorized(boolean status){
@@ -62,7 +62,7 @@ public class CacheSharedPreferences {
     }
 
     public String getCurrentPassword(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, "NoN");
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, null);
     }
 
     public void putCurrentEmail(String email){
@@ -71,7 +71,16 @@ public class CacheSharedPreferences {
     }
 
     public String getCurrentEmail(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_EMAIL, "NoN");
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_EMAIL, null);
+    }
+
+    public void putCurrentFacebookId(Long id){
+        mEditor.putLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, id);
+        mEditor.apply();
+    }
+
+    public Long getCurrentFacebookId(){
+        return mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
     }
 
 

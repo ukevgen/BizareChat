@@ -12,22 +12,33 @@ public class SignUpUserM {
 
     @SerializedName("password")
     @Expose
-    private String password;
+    private String password = null;
     @SerializedName("email")
     @Expose
-    private String email;
+    private String email = null;
     @SerializedName("full_name")
     @Expose
-    private String fullName;
+    private String fullName = null;
     @SerializedName("phone")
     @Expose
-    private String phone;
+    private String phone = null;
     @SerializedName("website")
     @Expose
-    private String website;
+    private String website = null;
     @SerializedName("blob_id")
     @Expose
-    private Integer blobId;
+    private Integer blobId = null;
+    @SerializedName("facebook_id")
+    @Expose
+    private Long facebookId = null;
+
+    public Long getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(Long facebookId) {
+        this.facebookId = facebookId;
+    }
 
     public String getPassword() {
         return password;
