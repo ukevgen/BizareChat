@@ -217,6 +217,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void onRegistrationSuccess(ResponseSignUpModel signUpModel) {
+        CurrentUser.getInstance().setAuthorized(true);
         mRegisterView.goToMainActivity(signUpModel);
         //mRegisterView.onRegistrationSuccess();
     }

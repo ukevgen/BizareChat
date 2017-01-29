@@ -19,8 +19,9 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         presenter = new SplashPresenter(this);
-        if (!UserToken.getInstance().isTokenExists() || !CurrentUser.getInstance().isAuthorized())
-            presenter.reSignIn();
+
+        if (!CurrentUser.getInstance().isAuthorized())
+            navigateToLoginActivity();
         else if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
             navigateToMainActivity();
         else

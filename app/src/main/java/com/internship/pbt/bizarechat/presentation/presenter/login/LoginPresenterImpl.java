@@ -9,6 +9,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -32,7 +33,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void requestLogin(String email, String password) {
         this.sessionRequestUseCase = new GetTokenUseCase(new SessionDataRepository());
-        sessionRequestUseCase.execute(new Subscriber() {
+        sessionRequestUseCase.execute(new Subscriber<Session>() {
             @Override
             public void onCompleted() {
                 loginUseCase(email, password);
@@ -44,8 +45,8 @@ public class LoginPresenterImpl implements LoginPresenter {
             }
 
             @Override
-            public void onNext(Object o) {
-
+            public void onNext(Session session) {
+                UserToken.getInstance().saveToken(session.getToken());
             }
         });
     }

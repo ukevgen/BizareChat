@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.activity.SplashActivity;
@@ -27,7 +29,7 @@ public class SplashPresenter implements SplashScreenPresenter {
     @Override
     public void reSignIn() {
         this.sessionRequestUseCase = new GetTokenUseCase(new SessionDataRepository());
-        sessionRequestUseCase.execute(new Subscriber() {
+        sessionRequestUseCase.execute(new Subscriber<Session>() {
             @Override
             public void onCompleted() {
                 loginUseCase(CurrentUser.getInstance().getCurrentEmail(),
@@ -42,8 +44,8 @@ public class SplashPresenter implements SplashScreenPresenter {
             }
 
             @Override
-            public void onNext(Object o) {
-
+            public void onNext(Session session) {
+                UserToken.getInstance().saveToken(session.getToken());
             }
         });
     }
@@ -66,6 +68,7 @@ public class SplashPresenter implements SplashScreenPresenter {
             public void onError(Throwable e) {
                 e.printStackTrace();
                 Log.d("54321", "request Login OnError() + " + e.toString());
+                onLoginFailure();
 
             }
 
@@ -77,7 +80,7 @@ public class SplashPresenter implements SplashScreenPresenter {
 
     @Override
     public void onLoginSuccess() {
-        activity.navigateToLoginActivity();
+        activity.navigateToMainActivity();
     }
 
     @Override

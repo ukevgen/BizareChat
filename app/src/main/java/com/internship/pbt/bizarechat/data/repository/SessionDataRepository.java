@@ -3,7 +3,6 @@ package com.internship.pbt.bizarechat.data.repository;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
-import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
@@ -20,7 +19,6 @@ import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import java.util.Random;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 
 public class SessionDataRepository implements SessionRepository {
@@ -79,12 +77,7 @@ public class SessionDataRepository implements SessionRepository {
     public Observable<UserLoginResponse> loginUser(UserRequestModel requestModel) {
         Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
         return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
-                .map(new Func1<SignInResponseModel, UserLoginResponse>() {
-                    @Override
-                    public UserLoginResponse call(SignInResponseModel response) {
-                        return SessionModelMapper.transform(response);
-                    }
-                });
+                .map(response -> SessionModelMapper.transform(response));
     }
 
     @Override
