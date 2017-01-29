@@ -21,6 +21,8 @@
 
         </activity>
 
+        <activity android:name=".presentation.view.activity.MainActivity" />
+
         <activity
             android:name=".presentation.view.activity.SplashActivity"
             android:theme="@style/SplashTheme">

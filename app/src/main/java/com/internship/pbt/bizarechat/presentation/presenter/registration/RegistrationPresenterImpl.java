@@ -43,6 +43,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private RegistrationView mRegisterView;
     private File fileToUpload;
     private SignUpModel mRegistrationModel;
+    private UseCase uploadFileUseCase;
     private UseCase signUpUseCase;
     private SignUpRequestM signUpRequestM;
 
@@ -111,8 +112,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void uploadAvatar() {
-        if (fileToUpload != null) {
-            UseCase uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+        if(fileToUpload != null){
+            this.uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
             uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
                 @Override
@@ -167,8 +169,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
-        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
-            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        // mRegisterView.setPermission(uri);
+        fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        if (mValidator.isValidAvatarSize(fileToUpload)) {
             mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.too_large_picture_max_size_1mb));
@@ -216,6 +219,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void onRegistrationSuccess(ResponseSignUpModel signUpModel) {
+        CurrentUser.getInstance().setAuthorized(true);
         mRegisterView.goToMainActivity(signUpModel);
         //mRegisterView.onRegistrationSuccess();
     }
@@ -232,6 +236,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void destroy() {
         if (mRegisterView != null)
             mRegisterView = null;
+        if (uploadFileUseCase != null)
+            uploadFileUseCase.unsubscribe();
     }
 
     @Override

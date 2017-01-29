@@ -1,8 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -14,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +30,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
@@ -76,22 +77,29 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
 
     private CircleImageView mAvatarImage;
-    private Animation mSuccessFacebookButtonAnim;
-    private Animation mFailButtonAnim;
-    private Animation getmSuccessSignUpAnim;
 
-    private LoginButton mFacebookButton;
     private InformationOnCheck informationOnCheck;
     private SignUpUserM userModel;
 
+    @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         if (context instanceof OnRegisterSuccess) {
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < 23)
+            if (activity instanceof OnRegisterSuccess) {
+                mOnRegisterSuccess = (OnRegisterSuccess) activity;
+            }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,13 +122,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         init(v);
-
-        LoginManager.getInstance().logOut();
-        this.setCallbackToLoginFacebookButton();
-        mFacebookLinkButton.setOnClickListener(l ->
-                LoginManager.getInstance().logInWithReadPermissions(RegistrationFragment.this,
-                        Arrays.asList("public_profile")));
-
 
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
@@ -237,54 +238,44 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
 
     public void hideErrorInvalidEmail() {
-        mEmailLayout.setError(null);
-        mEmailLayout.setErrorEnabled(false);
+        mEmailEditText.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPassword() {
-        mPasswordLayout.setError(null);
-        mPasswordLayout.setErrorEnabled(false);
+        mPasswordEditText.setError(null);
     }
 
 
     public void hideErrorPasswordConfirm() {
-        mPasswordConfLayout.setError(null);
-        mPasswordConfLayout.setErrorEnabled(false);
+        mPasswordConfirm.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPhone() {
-        mPhoneLayout.setError(null);
-        mPhoneLayout.setErrorEnabled(false);
+        mPhoneEditText.setError(null);
     }
 
     @Override
     public void showErrorInvalidEmail() {
-        mEmailLayout.setErrorEnabled(true);
-        mEmailLayout.setError(getString(R.string.invalid_email));
-        mPasswordEditText.setText("");
+        mEmailEditText.setError(getString(R.string.invalid_email));
 
     }
 
     @Override
     public void showErrorInvalidPassword() {
-        mPasswordLayout.setErrorEnabled(true);
-        mPasswordLayout.setError(getString(R.string.invalid_weak_password));
-        mPasswordEditText.setText("");
+        mPasswordEditText.setError(getString(R.string.invalid_weak_password));
+
     }
 
     @Override
     public void showErrorInvalidPhone() {
-        mPhoneLayout.setErrorEnabled(true);
-        mPhoneLayout.setError(getString(R.string.invalid_phone));
-        mPhoneEditText.setText("");
+        mPhoneEditText.setError(getString(R.string.invalid_phone));
     }
 
     @Override
     public void showErrorPasswordLength() {
-        mPasswordLayout.setError(getString(R.string.error_password_length));
-        mPasswordEditText.setText("");
+        mPasswordEditText.setError(getString(R.string.error_password_length));
     }
 
     @Override
@@ -351,6 +342,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (data != null && resultCode == RESULT_OK && requestCode == DEVICE_CAMERA) {
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }

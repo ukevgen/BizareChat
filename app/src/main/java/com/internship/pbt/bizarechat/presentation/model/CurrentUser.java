@@ -11,10 +11,6 @@ public class CurrentUser implements AuthStore {
 
     private static CurrentUser INSTANCE;
 
-    private Boolean isAuthorized = null;
-
-    private String avatarBlobId;
-
     private String facebookToken;
 
     private CacheSharedPreferences cache;
@@ -34,15 +30,12 @@ public class CurrentUser implements AuthStore {
 
     @Override
     public boolean isAuthorized() {
-        if (isAuthorized == null)
             return cache.isAuthorized();
-        else
-            return isAuthorized;
     }
 
+    @Override
     public void setAuthorized(boolean authorized) {
         cache.putIsUserAuthorized(authorized);
-        isAuthorized = authorized;
     }
 
     public String getFacebookToken() {
@@ -54,14 +47,26 @@ public class CurrentUser implements AuthStore {
     }
 
     public String getAvatarBlobId() {
-        if (avatarBlobId == null)
             return cache.getAccountAvatarBlobId();
-        else
-            return avatarBlobId;
     }
 
     public void setAvatarBlobId(String avatarBlobId) {
         cache.putAccountAvatarBlobId(avatarBlobId);
-        this.avatarBlobId = avatarBlobId;
+    }
+
+    public String getCurrentPassword(){
+        return cache.getCurrentPassword();
+    }
+
+    public void setCurrentPasswrod(String passwrod){
+        cache.putCurrentPassword(passwrod);
+    }
+
+    public String getCurrentEmail(){
+        return cache.getCurrentEmail();
+    }
+
+    public void setCurrentEmail(String email){
+        cache.putCurrentEmail(email);
     }
 }

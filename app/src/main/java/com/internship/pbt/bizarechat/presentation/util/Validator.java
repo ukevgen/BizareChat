@@ -1,14 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.ImageView;
-
-import java.io.IOException;
+import java.io.File;
 
 public class Validator {
 
@@ -43,26 +36,15 @@ public class Validator {
         return password.equals(confirmPsw);
     }
 
-    public boolean isValidAvatarSize(Context context, Uri uri) {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                    context.getContentResolver(),
-                    uri);
-            if (bitmap.getByteCount() / 10000000 < 1)
-                return true;
-            else
-                return false;
-
-        } catch (IOException ex) {
-            Log.d(TAG, ex.getMessage(), ex);
-            return false;
-        }
-
+    public boolean isValidAvatarSize(File file){
+        return calculateIsValidAvatarByteSize(file);
     }
 
-    public boolean isThereSomeImage(ImageView view) {
-        return (view.getDrawable() != null);
+    private boolean calculateIsValidAvatarByteSize(File file){
+        long avatarSize = (file.length() / 1024) / 1024;
+        return avatarSize < 1;
     }
+
 
     public String toApiPhoneFormat(String number) {
         return number.replaceAll(LETTERS, "");

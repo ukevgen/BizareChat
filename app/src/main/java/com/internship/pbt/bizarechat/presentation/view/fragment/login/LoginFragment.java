@@ -1,8 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.login;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,6 +13,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +28,6 @@ import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
-import com.internship.pbt.bizarechat.presentation.view.activity.LoginActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
@@ -42,17 +45,30 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private ProgressBar progressBar;
     private CheckBox keepMeSignIn;
     private NotificationManager notificationManager;
-    private onLoginSuccess onLoginSuccess;
+    private OnLoginSuccess OnLoginSuccess;
     public LoginFragment() {
         setRetainInstance(true);
     }
 
+    @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(context instanceof OnLoginSuccess) {
+            Log.d("123", "OnAttach");
+            this.OnLoginSuccess = (OnLoginSuccess) context;
+        }
+    }
 
-        if(context instanceof LoginActivity)
-            this.onLoginSuccess = (LoginActivity) context;
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < 23)
+            if(activity instanceof OnLoginSuccess) {
+                Log.d("123", "OnAttach");
+                this.OnLoginSuccess = (OnLoginSuccess) activity;
+            }
     }
 
     @Nullable
@@ -262,7 +278,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void onLoginSuccess() {
-        this.onLoginSuccess.onLoginSuccess();
+        this.OnLoginSuccess.onLoginSuccess();
     }
 
     @Override
@@ -280,7 +296,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         stopNotification();
     }
 
-    public interface onLoginSuccess {
+    public interface OnLoginSuccess {
         void onLoginSuccess();
     }
 }
