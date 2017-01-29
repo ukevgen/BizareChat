@@ -130,4 +130,7 @@ public class LoginPresenterUnitTest {
         loginPresenter.onKeepMeSignInFalse();
         verify(loginView).showCheckBoxModalDialog();
     }
+
+
 }
+

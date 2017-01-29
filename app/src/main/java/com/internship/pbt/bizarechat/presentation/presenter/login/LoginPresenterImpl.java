@@ -167,7 +167,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         if (sessionRequestUseCase != null)
             sessionRequestUseCase.unsubscribe();
         if (resetPasswordUseCase != null)
-            sessionRequestUseCase.unsubscribe();
+            resetPasswordUseCase.unsubscribe();
     }
 
     @Override
