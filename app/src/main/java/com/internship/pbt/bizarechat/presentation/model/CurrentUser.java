@@ -46,11 +46,11 @@ public class CurrentUser implements AuthStore {
         this.facebookToken = facebookToken;
     }
 
-    public String getAvatarBlobId() {
+    public Long getAvatarBlobId() {
         return cache.getAccountAvatarBlobId();
     }
 
-    public void setAvatarBlobId(String avatarBlobId) {
+    public void setAvatarBlobId(Long avatarBlobId) {
         cache.putAccountAvatarBlobId(avatarBlobId);
     }
 

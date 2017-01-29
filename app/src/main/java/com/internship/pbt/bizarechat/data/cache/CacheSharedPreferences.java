@@ -38,13 +38,13 @@ public class CacheSharedPreferences {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, null);
     }
 
-    public void putAccountAvatarBlobId(String value){
-        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_AVATAR, value);
+    public void putAccountAvatarBlobId(Long value){
+        mEditor.putLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, value);
         mEditor.apply();
     }
 
-    public String getAccountAvatarBlobId(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, null);
+    public Long getAccountAvatarBlobId(){
+        return mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, -1);
     }
 
     public void putIsUserAuthorized(boolean status){

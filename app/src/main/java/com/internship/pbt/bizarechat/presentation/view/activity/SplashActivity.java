@@ -26,6 +26,8 @@ public class SplashActivity extends BaseActivity {
             navigateToMainActivity();
         else
             navigateToLoginActivity();
+
+        finish();
     }
 
     public void navigateToMainActivity() {
@@ -42,5 +44,6 @@ public class SplashActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+
     }
 }

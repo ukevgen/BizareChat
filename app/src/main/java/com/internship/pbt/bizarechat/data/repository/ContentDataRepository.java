@@ -70,7 +70,7 @@ public class ContentDataRepository implements ContentRepository {
                         confirmRequest.setBlob(confirmBlob);
 
                         if(name == CurrentUser.CURRENT_AVATAR)
-                        cache.putAccountAvatarBlobId(blobId);
+                        cache.putAccountAvatarBlobId(Long.parseLong(blobId));
 
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
