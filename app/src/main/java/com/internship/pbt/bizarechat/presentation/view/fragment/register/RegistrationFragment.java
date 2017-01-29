@@ -411,7 +411,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     }
 
-
     public interface OnRegisterSuccess {
         void onRegisterSuccess();
     }
