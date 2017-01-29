@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 
+import com.facebook.FacebookSdk;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -33,6 +34,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void navigateToLoginActivity() {
+
         new Handler().postDelayed(
                 () -> mNavigator.navigateToLoginActivity(this),
                 BuildConfig.SPLASH_DELAY);
