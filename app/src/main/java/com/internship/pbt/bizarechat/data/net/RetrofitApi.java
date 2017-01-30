@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -88,11 +89,14 @@ public class RetrofitApi {
 
 
     private OkHttpClient createClient() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.d("OkHttp", message));
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         SessionTokenAuthenticator authenticator = new SessionTokenAuthenticator();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(20000, TimeUnit.MILLISECONDS);
         builder.connectTimeout(20000, TimeUnit.MILLISECONDS);
         builder.authenticator(authenticator);
+        builder.addInterceptor(logging);
         return builder.build();
     }
 
@@ -103,9 +107,10 @@ public class RetrofitApi {
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
             // Check whether response is "wrong login or password"
+            Log.d("123", response.toString());
+
             if (response.body().string().contains("Unauthorized")) {
                 // Closing connection...
-
                 return null;
             }
 

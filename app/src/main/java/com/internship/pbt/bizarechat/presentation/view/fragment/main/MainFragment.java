@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
@@ -26,6 +27,8 @@ public class MainFragment extends BaseFragment { //TODO Change to better name
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Toast.makeText(getActivity(),  " " + CurrentUser.getInstance().getAvatarBlobId(), Toast.LENGTH_LONG).show();
 
         logoutTestButton = (Button) view.findViewById(R.id.loggout_test_button);
         logoutTestButton.setOnClickListener(l ->{

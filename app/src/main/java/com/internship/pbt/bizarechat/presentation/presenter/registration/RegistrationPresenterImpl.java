@@ -6,13 +6,16 @@ import android.util.Log;
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -41,16 +44,20 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private final String TAG = "RegistrPresenterImpl";
     private Validator mValidator = new Validator();
     private RegistrationView mRegisterView;
-    private File fileToUpload;
+    private File fileToUpload = null;
     private SignUpModel mRegistrationModel;
     private UseCase uploadFileUseCase;
     private UseCase signUpUseCase;
     private SignUpRequestM signUpRequestM;
+    private UseCase loginUseCase;
+    private CurrentUser currentUser = CurrentUser.getInstance();
+    ;
 
     public RegistrationPresenterImpl() {
         super();
         mRegistrationModel = new RegistrationModel();
         mRegistrationModel.setPresenter(this);
+
     }
 
     @Override
@@ -114,8 +121,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void uploadAvatar() {
         if (fileToUpload != null) {
             this.uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
-
-                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
+                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, currentUser.CURRENT_AVATAR);
+            Log.d("uploadAvatar", "UploadAvatar");
             uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
                 @Override
                 public void onCompleted() {
@@ -126,12 +133,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 public void onError(Throwable e) {
                     String message = ErrorMessageFactory.
                             createMessageOnLogin(mRegisterView.getContextActivity(), e);
-                    mRegisterView.showError(message);
+                    e.printStackTrace();
+                    mRegisterView.showError("UploadAvatar" + message);
+                    currentUser.setAvatarBlobId(null);
                 }
 
                 @Override
                 public void onNext(Response<Void> response) {
-
+                    onRegistrationSuccess();
                 }
             });
         }
@@ -162,8 +171,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             isValidationSuccess = false;
             this.showErrorPasswordConfirm();
         }
-        if (isValidationSuccess)
+        if (isValidationSuccess) {
+            currentUser.setCurrentEmail(informationOnCheck.getEmail());
+            currentUser.setCurrentPasswrod(informationOnCheck.getPassword());
             this.registrationRequest(informationOnCheck);
+        }
     }
 
     @Override
@@ -180,7 +192,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void registrationRequest(SignUpUserM userM) {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
-        userM.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
+        userM.setFacebookId(currentUser.getCurrentFacebookId());
 
         Log.d("123", "SIGN UP USER M FACEBOOK ID = " + userM.getFacebookId());
         if (signUpRequestM == null)
@@ -191,7 +203,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         signUpUseCase.execute(new Subscriber<ResponseSignUpModel>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
@@ -204,8 +215,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onNext(ResponseSignUpModel signUpModel) {
                 Log.d(TAG, signUpModel.toString());
-                uploadAvatar();
-                onRegistrationSuccess(signUpModel);
+                currentUser.setCurrentUserId(Long.valueOf(signUpModel.getUser().getId()));
+                authorize();
+
             }
         });
 
@@ -220,9 +232,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void onRegistrationSuccess(ResponseSignUpModel signUpModel) {
-        CurrentUser.getInstance().setAuthorized(true);
-        mRegisterView.goToMainActivity(signUpModel);
+    public void onRegistrationSuccess() {
+        currentUser.setAuthorized(true);
+        mRegisterView.goToMainActivity();
         //mRegisterView.onRegistrationSuccess();
     }
 
@@ -242,13 +254,39 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             uploadFileUseCase.unsubscribe();
     }
 
+    private void authorize() {
+        loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+                new UserRequestModel(currentUser.getCurrentEmail(),
+                        currentUser.getCurrentPassword()));
+
+        loginUseCase.execute(new Subscriber<UserLoginResponse>() {
+            @Override
+            public void onCompleted() {
+                if (fileToUpload != null)
+                    uploadAvatar();
+                else
+                    onRegistrationSuccess();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(UserLoginResponse session) {
+
+            }
+        });
+    }
+
     @Override
     public void refreshLinkedInfInView(FacebookLinkInform linkInform) {
         Log.d("123", "callback " + linkInform.toString());
         mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
                 + linkInform.getFullName() + " Id " + linkInform.getUserId());
-        CurrentUser.getInstance().setFacebookToken(linkInform.getToken());
-        CurrentUser.getInstance().setCurrentFacebookId(linkInform.getUserId());
+        currentUser.setFacebookToken(linkInform.getToken());
+        currentUser.setCurrentFacebookId(linkInform.getUserId());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);
     }
 }

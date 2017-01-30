@@ -46,7 +46,7 @@ public class UserToken {
 
     public void deleteToken(){
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(tokenTag, null);
+        editor.clear();
         editor.apply();
     }
 

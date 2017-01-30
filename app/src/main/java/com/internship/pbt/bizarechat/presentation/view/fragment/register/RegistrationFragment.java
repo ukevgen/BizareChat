@@ -32,7 +32,6 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
@@ -171,7 +170,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void goToMainActivity(ResponseSignUpModel signUpModel) {
+    public void goToMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

@@ -7,7 +7,7 @@ import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 
 public class CurrentUser implements AuthStore {
 
-    public static final String CURRENT_AVATAR = "AVATAR";
+    public static final String CURRENT_AVATAR = "AVATAR.jpg";
 
     private static CurrentUser INSTANCE;
 
@@ -71,11 +71,7 @@ public class CurrentUser implements AuthStore {
     }
 
     public Long getCurrentFacebookId() {
-        long id = cache.getCurrentFacebookId();
-        if (id == -1)
-            return null;
-        else
-            return id;
+        return cache.getCurrentFacebookId();
     }
 
     public void setCurrentFacebookId(Long id) {
@@ -84,5 +80,13 @@ public class CurrentUser implements AuthStore {
 
     public void clearCurrentUser() {
         cache.deleteAllCache();
+    }
+
+    public Long getCurrentUserId() {
+        return cache.getUserId();
+    }
+
+    public void setCurrentUserId(Long id) {
+        cache.putUserId(id);
     }
 }

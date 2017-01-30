@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.repository;
 
 import android.content.Context;
 import android.net.UrlQuerySanitizer;
+import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
@@ -10,6 +11,7 @@ import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
+import com.internship.pbt.bizarechat.data.net.requests.UserUpdateBlobId;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -32,6 +34,7 @@ public class ContentDataRepository implements ContentRepository {
     private String name;
     private volatile String blobId = "";
     private CacheSharedPreferences cache;
+
     public ContentDataRepository(Context context) {
         contentService = RetrofitApi.getRetrofitApi().getContentService();
         cache = CacheSharedPreferences.getInstance(context);
@@ -44,17 +47,21 @@ public class ContentDataRepository implements ContentRepository {
 
         FileCreateRequest fileCreateRequest = new FileCreateRequest();
         fileCreateRequest.setBlob(createBlob);
+        Log.d("uploadAvatar", "create file " + file.getName());
 
         return contentService.createFile(UserToken.getInstance().getToken(), fileCreateRequest)
                 .flatMap(new Func1<CreateFileResponse, Observable<UploadFileResponse>>() {
                     @Override
                     public Observable<UploadFileResponse> call(CreateFileResponse createFileResponse) {
+                        Log.d("uploadAvatar", "-1.5 confirm " + blobId);
+
                         blobId = createFileResponse.getBlob().getId();
                         String params = createFileResponse.getBlob().getBlobObjectAccess().getParams();
                         params = params.replaceAll("&amp;", "&");
 
                         Map<String, RequestBody> paramsMap = composeFormParamsMap(params);
                         MultipartBody.Part filePart = prepareFilePart(file, contentType, name);
+                        Log.d("uploadAvatar", "-1 confirm " + blobId);
 
                         return contentService.uploadFile(ApiConstants.AMAZON_END_POINT, paramsMap, filePart);
                     }
@@ -69,13 +76,20 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
-                        if(name == CurrentUser.CURRENT_AVATAR)
-                        cache.putAccountAvatarBlobId(Long.parseLong(blobId));
-
+                        if (name.equals(CurrentUser.CURRENT_AVATAR) )
+                            cache.putAccountAvatarBlobId(Long.parseLong(blobId));
+                        Log.d("uploadAvatar", "confirm " + blobId);
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
                                 blobId,
-                                confirmRequest);
+                                confirmRequest).flatMap(new Func1<Response<Void>, Observable<Response<Void>>>() {
+                            @Override
+                            public Observable<Response<Void>> call(Response<Void> response) {
+                                Log.d("uploadAvatar", "updateUserID");
+                                return contentService.updateUserBlobId(CurrentUser.getInstance().getCurrentUserId(),
+                                        new UserUpdateBlobId(Integer.parseInt(blobId)));
+                            }
+                        });
                     }
                 });
     }

@@ -7,6 +7,7 @@ import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
 import com.internship.pbt.bizarechat.data.net.JsonAndXmlConverters.Xml;
+import com.internship.pbt.bizarechat.data.net.requests.UserUpdateBlobId;
 
 import java.util.Map;
 
@@ -45,4 +46,9 @@ public interface ContentService {
     Observable<Response<Void>> confirmFileUploaded(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                                    @Path(value = "blob_id") String blobId,
                                                    @Body FileUploadConfirmRequest request);
+
+    @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
+    @PUT("/users/{user_id}.json")
+    Observable<Response<Void>> updateUserBlobId(@Path (value = "user_id") Long id,
+                                                @Body UserUpdateBlobId userUpdateBlobId);
 }
