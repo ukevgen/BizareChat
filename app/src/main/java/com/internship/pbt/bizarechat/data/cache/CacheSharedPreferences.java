@@ -83,5 +83,9 @@ public class CacheSharedPreferences {
         return mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
     }
 
+    public void deleteAllCache(){
+        mEditor.clear();
+        mEditor.apply();
+    }
 
 }

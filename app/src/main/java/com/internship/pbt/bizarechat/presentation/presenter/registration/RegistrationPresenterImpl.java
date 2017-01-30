@@ -162,7 +162,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             isValidationSuccess = false;
             this.showErrorPasswordConfirm();
         }
-        CurrentUser.getInstance().setCurrentFacebookId(informationOnCheck.getFacebookId());
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
@@ -181,6 +180,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void registrationRequest(SignUpUserM userM) {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
+        userM.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
+
+        Log.d("123", "SIGN UP USER M FACEBOOK ID = " + userM.getFacebookId());
         if (signUpRequestM == null)
             signUpRequestM = new SignUpRequestM();
         signUpRequestM.setUser(userM);
@@ -246,6 +248,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
                 + linkInform.getFullName() + " Id " + linkInform.getUserId());
         CurrentUser.getInstance().setFacebookToken(linkInform.getToken());
+        CurrentUser.getInstance().setCurrentFacebookId(linkInform.getUserId());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);
     }
 }

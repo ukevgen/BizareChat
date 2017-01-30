@@ -126,7 +126,6 @@ dependencies {
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.16.1'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'

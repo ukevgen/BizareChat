@@ -33,6 +33,7 @@ import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
@@ -81,7 +82,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private InformationOnCheck informationOnCheck;
     private SignUpUserM userModel;
 
-    private FacebookLinkInform facebookLinkInform = null;
 
     @TargetApi(23)
     @Override
@@ -282,7 +282,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void refreshInfAfterFacebookLink(FacebookLinkInform linkInform) {
-        this.facebookLinkInform = linkInform;
         Log.d("123", "RegistrationFragment" + linkInform.toString());
         this.startOnFacebookLinkSuccessAnim();
     }
@@ -338,8 +337,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         userModel.setWebsite(mWebSite.getText().toString());
         userModel.setPhone(mPhoneEditText.getText().toString());
 
-        if (this.facebookLinkInform != null)
-            userModel.setFacebookId(facebookLinkInform.getUserId());
+            userModel.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
 
         String passwordConf = mPasswordConfirm.getText().toString();
 

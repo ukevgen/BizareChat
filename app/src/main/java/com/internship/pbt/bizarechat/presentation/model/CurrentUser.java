@@ -71,10 +71,18 @@ public class CurrentUser implements AuthStore {
     }
 
     public Long getCurrentFacebookId() {
-        return cache.getCurrentFacebookId();
+        long id = cache.getCurrentFacebookId();
+        if (id == -1)
+            return null;
+        else
+            return id;
     }
 
     public void setCurrentFacebookId(Long id) {
         cache.putCurrentFacebookId(id);
+    }
+
+    public void clearCurrentUser() {
+        cache.deleteAllCache();
     }
 }

@@ -31,6 +31,7 @@ public class MainFragment extends BaseFragment { //TODO Change to better name
         logoutTestButton.setOnClickListener(l ->{
             UserToken.getInstance().deleteToken();
             CurrentUser.getInstance().setAuthorized(false);
+            CurrentUser.getInstance().clearCurrentUser();
         });
 
         return view;
