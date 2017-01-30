@@ -96,6 +96,7 @@ android {
 
         release {
             buildConfigField BOOLEAN, CRASH_REPORTS, TRUE
+            buildConfigField INT, SPLASH_DELAY, '3000'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

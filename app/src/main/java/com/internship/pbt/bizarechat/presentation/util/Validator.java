@@ -45,6 +45,7 @@ public class Validator {
     }
     
 
+
     public String toApiPhoneFormat(String number) {
         return number.replaceAll(LETTERS, "");
     }

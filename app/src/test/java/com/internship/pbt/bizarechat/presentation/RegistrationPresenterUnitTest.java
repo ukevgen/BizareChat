@@ -1,24 +1,37 @@
-package com.internship.pbt.bizarechat;
+package com.internship.pbt.bizarechat.presentation;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.File;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({
+        Converter.class
+})
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
     private String[] positiveTestPasswordLengthData = {"111111", "1111111", "11111111111", "111111111111"};
@@ -28,6 +41,12 @@ public class RegistrationPresenterUnitTest {
 
     @Mock
     private Context context;
+
+    @Mock
+    private Uri uri;
+
+    @Mock
+    private File avatarFile;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -42,6 +61,10 @@ public class RegistrationPresenterUnitTest {
         mRegistrationPresenter = new RegistrationPresenterImpl();
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
+        PowerMockito.mockStatic(Converter.class);
+        when(Converter.convertUriToFile(any(Context.class), any(Uri.class))).thenReturn(avatarFile);
+
+        when(mRegistrationFragment.getContextActivity()).thenReturn(context);
     }
 
     @Test
@@ -90,6 +113,25 @@ public class RegistrationPresenterUnitTest {
         verify(mRegistrationFragment).showErrorInvalidPhone();
         verify(mRegistrationFragment, never()).showErrorInvalidPassword();
         verify(mRegistrationFragment, never()).showErrorInvalidEmail();
+    }
+
+    @Test
+    public void checkAvatarSizeValidBehavior(){
+        when(avatarFile.length()).thenReturn((long)(1024*1024-1));
+        mRegistrationPresenter.verifyAndLoadAvatar(uri);
+
+        verify(mRegistrationFragment).loadAvatarToImageView(uri);
+    }
+
+    @Test
+    public void checkAvatarSizeInvalidBehavior(){
+        long[] testData = {1024*1024, 1024*1024+1, 0};
+        for(long value : testData){
+            when(avatarFile.length()).thenReturn(value);
+            mRegistrationPresenter.verifyAndLoadAvatar(uri);
+
+            verify(mRegistrationFragment, atMost(testData.length)).showError(anyString());
+        }
     }
 
     @Test

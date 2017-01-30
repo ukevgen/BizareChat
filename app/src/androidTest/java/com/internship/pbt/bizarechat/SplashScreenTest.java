@@ -25,16 +25,13 @@ public class SplashScreenTest {
     @Test
     public void splashScreenDisappearsIn3Seconds(){
         init();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                intended(anyIntent());
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            intended(anyIntent());
         }).start();
         release();
     }
