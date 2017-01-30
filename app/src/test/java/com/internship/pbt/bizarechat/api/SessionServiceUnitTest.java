@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.api;
 
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
@@ -87,6 +89,7 @@ public class SessionServiceUnitTest {
         when(HmacSha1Signature.calculateSignature(anyInt(), anyLong())).thenReturn("");
         PowerMockito.mockStatic(SessionModelMapper.class);
         when(SessionModelMapper.transform(any(SessionModel.class))).thenReturn(session);
+        PowerMockito.mock(Log.class);
 
         when(retrofitApi.getSessionService()).thenReturn(sessionService);
         when(session.getToken()).thenReturn("");
@@ -109,7 +112,7 @@ public class SessionServiceUnitTest {
 
         doNothing().when(userToken).saveToken(anyString());
 
-        //presenter.requestSession();
+//        presenter.requestSession();
 
         verify(getTokenUseCase).execute(any(Subscriber.class));
         verify(sessionRepository).getSession();
@@ -128,7 +131,7 @@ public class SessionServiceUnitTest {
                         Response.error(422, ResponseBody.create(null, new byte[0])))
                 ));
 
-        //presenter.requestSession();
+//        presenter.requestSession();
 
         verify(getTokenUseCase).execute(any(Subscriber.class));
         verify(sessionRepository).getSession();

@@ -11,10 +11,6 @@ public class CurrentUser implements AuthStore {
 
     private static CurrentUser INSTANCE;
 
-    private Boolean isAuthorized = null;
-
-    private String avatarBlobId;
-
     private String facebookToken;
 
     private CacheSharedPreferences cache;
@@ -34,15 +30,12 @@ public class CurrentUser implements AuthStore {
 
     @Override
     public boolean isAuthorized() {
-        if (isAuthorized == null)
-            return cache.isAuthorized();
-        else
-            return isAuthorized;
+        return cache.isAuthorized();
     }
 
+    @Override
     public void setAuthorized(boolean authorized) {
         cache.putIsUserAuthorized(authorized);
-        isAuthorized = authorized;
     }
 
     public String getFacebookToken() {
@@ -53,15 +46,43 @@ public class CurrentUser implements AuthStore {
         this.facebookToken = facebookToken;
     }
 
-    public String getAvatarBlobId() {
-        if (avatarBlobId == null)
-            return cache.getAccountAvatarBlobId();
-        else
-            return avatarBlobId;
+    public Long getAvatarBlobId() {
+        return cache.getAccountAvatarBlobId();
     }
 
-    public void setAvatarBlobId(String avatarBlobId) {
+    public void setAvatarBlobId(Long avatarBlobId) {
         cache.putAccountAvatarBlobId(avatarBlobId);
-        this.avatarBlobId = avatarBlobId;
+    }
+
+    public String getCurrentPassword() {
+        return cache.getCurrentPassword();
+    }
+
+    public void setCurrentPasswrod(String passwrod) {
+        cache.putCurrentPassword(passwrod);
+    }
+
+    public String getCurrentEmail() {
+        return cache.getCurrentEmail();
+    }
+
+    public void setCurrentEmail(String email) {
+        cache.putCurrentEmail(email);
+    }
+
+    public Long getCurrentFacebookId() {
+        long id = cache.getCurrentFacebookId();
+        if (id == -1)
+            return null;
+        else
+            return id;
+    }
+
+    public void setCurrentFacebookId(Long id) {
+        cache.putCurrentFacebookId(id);
+    }
+
+    public void clearCurrentUser() {
+        cache.deleteAllCache();
     }
 }

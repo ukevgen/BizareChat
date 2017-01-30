@@ -13,7 +13,6 @@ public class UserToken {
 
 
     private UserToken(){
-
     }
 
     public static UserToken getInstance() {
@@ -32,7 +31,7 @@ public class UserToken {
     }
 
     public boolean isTokenExists(){
-        return preferences != null && !preferences.getString(tokenTag, "").isEmpty();
+        return getToken() != null;
     }
 
     public void saveToken(String token){
@@ -42,7 +41,13 @@ public class UserToken {
     }
 
     public String getToken(){
-        return preferences.getString(tokenTag, "");
+        return preferences.getString(tokenTag, null);
+    }
+
+    public void deleteToken(){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(tokenTag, null);
+        editor.apply();
     }
 
 }

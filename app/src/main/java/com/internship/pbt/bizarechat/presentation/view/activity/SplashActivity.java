@@ -5,22 +5,46 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.internship.pbt.bizarechat.BuildConfig;
-import com.internship.pbt.bizarechat.presentation.AuthStore;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.presenter.splash.SplashPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.splash.SplashScreenPresenter;
 
 public class SplashActivity extends BaseActivity {
 
-    private AuthStore mAuthStore;
+    private SplashScreenPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        presenter = new SplashPresenter(this);
+
+        if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
+            navigateToMainActivity();
+        else
+            navigateToLoginActivity();
+    }
+
+    public void navigateToMainActivity() {
         new Handler().postDelayed(
-                () -> mNavigator.navigateToLoginActivity(this),
+                () -> {
+                    mNavigator.navigateToMainActivity(this);
+                    finish();},
                 BuildConfig.SPLASH_DELAY);
+    }
 
-        finish();
+    public void navigateToLoginActivity() {
+        new Handler().postDelayed(
+                () -> {
+                    mNavigator.navigateToLoginActivity(this);
+                    finish();},
+                BuildConfig.SPLASH_DELAY);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
     }
 }
-

@@ -4,7 +4,7 @@ public class FacebookLinkInform {
 
     private String fullName;
 
-    private String userId;
+    private Long userId;
 
     private String token;
 
@@ -16,11 +16,11 @@ public class FacebookLinkInform {
         this.token = token;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

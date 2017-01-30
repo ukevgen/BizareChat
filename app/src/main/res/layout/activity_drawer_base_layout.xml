@@ -11,8 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <include
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            layout="@layout/fragment_container"/>
 
-        <include layout="@layout/fragment_container"/>
 
         <android.support.design.widget.NavigationView
             android:layout_width="match_parent"
@@ -21,10 +24,7 @@
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/menu_activity_main_drawer"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="WELCOME TO MAIN ACTIVITY"/>
+
     </android.support.v4.widget.DrawerLayout>
 
 

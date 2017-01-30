@@ -43,6 +43,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private RegistrationView mRegisterView;
     private File fileToUpload;
     private SignUpModel mRegistrationModel;
+    private UseCase uploadFileUseCase;
     private UseCase signUpUseCase;
     private SignUpRequestM signUpRequestM;
 
@@ -111,27 +112,28 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void uploadAvatar() {
-        if(fileToUpload != null){
-            UseCase uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+        if (fileToUpload != null) {
+            this.uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
+
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, CurrentUser.CURRENT_AVATAR);
-           uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
-               @Override
-               public void onCompleted() {
-                   mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
-               }
+            uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
+                @Override
+                public void onCompleted() {
+                    mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
+                }
 
-               @Override
-               public void onError(Throwable e) {
-                   String message = ErrorMessageFactory.
-                           createMessageOnLogin(mRegisterView.getContextActivity(), e);
-                   mRegisterView.showError(message);
-               }
+                @Override
+                public void onError(Throwable e) {
+                    String message = ErrorMessageFactory.
+                            createMessageOnLogin(mRegisterView.getContextActivity(), e);
+                    mRegisterView.showError(message);
+                }
 
-               @Override
-               public void onNext(Response<Void> response) {
+                @Override
+                public void onNext(Response<Void> response) {
 
-               }
-           });
+                }
+            });
         }
     }
 
@@ -160,15 +162,15 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             isValidationSuccess = false;
             this.showErrorPasswordConfirm();
         }
-
         if (isValidationSuccess)
             this.registrationRequest(informationOnCheck);
     }
 
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
-        if (mValidator.isValidAvatarSize(mRegisterView.getContextActivity(), uri)) {
-            fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        // mRegisterView.setPermission(uri);
+        fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        if (mValidator.isValidAvatarSize(fileToUpload)) {
             mRegisterView.loadAvatarToImageView(uri);
         } else {
             mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.too_large_picture_max_size_1mb));
@@ -178,6 +180,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void registrationRequest(SignUpUserM userM) {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
+        userM.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
+
+        Log.d("123", "SIGN UP USER M FACEBOOK ID = " + userM.getFacebookId());
         if (signUpRequestM == null)
             signUpRequestM = new SignUpRequestM();
         signUpRequestM.setUser(userM);
@@ -192,7 +197,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, e.toString());
-                mRegisterView.showError(USER_EXIST);
+                mRegisterView.showError(ErrorMessageFactory.
+                        createMessageOnRegistration(mRegisterView.getContextActivity(), e));
             }
 
             @Override
@@ -202,7 +208,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 onRegistrationSuccess(signUpModel);
             }
         });
-        
+
     }
 
 
@@ -215,6 +221,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void onRegistrationSuccess(ResponseSignUpModel signUpModel) {
+        CurrentUser.getInstance().setAuthorized(true);
         mRegisterView.goToMainActivity(signUpModel);
         //mRegisterView.onRegistrationSuccess();
     }
@@ -231,6 +238,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void destroy() {
         if (mRegisterView != null)
             mRegisterView = null;
+        if (uploadFileUseCase != null)
+            uploadFileUseCase.unsubscribe();
     }
 
     @Override
@@ -239,6 +248,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
                 + linkInform.getFullName() + " Id " + linkInform.getUserId());
         CurrentUser.getInstance().setFacebookToken(linkInform.getToken());
+        CurrentUser.getInstance().setCurrentFacebookId(linkInform.getUserId());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);
     }
 }

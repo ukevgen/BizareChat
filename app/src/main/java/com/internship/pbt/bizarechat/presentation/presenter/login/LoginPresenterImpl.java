@@ -10,6 +10,7 @@ import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
 
@@ -20,9 +21,15 @@ public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private ResetPasswordUseCase resetPasswordUseCase;
     private Validator validator = new Validator();
+    private UseCase loginUseCase;
 
     public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase) {
         this.resetPasswordUseCase = resetPasswordUseCase;
+    }
+
+    @Override
+    public void requestLogin(String email, String password) {
+        loginUseCase(email, password);
     }
 
     @Override
@@ -86,17 +93,19 @@ public class LoginPresenterImpl implements LoginPresenter {
             loginView.setButtonSignInEnabled(true);
     }
 
-    @Override
-    public void requestLogin(String email, String password) {
-        UseCase loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+    private void loginUseCase(String email, String password) {
+        this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
                 new UserRequestModel(email, password));
 
         Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
 
-        loginUseCase.execute(new Subscriber<UserLoginResponse>() {
+        this.loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
+                CurrentUser.getInstance().setAuthorized(true);
+                CurrentUser.getInstance().setCurrentEmail(email);
+                CurrentUser.getInstance().setCurrentPasswrod(password);
                 onLoginSuccess();
             }
 
@@ -112,7 +121,6 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onNext(UserLoginResponse userLoginResponse) {
-                Log.d("321", "Logged with inf " + userLoginResponse.getId() + " " + userLoginResponse.getFullName());
             }
         });
     }
@@ -135,6 +143,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void destroy() {
         loginView = null;
+        if (loginUseCase != null)
+            loginUseCase.unsubscribe();
+        if (resetPasswordUseCase != null)
+            resetPasswordUseCase.unsubscribe();
     }
 
     @Override

@@ -19,6 +19,7 @@ public abstract class UseCase<T> {
     @SuppressWarnings("unchecked")
     public void execute(Subscriber useCaseSubscriber) {
         this.mSubscription = this.buildUseCaseObservable()
+                .retry(3)
                 .subscribeOn(Schedulers.from(SchedulersFactory.getThreadExecutor()))
                 .observeOn(SchedulersFactory.getPostExecutor().getScheduler())
                 .subscribe(useCaseSubscriber);
