@@ -1,8 +1,9 @@
-package com.internship.pbt.bizarechat;
+package com.internship.pbt.bizarechat.util;
 
 
 import android.content.Context;
 
+import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 
 import org.junit.Assert;
