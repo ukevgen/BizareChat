@@ -41,9 +41,9 @@ public class Validator {
     }
 
     private boolean calculateIsValidAvatarByteSize(File file){
-        long avatarSize = (file.length() / 1024) / 1024;
-        return avatarSize < 1;
+        return file.length() < 1024*1024 && file.length() != 0;
     }
+    
 
 
     public String toApiPhoneFormat(String number) {

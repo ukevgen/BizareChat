@@ -87,6 +87,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnRegisterSuccess) {
+            // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
@@ -97,6 +98,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < 23)
             if (activity instanceof OnRegisterSuccess) {
+                // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
                 mOnRegisterSuccess = (OnRegisterSuccess) activity;
             }
     }
@@ -106,6 +108,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onCreate(Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreate");
         mRegistrationPresenter = new RegistrationPresenterImpl();
+        // TODO: 1/30/17 [Code Review] setting view BEFORE it is really created is a bad idea.
+        // move it to onCreateView for example
         mRegistrationPresenter.setRegistrationView(this);
         super.onCreate(savedInstanceState);
     }
@@ -124,6 +128,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         init(v);
 
+        // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
 
@@ -134,6 +139,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
+    // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
     private void setCallbackToLoginFacebookButton() {
         Log.d("123", "OnSuccess " + "setCallBack");
 

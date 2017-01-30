@@ -1,8 +1,9 @@
-package com.internship.pbt.bizarechat;
+package com.internship.pbt.bizarechat.presentation;
 
 
 import android.content.Context;
 
+import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;

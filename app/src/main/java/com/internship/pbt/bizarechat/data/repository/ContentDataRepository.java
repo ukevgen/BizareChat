@@ -36,6 +36,8 @@ public class ContentDataRepository implements ContentRepository {
     private CacheSharedPreferences cache;
 
     public ContentDataRepository(Context context) {
+        // TODO: 1/30/17 [Code Review] inject these properties as constructor parameters,
+        // prevent creating high coupling
         contentService = RetrofitApi.getRetrofitApi().getContentService();
         cache = CacheSharedPreferences.getInstance(context);
     }
@@ -79,6 +81,7 @@ public class ContentDataRepository implements ContentRepository {
                         if (name.equals(CurrentUser.CURRENT_AVATAR) )
                             cache.putAccountAvatarBlobId(Long.parseLong(blobId));
                         Log.d("uploadAvatar", "confirm " + blobId);
+
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
                                 blobId,

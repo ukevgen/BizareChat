@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat;
+package com.internship.pbt.bizarechat.util;
 
 
 import com.internship.pbt.bizarechat.data.util.HmacSha1Signature;
