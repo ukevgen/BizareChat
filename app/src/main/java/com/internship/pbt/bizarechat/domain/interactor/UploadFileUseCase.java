@@ -1,7 +1,5 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import android.net.Uri;
-
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 
 import java.io.File;
@@ -23,6 +21,7 @@ public class UploadFileUseCase extends UseCase<Response<Void>> {
         this.contentDataRepository = contentDataRepository;
         this.contentType = contentType;
         this.file = file;
+        this.name = name;
     }
 
     @Override

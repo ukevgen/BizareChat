@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat;
+package com.internship.pbt.bizarechat.util;
 
 
 import android.content.Context;

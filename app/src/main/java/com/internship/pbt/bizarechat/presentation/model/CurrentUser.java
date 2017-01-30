@@ -7,7 +7,7 @@ import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 
 public class CurrentUser implements AuthStore {
 
-    public static final String CURRENT_AVATAR = "AVATAR";
+    public static final String CURRENT_AVATAR = "AVATAR.jpg";
 
     private static CurrentUser INSTANCE;
 
@@ -30,7 +30,7 @@ public class CurrentUser implements AuthStore {
 
     @Override
     public boolean isAuthorized() {
-            return cache.isAuthorized();
+        return cache.isAuthorized();
     }
 
     @Override
@@ -46,27 +46,47 @@ public class CurrentUser implements AuthStore {
         this.facebookToken = facebookToken;
     }
 
-    public String getAvatarBlobId() {
-            return cache.getAccountAvatarBlobId();
+    public Long getAvatarBlobId() {
+        return cache.getAccountAvatarBlobId();
     }
 
-    public void setAvatarBlobId(String avatarBlobId) {
+    public void setAvatarBlobId(Long avatarBlobId) {
         cache.putAccountAvatarBlobId(avatarBlobId);
     }
 
-    public String getCurrentPassword(){
+    public String getCurrentPassword() {
         return cache.getCurrentPassword();
     }
 
-    public void setCurrentPasswrod(String passwrod){
+    public void setCurrentPasswrod(String passwrod) {
         cache.putCurrentPassword(passwrod);
     }
 
-    public String getCurrentEmail(){
+    public String getCurrentEmail() {
         return cache.getCurrentEmail();
     }
 
-    public void setCurrentEmail(String email){
+    public void setCurrentEmail(String email) {
         cache.putCurrentEmail(email);
+    }
+
+    public Long getCurrentFacebookId() {
+        return cache.getCurrentFacebookId();
+    }
+
+    public void setCurrentFacebookId(Long id) {
+        cache.putCurrentFacebookId(id);
+    }
+
+    public void clearCurrentUser() {
+        cache.deleteAllCache();
+    }
+
+    public Long getCurrentUserId() {
+        return cache.getUserId();
+    }
+
+    public void setCurrentUserId(Long id) {
+        cache.putUserId(id);
     }
 }

@@ -5,11 +5,9 @@ import android.util.Log;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
-import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
-import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -24,7 +22,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     private ResetPasswordUseCase resetPasswordUseCase;
     private Validator validator = new Validator();
     private UseCase loginUseCase;
-    private UseCase sessionRequestUseCase;
 
     public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase) {
         this.resetPasswordUseCase = resetPasswordUseCase;
@@ -32,23 +29,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void requestLogin(String email, String password) {
-        this.sessionRequestUseCase = new GetTokenUseCase(new SessionDataRepository());
-        sessionRequestUseCase.execute(new Subscriber<Session>() {
-            @Override
-            public void onCompleted() {
-                loginUseCase(email, password);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(Session session) {
-                UserToken.getInstance().saveToken(session.getToken());
-            }
-        });
+        loginUseCase(email, password);
     }
 
     @Override
@@ -164,8 +145,6 @@ public class LoginPresenterImpl implements LoginPresenter {
         loginView = null;
         if (loginUseCase != null)
             loginUseCase.unsubscribe();
-        if (sessionRequestUseCase != null)
-            sessionRequestUseCase.unsubscribe();
         if (resetPasswordUseCase != null)
             resetPasswordUseCase.unsubscribe();
     }

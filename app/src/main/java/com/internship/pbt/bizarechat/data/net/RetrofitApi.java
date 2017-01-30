@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.data.net;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
@@ -11,6 +12,7 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +22,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -86,11 +89,14 @@ public class RetrofitApi {
 
 
     private OkHttpClient createClient() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.d("OkHttp", message));
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         SessionTokenAuthenticator authenticator = new SessionTokenAuthenticator();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(20000, TimeUnit.MILLISECONDS);
         builder.connectTimeout(20000, TimeUnit.MILLISECONDS);
         builder.authenticator(authenticator);
+        builder.addInterceptor(logging);
         return builder.build();
     }
 
@@ -99,37 +105,66 @@ public class RetrofitApi {
         private String newToken;
 
         @Override
-        public Request authenticate(Route route, Response response) throws IOException{
+        public Request authenticate(Route route, Response response) throws IOException {
             // Check whether response is "wrong login or password"
-            if(response.body().string().contains("Unauthorized")){
-                // Closing connection...
+            Log.d("123", response.toString());
 
+            if (response.body().string().contains("Unauthorized")) {
+                // Closing connection...
                 return null;
             }
 
             SessionRepository sessionRepository = new SessionDataRepository();
 
-            sessionRepository.getSession()
-                    .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
-                    .observeOn(Schedulers.newThread())
-                    .subscribe(new Subscriber<Session>() {
-                        @Override
-                        public void onCompleted() {
+            if (CurrentUser.getInstance().isAuthorized() &&
+                    CurrentUser.getInstance().getCurrentPassword() != null &&
+                    CurrentUser.getInstance().getCurrentEmail() != null) {
+                Log.d("432", "sessionRepository.getSessionWithAuth");
+                sessionRepository.getSessionWithAuth(
+                        new UserRequestModel(CurrentUser.getInstance().getCurrentEmail(),
+                                CurrentUser.getInstance().getCurrentPassword()))
+                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
+                        .observeOn(Schedulers.newThread())
+                        .subscribe(new Subscriber<Session>() {
+                            @Override
+                            public void onCompleted() {
+                            }
 
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e(LOG_TAG, e.getMessage(), e);
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e(LOG_TAG, e.getMessage(), e);
-                        }
+                            @Override
+                            public void onNext(Session session) {
+                                newToken = session.getToken();
+                                UserToken.getInstance().saveToken(newToken);
+                            }
+                        });
 
-                        @Override
-                        public void onNext(Session session) {
-                            newToken = session.getToken();
-                            UserToken.getInstance().saveToken(newToken);
-                        }
-                    });
+            } else if (!CurrentUser.getInstance().isAuthorized()){
+                Log.d("432", "sessionRepository.getSession");
 
+                sessionRepository.getSession()
+                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
+                        .observeOn(Schedulers.newThread())
+                        .subscribe(new Subscriber<Session>() {
+                            @Override
+                            public void onCompleted() {
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e(LOG_TAG, e.getMessage(), e);
+                            }
+
+                            @Override
+                            public void onNext(Session session) {
+                                newToken = session.getToken();
+                                UserToken.getInstance().saveToken(newToken);
+                            }
+                        });
+            }
 
             return response.request().newBuilder()
                     .removeHeader(ApiConstants.TOKEN_HEADER_NAME)

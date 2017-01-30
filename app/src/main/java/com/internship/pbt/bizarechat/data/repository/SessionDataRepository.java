@@ -77,7 +77,7 @@ public class SessionDataRepository implements SessionRepository {
     public Observable<UserLoginResponse> loginUser(UserRequestModel requestModel) {
         Log.d("321", "loginUser() requestModel " + requestModel.toString() + " TOKEN " + UserToken.getInstance().getToken());
         return sessionService.loginUser(UserToken.getInstance().getToken(), requestModel)
-                .map(response -> SessionModelMapper.transform(response));
+                .map(SessionModelMapper::transform);
     }
 
     @Override

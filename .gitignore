@@ -1,7 +1,7 @@
 *.iml
 *.log
 .gradle
-*.log
+.idea/misc.xml
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
@@ -9,3 +9,4 @@
 /build
 /captures
 .externalNativeBuild
+

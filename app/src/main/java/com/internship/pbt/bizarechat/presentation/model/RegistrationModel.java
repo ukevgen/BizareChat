@@ -18,7 +18,7 @@ public class RegistrationModel implements SignUpModel {
         Log.d("123", "Profile " + Profile.getCurrentProfile().getId() + " ");
         FacebookLinkInform inform = new FacebookLinkInform();
         inform.setToken(AccessToken.getCurrentAccessToken().getToken());
-        inform.setUserId(AccessToken.getCurrentAccessToken().getUserId());
+        inform.setUserId(Long.parseLong(AccessToken.getCurrentAccessToken().getUserId()));
         inform.setFullName(Profile.getCurrentProfile().getName());
         if(inform.getToken() != null && inform.getUserId() != null)
             presenter.refreshLinkedInfInView(inform);

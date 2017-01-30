@@ -11,17 +11,17 @@ public class CacheSharedPreferences {
     private SharedPreferences.Editor mEditor;
     private String FILE_NAME = "CurrenAccount";
 
-    private CacheSharedPreferences(Context context){
+    private CacheSharedPreferences(Context context) {
         mSharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
 
-    public static CacheSharedPreferences getInstance(Context context){
+    public static CacheSharedPreferences getInstance(Context context) {
         CacheSharedPreferences local = INSTANCE;
-        if(local == null) {
+        if (local == null) {
             synchronized (CacheSharedPreferences.class) {
                 local = INSTANCE;
-                if(local == null){
+                if (local == null) {
                     INSTANCE = local = new CacheSharedPreferences(context);
                 }
             }
@@ -29,50 +29,84 @@ public class CacheSharedPreferences {
         return local;
     }
 
-    public void putToken(String value){
+    public void putToken(String value) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_TOKEN, value);
         mEditor.apply();
     }
 
-    public String getToken(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, "NoN");
+    public String getToken() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_TOKEN, null);
     }
 
-    public void putAccountAvatarBlobId(String value){
-        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_AVATAR, value);
+    public void putAccountAvatarBlobId(Long value) {
+        mEditor.putLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, value);
         mEditor.apply();
     }
 
-    public String getAccountAvatarBlobId(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR, "NoN");
+    public Long getAccountAvatarBlobId() {
+        long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, -1);
+        if (id == -1)
+            return null;
+        else
+            return id;
     }
 
-    public void putIsUserAuthorized(boolean status){
+    public void putIsUserAuthorized(boolean status) {
         mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, status);
         mEditor.apply();
     }
 
-    public boolean isAuthorized(){
+    public boolean isAuthorized() {
         return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_AUTHORIZATION, false);
     }
 
-    public void putCurrentPassword(String password){
+    public void putCurrentPassword(String password) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, password);
         mEditor.apply();
     }
 
-    public String getCurrentPassword(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, "NoN");
+    public String getCurrentPassword() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PASSWORD, null);
     }
 
-    public void putCurrentEmail(String email){
+    public void putCurrentEmail(String email) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_EMAIL, email);
         mEditor.apply();
     }
 
-    public String getCurrentEmail(){
-        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_EMAIL, "NoN");
+    public String getCurrentEmail() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_EMAIL, null);
     }
 
+    public void putCurrentFacebookId(Long id) {
+        mEditor.putLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, id);
+        mEditor.apply();
+    }
+
+    public Long getCurrentFacebookId() {
+        long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
+        if (id == -1)
+            return null;
+        else
+            return id;
+    }
+
+    public void putUserId(Long id) {
+        mEditor.putLong(CacheConstants.CURRENT_ACCOUNT_ID, id);
+        mEditor.apply();
+    }
+
+    public Long getUserId() {
+        long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_ID, -1);
+        if (id == -1)
+            return null;
+        else
+            return id;
+    }
+
+    public void deleteAllCache() {
+        mEditor.clear();
+        mEditor.apply();
+    }
 
 }

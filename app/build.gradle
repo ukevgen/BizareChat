@@ -96,6 +96,7 @@ android {
 
         release {
             buildConfigField BOOLEAN, CRASH_REPORTS, TRUE
+            buildConfigField INT, SPLASH_DELAY, '3000'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -121,12 +122,12 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:converter-simplexml:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.16.1'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'

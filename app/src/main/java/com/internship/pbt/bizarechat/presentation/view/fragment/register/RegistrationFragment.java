@@ -32,7 +32,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
@@ -81,11 +81,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private InformationOnCheck informationOnCheck;
     private SignUpUserM userModel;
 
+
     @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnRegisterSuccess) {
+            // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
@@ -96,6 +98,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < 23)
             if (activity instanceof OnRegisterSuccess) {
+                // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
                 mOnRegisterSuccess = (OnRegisterSuccess) activity;
             }
     }
@@ -105,6 +108,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onCreate(Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreate");
         mRegistrationPresenter = new RegistrationPresenterImpl();
+        // TODO: 1/30/17 [Code Review] setting view BEFORE it is really created is a bad idea.
+        // move it to onCreateView for example
         mRegistrationPresenter.setRegistrationView(this);
         super.onCreate(savedInstanceState);
     }
@@ -123,6 +128,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         init(v);
 
+        // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
         LoginManager.getInstance().logOut();
         this.setCallbackToLoginFacebookButton();
 
@@ -133,6 +139,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         return v;
     }
 
+    // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
     private void setCallbackToLoginFacebookButton() {
         Log.d("123", "OnSuccess " + "setCallBack");
 
@@ -169,7 +176,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void goToMainActivity(ResponseSignUpModel signUpModel) {
+    public void goToMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -334,6 +341,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         userModel.setPassword(mPasswordEditText.getText().toString());
         userModel.setWebsite(mWebSite.getText().toString());
         userModel.setPhone(mPhoneEditText.getText().toString());
+
+            userModel.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
+
         String passwordConf = mPasswordConfirm.getText().toString();
 
         mRegistrationPresenter.validateInformation(userModel, passwordConf);
@@ -376,14 +386,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                 .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
     }
 
-    public interface OnRegisterSuccess {
-        void onRegisterSuccess();
-    }
-
-
     private void init(View v) {
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
-        mImageWrapper = (FrameLayout)v.findViewById(R.id.image_wrapper);
+        mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
 
@@ -407,6 +412,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
+    }
+
+    public interface OnRegisterSuccess {
+        void onRegisterSuccess();
     }
 
 }

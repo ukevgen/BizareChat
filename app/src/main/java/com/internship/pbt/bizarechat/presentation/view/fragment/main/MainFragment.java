@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
@@ -27,10 +28,15 @@ public class MainFragment extends BaseFragment { //TODO Change to better name
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        Toast.makeText(getActivity(),  " " + CurrentUser.getInstance().getAvatarBlobId(), Toast.LENGTH_LONG).show();
+
         logoutTestButton = (Button) view.findViewById(R.id.loggout_test_button);
         logoutTestButton.setOnClickListener(l ->{
+            // TODO: 1/30/17 [Code Review] move this to MVP layers (I know this is added for test purposes)
+            // but if you add this - to this in a correct way :)
             UserToken.getInstance().deleteToken();
             CurrentUser.getInstance().setAuthorized(false);
+            CurrentUser.getInstance().clearCurrentUser();
         });
 
         return view;
