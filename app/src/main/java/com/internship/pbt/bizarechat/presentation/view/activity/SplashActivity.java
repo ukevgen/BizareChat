@@ -21,24 +21,25 @@ public class SplashActivity extends BaseActivity {
 
         presenter = new SplashPresenter(this);
 
-        if (!CurrentUser.getInstance().isAuthorized())
-            navigateToLoginActivity();
-        else if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
+        if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
             navigateToMainActivity();
         else
             navigateToLoginActivity();
-
-        finish();
     }
 
     public void navigateToMainActivity() {
-        mNavigator.navigateToMainActivity(this);
+        new Handler().postDelayed(
+                () -> {
+                    mNavigator.navigateToMainActivity(this);
+                    finish();},
+                BuildConfig.SPLASH_DELAY);
     }
 
     public void navigateToLoginActivity() {
-
         new Handler().postDelayed(
-                () -> mNavigator.navigateToLoginActivity(this),
+                () -> {
+                    mNavigator.navigateToLoginActivity(this);
+                    finish();},
                 BuildConfig.SPLASH_DELAY);
     }
 
