@@ -21,6 +21,7 @@ public class SplashActivity extends BaseActivity {
 
         presenter = new SplashPresenter(this);
 
+        // TODO: 1/30/17 [Code Review] The logic below is a part of business logic and should not be here
         if (!CurrentUser.getInstance().isAuthorized())
             navigateToLoginActivity();
         else if (CurrentUser.getInstance().isAuthorized() && UserToken.getInstance().isTokenExists())
@@ -28,6 +29,7 @@ public class SplashActivity extends BaseActivity {
         else
             navigateToLoginActivity();
 
+        // TODO: 1/30/17 [Code Review] this will finish current activity, lol. What about 3 seconds delay?
         finish();
     }
 

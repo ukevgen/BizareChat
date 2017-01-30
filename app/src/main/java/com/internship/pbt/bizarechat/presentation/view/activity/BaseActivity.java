@@ -16,10 +16,12 @@ public class BaseActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: 1/30/17 [Code Review] This code is redundant, you've initialized navigator as property already
         if (mNavigator == null)
             mNavigator = Navigator.getInstance();
     }
 
+    // TODO: 1/30/17 [Code Review] This can be removed
     @Override protected void onResume() {
         super.onResume();
     }

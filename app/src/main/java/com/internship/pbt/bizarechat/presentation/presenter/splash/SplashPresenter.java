@@ -21,7 +21,8 @@ public class SplashPresenter implements SplashScreenPresenter {
     private UseCase loginUseCase;
     private SplashActivity activity;
 
-
+    // TODO: 1/30/17 [Code Review] You should not use anything related to Android SDK
+    // in your Presenter classes. Why don't you use View layer at all?
     public SplashPresenter(SplashActivity activity) {
         this.activity = activity;
     }
@@ -80,6 +81,7 @@ public class SplashPresenter implements SplashScreenPresenter {
 
     @Override
     public void onLoginSuccess() {
+        // TODO: 1/30/17 [Code Review] do not forget to check whether your view module ref is null.
         activity.navigateToMainActivity();
     }
 
@@ -104,6 +106,8 @@ public class SplashPresenter implements SplashScreenPresenter {
             sessionRequestUseCase.unsubscribe();
         if (loginUseCase != null)
             loginUseCase.unsubscribe();
+
+        // TODO: 1/30/17 [Code Review] nullify view reference here (activity in your case)
     }
 
     @Override

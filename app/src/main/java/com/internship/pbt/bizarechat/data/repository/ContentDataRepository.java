@@ -33,6 +33,8 @@ public class ContentDataRepository implements ContentRepository {
     private volatile String blobId = "";
     private CacheSharedPreferences cache;
     public ContentDataRepository(Context context) {
+        // TODO: 1/30/17 [Code Review] inject these properties as constructor parameters,
+        // prevent creating high coupling
         contentService = RetrofitApi.getRetrofitApi().getContentService();
         cache = CacheSharedPreferences.getInstance(context);
     }
@@ -69,6 +71,7 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
+                        // TODO: 1/30/17 [Code Review] Use equals() method to compare strings
                         if(name == CurrentUser.CURRENT_AVATAR)
                         cache.putAccountAvatarBlobId(Long.parseLong(blobId));
 

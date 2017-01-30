@@ -29,6 +29,8 @@ public class MainFragment extends BaseFragment { //TODO Change to better name
 
         logoutTestButton = (Button) view.findViewById(R.id.loggout_test_button);
         logoutTestButton.setOnClickListener(l ->{
+            // TODO: 1/30/17 [Code Review] move this to MVP layers (I know this is added for test purposes)
+            // but if you add this - to this in a correct way :)
             UserToken.getInstance().deleteToken();
             CurrentUser.getInstance().setAuthorized(false);
             CurrentUser.getInstance().clearCurrentUser();

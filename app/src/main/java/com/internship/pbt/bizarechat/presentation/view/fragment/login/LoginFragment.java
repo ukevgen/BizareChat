@@ -45,7 +45,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private ProgressBar progressBar;
     private CheckBox keepMeSignIn;
     private NotificationManager notificationManager;
+    // TODO: 1/30/17 [Code Review] why uppercase?
     private OnLoginSuccess OnLoginSuccess;
+
+    // TODO: 1/30/17 [Code Review] is there some good reason to set retainInstance to true?
     public LoginFragment() {
         setRetainInstance(true);
     }
@@ -56,6 +59,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         super.onAttach(context);
         if(context instanceof OnLoginSuccess) {
             Log.d("123", "OnAttach");
+            // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
             this.OnLoginSuccess = (OnLoginSuccess) context;
         }
     }
@@ -67,6 +71,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         if (Build.VERSION.SDK_INT < 23)
             if(activity instanceof OnLoginSuccess) {
                 Log.d("123", "OnAttach");
+                // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
                 this.OnLoginSuccess = (OnLoginSuccess) activity;
             }
     }
@@ -131,6 +136,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showError(String message) {
+        // TODO: 1/30/17 [Code Review] check in presenter if view is null or not. You do not need this condition
         if (getView() != null)
             Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
@@ -149,6 +155,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // TODO: 1/30/17 [Code Review] why are these 2 lines added not in onCreateView as another equivalent code?
         TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
         txtView.setText(R.string.sign_in);
     }
