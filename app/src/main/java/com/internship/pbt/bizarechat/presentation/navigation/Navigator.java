@@ -27,14 +27,14 @@ public class Navigator {
     }
 
     public void navigateToMainActivity(Context context) {
-        if (context != null) {
-            if (context instanceof LoginActivity) {
+        if (context != null)
+            if(context instanceof LoginActivity) {
                 Intent intent = MainActivity.getCallingIntent(context);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                ((LoginActivity) context).finish();
                 context.startActivity(intent);
-            } else
-                context.startActivity(MainActivity.getCallingIntent(context));
-        }
+            }
+            context.startActivity(MainActivity.getCallingIntent(context));
     }
 
 }
