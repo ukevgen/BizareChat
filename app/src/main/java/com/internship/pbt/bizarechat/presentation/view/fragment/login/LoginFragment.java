@@ -49,9 +49,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private NotificationManager notificationManager;
     private OnLoginSuccess onLoginSuccess;
 
-    // TODO: 1/30/17 [Code Review] is there some good reason to set retainInstance to true?
+
     public LoginFragment() {
-        setRetainInstance(true);
     }
 
     @TargetApi(23)
@@ -82,6 +81,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
             onLoginSuccess = null;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideLoading();
+        loginPresenter.stop();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,24 +103,34 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     private void addTextListener() {
-        TextWatcher textWatcher = new TextWatcher() {
+        emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                loginPresenter.checkFieldsAndSetButtonState(emailEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginPresenter.onEmailChanged(emailEditText.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
-        };
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-        emailEditText.addTextChangedListener(textWatcher);
-        passwordEditText.addTextChangedListener(textWatcher);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                loginPresenter.onPasswordChanged(passwordEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     private void setButtonListeners() {
@@ -169,6 +185,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void navigateToRegistration() {
+        hideLoading();
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.enter_from_left, R.animator.exit_to_right,
                         R.animator.enter_from_right, R.animator.exit_to_left)

@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="textColorError">@color/red</item>
+        <item name="textColorError">@color/invalid_info_test_color</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -61,7 +61,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="InvalidInfo">
+    <style name="TextInputLayoutInvalidInfo" parent="@android:style/TextAppearance">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/invalid_info_test_color</item>
     </style>

@@ -95,10 +95,10 @@ public class SessionServiceUnitTest {
         when(retrofitApi.getSessionService()).thenReturn(sessionService);
         when(session.getToken()).thenReturn("");
 
-        sessionRepository = spy(new SessionDataRepository(BizareChatApp.getInstance().getSessionService())); // TODO STUB
+        sessionRepository = spy(new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
         getTokenUseCase = spy(new GetTokenUseCase(
                 sessionRepository));
-        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository); // TODO sessionRepository STUB
+        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository);
         presenter.setLoginView(view);
     }
 

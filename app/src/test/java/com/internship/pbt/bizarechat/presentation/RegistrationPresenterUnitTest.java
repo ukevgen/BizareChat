@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
@@ -57,6 +57,14 @@ public class RegistrationPresenterUnitTest {
     private File avatarFile;
 
     @Mock
+    private RegistrationModel registrationModel;
+
+    @Mock
+    private ContentRepository contentRepository;
+
+    @Mock
+    private SessionRepository sessionRepository;
+  
     private FormatWatcher formatWatcher;
 
     private RegistrationPresenter mRegistrationPresenter;
@@ -69,10 +77,10 @@ public class RegistrationPresenterUnitTest {
         SignUpUserM.setEmail("roman-kapshuk@ukr.net");
         SignUpUserM.setPassword("QA1we2");
         SignUpUserM.setPhone("0797878796");
-        mRegistrationPresenter = new RegistrationPresenterImpl(new RegistrationModel(), // TODO STUB FOR FUTURE UPGRADE
-                new ContentDataRepository(BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache()),
-                new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
+        mRegistrationPresenter = new RegistrationPresenterImpl(
+                registrationModel,
+                contentRepository,
+                sessionRepository);
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
         PowerMockito.mockStatic(Converter.class);
