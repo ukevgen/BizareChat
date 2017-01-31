@@ -69,10 +69,6 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
         }
     }
 
-    @Override
-    public void onRegisterSuccess() {
-        mNavigator.navigateToMainActivity(this);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -130,6 +126,11 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
 
     @Override
     public void onLoginSuccess() {
+        mNavigator.navigateToMainActivity(this);
+    }
+
+    @Override
+    public void onRegisterSuccess() {
         mNavigator.navigateToMainActivity(this);
     }
 }

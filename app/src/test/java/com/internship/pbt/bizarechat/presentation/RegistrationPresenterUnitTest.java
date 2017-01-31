@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.presentation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
@@ -10,6 +11,7 @@ import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
@@ -21,6 +23,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+
+import ru.tinkoff.decoro.watchers.FormatWatcher;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -38,6 +42,7 @@ import static org.mockito.Mockito.when;
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
     private String[] positiveTestPasswordLengthData = {"111111", "1111111", "11111111111", "111111111111"};
+    private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
 
     @Mock
     private RegistrationView mRegistrationFragment;
@@ -59,6 +64,8 @@ public class RegistrationPresenterUnitTest {
 
     @Mock
     private SessionRepository sessionRepository;
+  
+    private FormatWatcher formatWatcher;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -148,6 +155,24 @@ public class RegistrationPresenterUnitTest {
             verify(mRegistrationFragment, atMost(testData.length)).showError(anyString());
         }
     }
+
+
+    @Test
+    public void checkPhoneMask() {
+        assert formatWatcher.getMask().equals(PHONE_FORMAT);
+
+    }
+
+
+    @Test
+    public void navigateToMainActivityTest() {
+        mRegistrationPresenter.onRegistrationSuccess();
+        mRegistrationFragment.goToMainActivity();
+        PowerMockito.mockStatic(MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
+        verify(context).startActivity(intent);
+    }
+
 
     @Test
     public void passwordMatch() {
