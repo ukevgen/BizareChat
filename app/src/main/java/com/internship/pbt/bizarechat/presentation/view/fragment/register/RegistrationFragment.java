@@ -342,7 +342,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         userModel.setWebsite(mWebSite.getText().toString());
         userModel.setPhone(mPhoneEditText.getText().toString());
 
-            userModel.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
+        userModel.setFacebookId(CurrentUser.getInstance().getCurrentFacebookId());
 
         String passwordConf = mPasswordConfirm.getText().toString();
 
