@@ -8,4 +8,5 @@ public interface Presenter {
 
     void destroy();
 
+    void stop();
 }

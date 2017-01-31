@@ -51,6 +51,11 @@ public class SplashPresenter implements SplashScreenPresenter {
     }
 
     @Override
+    public void stop() {
+
+    }
+
+    @Override
     public void destroy() {
         if (activity != null)
             activity = null;

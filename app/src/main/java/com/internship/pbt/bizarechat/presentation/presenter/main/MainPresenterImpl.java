@@ -28,6 +28,11 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void stop() {
+
+    }
+
+    @Override
     public void destroy() {
 
     }

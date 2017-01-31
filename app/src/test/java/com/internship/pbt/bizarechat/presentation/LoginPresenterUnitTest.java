@@ -4,9 +4,9 @@ package com.internship.pbt.bizarechat.presentation;
 import android.content.Context;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
+import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
@@ -47,29 +47,34 @@ public class LoginPresenterUnitTest {
     private LoginFragment loginView;
     @Mock
     private Context context;
+    @Mock
+    private SessionRepository sessionRepository;
 
     @Before
     public void prepareData() {
-        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase,
-                new SessionDataRepository(BizareChatApp.getInstance().getSessionService())); // TODO STUB FOR FUTURE UPGRADE
+        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository);
         loginPresenter.setLoginView(loginView);
     }
 
     @Test
-    public void checkFieldsAndSetButtonStateEnabled() {
-        loginPresenter.checkFieldsAndSetButtonState("1234", "1234");
+    public void checkEmailAndPasswordIsNotEmptyBehavior() {
+        loginPresenter.onEmailChanged("1234");
+        loginPresenter.onPasswordChanged("1234");
         verify(loginView, times(1)).setButtonSignInEnabled(true);
     }
 
     @Test
-    public void checkFieldsAndSetButtonStateDisabled() {
-        loginPresenter.checkFieldsAndSetButtonState("", "");
+    public void checkEmailOrPasswordIsEmptyBehavior() {
+        loginPresenter.onEmailChanged("");
+        loginPresenter.onPasswordChanged("");
         verify(loginView, times(1)).setButtonSignInEnabled(false);
 
-        loginPresenter.checkFieldsAndSetButtonState("1234", "");
+        loginPresenter.onEmailChanged("1234");
+        loginPresenter.onPasswordChanged("");
         verify(loginView, times(2)).setButtonSignInEnabled(false);
 
-        loginPresenter.checkFieldsAndSetButtonState("", "1234");
+        loginPresenter.onEmailChanged("");
+        loginPresenter.onPasswordChanged("1234");
         verify(loginView, times(3)).setButtonSignInEnabled(false);
     }
 
