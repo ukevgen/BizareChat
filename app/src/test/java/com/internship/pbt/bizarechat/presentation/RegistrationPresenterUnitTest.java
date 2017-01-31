@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
@@ -58,7 +61,10 @@ public class RegistrationPresenterUnitTest {
         SignUpUserM.setEmail("roman-kapshuk@ukr.net");
         SignUpUserM.setPassword("QA1we2");
         SignUpUserM.setPhone("0797878796");
-        mRegistrationPresenter = new RegistrationPresenterImpl();
+        mRegistrationPresenter = new RegistrationPresenterImpl(new RegistrationModel(), // TODO STUB FOR FUTURE UPGRADE
+                new ContentDataRepository(BizareChatApp.getInstance().getContentService(),
+                        BizareChatApp.getInstance().getCache()),
+                new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
         PowerMockito.mockStatic(Converter.class);
@@ -68,8 +74,8 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void checkPasswordLengthNotMatches(){
-        for(String value : negativeTestPasswordLengthData){
+    public void checkPasswordLengthNotMatches() {
+        for (String value : negativeTestPasswordLengthData) {
             SignUpUserM.setPassword(value);
             mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
             verify(mRegistrationFragment, atLeastOnce()).showErrorPasswordLength();
@@ -77,8 +83,8 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void checkPasswordLengthMatches(){
-        for(String value : positiveTestPasswordLengthData){
+    public void checkPasswordLengthMatches() {
+        for (String value : positiveTestPasswordLengthData) {
             SignUpUserM.setPassword(value);
             mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
             verify(mRegistrationFragment, never()).showErrorPasswordLength();
@@ -96,7 +102,7 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void checkIfUserEnteredInvalidPassword(){
+    public void checkIfUserEnteredInvalidPassword() {
         SignUpUserM.setPassword("Invalid");
         mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
 
@@ -106,7 +112,7 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void checkIfUserEnteredInvalidPhone(){
+    public void checkIfUserEnteredInvalidPhone() {
         SignUpUserM.setPhone("Invalid");
         mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
 
@@ -116,17 +122,17 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void checkAvatarSizeValidBehavior(){
-        when(avatarFile.length()).thenReturn((long)(1024*1024-1));
+    public void checkAvatarSizeValidBehavior() {
+        when(avatarFile.length()).thenReturn((long) (1024 * 1024 - 1));
         mRegistrationPresenter.verifyAndLoadAvatar(uri);
 
         verify(mRegistrationFragment).loadAvatarToImageView(uri);
     }
 
     @Test
-    public void checkAvatarSizeInvalidBehavior(){
-        long[] testData = {1024*1024, 1024*1024+1, 0};
-        for(long value : testData){
+    public void checkAvatarSizeInvalidBehavior() {
+        long[] testData = {1024 * 1024, 1024 * 1024 + 1, 0};
+        for (long value : testData) {
             when(avatarFile.length()).thenReturn(value);
             mRegistrationPresenter.verifyAndLoadAvatar(uri);
 
@@ -135,6 +141,7 @@ public class RegistrationPresenterUnitTest {
     }
 
     @Test
-    public void passwordMatch(){}
+    public void passwordMatch() {
+    }
 
 }

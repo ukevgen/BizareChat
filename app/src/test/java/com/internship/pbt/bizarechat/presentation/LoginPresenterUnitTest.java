@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.presentation;
 import android.content.Context;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
@@ -49,7 +50,8 @@ public class LoginPresenterUnitTest {
 
     @Before
     public void prepareData() {
-        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase);
+        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase,
+                new SessionDataRepository(BizareChatApp.getInstance().getSessionService())); // TODO STUB FOR FUTURE UPGRADE
         loginPresenter.setLoginView(loginView);
     }
 
@@ -79,7 +81,7 @@ public class LoginPresenterUnitTest {
 
     @Test
     public void showForgotPasswordDialog() {
-        loginPresenter.onPasswordForgot();
+        loginPresenter.onForgotPasswordClicked();
         verify(loginView, times(1)).showForgotPassword();
     }
 

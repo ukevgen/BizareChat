@@ -5,9 +5,9 @@ import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 
 public interface SplashScreenPresenter extends Presenter {
 
-    void reSignIn();
+    void checkIsAuthorized();
 
-    void onLoginSuccess();
+    void navigateToMainActivity();
 
-    void onLoginFailure();
+    void navigateToLoginActivity();
 }

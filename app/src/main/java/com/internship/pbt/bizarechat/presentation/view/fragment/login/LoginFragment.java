@@ -24,8 +24,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
@@ -45,8 +47,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private ProgressBar progressBar;
     private CheckBox keepMeSignIn;
     private NotificationManager notificationManager;
-    // TODO: 1/30/17 [Code Review] why uppercase?
-    private OnLoginSuccess OnLoginSuccess;
+    private OnLoginSuccess onLoginSuccess;
 
     // TODO: 1/30/17 [Code Review] is there some good reason to set retainInstance to true?
     public LoginFragment() {
@@ -57,10 +58,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof OnLoginSuccess) {
+        if (context instanceof OnLoginSuccess) {
             Log.d("123", "OnAttach");
-            // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
-            this.OnLoginSuccess = (OnLoginSuccess) context;
+            this.onLoginSuccess = (OnLoginSuccess) context;
         }
     }
 
@@ -69,25 +69,24 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < 23)
-            if(activity instanceof OnLoginSuccess) {
+            if (activity instanceof OnLoginSuccess) {
                 Log.d("123", "OnAttach");
-                // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
-                this.OnLoginSuccess = (OnLoginSuccess) activity;
+                this.onLoginSuccess = (OnLoginSuccess) activity;
             }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (onLoginSuccess != null)
+            onLoginSuccess = null;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        signIn = (Button) view.findViewById(R.id.sign_in);
-        signUp = (Button) view.findViewById(R.id.sign_up);
-        emailEditText = (EditText) view.findViewById(R.id.email);
-        passwordEditText = (EditText) view.findViewById(R.id.password);
-        forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
-        progressBar = (ProgressBar) getActivity().findViewById(R.id.progress_bar);
-        keepMeSignIn = (CheckBox) view.findViewById(R.id.keep_me_check);
-        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        initView(view);
 
         loginPresenter.setLoginView(this);
 
@@ -121,12 +120,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private void setButtonListeners() {
         signIn.setOnClickListener(
                 v -> loginPresenter.requestLogin(
-                        emailEditText.getText().toString(),
+                        emailEditText.getText().toString().trim(),
                         passwordEditText.getText().toString()));
 
         signUp.setOnClickListener(v -> loginPresenter.goToRegistration());
 
-        forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onPasswordForgot());
+        forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onForgotPasswordClicked());
 
         keepMeSignIn.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (!isChecked)
@@ -136,9 +135,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showError(String message) {
-        // TODO: 1/30/17 [Code Review] check in presenter if view is null or not. You do not need this condition
-        if (getView() != null)
-            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -155,18 +152,19 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // TODO: 1/30/17 [Code Review] why are these 2 lines added not in onCreateView as another equivalent code?
-        TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
-        txtView.setText(R.string.sign_in);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ResetPasswordUseCase resetPassword = new ResetPasswordUseCase(
-                new UserDataRepository());
-        loginPresenter = new LoginPresenterImpl(resetPassword);
+                new UserDataRepository(
+                        BizareChatApp.getInstance().getUserService()));
+
+        loginPresenter = new LoginPresenterImpl(
+                resetPassword,
+                new SessionDataRepository(
+                        BizareChatApp.getInstance().getSessionService()));
     }
 
     @Override
@@ -193,6 +191,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         dialog.show();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void showForgotPassword() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
@@ -203,17 +202,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
         emailEditTextInPasswordRecovery.setTextColor(getActivity().getResources().getColor(R.color.black));
         emailEditTextInPasswordRecovery.setHint(R.string.email_address);
 
-        builder.setPositiveButton(R.string.send_email, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+        builder.setPositiveButton(R.string.send_email, (dialog1, whichButton) -> {
 
-            }
         });
 
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(R.string.cancel, (dialog12, whichButton) -> dialog12.dismiss());
 
         dialog = builder.create();
         dialog.setView(emailEditTextInPasswordRecovery, 30, 30, 30, 0);
@@ -285,8 +278,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     @Override
-    public void onLoginSuccess() {
-        this.OnLoginSuccess.onLoginSuccess();
+    public void NavigateToMainActivity() {
+        this.onLoginSuccess.onLoginSuccess();
     }
 
     @Override
@@ -301,7 +294,21 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onResume() {
         super.onResume();
+        loginPresenter.resume();
         stopNotification();
+    }
+
+    private void initView(View view) {
+        signIn = (Button) view.findViewById(R.id.sign_in);
+        signUp = (Button) view.findViewById(R.id.sign_up);
+        emailEditText = (EditText) view.findViewById(R.id.email);
+        passwordEditText = (EditText) view.findViewById(R.id.password);
+        forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.progress_bar);
+        keepMeSignIn = (CheckBox) view.findViewById(R.id.keep_me_check);
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
+        txtView.setText(R.string.sign_in);
     }
 
     public interface OnLoginSuccess {

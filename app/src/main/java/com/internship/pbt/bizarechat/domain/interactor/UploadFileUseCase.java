@@ -1,6 +1,6 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 
 import java.io.File;
 
@@ -9,15 +9,15 @@ import rx.Observable;
 
 public class UploadFileUseCase extends UseCase<Response<Void>> {
 
-    private ContentDataRepository contentDataRepository;
+    private ContentRepository contentDataRepository;
     private String contentType;
     private File file;
     private String name;
 
-    public UploadFileUseCase(ContentDataRepository contentDataRepository,
+    public UploadFileUseCase(ContentRepository contentDataRepository,
                              String contentType,
                              File file,
-                             String name){
+                             String name) {
         this.contentDataRepository = contentDataRepository;
         this.contentType = contentType;
         this.file = file;

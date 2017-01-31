@@ -74,6 +74,14 @@ public class CurrentUser implements AuthStore {
         return cache.getCurrentFacebookId();
     }
 
+    public void setKeepMeSignIn(boolean keepMeSignIn) {
+        cache.putKeppMeSignIn(keepMeSignIn);
+    }
+
+    public boolean getKeepMeSignIn() {
+        return cache.getKeppMeSignIn();
+    }
+
     public void setCurrentFacebookId(Long id) {
         cache.putCurrentFacebookId(id);
     }

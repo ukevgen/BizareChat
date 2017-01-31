@@ -10,7 +10,6 @@ public class LoginUserUseCase extends UseCase<UserLoginResponse> {
 
     private SessionRepository sessionRepository;
     private UserRequestModel requestModel;
-    private String token;
 
     public LoginUserUseCase(SessionRepository sessionRepository, UserRequestModel userRequestModel) {
         this.sessionRepository = sessionRepository;

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.datamodel.mappers.SessionModelMapper;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
-import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.SessionRequest;
 import com.internship.pbt.bizarechat.data.net.requests.SessionWithAuthRequest;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
@@ -28,8 +27,8 @@ public class SessionDataRepository implements SessionRepository {
     private SessionService sessionService;
     private Random randomizer;
 
-    public SessionDataRepository() {
-        sessionService = RetrofitApi.getRetrofitApi().getSessionService();
+    public SessionDataRepository(SessionService sessionService) {
+        this.sessionService = sessionService;
         randomizer = new Random(NUMERIC);
     }
 
