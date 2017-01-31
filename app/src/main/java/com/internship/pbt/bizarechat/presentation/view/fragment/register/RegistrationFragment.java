@@ -25,16 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
-import com.internship.pbt.bizarechat.presentation.model.InformationOnCheck;
+import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
@@ -52,8 +51,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private static final String PACKAGE_PATH = "com.internship.pbt.bizarechat.presentation.view.fragment.register";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
-
-    private CallbackManager callbackManager;
 
     private RegistrationPresenter mRegistrationPresenter;
 
@@ -78,7 +75,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     private CircleImageView mAvatarImage;
 
-    private InformationOnCheck informationOnCheck;
     private SignUpUserM userModel;
 
 
@@ -87,7 +83,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnRegisterSuccess) {
-            // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
             mOnRegisterSuccess = (OnRegisterSuccess) context;
         }
     }
@@ -98,19 +93,20 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < 23)
             if (activity instanceof OnRegisterSuccess) {
-                // TODO: 1/30/17 [Code Review] nullify reference in onDetach method
                 mOnRegisterSuccess = (OnRegisterSuccess) activity;
             }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mOnRegisterSuccess != null)
+            mOnRegisterSuccess = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreate");
-        mRegistrationPresenter = new RegistrationPresenterImpl();
-        // TODO: 1/30/17 [Code Review] setting view BEFORE it is really created is a bad idea.
-        // move it to onCreateView for example
-        mRegistrationPresenter.setRegistrationView(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -123,49 +119,27 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("123", "Fragment OnCreateView");
-
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
+
+        mRegistrationPresenter = new RegistrationPresenterImpl(
+                new RegistrationModel(),
+                new ContentDataRepository(
+                        BizareChatApp.getInstance().getContentService(),
+                        BizareChatApp.getInstance().getCache()),
+                new SessionDataRepository(
+                        BizareChatApp.getInstance().getSessionService()));
+        mRegistrationPresenter.setRegistrationView(this);
 
         init(v);
 
-        // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
-        LoginManager.getInstance().logOut();
-        this.setCallbackToLoginFacebookButton();
 
         mFacebookLinkButton.setOnClickListener(this);
         mImageWrapper.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
 
+        mRegistrationPresenter.logoutFacebookSdk();
+        mRegistrationPresenter.setCallbackToLoginFacebookButton();
         return v;
-    }
-
-    // TODO: 1/30/17 [Code Review] this is a business logic, should not be located here
-    private void setCallbackToLoginFacebookButton() {
-        Log.d("123", "OnSuccess " + "setCallBack");
-
-        callbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Bundle param = new Bundle();
-                param.putString("fields", "id, email");
-                Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
-                mRegistrationPresenter.facebookLink(loginResult);
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d("123", "OnCancel");
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d("123", error.toString());
-            }
-        });
-
     }
 
 
@@ -363,7 +337,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         }
 
         if (resultCode == RESULT_OK)
-            callbackManager.onActivityResult(requestCode, resultCode, data);
+            mRegistrationPresenter.setOnActivityResultInFacebookCallback(requestCode, resultCode, data);
     }
 
     @Override
@@ -385,6 +359,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         LoginManager.getInstance()
                 .logInWithReadPermissions(RegistrationFragment.this, Arrays.asList("public_profile"));
     }
+
 
     private void init(View v) {
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);

@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.data.repository;
 
-import android.content.Context;
 import android.net.UrlQuerySanitizer;
 import android.util.Log;
 
@@ -8,7 +7,6 @@ import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
-import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
 import com.internship.pbt.bizarechat.data.net.requests.UserUpdateBlobId;
@@ -35,13 +33,12 @@ public class ContentDataRepository implements ContentRepository {
     private volatile String blobId = "";
     private CacheSharedPreferences cache;
 
-    public ContentDataRepository(Context context) {
-        // TODO: 1/30/17 [Code Review] inject these properties as constructor parameters,
-        // prevent creating high coupling
-        contentService = RetrofitApi.getRetrofitApi().getContentService();
-        cache = CacheSharedPreferences.getInstance(context);
+    public ContentDataRepository(ContentService retrofitApi, CacheSharedPreferences cache) {
+        contentService = retrofitApi;
+        this.cache = cache;
     }
 
+    @Override
     public Observable<Response<Void>> uploadFile(String contentType, File file, String name) {
         FileCreateRequest.Blob createBlob = new FileCreateRequest.Blob();
         createBlob.setContentType(contentType);

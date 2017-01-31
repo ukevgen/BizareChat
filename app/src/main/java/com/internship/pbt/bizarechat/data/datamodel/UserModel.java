@@ -47,7 +47,7 @@ public class UserModel {
 
     @SerializedName("facebook_id")
     @Expose
-    private Integer facebookId;
+    private Long facebookId;
 
     @SerializedName("twitter_id")
     @Expose
@@ -149,11 +149,11 @@ public class UserModel {
         this.externalUserId = externalUserId;
     }
 
-    public Integer getFacebookId() {
+    public Long getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(Integer facebookId) {
+    public void setFacebookId(Long facebookId) {
         this.facebookId = facebookId;
     }
 

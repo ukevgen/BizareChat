@@ -12,7 +12,7 @@ public class UserLoginResponse {
 
     private Integer externalUserId;
 
-    private Integer facebookId;
+    private Long facebookId;
 
     private String fullName;
 
@@ -71,11 +71,11 @@ public class UserLoginResponse {
         this.externalUserId = externalUserId;
     }
 
-    public Integer getFacebookId() {
+    public Long getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(Integer facebookId) {
+    public void setFacebookId(Long facebookId) {
         this.facebookId = facebookId;
     }
 

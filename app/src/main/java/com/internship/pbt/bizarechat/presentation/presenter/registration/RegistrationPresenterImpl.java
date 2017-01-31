@@ -1,22 +1,28 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignUpUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
+import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
@@ -51,13 +57,18 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private SignUpRequestM signUpRequestM;
     private UseCase loginUseCase;
     private CurrentUser currentUser = CurrentUser.getInstance();
-    ;
+    private CallbackManager callbackManager;
+    private ContentRepository contentRepository;
+    private SessionRepository sessionRepository;
 
-    public RegistrationPresenterImpl() {
+    public RegistrationPresenterImpl(RegistrationModel registrationModel,
+                                     ContentRepository contentRepository,
+                                     SessionRepository sessionRepository) {
         super();
-        mRegistrationModel = new RegistrationModel();
-        mRegistrationModel.setPresenter(this);
-
+        this.mRegistrationModel = registrationModel;
+        this.mRegistrationModel.setPresenter(this);
+        this.contentRepository = contentRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -120,8 +131,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void uploadAvatar() {
         if (fileToUpload != null) {
-            this.uploadFileUseCase = new UploadFileUseCase(new ContentDataRepository(mRegisterView.getContextActivity()),
-                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG, fileToUpload, currentUser.CURRENT_AVATAR);
+            this.uploadFileUseCase = new UploadFileUseCase(contentRepository,
+                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG,
+                    fileToUpload,
+                    CurrentUser.CURRENT_AVATAR);
             Log.d("uploadAvatar", "UploadAvatar");
             uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
                 @Override
@@ -199,7 +212,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             signUpRequestM = new SignUpRequestM();
         signUpRequestM.setUser(userM);
 
-        signUpUseCase = new SignUpUseCase(new SessionDataRepository(), signUpRequestM);
+        signUpUseCase = new SignUpUseCase(sessionRepository, signUpRequestM);
         signUpUseCase.execute(new Subscriber<ResponseSignUpModel>() {
             @Override
             public void onCompleted() {
@@ -217,7 +230,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 Log.d(TAG, signUpModel.toString());
                 currentUser.setCurrentUserId(Long.valueOf(signUpModel.getUser().getId()));
                 authorize();
-
             }
         });
 
@@ -234,8 +246,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void onRegistrationSuccess() {
         currentUser.setAuthorized(true);
-        mRegisterView.goToMainActivity();
-        //mRegisterView.onRegistrationSuccess();
+        //mRegisterView.goToMainActivity();
+        mRegisterView.onRegistrationSuccess();
     }
 
     @Override
@@ -252,32 +264,74 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             mRegisterView = null;
         if (uploadFileUseCase != null)
             uploadFileUseCase.unsubscribe();
+        if (loginUseCase != null)
+            loginUseCase.unsubscribe();
     }
 
     private void authorize() {
-        loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+        loginUseCase = new LoginUserUseCase(sessionRepository,
                 new UserRequestModel(currentUser.getCurrentEmail(),
                         currentUser.getCurrentPassword()));
 
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                mRegisterView.showError(ErrorMessageFactory.
+                        createMessageOnRegistration(mRegisterView.getContextActivity(), e));
+            }
+
+            @Override
+            public void onNext(UserLoginResponse session) {
                 if (fileToUpload != null)
                     uploadAvatar();
                 else
                     onRegistrationSuccess();
             }
+        });
+    }
+
+    @Override
+    public void logoutFacebookSdk() {
+        LoginManager.getInstance().logOut();
+    }
+
+    @Override
+    public void setCallbackToLoginFacebookButton() {
+        Log.d("123", "OnSuccess " + "setCallBack");
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Bundle param = new Bundle();
+                param.putString("fields", "id, email");
+                Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
+                facebookLink(loginResult);
+            }
 
             @Override
-            public void onError(Throwable e) {
+            public void onCancel() {
+                Log.d("123", "OnCancel");
 
             }
 
             @Override
-            public void onNext(UserLoginResponse session) {
-
+            public void onError(FacebookException error) {
+                Log.d("123", error.toString());
             }
         });
+    }
+
+    @Override
+    public void setOnActivityResultInFacebookCallback(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

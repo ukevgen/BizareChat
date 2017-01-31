@@ -1,14 +1,16 @@
 package com.internship.pbt.bizarechat.presentation.presenter.registration;
 
+import android.content.Intent;
 import android.net.Uri;
 
 import com.facebook.login.LoginResult;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
+import com.internship.pbt.bizarechat.presentation.presenter.LoadDataPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
-public interface RegistrationPresenter extends Presenter {
+public interface RegistrationPresenter extends Presenter, LoadDataPresenter{
 
     void showErrorInvalidPassword();
 
@@ -39,5 +41,11 @@ public interface RegistrationPresenter extends Presenter {
     void createFormatWatcher();
 
     void uploadAvatar();
+
+    void logoutFacebookSdk();
+
+    void setCallbackToLoginFacebookButton();
+
+    void setOnActivityResultInFacebookCallback(int requestCode, int resultCode, Intent data);
 
 }
