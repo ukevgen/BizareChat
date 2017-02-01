@@ -13,9 +13,9 @@ import id.zelory.compressor.Compressor;
 
 public class Converter {
 
-    private Converter(){}
+    public Converter(){}
 
-    public static File convertUriToFile(Context context, Uri uri){
+    public File convertUriToFile(Context context, Uri uri){
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) return null;
@@ -27,7 +27,7 @@ public class Converter {
         return new File(s);
     }
 
-    public static File compressPhoto(Context context, File src) throws IOException{
+    public File compressPhoto(Context context, File src) throws IOException{
          return Compressor.getDefault(context).compressToFile(src);
     }
 

@@ -7,8 +7,10 @@ import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginFragment;
 
 import org.junit.Before;
@@ -52,7 +54,10 @@ public class LoginPresenterUnitTest {
 
     @Before
     public void prepareData() {
-        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository);
+        loginPresenter = new LoginPresenterImpl(resetPasswordUseCase,
+                sessionRepository,
+                new Validator(),
+                CurrentUser.getInstance()); // TODO STUB
         loginPresenter.setLoginView(loginView);
     }
 

@@ -17,8 +17,10 @@ import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.login.LoginView;
 
 import org.junit.Before;
@@ -82,6 +84,9 @@ public class SessionServiceUnitTest {
     @Mock
     private RetrofitApi retrofitApi;
 
+    @Mock
+    private Validator validator;
+
     @Before
     public void setUp(){
         PowerMockito.mockStatic(RetrofitApi.class);
@@ -98,7 +103,7 @@ public class SessionServiceUnitTest {
         sessionRepository = spy(new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
         getTokenUseCase = spy(new GetTokenUseCase(
                 sessionRepository));
-        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository);
+        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository, validator, CurrentUser.getInstance()); //TODO STUB
         presenter.setLoginView(view);
     }
 

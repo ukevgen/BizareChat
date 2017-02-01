@@ -20,16 +20,21 @@ import rx.Subscriber;
 public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
     private ResetPasswordUseCase resetPasswordUseCase;
-    private Validator validator = new Validator();
+    private Validator validator;
     private UseCase loginUseCase;
     private SessionRepository sessionRepository;
     private boolean isEmailFieldEmpty = true;
     private boolean isPasswordFieldEmpty = true;
+    private CurrentUser currentUser;
 
     public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase,
-                              SessionRepository sessionRepository) {
+                              SessionRepository sessionRepository,
+                              Validator validator,
+                              CurrentUser currentUser) {
         this.resetPasswordUseCase = resetPasswordUseCase;
         this.sessionRepository = sessionRepository;
+        this.validator = validator;
+        this.currentUser = currentUser;
     }
 
     @Override
@@ -143,14 +148,14 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onNext(UserLoginResponse userLoginResponse) {
-                if (CurrentUser.getInstance().getKeepMeSignIn())
-                    CurrentUser.getInstance().setAuthorized(true);
+                if (currentUser.getKeepMeSignIn())
+                    currentUser.setAuthorized(true);
 
                 else
-                    CurrentUser.getInstance().setAuthorized(false);
+                    currentUser.setAuthorized(false);
 
-                CurrentUser.getInstance().setCurrentEmail(email);
-                CurrentUser.getInstance().setCurrentPasswrod(password);
+                currentUser.setCurrentEmail(email);
+                currentUser.setCurrentPasswrod(password);
             }
         });
     }
@@ -158,17 +163,17 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onKeepMeSignInFalse() {
         loginView.showCheckBoxModalDialog();
-        CurrentUser.getInstance().setKeepMeSignIn(false);
+        currentUser.setKeepMeSignIn(false);
     }
 
     @Override
     public void onKeepMeSignInTrue() {
-        CurrentUser.getInstance().setKeepMeSignIn(true);
+        currentUser.setKeepMeSignIn(true);
     }
 
     @Override
     public void resume() {
-        CurrentUser.getInstance().clearCurrentUser();
+        currentUser.clearCurrentUser();
         UserToken.getInstance().deleteToken();
     }
 

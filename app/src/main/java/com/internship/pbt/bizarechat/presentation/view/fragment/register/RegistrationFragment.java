@@ -35,6 +35,7 @@ import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
@@ -43,7 +44,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import id.zelory.compressor.Compressor;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
 import static android.app.Activity.RESULT_OK;
@@ -131,7 +131,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                         BizareChatApp.getInstance().getContentService(),
                         BizareChatApp.getInstance().getCache()),
                 new SessionDataRepository(
-                        BizareChatApp.getInstance().getSessionService()));
+                        BizareChatApp.getInstance().getSessionService()),
+                new Converter(),
+                new Validator(),
+                CurrentUser.getInstance());
         mRegistrationPresenter.setRegistrationView(this);
 
         init(v);

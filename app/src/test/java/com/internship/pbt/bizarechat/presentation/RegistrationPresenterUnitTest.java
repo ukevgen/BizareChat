@@ -7,10 +7,12 @@ import android.net.Uri;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
@@ -26,7 +28,6 @@ import java.io.File;
 
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
@@ -64,7 +65,7 @@ public class RegistrationPresenterUnitTest {
 
     @Mock
     private SessionRepository sessionRepository;
-  
+
     private FormatWatcher formatWatcher;
 
     private RegistrationPresenter mRegistrationPresenter;
@@ -80,11 +81,14 @@ public class RegistrationPresenterUnitTest {
         mRegistrationPresenter = new RegistrationPresenterImpl(
                 registrationModel,
                 contentRepository,
-                sessionRepository);
+                sessionRepository,
+                new Converter(),
+                new Validator(),
+                CurrentUser.getInstance()); // TODO STUB
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
         PowerMockito.mockStatic(Converter.class);
-        when(Converter.convertUriToFile(any(Context.class), any(Uri.class))).thenReturn(avatarFile);
+       // when(Converter.convertUriToFile(any(Context.class), any(Uri.class))).thenReturn(avatarFile); // TODO STUB
 
         when(mRegistrationFragment.getContextActivity()).thenReturn(context);
     }

@@ -28,8 +28,10 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationFragment;
 
@@ -180,7 +182,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginPresenter = new LoginPresenterImpl(
                 resetPassword,
                 new SessionDataRepository(
-                        BizareChatApp.getInstance().getSessionService()));
+                        BizareChatApp.getInstance().getSessionService()),
+                new Validator(),
+                CurrentUser.getInstance());
     }
 
     @Override

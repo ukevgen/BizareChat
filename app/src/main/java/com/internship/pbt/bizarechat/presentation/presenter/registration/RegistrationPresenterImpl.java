@@ -49,7 +49,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private static final String USER_EXIST = "Sorry, this email already exist";
     private static final String AVATAR = "Too large picture max size 1mb";
     private final String TAG = "RegistrPresenterImpl";
-    private Validator mValidator = new Validator();
+    private Validator mValidator;
     private RegistrationView mRegisterView;
     private File fileToUpload = null;
     private SignUpModel mRegistrationModel;
@@ -57,19 +57,26 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private UseCase signUpUseCase;
     private SignUpRequestM signUpRequestM;
     private UseCase loginUseCase;
-    private CurrentUser currentUser = CurrentUser.getInstance();
+    private CurrentUser currentUser;
     private CallbackManager callbackManager;
     private ContentRepository contentRepository;
     private SessionRepository sessionRepository;
+    private Converter converter;
 
     public RegistrationPresenterImpl(RegistrationModel registrationModel,
                                      ContentRepository contentRepository,
-                                     SessionRepository sessionRepository) {
+                                     SessionRepository sessionRepository,
+                                     Converter converter,
+                                     Validator validator,
+                                     CurrentUser currentUser) {
         super();
         this.mRegistrationModel = registrationModel;
         this.mRegistrationModel.setPresenter(this);
         this.contentRepository = contentRepository;
         this.sessionRepository = sessionRepository;
+        this.converter = converter;
+        this.mValidator = validator;
+        this.currentUser = currentUser;
     }
 
     @Override
@@ -203,8 +210,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
         try {
-            fileToUpload = Converter.compressPhoto(mRegisterView.getContextActivity(),
-                    Converter.convertUriToFile(mRegisterView.getContextActivity(), uri));
+            fileToUpload = converter.compressPhoto(mRegisterView.getContextActivity(),
+                    converter.convertUriToFile(mRegisterView.getContextActivity(), uri));
         } catch (IOException e) {
             e.printStackTrace();
         }
