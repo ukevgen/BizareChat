@@ -15,10 +15,9 @@ public interface LoginPresenter extends Presenter, LoadDataPresenter {
 
     void onForgotPasswordClicked();
 
-    // TODO: 1/30/17 [Code Review] The methods below should be like 'onEmailChanged(String email)' and
-    // 'onPasswordChanged(String password)', 'AndSetButtonState' is redundant, you should name the methods as some action,
-    // there is no guarantee that its realization will contain logic with setting of button state
-    void checkFieldsAndSetButtonState(String email, String password);
+    void onEmailChanged(String email);
+
+    void onPasswordChanged(String password);
 
     void checkIsEmailValid(String email);
 

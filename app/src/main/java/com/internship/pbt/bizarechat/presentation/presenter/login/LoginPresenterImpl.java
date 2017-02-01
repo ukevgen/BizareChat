@@ -23,6 +23,8 @@ public class LoginPresenterImpl implements LoginPresenter {
     private Validator validator = new Validator();
     private UseCase loginUseCase;
     private SessionRepository sessionRepository;
+    private boolean isEmailFieldEmpty = true;
+    private boolean isPasswordFieldEmpty = true;
 
     public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase,
                               SessionRepository sessionRepository) {
@@ -38,8 +40,9 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void checkIsEmailValid(String email) {
         if (validator.isValidEmail(email)) {
-            resetPasswordUseCase.setEmail(email);
+            if(loginView != null) loginView.showLoading();
 
+            resetPasswordUseCase.setEmail(email);
             resetPasswordUseCase.execute(new Subscriber<Response<Void>>() {
                 @Override
                 public void onCompleted() {
@@ -48,14 +51,20 @@ public class LoginPresenterImpl implements LoginPresenter {
 
                 @Override
                 public void onError(Throwable e) {
-                    String message = ErrorMessageFactory.
-                            createMessageOnLogin(loginView.getContextActivity(), e);
-                    loginView.showError(message);
+                    if(loginView != null) {
+                        String message = ErrorMessageFactory.
+                                createMessageOnLogin(loginView.getContextActivity(), e);
+                        loginView.hideLoading();
+                        loginView.showError(message);
+                    }
                 }
 
                 @Override
                 public void onNext(Response<Void> o) {
-                    loginView.showSuccessOnPasswordRecovery();
+                    if(loginView != null) {
+                        loginView.showSuccessOnPasswordRecovery();
+                        loginView.hideLoading();
+                    }
                 }
             });
         } else {
@@ -89,14 +98,25 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void checkFieldsAndSetButtonState(String email, String password) {
-        if (email.isEmpty() || password.isEmpty())
+    public void onEmailChanged(String email) {
+        isEmailFieldEmpty = email.isEmpty();
+        if(isEmailFieldEmpty || isPasswordFieldEmpty)
+            loginView.setButtonSignInEnabled(false);
+        else
+            loginView.setButtonSignInEnabled(true);
+    }
+
+    @Override
+    public void onPasswordChanged(String password) {
+        isPasswordFieldEmpty = password.isEmpty();
+        if(isEmailFieldEmpty || isPasswordFieldEmpty)
             loginView.setButtonSignInEnabled(false);
         else
             loginView.setButtonSignInEnabled(true);
     }
 
     private void loginUseCase(String email, String password) {
+        if(loginView != null) loginView.showLoading();
         this.loginUseCase = new LoginUserUseCase(sessionRepository,
                 new UserRequestModel(email, password));
 
@@ -106,17 +126,19 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
+                if(loginView != null) loginView.hideLoading();
                 navigateToMainActivity();
             }
 
             @Override
             public void onError(Throwable e) {
-                String message = ErrorMessageFactory.
-                        createMessageOnLogin(loginView.getContextActivity(), e);
-                loginView.showError(message);
-                e.printStackTrace();
+                if(loginView !=null) {
+                    String message = ErrorMessageFactory.
+                            createMessageOnLogin(loginView.getContextActivity(), e);
+                    loginView.hideLoading();
+                    loginView.showError(message);
+                }
                 Log.d("321", "request Login OnError() + " + e.toString());
-
             }
 
             @Override
@@ -158,6 +180,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void destroy() {
         loginView = null;
+    }
+
+    @Override
+    public void stop() {
         if (loginUseCase != null)
             loginUseCase.unsubscribe();
         if (resetPasswordUseCase != null)

@@ -35,9 +35,10 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_email"
-            style="@style/Theme.AppCompat"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/image_wrapper"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/sing_up_email_margin_top"
@@ -47,17 +48,19 @@
                 android:id="@+id/register_email"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/email_address"
                 android:inputType="textEmailAddress"
-                android:text="@string/email_com" />
+                android:text="@string/email_com"/>
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_password"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/text_input_email"
             android:layout_centerHorizontal="true"
             android:textColorHint="@color/email_hint">
@@ -66,7 +69,7 @@
                 android:id="@+id/register_password"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword" />
 
@@ -74,8 +77,10 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_password_confirm"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/text_input_password"
             android:layout_centerHorizontal="true"
             android:textColorHint="@color/email_hint">
@@ -84,15 +89,17 @@
                 android:id="@+id/register_confirm_password"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_full_name"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/text_input_password_confirm"
             android:layout_centerHorizontal="true"
             android:textColorHint="@color/email_hint">
@@ -101,14 +108,16 @@
                 android:id="@+id/register_full_name"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/full_name" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_phone"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/text_input_full_name"
             android:layout_centerHorizontal="true"
             android:textColorHint="@color/email_hint">
@@ -117,7 +126,7 @@
                 android:id="@+id/register_phone"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/phone"
                 android:inputType="phone"
                 android:text="@string/ukr_phone" />
@@ -125,8 +134,10 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_website"
+            app:errorTextAppearance="@style/TextInputLayoutInvalidInfo"
             android:layout_width="@dimen/sing_up_element_width"
-            android:layout_height="@dimen/sing_up_element_height"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_below="@id/text_input_phone"
             android:layout_centerHorizontal="true"
             android:textColorHint="@color/email_hint">
@@ -135,7 +146,7 @@
                 android:id="@+id/register_website"
                 style="@style/RegisterInfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/website" />
         </android.support.design.widget.TextInputLayout>
 

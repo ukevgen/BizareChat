@@ -1,15 +1,17 @@
 package com.internship.pbt.bizarechat.presentation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
-import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
@@ -21,6 +23,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+
+import ru.tinkoff.decoro.watchers.FormatWatcher;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -38,6 +42,7 @@ import static org.mockito.Mockito.when;
 public class RegistrationPresenterUnitTest {
     private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
     private String[] positiveTestPasswordLengthData = {"111111", "1111111", "11111111111", "111111111111"};
+    private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
 
     @Mock
     private RegistrationView mRegistrationFragment;
@@ -51,6 +56,17 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private File avatarFile;
 
+    @Mock
+    private RegistrationModel registrationModel;
+
+    @Mock
+    private ContentRepository contentRepository;
+
+    @Mock
+    private SessionRepository sessionRepository;
+  
+    private FormatWatcher formatWatcher;
+
     private RegistrationPresenter mRegistrationPresenter;
 
     private SignUpUserM SignUpUserM;
@@ -61,10 +77,10 @@ public class RegistrationPresenterUnitTest {
         SignUpUserM.setEmail("roman-kapshuk@ukr.net");
         SignUpUserM.setPassword("QA1we2");
         SignUpUserM.setPhone("0797878796");
-        mRegistrationPresenter = new RegistrationPresenterImpl(new RegistrationModel(), // TODO STUB FOR FUTURE UPGRADE
-                new ContentDataRepository(BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache()),
-                new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
+        mRegistrationPresenter = new RegistrationPresenterImpl(
+                registrationModel,
+                contentRepository,
+                sessionRepository);
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
         PowerMockito.mockStatic(Converter.class);
@@ -139,6 +155,24 @@ public class RegistrationPresenterUnitTest {
             verify(mRegistrationFragment, atMost(testData.length)).showError(anyString());
         }
     }
+
+
+    @Test
+    public void checkPhoneMask() {
+        assert formatWatcher.getMask().equals(PHONE_FORMAT);
+
+    }
+
+
+    @Test
+    public void navigateToMainActivityTest() {
+        mRegistrationPresenter.onRegistrationSuccess();
+        mRegistrationFragment.goToMainActivity();
+        PowerMockito.mockStatic(MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
+        verify(context).startActivity(intent);
+    }
+
 
     @Test
     public void passwordMatch() {

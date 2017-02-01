@@ -20,8 +20,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
@@ -61,6 +61,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mPasswordConfLayout,
             mPhoneLayout;
     private FrameLayout mImageWrapper;
+
+    private ProgressBar mProgressBar;
 
     private EditText mEmailEditText,
             mFullName,
@@ -173,6 +175,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        hideLoading();
+        mRegistrationPresenter.stop();
+    }
+
+    @Override
     public void startFailedSignUpAnim() {
 
     }
@@ -201,11 +210,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
 
     @Override
     public void hideLoading() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -221,44 +232,42 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
 
     public void hideErrorInvalidEmail() {
-        mEmailEditText.setError(null);
+        mEmailLayout.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPassword() {
-        mPasswordEditText.setError(null);
+        mPasswordLayout.setError(null);
     }
 
 
     public void hideErrorPasswordConfirm() {
-        mPasswordConfirm.setError(null);
+        mPasswordConfLayout.setError(null);
     }
 
     @Override
     public void hideErrorInvalidPhone() {
-        mPhoneEditText.setError(null);
+        mPhoneLayout.setError(null);
     }
 
     @Override
     public void showErrorInvalidEmail() {
-        mEmailEditText.setError(getString(R.string.invalid_email));
-
+        mEmailLayout.setError(getString(R.string.invalid_email));
     }
 
     @Override
     public void showErrorInvalidPassword() {
-        mPasswordEditText.setError(getString(R.string.invalid_weak_password));
-
+        mPasswordLayout.setError(getString(R.string.invalid_weak_password));
     }
 
     @Override
     public void showErrorInvalidPhone() {
-        mPhoneEditText.setError(getString(R.string.invalid_phone));
+        mPhoneLayout.setError(getString(R.string.invalid_phone));
     }
 
     @Override
     public void showErrorPasswordLength() {
-        mPasswordEditText.setError(getString(R.string.error_password_length));
+        mPasswordLayout.setError(getString(R.string.error_password_length));
     }
 
     @Override
@@ -354,7 +363,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     public void showErrorPasswordConfirm() {
         mPasswordConfirm.setText("");
-        Toast.makeText(this.getContextActivity(), R.string.do_not_match_password, Toast.LENGTH_SHORT).show();
+        mPasswordConfLayout.setError(getString(R.string.do_not_match_password));
     }
 
     private void facebookLoginWithPermissions() {
@@ -367,7 +376,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mAvatarImage = (CircleImageView) v.findViewById(R.id.user_pic);
         mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
+        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.progress_bar);
+
         mEmailLayout = (TextInputLayout) v.findViewById(R.id.text_input_email);
+        mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
+        mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
+        mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
 
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);

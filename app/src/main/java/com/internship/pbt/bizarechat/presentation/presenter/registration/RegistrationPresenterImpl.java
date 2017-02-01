@@ -132,6 +132,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void uploadAvatar() {
         if (fileToUpload != null) {
+            mRegisterView.showLoading();
             this.uploadFileUseCase = new UploadFileUseCase(contentRepository,
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG,
                     fileToUpload,
@@ -145,10 +146,13 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
                 @Override
                 public void onError(Throwable e) {
-                    String message = ErrorMessageFactory.
-                            createMessageOnLogin(mRegisterView.getContextActivity(), e);
                     e.printStackTrace();
-                    mRegisterView.showError("UploadAvatar" + message);
+                    if(mRegisterView != null) {
+                        String message = ErrorMessageFactory.
+                                createMessageOnLogin(mRegisterView.getContextActivity(), e);
+                        mRegisterView.hideLoading();
+                        mRegisterView.showError("UploadAvatar" + message);
+                    }
                     currentUser.setAvatarBlobId(null);
                 }
 
@@ -162,6 +166,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
+        if(mRegisterView != null) mRegisterView.showLoading();
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
@@ -189,6 +194,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             currentUser.setCurrentEmail(informationOnCheck.getEmail());
             currentUser.setCurrentPasswrod(informationOnCheck.getPassword());
             this.registrationRequest(informationOnCheck);
+        } else {
+            if(mRegisterView != null) mRegisterView.hideLoading();
         }
     }
 
@@ -238,8 +245,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, e.toString());
-                mRegisterView.showError(ErrorMessageFactory.
-                        createMessageOnRegistration(mRegisterView.getContextActivity(), e));
+                if(mRegisterView != null) {
+                    mRegisterView.hideLoading();
+                    mRegisterView.showError(ErrorMessageFactory.
+                            createMessageOnRegistration(mRegisterView.getContextActivity(), e));
+                }
             }
 
             @Override
@@ -262,6 +272,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void onRegistrationSuccess() {
+        mRegisterView.hideLoading();
         currentUser.setAuthorized(true);
         //mRegisterView.goToMainActivity();
         mRegisterView.onRegistrationSuccess();
@@ -276,13 +287,17 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void destroy() {
-        if (mRegisterView != null)
-            mRegisterView = null;
+    public void stop() {
         if (uploadFileUseCase != null)
             uploadFileUseCase.unsubscribe();
         if (loginUseCase != null)
             loginUseCase.unsubscribe();
+    }
+
+    @Override
+    public void destroy() {
+        if (mRegisterView != null)
+            mRegisterView = null;
     }
 
     private void authorize() {
@@ -299,8 +314,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                mRegisterView.showError(ErrorMessageFactory.
-                        createMessageOnRegistration(mRegisterView.getContextActivity(), e));
+                if(mRegisterView != null) {
+                    mRegisterView.hideLoading();
+                    mRegisterView.showError(ErrorMessageFactory.
+                            createMessageOnRegistration(mRegisterView.getContextActivity(), e));
+                }
             }
 
             @Override
