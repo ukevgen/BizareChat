@@ -33,6 +33,7 @@ import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import java.io.File;
+import java.io.IOException;
 
 import retrofit2.Response;
 import ru.tinkoff.decoro.MaskImpl;
@@ -194,11 +195,27 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        fileToUpload = Converter.convertUriToFile(mRegisterView.getContextActivity(), uri);
+        try {
+            fileToUpload = Converter.compressPhoto(mRegisterView.getContextActivity(),
+                    Converter.convertUriToFile(mRegisterView.getContextActivity(), uri));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (mValidator.isValidAvatarSize(fileToUpload)) {
-            mRegisterView.loadAvatarToImageView(uri);
+            mRegisterView.loadAvatarToImageView(fileToUpload);
         } else {
-            mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.too_large_picture_max_size_1mb));
+            mRegisterView.showError(mRegisterView.getContextActivity()
+                    .getString(R.string.too_large_picture_please_select_anouther));
+            fileToUpload = null;
+        }
+    }
+
+    @Override
+    public void verifyAndLoadAvatar(File file) {
+        fileToUpload = file;
+        if (mValidator.isValidAvatarSize(fileToUpload)) {
+            mRegisterView.loadAvatarToImageView(fileToUpload);
         }
     }
 
@@ -302,7 +319,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void setCallbackToLoginFacebookButton() {
+    public void setCallbackToLoginFacebookButton() { //Sasha, you told me do this in presenter :)
         Log.d("123", "OnSuccess " + "setCallBack");
 
         callbackManager = CallbackManager.Factory.create();

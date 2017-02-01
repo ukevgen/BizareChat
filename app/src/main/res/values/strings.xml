@@ -39,7 +39,7 @@
 
     <string name="device_camera">Device Camera</string>
     <string name="photo_gallery">Photo Gallery</string>
-    <string name="too_large_picture_max_size_1mb">Too large picture max size 1mb</string>
+    <string name="too_large_picture_please_select_anouther">Too large image, please select another</string>
     <string name="restore_password">Restore Password</string>
     <string name="send_email">SEND</string>
     <string name="cancel">Cancel</string>

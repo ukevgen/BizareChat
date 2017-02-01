@@ -126,7 +126,7 @@ public class RegistrationPresenterUnitTest {
         when(avatarFile.length()).thenReturn((long) (1024 * 1024 - 1));
         mRegistrationPresenter.verifyAndLoadAvatar(uri);
 
-        verify(mRegistrationFragment).loadAvatarToImageView(uri);
+        verify(mRegistrationFragment).loadAvatarToImageView(avatarFile);
     }
 
     @Test

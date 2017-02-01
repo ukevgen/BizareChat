@@ -10,6 +10,8 @@ import com.internship.pbt.bizarechat.presentation.presenter.LoadDataPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
+import java.io.File;
+
 public interface RegistrationPresenter extends Presenter, LoadDataPresenter{
 
     void showErrorInvalidPassword();
@@ -35,6 +37,8 @@ public interface RegistrationPresenter extends Presenter, LoadDataPresenter{
     void showErrorPasswordLength();
 
     void verifyAndLoadAvatar(Uri uri);
+
+    void verifyAndLoadAvatar(File file);
 
     void showErrorPasswordConfirm();
 

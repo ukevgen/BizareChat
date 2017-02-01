@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,12 +35,15 @@ import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.model.RegistrationModel;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
+import java.io.File;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
 import static android.app.Activity.RESULT_OK;
@@ -341,8 +343,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void loadAvatarToImageView(Uri uri) {
-        Glide.with(this).load(uri).centerCrop().into(mAvatarImage);
+    public void loadAvatarToImageView(File file) {
+        Glide.with(this).load(file).centerCrop().into(mAvatarImage);
     }
 
     @Override

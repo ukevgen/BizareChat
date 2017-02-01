@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.presentation.util;
 
 
+import android.util.Log;
+
 import java.io.File;
 
 public class Validator {
@@ -41,6 +43,7 @@ public class Validator {
     }
 
     private boolean calculateIsValidAvatarByteSize(File file){
+        Log.d("file1", "File lenght " + file.length());
         return file.length() < 1024*1024 && file.length() != 0;
     }
     

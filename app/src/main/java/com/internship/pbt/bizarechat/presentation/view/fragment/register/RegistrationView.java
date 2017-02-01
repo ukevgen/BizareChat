@@ -1,10 +1,11 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.register;
 
 import android.content.Context;
-import android.net.Uri;
 
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
 import com.internship.pbt.bizarechat.presentation.view.fragment.LoadDataView;
+
+import java.io.File;
 
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
@@ -42,7 +43,7 @@ public interface RegistrationView extends LoadDataView {
 
     void showPictureChooser();
 
-    void loadAvatarToImageView(Uri uri);
+    void loadAvatarToImageView(File file);
 
     void showErrorPasswordConfirm();
 
