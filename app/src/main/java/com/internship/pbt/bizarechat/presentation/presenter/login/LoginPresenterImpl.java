@@ -125,12 +125,10 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.loginUseCase = new LoginUserUseCase(sessionRepository,
                 new UserRequestModel(email, password));
 
-        Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
 
         this.loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-                Log.d("321", "request Login OnCompleted()");
                 if(loginView != null) loginView.hideLoading();
                 navigateToMainActivity();
             }
@@ -143,7 +141,6 @@ public class LoginPresenterImpl implements LoginPresenter {
                     loginView.hideLoading();
                     loginView.showError(message);
                 }
-                Log.d("321", "request Login OnError() + " + e.toString());
             }
 
             @Override

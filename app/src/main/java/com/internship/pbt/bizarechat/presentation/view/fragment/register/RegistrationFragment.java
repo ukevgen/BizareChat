@@ -110,7 +110,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("123", "Fragment OnCreate");
         super.onCreate(savedInstanceState);
     }
 
@@ -122,7 +121,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("123", "Fragment OnCreateView");
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mRegistrationPresenter = new RegistrationPresenterImpl(
@@ -132,8 +130,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                         BizareChatApp.getInstance().getCache()),
                 new SessionDataRepository(
                         BizareChatApp.getInstance().getSessionService()),
-                new Converter(),
                 new Validator(),
+                new Converter(this.getContextActivity()),
                 CurrentUser.getInstance());
         mRegistrationPresenter.setRegistrationView(this);
 
@@ -228,12 +226,29 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void showError(String message) {
-        if (getView() != null)
-            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
+    public void showIsAvatarUploadedMessage() {
+        Snackbar.make(getView(),
+                getContextActivity().getText(R.string.avatar_uploaded),
+                Snackbar.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void showTooLargeImage() {
+        Snackbar.make(getView(),
+                getContextActivity().getText(R.string.too_large_picture_please_select_anouther),
+                Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showUserLinkedWithFacebook() {
+
+    }
+
+    @Override
     public void hideErrorInvalidEmail() {
         mEmailLayout.setError(null);
     }
@@ -275,7 +290,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void refreshInfAfterFacebookLink(FacebookLinkInform linkInform) {
-        Log.d("123", "RegistrationFragment" + linkInform.toString());
         this.startOnFacebookLinkSuccessAnim();
     }
 
@@ -406,6 +420,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
         mImageWrapper = (FrameLayout) v.findViewById(R.id.image_wrapper);
 
+    }
+
+    @Override
+    public String getStringFromRes(int r) {
+        return this.getString(r);
     }
 
     public interface OnRegisterSuccess {

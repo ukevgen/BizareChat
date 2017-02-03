@@ -10,7 +10,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
@@ -33,7 +32,6 @@ import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import java.io.File;
-import java.io.IOException;
 
 import retrofit2.Response;
 import ru.tinkoff.decoro.MaskImpl;
@@ -63,19 +61,20 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     private SessionRepository sessionRepository;
     private Converter converter;
 
+
     public RegistrationPresenterImpl(RegistrationModel registrationModel,
                                      ContentRepository contentRepository,
                                      SessionRepository sessionRepository,
-                                     Converter converter,
                                      Validator validator,
+                                     Converter converter,
                                      CurrentUser currentUser) {
         super();
         this.mRegistrationModel = registrationModel;
         this.mRegistrationModel.setPresenter(this);
         this.contentRepository = contentRepository;
         this.sessionRepository = sessionRepository;
-        this.converter = converter;
         this.mValidator = validator;
+        this.converter = converter;
         this.currentUser = currentUser;
     }
 
@@ -144,21 +143,20 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG,
                     fileToUpload,
                     CurrentUser.CURRENT_AVATAR);
-            Log.d("uploadAvatar", "UploadAvatar");
             uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
                 @Override
                 public void onCompleted() {
-                    mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.avatar_uploaded));
+                    mRegisterView.showIsAvatarUploadedMessage();
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
-                    if(mRegisterView != null) {
+                    if (mRegisterView != null) {
                         String message = ErrorMessageFactory.
                                 createMessageOnLogin(mRegisterView.getContextActivity(), e);
                         mRegisterView.hideLoading();
-                        mRegisterView.showError("UploadAvatar" + message);
+                        mRegisterView.showError("UploadAvatar " + message);
                     }
                     currentUser.setAvatarBlobId(null);
                 }
@@ -173,7 +171,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
-        if(mRegisterView != null) mRegisterView.showLoading();
+        if (mRegisterView != null) mRegisterView.showLoading();
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
@@ -202,25 +200,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             currentUser.setCurrentPasswrod(informationOnCheck.getPassword());
             this.registrationRequest(informationOnCheck);
         } else {
-            if(mRegisterView != null) mRegisterView.hideLoading();
+            if (mRegisterView != null) mRegisterView.hideLoading();
         }
     }
 
     @Override
     public void verifyAndLoadAvatar(Uri uri) {
         // mRegisterView.setPermission(uri);
-        try {
-            fileToUpload = converter.compressPhoto(mRegisterView.getContextActivity(),
-                    converter.convertUriToFile(mRegisterView.getContextActivity(), uri));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
             mRegisterView.loadAvatarToImageView(fileToUpload);
         } else {
-            mRegisterView.showError(mRegisterView.getContextActivity()
-                    .getString(R.string.too_large_picture_please_select_anouther));
+            mRegisterView.showTooLargeImage();
             fileToUpload = null;
         }
     }
@@ -238,7 +230,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
         userM.setFacebookId(currentUser.getCurrentFacebookId());
 
-        Log.d("123", "SIGN UP USER M FACEBOOK ID = " + userM.getFacebookId());
         if (signUpRequestM == null)
             signUpRequestM = new SignUpRequestM();
         signUpRequestM.setUser(userM);
@@ -252,7 +243,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d(TAG, e.toString());
-                if(mRegisterView != null) {
+                if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
                             createMessageOnRegistration(mRegisterView.getContextActivity(), e));
@@ -272,7 +263,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void facebookLink(LoginResult loginResult) {
-        Log.d("123", "Presenter Facebook request");
         mRegistrationModel.getFacebookLink(loginResult);
 
     }
@@ -321,7 +311,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                if(mRegisterView != null) {
+                if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
                             createMessageOnRegistration(mRegisterView.getContextActivity(), e));
@@ -344,8 +334,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     }
 
     @Override
-    public void setCallbackToLoginFacebookButton() { //Sasha, you told me do this in presenter :)
-        Log.d("123", "OnSuccess " + "setCallBack");
+    public void setCallbackToLoginFacebookButton() {
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -354,19 +343,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             public void onSuccess(LoginResult loginResult) {
                 Bundle param = new Bundle();
                 param.putString("fields", "id, email");
-                Log.d("123", "OnSuccess FRAGMENT INF" + loginResult.getAccessToken().getUserId());
                 facebookLink(loginResult);
             }
 
             @Override
             public void onCancel() {
-                Log.d("123", "OnCancel");
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("123", error.toString());
             }
         });
     }
@@ -378,9 +364,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void refreshLinkedInfInView(FacebookLinkInform linkInform) {
-        Log.d("123", "callback " + linkInform.toString());
-        mRegisterView.showError(mRegisterView.getContextActivity().getString(R.string.linked_with_facebook_user) + " "
-                + linkInform.getFullName() + " Id " + linkInform.getUserId());
+        mRegisterView.showUserLinkedWithFacebook();
         currentUser.setFacebookToken(linkInform.getToken());
         currentUser.setCurrentFacebookId(linkInform.getUserId());
         mRegisterView.refreshInfAfterFacebookLink(linkInform);

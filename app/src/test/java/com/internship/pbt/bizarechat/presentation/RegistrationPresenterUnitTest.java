@@ -28,6 +28,7 @@ import java.io.File;
 
 import ru.tinkoff.decoro.watchers.FormatWatcher;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
+        CurrentUser.class,
         Converter.class
 })
 public class RegistrationPresenterUnitTest {
@@ -66,6 +68,12 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private SessionRepository sessionRepository;
 
+    @Mock
+    private Converter converter;
+
+    @Mock
+    private CurrentUser currentUser;
+
     private FormatWatcher formatWatcher;
 
     private RegistrationPresenter mRegistrationPresenter;
@@ -74,6 +82,12 @@ public class RegistrationPresenterUnitTest {
 
     @Before
     public void prepareData() {
+        PowerMockito.mockStatic(Converter.class);
+        when(converter.convertUriToFile(any(Uri.class))).thenReturn(avatarFile); // TODO STUB
+        PowerMockito.mockStatic(CurrentUser.class);
+        when(CurrentUser.getInstance()).thenReturn(currentUser);
+        when(mRegistrationFragment.getContextActivity()).thenReturn(context);
+
         SignUpUserM = new SignUpUserM();
         SignUpUserM.setEmail("roman-kapshuk@ukr.net");
         SignUpUserM.setPassword("QA1we2");
@@ -82,16 +96,16 @@ public class RegistrationPresenterUnitTest {
                 registrationModel,
                 contentRepository,
                 sessionRepository,
-                new Converter(),
                 new Validator(),
-                CurrentUser.getInstance()); // TODO STUB
+                new Converter(context),
+                currentUser); // TODO STUB
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
-        PowerMockito.mockStatic(Converter.class);
-       // when(Converter.convertUriToFile(any(Context.class), any(Uri.class))).thenReturn(avatarFile); // TODO STUB
 
-        when(mRegistrationFragment.getContextActivity()).thenReturn(context);
+
     }
+
+
 
     @Test
     public void checkPasswordLengthNotMatches() {
