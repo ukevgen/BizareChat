@@ -25,7 +25,8 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess,LoginFragment.OnLoginSuccess,
+public class LoginActivity extends BaseActivity implements RegistrationFragment.OnRegisterSuccess,
+        LoginFragment.OnLoginSuccess,
         EasyPermissions.PermissionCallbacks {
 
     private static final int RC_USE_CAMERA = 104;
@@ -69,10 +70,6 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
         }
     }
 
-    @Override
-    public void onRegisterSuccess() {
-        mNavigator.navigateToMainActivity(this);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -130,6 +127,11 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
 
     @Override
     public void onLoginSuccess() {
+        mNavigator.navigateToMainActivity(this);
+    }
+
+    @Override
+    public void onRegisterSuccess() {
         mNavigator.navigateToMainActivity(this);
     }
 }

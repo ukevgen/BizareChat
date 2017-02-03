@@ -12,6 +12,7 @@ import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class RetrofitApi {
     private ContentService contentService;
 
     private RetrofitApi() {
+
         OkHttpClient okHttpClient = createClient();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -114,7 +116,8 @@ public class RetrofitApi {
                 return null;
             }
 
-            SessionRepository sessionRepository = new SessionDataRepository();
+            SessionRepository sessionRepository = new SessionDataRepository(
+                    BizareChatApp.getInstance().getSessionService());
 
             if (CurrentUser.getInstance().isAuthorized() &&
                     CurrentUser.getInstance().getCurrentPassword() != null &&
@@ -142,7 +145,7 @@ public class RetrofitApi {
                             }
                         });
 
-            } else if (!CurrentUser.getInstance().isAuthorized()){
+            } else if (!CurrentUser.getInstance().isAuthorized()) {
                 Log.d("432", "sessionRepository.getSession");
 
                 sessionRepository.getSession()

@@ -35,4 +35,6 @@ public interface SessionService {
     Observable<ResponseSignUpModel> signUpUser(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                                @Body SignUpRequestM signUpRequestModel);
 
+
+
 }

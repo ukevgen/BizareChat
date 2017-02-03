@@ -3,12 +3,12 @@ package com.internship.pbt.bizarechat.presentation.presenter.login;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
-import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
+import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
@@ -22,9 +22,12 @@ public class LoginPresenterImpl implements LoginPresenter {
     private ResetPasswordUseCase resetPasswordUseCase;
     private Validator validator = new Validator();
     private UseCase loginUseCase;
+    private SessionRepository sessionRepository;
 
-    public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase) {
+    public LoginPresenterImpl(ResetPasswordUseCase resetPasswordUseCase,
+                              SessionRepository sessionRepository) {
         this.resetPasswordUseCase = resetPasswordUseCase;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -81,7 +84,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void onPasswordForgot() {
+    public void onForgotPasswordClicked() {
         loginView.showForgotPassword();
     }
 
@@ -94,7 +97,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     private void loginUseCase(String email, String password) {
-        this.loginUseCase = new LoginUserUseCase(new SessionDataRepository(),
+        this.loginUseCase = new LoginUserUseCase(sessionRepository,
                 new UserRequestModel(email, password));
 
         Log.d("321", "request Login. TOKEN = " + UserToken.getInstance().getToken());
@@ -103,10 +106,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onCompleted() {
                 Log.d("321", "request Login OnCompleted()");
-                CurrentUser.getInstance().setAuthorized(true);
-                CurrentUser.getInstance().setCurrentEmail(email);
-                CurrentUser.getInstance().setCurrentPasswrod(password);
-                onLoginSuccess();
+                navigateToMainActivity();
             }
 
             @Override
@@ -121,6 +121,14 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onNext(UserLoginResponse userLoginResponse) {
+                if (CurrentUser.getInstance().getKeepMeSignIn())
+                    CurrentUser.getInstance().setAuthorized(true);
+
+                else
+                    CurrentUser.getInstance().setAuthorized(false);
+
+                CurrentUser.getInstance().setCurrentEmail(email);
+                CurrentUser.getInstance().setCurrentPasswrod(password);
             }
         });
     }
@@ -128,11 +136,18 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onKeepMeSignInFalse() {
         loginView.showCheckBoxModalDialog();
+        CurrentUser.getInstance().setKeepMeSignIn(false);
+    }
+
+    @Override
+    public void onKeepMeSignInTrue() {
+        CurrentUser.getInstance().setKeepMeSignIn(true);
     }
 
     @Override
     public void resume() {
-
+        CurrentUser.getInstance().clearCurrentUser();
+        UserToken.getInstance().deleteToken();
     }
 
     @Override
@@ -150,7 +165,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void onLoginSuccess() {
-        loginView.onLoginSuccess();
+    public void navigateToMainActivity() {
+        loginView.NavigateToMainActivity();
     }
 }

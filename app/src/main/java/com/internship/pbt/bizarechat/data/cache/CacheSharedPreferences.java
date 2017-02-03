@@ -84,7 +84,7 @@ public class CacheSharedPreferences {
     }
 
     public Long getCurrentFacebookId() {
-        long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
+        Long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
         if (id == -1)
             return null;
         else
@@ -102,6 +102,15 @@ public class CacheSharedPreferences {
             return null;
         else
             return id;
+    }
+
+    public void putKeppMeSignIn(boolean keepMeSignIn) {
+        mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_KEEP_ME_SIGN_IN, keepMeSignIn);
+        mEditor.apply();
+    }
+
+    public boolean getKeppMeSignIn() {
+        return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_KEEP_ME_SIGN_IN, true);
     }
 
     public void deleteAllCache() {

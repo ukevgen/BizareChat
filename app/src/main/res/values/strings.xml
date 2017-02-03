@@ -54,4 +54,6 @@
     <string name="linked_with_facebook_user">Linked with facebook user</string>
 
     <string name="malformed_request_parameters">mMlformed request parameters</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

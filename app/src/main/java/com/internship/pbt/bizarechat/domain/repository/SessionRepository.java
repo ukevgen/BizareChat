@@ -6,6 +6,7 @@ import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 
+import retrofit2.Response;
 import rx.Observable;
 
 
@@ -17,6 +18,5 @@ public interface SessionRepository {
     Observable<UserLoginResponse> loginUser(UserRequestModel requestModel);
 
     Observable<ResponseSignUpModel> signUpUser(SignUpRequestM requestModel);
-
 
 }

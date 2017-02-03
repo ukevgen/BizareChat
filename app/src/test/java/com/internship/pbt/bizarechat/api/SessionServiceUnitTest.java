@@ -15,6 +15,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetTokenUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.ResetPasswordUseCase;
 import com.internship.pbt.bizarechat.domain.model.Session;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenter;
 import com.internship.pbt.bizarechat.presentation.presenter.login.LoginPresenterImpl;
@@ -94,10 +95,10 @@ public class SessionServiceUnitTest {
         when(retrofitApi.getSessionService()).thenReturn(sessionService);
         when(session.getToken()).thenReturn("");
 
-        sessionRepository = spy(new SessionDataRepository());
+        sessionRepository = spy(new SessionDataRepository(BizareChatApp.getInstance().getSessionService())); // TODO STUB
         getTokenUseCase = spy(new GetTokenUseCase(
                 sessionRepository));
-        presenter = new LoginPresenterImpl(resetPasswordUseCase);
+        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository); // TODO sessionRepository STUB
         presenter.setLoginView(view);
     }
 
