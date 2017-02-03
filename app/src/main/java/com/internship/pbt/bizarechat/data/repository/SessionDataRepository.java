@@ -84,4 +84,6 @@ public class SessionDataRepository implements SessionRepository {
         return sessionService.signUpUser(UserToken.getInstance().getToken(), requestModel);
 
     }
+
+
 }

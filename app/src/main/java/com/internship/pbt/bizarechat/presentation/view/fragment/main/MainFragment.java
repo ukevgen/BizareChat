@@ -33,8 +33,11 @@ public class MainFragment extends BaseFragment { //TODO Change to better name
         Toast.makeText(getActivity(),  " " + CurrentUser.getInstance().getAvatarBlobId(), Toast.LENGTH_LONG).show();
 
         logoutTestButton = (Button) view.findViewById(R.id.loggout_test_button);
-        logoutTestButton.setOnClickListener(l ->{
-            mainPresenter.logout();
+        logoutTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View l) {
+                mainPresenter.logout();
+            }
         });
 
         return view;

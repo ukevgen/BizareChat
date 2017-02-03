@@ -34,7 +34,6 @@ public class BizareChatApp extends Application {
 //        if(LeakCanary.isInAnalyzerProcess(this))
 //            return;
 //        LeakCanary.install(this);
-        FacebookSdk.sdkInitialize(this);
 
         AppEventsLogger.activateApp(this);
         UserToken.getInstance().initSharedPreferences(this);
