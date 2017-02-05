@@ -51,13 +51,15 @@ public class LoginPresenterUnitTest {
     private Context context;
     @Mock
     private SessionRepository sessionRepository;
+    @Mock
+    private CurrentUser currentUser;
 
     @Before
     public void prepareData() {
         loginPresenter = new LoginPresenterImpl(resetPasswordUseCase,
                 sessionRepository,
                 new Validator(),
-                CurrentUser.getInstance()); // TODO STUB
+                currentUser); // TODO STUB
         loginPresenter.setLoginView(loginView);
     }
 
@@ -72,15 +74,15 @@ public class LoginPresenterUnitTest {
     public void checkEmailOrPasswordIsEmptyBehavior() {
         loginPresenter.onEmailChanged("");
         loginPresenter.onPasswordChanged("");
-        verify(loginView, times(1)).setButtonSignInEnabled(false);
+        verify(loginView, times(2)).setButtonSignInEnabled(false);
 
         loginPresenter.onEmailChanged("1234");
         loginPresenter.onPasswordChanged("");
-        verify(loginView, times(2)).setButtonSignInEnabled(false);
+        verify(loginView, times(4)).setButtonSignInEnabled(false);
 
         loginPresenter.onEmailChanged("");
         loginPresenter.onPasswordChanged("1234");
-        verify(loginView, times(3)).setButtonSignInEnabled(false);
+        verify(loginView, times(6)).setButtonSignInEnabled(false);
     }
 
     @Test

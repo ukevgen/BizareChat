@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -372,6 +371,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     public void loadAvatarToImageView(File file) {
         Glide.with(this).load(file).centerCrop().into(mAvatarImage);
     }
+
 
     @Override
     public Context getContextActivity() {
