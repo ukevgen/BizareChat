@@ -12,6 +12,7 @@
     <color name="button_sign_in_pressed">#00383e</color>
     <color name="button_sing_up_pressed">#113e43</color>
     <color name="button_sign_up">#27686f</color>
+    <color name="button_add_chat">#27686f</color>
     <color name="forgot_password_pressed">#205d64</color>
     <color name="email_hint">#8fb4b9</color>
     <color name="facebook_btn">#3a579a</color>

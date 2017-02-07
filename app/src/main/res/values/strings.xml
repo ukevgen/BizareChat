@@ -56,4 +56,6 @@
     <string name="malformed_request_parameters">mMlformed request parameters</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="chat">CHAT</string>
+    <string name="search_title">Search</string>
 </resources>
