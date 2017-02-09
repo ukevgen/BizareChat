@@ -132,6 +132,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
+    compile 'com.androidadvance:topsnackbar:1.1.1'
 
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
