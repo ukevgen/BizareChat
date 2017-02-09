@@ -101,6 +101,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -133,6 +134,10 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
     compile 'com.androidadvance:topsnackbar:1.1.1'
+
+    //DataBase
+    compile 'de.greenrobot:greendao:2.1.0'
+    compile 'de.greenrobot:greendao-generator:2.1.0'
 
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
