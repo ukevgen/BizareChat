@@ -1,9 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.presenter.chats;
 
 
-import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
-
-public interface ChatPresenter extends Presenter{
+public interface ChatPresenter{
 
     void setChatImage();
 

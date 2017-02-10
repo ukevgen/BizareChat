@@ -138,6 +138,11 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
     compile 'com.androidadvance:topsnackbar:1.1.1'
 
+    //Moxy
+    compile 'com.arello-mobile:moxy:1.4.5'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
+    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+
     //Emoji
     compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
     //DataBase
