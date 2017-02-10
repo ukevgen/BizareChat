@@ -13,6 +13,9 @@ apply plugin: 'jacoco'
 
 repositories {
     maven {
+        url "https://dl.bintray.com/hani-momanii/maven"
+    }
+    maven {
         url 'https://maven.fabric.io/public'
     }
     maven {
@@ -135,10 +138,11 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
     compile 'com.androidadvance:topsnackbar:1.1.1'
 
+    //Emoji
+    compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
     //DataBase
     compile 'de.greenrobot:greendao:2.1.0'
-    compile 'de.greenrobot:greendao-generator:2.1.0'
-
+    compile 'de.greenrobot:greendao-generator:2.1.0
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
     //Permission

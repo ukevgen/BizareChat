@@ -68,4 +68,7 @@
     <string name="new_chat_members_title">SELECT MEMBERS</string>
     <string name="new_chat_button_create">CREATE</string>
     <string name="edit_chat_save_button">SAVE</string>
+    <string name="outgoing_message_author">Me</string>
+    <string name="chat_room_enter_message_hint">Type your message</string>
+    <string name="me">Me</string>
 </resources>

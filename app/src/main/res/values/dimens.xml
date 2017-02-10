@@ -31,4 +31,5 @@
     <dimen name="forgot_password_width">280dp</dimen>
     <dimen name="forgot_password_height">100dp</dimen>
     <dimen name="image_size_main">50dp</dimen>
+    <dimen name="chat_photo_size">32dp</dimen>
 </resources>
