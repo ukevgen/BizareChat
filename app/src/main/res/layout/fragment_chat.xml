@@ -4,16 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chat_room_messages_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/chat_room_enter_text_container"
-        android:paddingBottom="24dp"
-        app:stackFromEnd="true"
-        app:reverseLayout="true"/>
     <RelativeLayout
         android:id="@+id/chat_room_enter_text_container"
         android:layout_width="match_parent"
@@ -21,6 +11,14 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:background="@color/white">
+        <Button
+            android:id="@+id/chat_room_send_button"
+            android:layout_width="20dp"
+            android:layout_height="16dp"
+            android:background="@drawable/send_button_image"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"/>
         <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
             android:id="@+id/chat_room_enter_message"
             android:layout_alignParentStart="true"
@@ -33,13 +31,15 @@
             android:padding="8dp"
             android:maxHeight="64dp"
             android:hint="@string/chat_room_enter_message_hint"/>
-        <Button
-            android:id="@+id/chat_room_send_button"
-            android:layout_width="20dp"
-            android:layout_height="16dp"
-            android:background="@drawable/send_button_image"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="16dp"/>
     </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+    android:id="@+id/chat_room_messages_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_above="@id/chat_room_enter_text_container"
+    android:paddingBottom="24dp"
+    app:stackFromEnd="true"
+    app:reverseLayout="true"/>
 </RelativeLayout>
