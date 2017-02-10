@@ -1,7 +1,12 @@
 package com.internship.pbt.bizarechat.presentation.presenter.chats;
 
 
-public class ChatPresenterImp implements ChatPresenter {
+import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
+import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatView;
+
+@InjectViewState
+public class PublicChatPresenter extends MvpPresenter<PublicChatView> implements ChatPresenter{
     @Override
     public void setChatImage() {
 
