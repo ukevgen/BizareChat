@@ -23,9 +23,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new PublicChatFragment();
+                return PublicChatFragment.newInstance();
             case 1:
-                return new PrivateChatFragment();
+                return PrivateChatFragment.newInstance();
             default:
                 return null;
 
