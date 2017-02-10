@@ -17,4 +17,6 @@ public class PublicChatFragment extends Fragment implements PublicChatView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_public_chats, container, false);
     }
+
+
 }

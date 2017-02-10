@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
 
@@ -35,6 +34,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mNumOfTabs;
     }
 }
