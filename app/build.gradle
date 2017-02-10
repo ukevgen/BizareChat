@@ -104,6 +104,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -139,6 +140,9 @@ dependencies {
 
     //Emoji
     compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
+    //DataBase
+    compile 'de.greenrobot:greendao:2.1.0'
+    compile 'de.greenrobot:greendao-generator:2.1.0
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
     //Permission

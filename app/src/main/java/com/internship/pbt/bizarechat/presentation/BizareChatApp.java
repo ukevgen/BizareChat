@@ -3,7 +3,6 @@ package com.internship.pbt.bizarechat.presentation;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
-import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
