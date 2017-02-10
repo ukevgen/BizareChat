@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.internship.pbt.bizarechat.R;
+
 import com.internship.pbt.bizarechat.presentation.presenter.chats.ChatPresenter;
 
 public class PublicChatFragment extends MvpAppCompatFragment implements PublicChatView {
@@ -19,7 +20,12 @@ public class PublicChatFragment extends MvpAppCompatFragment implements PublicCh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_public_chats, container, false);
+        return inflater.inflate(R.layout.fragment_chats_list, container, false);
+    }
+
+    public static PublicChatFragment newInstance() {
+        PublicChatFragment fragment = new PublicChatFragment();
+        return fragment;
     }
 
 

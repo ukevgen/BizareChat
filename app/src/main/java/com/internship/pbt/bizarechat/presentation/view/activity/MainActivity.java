@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.PagerAdapter;
-import com.internship.pbt.bizarechat.presentation.view.fragment.main.MainFragment;
 
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -35,12 +35,14 @@ public class MainActivity extends BaseActivity implements
 
         findViews();
         setToolbarAndNavigationDrawer();
-
-        addFragment(R.id.activity_layout_fragment_container, new MainFragment());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+     /*   if (savedInstanceState == null)
+            addFragment(R.id.main_screen_container, new MainFragment());*/
 
     }
 
     private void setToolbarAndNavigationDrawer() {
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
@@ -49,6 +51,8 @@ public class MainActivity extends BaseActivity implements
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
