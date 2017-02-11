@@ -30,7 +30,6 @@ public class MainFragment extends BaseFragment implements MainView { //TODO Chan
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mainPresenter = new MainPresenterImpl();
-        mainPresenter.setMainView(this);
 
         Toast.makeText(getActivity(), " " + CurrentUser.getInstance().getAvatarBlobId(), Toast.LENGTH_LONG).show();
 
