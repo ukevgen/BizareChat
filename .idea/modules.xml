@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/BizareChat.iml" filepath="$PROJECT_DIR$/BizareChat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dbgenerator/dbgenerator.iml" filepath="$PROJECT_DIR$/dbgenerator/dbgenerator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dbgenerator/dbgenerator.iml" filepath="$PROJECT_DIR$/dbgenerator/dbgenerator.iml" />
     </modules>
   </component>
 </project>
