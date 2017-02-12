@@ -12,7 +12,6 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
@@ -71,17 +70,7 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {

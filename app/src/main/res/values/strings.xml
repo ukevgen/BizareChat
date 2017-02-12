@@ -72,4 +72,6 @@
     <string name="chat_room_enter_message_hint">Type your message</string>
     <string name="me">Me</string>
     <string name="no_friends_error">Please add Friends first</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="sign_out">SIGN OUT</string>
 </resources>

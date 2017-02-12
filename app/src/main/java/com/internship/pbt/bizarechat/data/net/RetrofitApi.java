@@ -3,7 +3,6 @@ package com.internship.pbt.bizarechat.data.net;
 
 import android.util.Log;
 
-import com.google.gson.GsonBuilder;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
@@ -49,9 +48,7 @@ public class RetrofitApi {
                 .baseUrl(ApiConstants.API_END_POINT)
                 .client(okHttpClient)
                 .addConverterFactory(new QualifiedTypeConverterFactory(
-                        GsonConverterFactory.create(new GsonBuilder()
-                                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                                .create()),
+                        GsonConverterFactory.create(),
                         SimpleXmlConverterFactory.create()
                 ))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
