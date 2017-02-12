@@ -32,7 +32,7 @@ public class SessionModelMapper {
             userLoginResponse.setExternalUserId(response.getUser().getExternalUserId());
             userLoginResponse.setFacebookId(response.getUser().getFacebookId());
             userLoginResponse.setFullName(response.getUser().getFullName());
-            userLoginResponse.setId(response.getUser().getId());
+            userLoginResponse.setId(response.getUser().getUserId());
             userLoginResponse.setUpdatedAt(response.getUser().getUpdatedAt());
             userLoginResponse.setWebsite(response.getUser().getWebsite());
             userLoginResponse.setUserTags(response.getUser().getUserTags());
