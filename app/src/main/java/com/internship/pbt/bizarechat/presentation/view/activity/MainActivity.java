@@ -6,23 +6,40 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.PagerAdapter;
+import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
+import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 
-public class MainActivity extends BaseActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends MvpAppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
 
+    @InjectPresenter
+    MainPresenterImpl presenter;
+
+    @ProvidePresenter
+    MainPresenterImpl provideMainPresenter(){
+        return new MainPresenterImpl();
+    }
+
+    private Navigator navigator = Navigator.getInstance();
     private ViewPager mViewPager;
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
+    private FloatingActionButton fab;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -52,8 +69,6 @@ public class MainActivity extends BaseActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -78,6 +93,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void findViews() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(this);
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText("Public"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Private"));
@@ -90,5 +107,22 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.fab){
+            presenter.addNewChat();
+        }
+    }
+
+    @Override
+    public void showLackOfDialogs() {
+        Snackbar.make(mDrawer, R.string.no_friends_error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startNewChatView() {
+
     }
 }

@@ -9,12 +9,18 @@ import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.presentation.presenter.chats.ChatPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.chats.PrivateChatPresenter;
 
 public class PrivateChatFragment extends MvpAppCompatFragment implements PrivateChatView {
     @InjectPresenter
-    private ChatPresenter presenter;
+    PrivateChatPresenter presenter;
+
+    @ProvidePresenter
+    PrivateChatPresenter provideChatPresenter(){
+        return new PrivateChatPresenter();
+    }
 
     @Nullable
     @Override

@@ -71,4 +71,5 @@
     <string name="outgoing_message_author">Me</string>
     <string name="chat_room_enter_message_hint">Type your message</string>
     <string name="me">Me</string>
+    <string name="no_friends_error">Please add Friends first</string>
 </resources>
