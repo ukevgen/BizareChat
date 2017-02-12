@@ -3,78 +3,131 @@ package com.internship.pbt.bizarechat.data.datamodel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserModel {
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Generated;
 
+@Entity(nameInDb = "User")
+public class UserModel {
+    @Id(autoincrement = true)
+    private long id;
+
+    @Property(nameInDb = "user_id")
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Integer userId;
 
+    @Property(nameInDb = "full_name")
     @SerializedName("full_name")
     @Expose
     private String fullName;
 
+    @Property(nameInDb = "email")
     @SerializedName("email")
     @Expose
     private String email;
 
+    @Property(nameInDb = "login")
     @SerializedName("login")
     @Expose
     private String login;
 
+    @Property(nameInDb = "phone")
     @SerializedName("phone")
     @Expose
     private String phone;
 
+    @Property(nameInDb = "website")
     @SerializedName("website")
     @Expose
     private String website;
 
+    @Property(nameInDb = "created_at")
     @SerializedName("created_at")
     @Expose
     private String createdAt;
 
+    @Property(nameInDb = "updated_at")
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
 
+    @Property(nameInDb = "last_request_at")
     @SerializedName("last_request_at")
     @Expose
     private String lastRequestAt;
 
+    @Property(nameInDb = "external_user_id")
     @SerializedName("external_user_id")
     @Expose
     private Integer externalUserId;
 
+    @Property(nameInDb = "facebook_id")
     @SerializedName("facebook_id")
     @Expose
     private Long facebookId;
 
+    @Property(nameInDb = "twitter_id")
     @SerializedName("twitter_id")
     @Expose
     private String twitterId;
 
+    @Property(nameInDb = "twitter_digits_id")
     @SerializedName("twitter_digits_id")
     @Expose
     private Integer twitterDigitsId;
 
+    @Property(nameInDb = "blob_id")
     @SerializedName("blob_id")
     @Expose
     private Integer blobId;
 
+    @Property(nameInDb = "custom_data")
     @SerializedName("custom_data")
     @Expose
-    private Object customData;
+    private String customData;
 
+    @Property(nameInDb = "user_tags")
     @SerializedName("user_tags")
     @Expose
     private String userTags;
 
-    public Integer getId() {
-        return id;
+    @Generated(hash = 724794121)
+    public UserModel(long id, Integer userId, String fullName, String email,
+            String login, String phone, String website, String createdAt,
+            String updatedAt, String lastRequestAt, Integer externalUserId,
+            Long facebookId, String twitterId, Integer twitterDigitsId,
+            Integer blobId, String customData, String userTags) {
+        this.id = id;
+        this.userId = userId;
+        this.fullName = fullName;
+        this.email = email;
+        this.login = login;
+        this.phone = phone;
+        this.website = website;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.lastRequestAt = lastRequestAt;
+        this.externalUserId = externalUserId;
+        this.facebookId = facebookId;
+        this.twitterId = twitterId;
+        this.twitterDigitsId = twitterDigitsId;
+        this.blobId = blobId;
+        this.customData = customData;
+        this.userTags = userTags;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Generated(hash = 782181818)
+    public UserModel() {
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getFullName() {
@@ -181,11 +234,11 @@ public class UserModel {
         this.blobId = blobId;
     }
 
-    public Object getCustomData() {
+    public String getCustomData() {
         return customData;
     }
 
-    public void setCustomData(Object customData) {
+    public void setCustomData(String customData) {
         this.customData = customData;
     }
 
@@ -195,6 +248,14 @@ public class UserModel {
 
     public void setUserTags(String userTags) {
         this.userTags = userTags;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
 }

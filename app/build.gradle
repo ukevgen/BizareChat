@@ -151,6 +151,7 @@ dependencies {
     //DataBase
     compile 'de.greenrobot:greendao:2.1.0'
     compile 'de.greenrobot:greendao-generator:2.1.0'
+    compile 'org.greenrobot:greendao:3.2.0'
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
     //Permission

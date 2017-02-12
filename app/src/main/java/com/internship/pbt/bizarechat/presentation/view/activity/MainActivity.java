@@ -17,16 +17,22 @@ import android.view.View;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.PagerAdapter;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
-import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 
 public class MainActivity extends MvpAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
 
     @InjectPresenter
-    private MainPresenter presenter;
+    MainPresenterImpl presenter;
+
+    @ProvidePresenter
+    MainPresenterImpl provideMainPresenter(){
+        return new MainPresenterImpl();
+    }
 
     private Navigator navigator = Navigator.getInstance();
     private ViewPager mViewPager;

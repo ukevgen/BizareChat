@@ -8,13 +8,19 @@ import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.presentation.presenter.chatroom.ChatRoomPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.chatroom.ChatRoomPresenterImpl;
 
 
 public class ChatRoomFragment extends MvpAppCompatFragment implements ChatRoomView {
     @InjectPresenter
-    private ChatRoomPresenter presenter;
+    ChatRoomPresenterImpl presenter;
+
+    @ProvidePresenter
+    ChatRoomPresenterImpl provideChatRoomPresenter(){
+        return new ChatRoomPresenterImpl();
+    }
 
     @Nullable
     @Override
