@@ -1,10 +1,14 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
+import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
-public class MainPresenterImpl implements MainPresenter {
+@InjectViewState
+public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPresenter {
 
     private void clearCurrentUserCache() {
         UserToken.getInstance().deleteToken();
@@ -17,24 +21,19 @@ public class MainPresenterImpl implements MainPresenter {
         clearCurrentUserCache();
     }
 
+
+
     @Override
-    public void resume() {
+    public void navigateToNewChat() {
 
     }
 
     @Override
-    public void pause() {
-
+    public void addNewChat() {
+        if(true) {
+            getViewState().startNewChatView();
+        } else{
+            getViewState().showLackOfDialogs();
+        }
     }
-
-    @Override
-    public void stop() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
 }

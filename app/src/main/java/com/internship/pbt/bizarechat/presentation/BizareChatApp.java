@@ -7,17 +7,24 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.datamodel.DaoMaster;
+import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
+import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
+
+import org.greenrobot.greendao.database.Database;
 
 import io.fabric.sdk.android.Fabric;
 
 public class BizareChatApp extends Application {
 
     private static BizareChatApp INSTANCE = null;
+
+    private DaoSession daoSession;
 
     public static BizareChatApp getInstance() {
         return INSTANCE;
@@ -34,10 +41,15 @@ public class BizareChatApp extends Application {
 //        if(LeakCanary.isInAnalyzerProcess(this))
 //            return;
 //        LeakCanary.install(this);
-        FacebookSdk.sdkInitialize(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         AppEventsLogger.activateApp(this);
         UserToken.getInstance().initSharedPreferences(this);
+
+        //DB init
+        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
+        Database db = openHelper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
     }
 
     public CacheSharedPreferences getCache() {
@@ -54,5 +66,13 @@ public class BizareChatApp extends Application {
 
     public SessionService getSessionService() {
         return RetrofitApi.getRetrofitApi().getSessionService();
+    }
+
+    public DialogsService getDialogsService(){
+        return RetrofitApi.getRetrofitApi().getDialogsService();
+    }
+
+    public DaoSession getDaoSession() {
+        return daoSession;
     }
 }

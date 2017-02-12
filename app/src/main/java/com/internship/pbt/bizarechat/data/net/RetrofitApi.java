@@ -3,9 +3,11 @@ package com.internship.pbt.bizarechat.data.net;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
+import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -37,6 +39,7 @@ public class RetrofitApi {
     private SessionService sessionService;
     private UserService userService;
     private ContentService contentService;
+    private DialogsService dialogsService;
 
     private RetrofitApi() {
 
@@ -46,7 +49,9 @@ public class RetrofitApi {
                 .baseUrl(ApiConstants.API_END_POINT)
                 .client(okHttpClient)
                 .addConverterFactory(new QualifiedTypeConverterFactory(
-                        GsonConverterFactory.create(),
+                        GsonConverterFactory.create(new GsonBuilder()
+                                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                .create()),
                         SimpleXmlConverterFactory.create()
                 ))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -74,6 +79,7 @@ public class RetrofitApi {
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
         contentService = retrofit.create(ContentService.class);
+        dialogsService = retrofit.create(DialogsService.class);
     }
 
     public SessionService getSessionService() {
@@ -84,11 +90,13 @@ public class RetrofitApi {
         return userService;
     }
 
-
     public ContentService getContentService() {
         return contentService;
     }
 
+    public DialogsService getDialogsService() {
+        return dialogsService;
+    }
 
     private OkHttpClient createClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.d("OkHttp", message));

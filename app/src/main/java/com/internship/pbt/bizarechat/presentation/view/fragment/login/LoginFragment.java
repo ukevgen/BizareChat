@@ -37,7 +37,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 
 public class LoginFragment extends BaseFragment implements LoginView {
-    public static final int notifID = 33;
+    public static final int NOTIF_ID = 33;
     private LoginPresenter loginPresenter;
     private Button signIn;
     private Button signUp;
@@ -235,9 +235,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         Button buttonSend = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         buttonSend.setOnClickListener(
-                v -> loginPresenter
-                        .checkIsEmailValid(emailEditTextInPasswordRecovery
-                                .getText().toString())
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loginPresenter
+                                .checkIsEmailValid(emailEditTextInPasswordRecovery
+                                        .getText().toString());
+                    }
+                }
         );
         buttonSend.setEnabled(false);
 
@@ -309,7 +314,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     private void stopNotification() {
-        notificationManager.cancel(notifID);
+        notificationManager.cancel(NOTIF_ID);
     }
 
     @Override

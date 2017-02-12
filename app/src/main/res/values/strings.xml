@@ -53,5 +53,23 @@
     <string name="facebook_app_id">233083370481962</string>
     <string name="linked_with_facebook_user">Linked with facebook user</string>
 
-    <string name="malformed_request_parameters">mMlformed request parameters</string>
+    <string name="malformed_request_parameters">malformed request parameters</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="chat">CHAT</string>
+    <string name="search_title">Search</string>
+    <string name="there_are_no_chats_yet">There are no chats yet.</string>
+    <string name="main_invite_friends"><u>Invite friends</u></string>
+    <string name="main_and_start_a_new_chat">\u0020and start a new chat</string>
+    <string name="chat_name">CHAT NAME</string>
+    <string name="privacy">PRIVACY</string>
+    <string name="new_chat_radio_public">Public</string>
+    <string name="new_chat_radio_private">Private</string>
+    <string name="new_chat_members_title">SELECT MEMBERS</string>
+    <string name="new_chat_button_create">CREATE</string>
+    <string name="edit_chat_save_button">SAVE</string>
+    <string name="outgoing_message_author">Me</string>
+    <string name="chat_room_enter_message_hint">Type your message</string>
+    <string name="me">Me</string>
+    <string name="no_friends_error">Please add Friends first</string>
 </resources>
