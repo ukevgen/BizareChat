@@ -35,7 +35,6 @@ public class NewChatFragment extends MvpAppCompatFragment implements NewChatView
         return view;
     }
 
-
     @Override
     public void onClick(View v) {
 

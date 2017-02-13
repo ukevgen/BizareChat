@@ -23,7 +23,6 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
     }
 
-
     @Override
     public void navigateToNewChat() {
         getViewState().startNewChatView();
