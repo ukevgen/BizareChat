@@ -33,7 +33,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         if(true) {
             getViewState().startNewChatView();
         } else{
-            getViewState().showLackOfDialogs();
+            getViewState().showLackOfFriends();
         }
     }
 }
