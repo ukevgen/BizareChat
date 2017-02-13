@@ -18,22 +18,30 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
     @Override
     public void logout() {
-        clearCurrentUserCache();
-    }
+        // TODO: implement request to Sign Out
+        //onLogoutSuccess();
 
+    }
 
 
     @Override
     public void navigateToNewChat() {
-
+        getViewState().startNewChatView();
+        getViewState().hideNavigationElements();
     }
 
     @Override
     public void addNewChat() {
-        if(true) {
-            getViewState().startNewChatView();
-        } else{
+        if (true) {
+            navigateToNewChat();
+        } else {
             getViewState().showLackOfFriends();
         }
+    }
+
+    @Override
+    public void onLogoutSuccess() {
+        getViewState().navigateToLoginScreen();
+        clearCurrentUserCache();
     }
 }

@@ -35,10 +35,6 @@ public class Navigator {
                 context.startActivity(intent);
             }
         context.startActivity(MainActivity.getCallingIntent(context));
-        /*Intent intent = new Intent(context, MainActivity.class);
-        context.startActivity(intent);*/
-
-
     }
 
 }

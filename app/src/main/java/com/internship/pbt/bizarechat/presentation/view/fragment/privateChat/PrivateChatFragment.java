@@ -28,6 +28,11 @@ public class PrivateChatFragment extends MvpAppCompatFragment implements Private
         return inflater.inflate(R.layout.fragment_chats_list, container, false);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
     }

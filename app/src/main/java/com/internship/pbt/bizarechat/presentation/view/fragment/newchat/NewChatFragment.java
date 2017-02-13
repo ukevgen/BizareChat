@@ -13,23 +13,31 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.presenter.newchat.NewChatPresenterImpl;
 
-public class NewChatFragment extends MvpAppCompatFragment implements NewChatView {
+public class NewChatFragment extends MvpAppCompatFragment implements NewChatView, View.OnClickListener {
     @InjectPresenter
     NewChatPresenterImpl presenter;
 
     @ProvidePresenter
-    NewChatPresenterImpl provideNewChatPresenter(){
+    NewChatPresenterImpl provideNewChatPresenter() {
         return new NewChatPresenterImpl();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_chat, container, false);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_new_chat, container, false);
+
+        return view;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
