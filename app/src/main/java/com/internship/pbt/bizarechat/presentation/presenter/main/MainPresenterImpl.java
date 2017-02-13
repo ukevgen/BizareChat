@@ -35,7 +35,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         if (true) {
             navigateToNewChat();
         } else {
-            getViewState().showLackOfDialogs();
+            getViewState().showLackOfFriends();
         }
     }
 

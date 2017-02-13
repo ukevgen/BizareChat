@@ -40,5 +40,4 @@ public class NewChatFragment extends MvpAppCompatFragment implements NewChatView
     public void onClick(View v) {
 
     }
-
 }

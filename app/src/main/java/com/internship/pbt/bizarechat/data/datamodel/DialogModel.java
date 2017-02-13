@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.greendao.annotation.Generated;
 
 
 @Entity(nameInDb = "Dialog")
 public class DialogModel {
     @Id(autoincrement = true)
-    private long id;
+    private long dbId;
     @Property(nameInDb = "dialog_id")
     @SerializedName("_id")
     @Expose
@@ -68,11 +68,11 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 757701320)
-    public DialogModel(long id, String dialogId, String createdAt, String updatedAt, String lastMessage,
+    @Generated(hash = 268633615)
+    public DialogModel(long dbId, String dialogId, String createdAt, String updatedAt, String lastMessage,
             long lastMessageDateSent, int lastMessageUserId, String name, String photo,
             List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
-        this.id = id;
+        this.dbId = dbId;
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -188,15 +188,23 @@ public class DialogModel {
     }
 
     public long getId() {
-        return this.id;
+        return this.dbId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.dbId = id;
     }
 
     public void setLastMessageUserId(int lastMessageUserId) {
         this.lastMessageUserId = lastMessageUserId;
+    }
+
+    public long getDbId() {
+        return this.dbId;
+    }
+
+    public void setDbId(long dbId) {
+        this.dbId = dbId;
     }
 
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {

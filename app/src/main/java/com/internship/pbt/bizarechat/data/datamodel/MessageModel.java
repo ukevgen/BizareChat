@@ -17,7 +17,7 @@ import java.util.List;
 @Entity(nameInDb = "Message")
 public class MessageModel {
     @Id(autoincrement = true)
-    private long id;
+    private long dbId;
     @Property(nameInDb = "message_id")
     @SerializedName("_id")
     @Expose
@@ -70,12 +70,12 @@ public class MessageModel {
     @Expose
     private Integer read;
 
-    @Generated(hash = 114611656)
-    public MessageModel(long id, String messageId, String createdAt, String updatedAt,
+    @Generated(hash = 1965344788)
+    public MessageModel(long dbId, String messageId, String createdAt, String updatedAt,
             List<Object> attachments, List<Integer> readIds, List<Integer> deliveredIds,
             String chatDialogId, long dateSent, String message, Integer recipientId, Integer senderId,
             Integer read) {
-        this.id = id;
+        this.dbId = dbId;
         this.messageId = messageId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -191,11 +191,19 @@ public class MessageModel {
     }
 
     public long getId() {
-        return this.id;
+        return this.dbId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.dbId = id;
+    }
+
+    public long getDbId() {
+        return this.dbId;
+    }
+
+    public void setDbId(long dbId) {
+        this.dbId = dbId;
     }
 
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {

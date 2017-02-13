@@ -3,7 +3,6 @@
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/button_add_chat"
     android:orientation="vertical"
     android:paddingBottom="20dp">
 
