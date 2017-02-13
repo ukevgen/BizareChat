@@ -7,4 +7,6 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatV
 
 @InjectViewState
 public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements NewChatPresenter {
+
+
 }

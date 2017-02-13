@@ -18,7 +18,7 @@ public class PublicChatFragment extends MvpAppCompatFragment implements PublicCh
     PublicChatPresenter presenter;
 
     @ProvidePresenter
-    PublicChatPresenter provideChatPresenter(){
+    PublicChatPresenter provideChatPresenter() {
         return new PublicChatPresenter();
     }
 
@@ -26,6 +26,11 @@ public class PublicChatFragment extends MvpAppCompatFragment implements PublicCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_chats_list, container, false);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public static PublicChatFragment newInstance() {

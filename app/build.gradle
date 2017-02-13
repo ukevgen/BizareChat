@@ -146,6 +146,8 @@ dependencies {
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
 
+    //Swipe layout (delete row in RecyclerView)
+    compile "com.daimajia.swipelayout:library:1.2.0"
     //Emoji
     compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
     //DataBase

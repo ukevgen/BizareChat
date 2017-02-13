@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,11 @@ import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.domain.model.chatroom.ChatMessageModel;
-import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,12 +23,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecyclerAdapter.MessageHolder> {
     private long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private List<ChatMessageModel> messageList;
+    private Map<Long, Bitmap> occupantsPhotos;
     private int self = Integer.MAX_VALUE;
     private Context context;
 
-    public ChatRoomRecyclerAdapter(Context context, List<ChatMessageModel> messageList){
+    public ChatRoomRecyclerAdapter(Context context,
+                                   List<ChatMessageModel> messageList,
+                                   Map<Long, Bitmap> occupantsPhotos){
         this.context = context;
         this.messageList = messageList;
+        this.occupantsPhotos = occupantsPhotos;
     }
 
     @Override
@@ -59,7 +65,6 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         holder.time.setText(message.getTime());
         if(message.getUserId() == currentUserId){
             holder.userName.setText(context.getString(R.string.me));
-            //TODO set current user avatar from cache
             switch(message.getState()){
                 case MessageState.SENT:
                     holder.deliveryStatus.setImageDrawable(
@@ -73,9 +78,8 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
                     holder.deliveryStatus.setVisibility(View.INVISIBLE);
                     break;
             }
-        } else{
-            //TODO set another user avatar from cache
         }
+        holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getUserId()));
     }
 
     @Override
