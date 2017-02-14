@@ -43,4 +43,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().navigateToLoginScreen();
         clearCurrentUserCache();
     }
+
+    @Override
+    public void inviteFriends() {
+        getViewState().showInviteFriendsScreen();
+    }
 }
