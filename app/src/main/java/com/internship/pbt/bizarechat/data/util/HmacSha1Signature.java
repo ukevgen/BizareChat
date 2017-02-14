@@ -82,7 +82,7 @@ public class HmacSha1Signature {
         sb.append("&auth_key=").append(AUTH_KEY);
         sb.append("&nonce=").append(nonce);
         sb.append("&timestamp=").append(timestamp);
-        sb.append("&user[login]=").append(login);
+        sb.append("&user[email]=").append(login);
         sb.append("&user[password]=").append(pass);
 
         return sb.toString();

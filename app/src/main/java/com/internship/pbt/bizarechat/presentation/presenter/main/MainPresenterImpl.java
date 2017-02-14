@@ -19,8 +19,12 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     @Override
     public void logout() {
         // TODO: implement request to Sign Out
-        //onLogoutSuccess();
+        onLogoutSuccess();
+    }
 
+    public void navigateToUsers(){
+        getViewState().startUsersView();
+        getViewState().hideNavigationElements();
     }
 
     @Override
@@ -44,6 +48,14 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         clearCurrentUserCache();
     }
 
+    public void confirmLogOut(){
+        getViewState().confirmLogOut();
+    }
+
+    public void onBackPressed(){
+        getViewState().startBackPressed();
+    }
+      
     @Override
     public void inviteFriends() {
         getViewState().showInviteFriendsScreen();
