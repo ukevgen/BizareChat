@@ -74,4 +74,8 @@
     <string name="no_friends_error">Please add Friends first</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="select_members">SELECT MEMBERS</string>
+    <string name="save">SAVE</string>
+    <string name="friend_name">Friend name</string>
+    <string name="friend_email">Friend email</string>
 </resources>

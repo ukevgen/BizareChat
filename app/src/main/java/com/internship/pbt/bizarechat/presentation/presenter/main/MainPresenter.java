@@ -11,4 +11,6 @@ public interface MainPresenter {
 
     void onLogoutSuccess();
 
+    void inviteFriends();
+
 }

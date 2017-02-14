@@ -55,4 +55,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     public void onBackPressed(){
         getViewState().startBackPressed();
     }
+      
+    @Override
+    public void inviteFriends() {
+        getViewState().showInviteFriendsScreen();
+    }
 }

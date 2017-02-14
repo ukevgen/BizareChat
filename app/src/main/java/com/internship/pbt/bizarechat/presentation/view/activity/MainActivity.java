@@ -31,6 +31,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
@@ -93,13 +94,13 @@ public class MainActivity extends MvpAppCompatActivity implements
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.main_screen_container, new PublicChatFragment())
                             .commit();
                 }
-                if(tab.getPosition() == 1){
+                if (tab.getPosition() == 1) {
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.main_screen_container, new PrivateChatFragment())
@@ -136,13 +137,17 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void showInviteFriendsScreen() {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_screen_container, new InviteFriendsFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         mDrawer.closeDrawer(GravityCompat.START, true);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.create_new_chat:
                 presenter.addNewChat();
                 return true;
@@ -176,7 +181,7 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.fab:
                 mNavigationView.getMenu().getItem(0).setChecked(true);
                 presenter.addNewChat();
@@ -184,6 +189,9 @@ public class MainActivity extends MvpAppCompatActivity implements
             case -1:
                 onBackPressed();
                 break;
+            case R.id.invite_friends:
+                presenter.inviteFriends();
+
         }
     }
 
@@ -241,7 +249,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onBackPressed();
     }
 
-    private void startActionBarToggleAnim(float start, float end){
+    private void startActionBarToggleAnim(float start, float end) {
         ValueAnimator anim = ValueAnimator.ofFloat(start, end);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -249,7 +257,7 @@ public class MainActivity extends MvpAppCompatActivity implements
                 float slideOffset = (Float) valueAnimator.getAnimatedValue();
                 toggle.onDrawerSlide(null, slideOffset);
 
-                if(slideOffset == 1 && start == 0) {
+                if (slideOffset == 1 && start == 0) {
                     toggle.setDrawerIndicatorEnabled(false);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 }
@@ -268,7 +276,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         toolbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                 | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mTabLayout.setVisibility(View.VISIBLE);
-        if(!dialogsExist)
+        if (!dialogsExist)
             mLayout.setVisibility(View.VISIBLE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
