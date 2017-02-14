@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +126,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                 new RegistrationModel(),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache()),
+                        BizareChatApp.getInstance().getCache(),
+                        BizareChatApp.getInstance().getCacheUsersPhotos()),
                 new SessionDataRepository(
                         BizareChatApp.getInstance().getSessionService()),
                 new Validator(),

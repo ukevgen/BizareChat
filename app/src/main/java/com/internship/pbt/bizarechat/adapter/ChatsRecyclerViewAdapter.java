@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
@@ -21,7 +20,6 @@ public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsRecycler
     OnNewMessageCallback newMessageCallback;
     ChatDelete chatDelete;
     ChatClick chatClick;
-
 
     @Override
     public ChatsHolder onCreateViewHolder(ViewGroup parent, int viewType) {

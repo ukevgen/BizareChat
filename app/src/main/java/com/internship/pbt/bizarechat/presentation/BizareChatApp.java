@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.DaoMaster;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
@@ -50,6 +51,10 @@ public class BizareChatApp extends Application {
         DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
         Database db = openHelper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+    }
+
+    public CacheUsersPhotos getCacheUsersPhotos(){
+        return CacheUsersPhotos.getInstance(this);
     }
 
     public CacheSharedPreferences getCache() {

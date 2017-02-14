@@ -10,7 +10,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/message_user_photo"
-        android:background="@drawable/userpic"
+        android:background="@drawable/user_icon"
         android:layout_width="@dimen/chat_photo_size"
         android:layout_height="@dimen/chat_photo_size"
         android:layout_alignParentTop="true"

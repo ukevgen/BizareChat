@@ -16,7 +16,7 @@ public class UserLoginResponse {
 
     private String fullName;
 
-    private Integer id;
+    private Long id;
 
     private String lastRequestAt;
 
@@ -87,11 +87,11 @@ public class UserLoginResponse {
         this.fullName = fullName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

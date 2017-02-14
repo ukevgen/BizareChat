@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,10 +34,14 @@ import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterIm
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersFragment;
 
 public class MainActivity extends MvpAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
     private boolean dialogsExist = false;
+
+    private final String newChatFragmentTag = "newChatFragment";
+    private final String usersFragmentTag = "usersFragment";
 
     @InjectPresenter
     MainPresenterImpl presenter;
@@ -50,6 +57,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Navigator navigator = Navigator.getInstance();
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
+    private AppBarLayout.LayoutParams toolbarParams;
     private TabLayout mTabLayout;
     private FloatingActionButton fab;
     private ActionBarDrawerToggle toggle;
@@ -120,8 +128,10 @@ public class MainActivity extends MvpAppCompatActivity implements
         mTabLayout.addTab(mTabLayout.newTab().setText("Private"));
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarParams = (AppBarLayout.LayoutParams)mToolbar.getLayoutParams();
         setSupportActionBar(mToolbar);
         mTextOnToolbar = (TextView) findViewById(R.id.chat_toolbar_title);
+        mNavigationView = (NavigationView)findViewById(R.id.nav_view);
     }
 
     @Override
@@ -131,19 +141,24 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawer.closeDrawer(GravityCompat.START, true);
         switch(item.getItemId()){
             case R.id.create_new_chat:
                 presenter.addNewChat();
                 return true;
+            case R.id.users:
+                presenter.navigateToUsers();
+                return true;
             case R.id.log_out:
-                confirmLogOut();
+                presenter.confirmLogOut();
                 return true;
             default:
                 return false;
         }
     }
 
-    private void confirmLogOut() {
+    @Override
+    public void confirmLogOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
         builder.setTitle(R.string.are_you_sure);
         builder.setPositiveButton(R.string.sign_out, (dialog1, whichButton) -> {
@@ -153,8 +168,8 @@ public class MainActivity extends MvpAppCompatActivity implements
         builder.setNegativeButton(R.string.cancel, (dialog12, whichButton) -> dialog12.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
-        Button buttonSigOut = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        buttonSigOut.setOnClickListener(
+        Button buttonSignOut = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        buttonSignOut.setOnClickListener(
                 v -> presenter.logout()
         );
     }
@@ -163,6 +178,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.fab:
+                mNavigationView.getMenu().getItem(0).setChecked(true);
                 presenter.addNewChat();
                 break;
             case -1:
@@ -184,15 +200,41 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startNewChatView() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_screen_container, new NewChatFragment())
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
+        if(fragment != null){
+            transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new NewChatFragment(), newChatFragmentTag)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void startUsersView() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
+        if(fragment != null){
+            transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new UsersFragment(), usersFragmentTag)
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void onBackPressed() {
+        presenter.onBackPressed();
+    }
+
+    @Override
+    public void startBackPressed() {
         if(getSupportFragmentManager().getBackStackEntryCount() == 1){
             showNavigationElements();
         }
@@ -221,6 +263,10 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void showNavigationElements() {
         fab.show();
+        mNavigationView.getMenu().getItem(0).setChecked(true);
+        mNavigationView.getMenu().getItem(0).setChecked(false);
+        toolbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mTabLayout.setVisibility(View.VISIBLE);
         if(!dialogsExist)
             mLayout.setVisibility(View.VISIBLE);
@@ -232,9 +278,9 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void hideNavigationElements() {
         fab.hide();
+        toolbarParams.setScrollFlags(0);
         mTabLayout.setVisibility(View.GONE);
         mLayout.setVisibility(View.GONE);
-        mDrawer.closeDrawer(GravityCompat.START, true);
         startActionBarToggleAnim(0, 1);
     }
 

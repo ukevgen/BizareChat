@@ -57,7 +57,8 @@ public class SessionDataRepository implements SessionRepository {
         int nonce = randomizer.nextInt();
         if (nonce < NIL) nonce = -nonce;
         long timestamp = System.currentTimeMillis() / MILSECONDS;
-        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
+        String signature = HmacSha1Signature.calculateSignatureWithAuth(
+                requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
 
         SessionWithAuthRequest request = new SessionWithAuthRequest(
                 ApiConstants.APP_ID,
