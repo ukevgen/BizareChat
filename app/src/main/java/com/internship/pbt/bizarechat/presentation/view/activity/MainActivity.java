@@ -30,6 +30,9 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
@@ -44,13 +47,15 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     private final String newChatFragmentTag = "newChatFragment";
     private final String usersFragmentTag = "usersFragment";
+    private final static String INVITE_FRIENDS_FR_TAG = "inviteFriendsFragment";
 
     @InjectPresenter
     MainPresenterImpl presenter;
 
     @ProvidePresenter
     MainPresenterImpl provideMainPresenter() {
-        return new MainPresenterImpl();
+        return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
+                getInstance().getSessionService())));
     }
 
     private RelativeLayout mLayout;
@@ -130,17 +135,24 @@ public class MainActivity extends MvpAppCompatActivity implements
         mTabLayout.addTab(mTabLayout.newTab().setText("Private"));
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarParams = (AppBarLayout.LayoutParams)mToolbar.getLayoutParams();
+        toolbarParams = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
         setSupportActionBar(mToolbar);
         mTextOnToolbar = (TextView) findViewById(R.id.chat_toolbar_title);
-        mNavigationView = (NavigationView)findViewById(R.id.nav_view);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
     }
 
     @Override
     public void showInviteFriendsScreen() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_screen_container, new InviteFriendsFragment())
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(INVITE_FRIENDS_FR_TAG);
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, INVITE_FRIENDS_FR_TAG)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new InviteFriendsFragment(),
+                INVITE_FRIENDS_FR_TAG)
                 .addToBackStack(null)
                 .commit();
     }
@@ -211,7 +223,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void startNewChatView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
-        if(fragment != null){
+        if (fragment != null) {
             transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
                     .commit();
             return;
@@ -226,7 +238,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void startUsersView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
-        if(fragment != null){
+        if (fragment != null) {
             transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
                     .commit();
             return;
@@ -244,7 +256,7 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() == 1){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             showNavigationElements();
         }
         super.onBackPressed();
