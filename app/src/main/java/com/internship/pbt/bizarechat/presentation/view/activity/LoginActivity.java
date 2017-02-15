@@ -30,6 +30,7 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
 
     private static final int RC_USE_CAMERA = 104;
     private static final int RC_STORAGE_PERMS = 103;
+    private static final int RC_CONTACTS_PERMS = 105;
     private static final int LANDSCAPE = 2;
     private static final long REMIND_ME = 900000;
 
@@ -55,6 +56,7 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
             addFragment(R.id.activity_layout_fragment_container, new LoginFragment());
         checkStoragePermission();
         checkCameraPermission();
+        checkContactsPermission();
 
     }
 
@@ -68,8 +70,6 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
                     PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         }
     }
-
-
 
 
     @Override
@@ -104,6 +104,18 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
                 ActivityCompat.requestPermissions(LoginActivity.this,
                         new String[]{Manifest.permission.CAMERA},
                         RC_USE_CAMERA);
+            }
+        }
+    }
+
+    private void checkContactsPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(LoginActivity.this,
+                    Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(LoginActivity.this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        RC_CONTACTS_PERMS);
             }
         }
     }

@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 public class ContactsFriends {
     private String name,
             email;
-    private int photoId;
+    private String photoId;
     private boolean checked = false;
     private Bitmap userPic;
 
@@ -48,11 +48,11 @@ public class ContactsFriends {
         this.name = name;
     }
 
-    public int getPhotoId() {
+    public String getPhotoId() {
         return photoId;
     }
 
-    public void setPhotoId(int photoId) {
+    public void setPhotoId(String photoId) {
         this.photoId = photoId;
     }
 }

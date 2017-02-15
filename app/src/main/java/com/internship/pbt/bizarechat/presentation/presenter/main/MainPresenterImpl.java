@@ -1,28 +1,53 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.internship.pbt.bizarechat.data.repository.UserToken;
-import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
+
+import retrofit2.Response;
+import rx.Subscriber;
 
 @InjectViewState
 public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPresenter {
 
+    private SignOutUseCase signOutUseCase;
+
+    public MainPresenterImpl(SignOutUseCase signOutUseCase) {
+        this.signOutUseCase = signOutUseCase;
+    }
+
     private void clearCurrentUserCache() {
-        UserToken.getInstance().deleteToken();
+        /*UserToken.getInstance().deleteToken();
         CurrentUser.getInstance().setAuthorized(false);
-        CurrentUser.getInstance().clearCurrentUser();
+        CurrentUser.getInstance().clearCurrentUser();*/
     }
 
     @Override
     public void logout() {
-        // TODO: implement request to Sign Out
-        onLogoutSuccess();
+        signOutUseCase.execute(new Subscriber<Response<Void>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d("TAG", e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onNext(Response<Void> voidResponse) {
+                Log.d("TAG", "ok");
+            }
+        });
+
     }
 
-    public void navigateToUsers(){
+    public void navigateToUsers() {
         getViewState().startUsersView();
         getViewState().hideNavigationElements();
     }
@@ -48,16 +73,17 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         clearCurrentUserCache();
     }
 
-    public void confirmLogOut(){
+    public void confirmLogOut() {
         getViewState().confirmLogOut();
     }
 
-    public void onBackPressed(){
+    public void onBackPressed() {
         getViewState().startBackPressed();
     }
-      
+
     @Override
     public void inviteFriends() {
         getViewState().showInviteFriendsScreen();
+        getViewState().hideNavigationElements();
     }
 }

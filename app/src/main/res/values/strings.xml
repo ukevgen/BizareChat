@@ -78,4 +78,7 @@
     <string name="save">SAVE</string>
     <string name="friend_name">Friend name</string>
     <string name="friend_email">Friend email</string>
+    <string name="send">SEND</string>
+    <string name="error_send">No email client installed in this device.</string>
+    <string name="sorry">Sorry, but you have not any friends with email</string>
 </resources>
