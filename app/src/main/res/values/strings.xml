@@ -74,4 +74,6 @@
     <string name="no_friends_error">Please add Friends first</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="new_chat_title">NEW CHAT</string>
+    <string name="users_title">USERS</string>
 </resources>
