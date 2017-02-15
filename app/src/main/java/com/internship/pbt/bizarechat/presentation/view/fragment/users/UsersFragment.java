@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -39,9 +40,10 @@ public class UsersFragment extends MvpAppCompatFragment implements UsersView{
 
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
+    private TextView toolbarTitle;
 
     private boolean loading = true;
-    int pastVisibleItems, visibleItemCount, totalItemCount;
+    private int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @Nullable
     @Override
@@ -78,6 +80,12 @@ public class UsersFragment extends MvpAppCompatFragment implements UsersView{
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -85,6 +93,7 @@ public class UsersFragment extends MvpAppCompatFragment implements UsersView{
     @Override
     public void onStart() {
         super.onStart();
+        toolbarTitle.setText(R.string.users_title);
         recyclerView.setAdapter(presenter.getAdapter().setContext(getActivity()));
         presenter.getAllUsers();
     }
