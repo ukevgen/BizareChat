@@ -71,7 +71,7 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
                     insertCounter++;
 
                     if(user.getBlobId() != null){
-                        getAndAddPhoto(user.getUserId(), user.getBlobId());
+                        getAndAddPhoto(users.size()-1, user.getUserId(), user.getBlobId());
                     } else{
                         usersPhotos.put(user.getUserId(), null);
                     }
@@ -87,7 +87,7 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
         });
     }
 
-    private void getAndAddPhoto(Long userId, Integer blobId){
+    private void getAndAddPhoto(int position, Long userId, Integer blobId){
         photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
             @Override
@@ -101,6 +101,7 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
             @Override
             public void onNext(Bitmap bitmap) {
                 usersPhotos.put(userId, bitmap);
+                adapter.notifyItemChanged(position);
             }
         });
     }

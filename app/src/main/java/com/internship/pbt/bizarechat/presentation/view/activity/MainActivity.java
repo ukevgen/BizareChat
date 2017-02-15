@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -77,12 +78,12 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_base_layout);
 
-
         findViews();
         setToolbarAndNavigationDrawer();
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     private void setToolbarAndNavigationDrawer() {
@@ -283,6 +284,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void showNavigationElements() {
         fab.show();
+        mTextOnToolbar.setText(getString(R.string.chat));
         mNavigationView.getMenu().getItem(0).setChecked(true);
         mNavigationView.getMenu().getItem(0).setChecked(false);
         toolbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
