@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,19 +18,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            app:hintTextAppearance="@style/NewChatTextInputEditText"
+            android:textColorHint="@color/new_chat_edit_text_hint_color">
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/new_chat_name_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:backgroundTint="#e0e0e0"
+                android:textCursorDrawable="@color/new_chat_edit_text_hint_color"
                 android:hint="@string/chat_name"/>
         </android.support.design.widget.TextInputLayout>
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/new_chat_image"
-            android:background="@drawable/invite_users_icon"
+            android:background="@drawable/group_icon"
             android:layout_gravity="bottom"
             android:layout_width="@dimen/image_size_main"
-            android:layout_height="@dimen/image_size_main" />
+            android:layout_height="@dimen/image_size_main"/>
     </LinearLayout>
     <TextView
         android:id="@+id/new_chat_privacy_title"
@@ -37,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/new_chat_name_container"
         android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:layout_marginTop="36dp"
         android:text="@string/privacy"/>
     <RadioGroup
@@ -46,30 +52,36 @@
         android:layout_marginTop="8dp"
         android:layout_below="@id/new_chat_privacy_title"
         android:orientation="horizontal">
-        <RadioButton
+        <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/radio_public"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
+            app:buttonTint="@color/colorPrimary"
             android:text="@string/new_chat_radio_public"/>
-        <RadioButton
+        <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/radio_private"
             android:layout_marginStart="32dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:buttonTint="@color/colorPrimary"
             android:text="@string/new_chat_radio_private"/>
     </RadioGroup>
     <TextView
+        android:visibility="gone"
         android:id="@+id/new_chat_members_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/new_chat_privacy_container"
         android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:layout_marginTop="36dp"
         android:text="@string/new_chat_members_title"/>
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/new_chat_members_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
         android:layout_marginTop="8dp"
         android:layout_below="@id/new_chat_members_title"/>
     <Button
@@ -77,8 +89,8 @@
         style="@style/NewChatButtonCreate"
         android:layout_width="182dp"
         android:layout_height="40dp"
-        android:layout_below="@id/new_chat_members_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/new_chat_members_container"
         android:text="@string/new_chat_button_create"/>
 </RelativeLayout>
