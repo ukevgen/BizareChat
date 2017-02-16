@@ -13,4 +13,6 @@ public interface MainPresenter {
 
     void inviteFriends();
 
+    void getAllDialogs();
+
 }

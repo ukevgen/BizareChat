@@ -5,6 +5,10 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
+import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
@@ -15,9 +19,14 @@ import rx.Subscriber;
 public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPresenter {
 
     private SignOutUseCase signOutUseCase;
+    private GetAllDialogsUseCase dialogsUseCase;
+    private DaoSession daoSession;
 
-    public MainPresenterImpl(SignOutUseCase signOutUseCase) {
+    public MainPresenterImpl(SignOutUseCase signOutUseCase, GetAllDialogsUseCase dialogsUseCase,
+                             DaoSession daoSession) {
         this.signOutUseCase = signOutUseCase;
+        this.dialogsUseCase = dialogsUseCase;
+        this.daoSession = daoSession;
     }
 
     private void clearCurrentUserCache() {
@@ -88,5 +97,29 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     public void inviteFriends() {
         getViewState().showInviteFriendsScreen();
         getViewState().hideNavigationElements();
+    }
+
+    @Override
+    public void getAllDialogs() {
+        dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d("TAG", e.toString());
+            }
+
+            @Override
+            public void onNext(AllDialogsResponse response) {
+                Log.d("TAG", response.toString());
+                DialogModelDao modelDao = daoSession.getDialogModelDao();
+                modelDao.insertOrReplace(response.getDialogModels().get(0));
+
+                Log.d("TAG", String.valueOf(modelDao.count()));
+            }
+        });
     }
 }

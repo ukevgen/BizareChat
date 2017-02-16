@@ -30,7 +30,9 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
@@ -55,7 +57,10 @@ public class MainActivity extends MvpAppCompatActivity implements
     @ProvidePresenter
     MainPresenterImpl provideMainPresenter() {
         return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
-                getInstance().getSessionService())));
+                getInstance().getSessionService())),
+                new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
+                BizareChatApp.getInstance().getDaoSession());
     }
 
     private RelativeLayout mLayout;
@@ -84,6 +89,8 @@ public class MainActivity extends MvpAppCompatActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        presenter.getAllDialogs();
     }
 
     private void setToolbarAndNavigationDrawer() {
@@ -260,6 +267,11 @@ public class MainActivity extends MvpAppCompatActivity implements
             showNavigationElements();
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void showDialogs() {
+
     }
 
     private void startActionBarToggleAnim(float start, float end) {

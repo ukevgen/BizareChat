@@ -21,4 +21,6 @@ public interface MainView extends MvpView {
     void confirmLogOut();
 
     void startBackPressed();
+
+    void showDialogs();
 }

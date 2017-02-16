@@ -9,6 +9,6 @@ import retrofit2.http.Header;
 import rx.Observable;
 
 public interface DialogsService {
-    @GET("/Dialog.json")
+    @GET("chat/Dialog.json")
     Observable<AllDialogsResponse> getAllDialogs(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader);
 }

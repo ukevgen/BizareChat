@@ -228,4 +228,23 @@ public class DialogModel {
             return entityProperty.toString();
         }
     }
+
+    @Override
+    public String toString() {
+        return "DialogModel{" +
+                "dbId=" + dbId +
+                ", dialogId='" + dialogId + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", lastMessage='" + lastMessage + '\'' +
+                ", lastMessageDateSent=" + lastMessageDateSent +
+                ", lastMessageUserId=" + lastMessageUserId +
+                ", name='" + name + '\'' +
+                ", photo='" + photo + '\'' +
+                ", occupantsIds=" + occupantsIds +
+                ", type=" + type +
+                ", unreadMessagesCount=" + unreadMessagesCount +
+                ", xmppRoomJid='" + xmppRoomJid + '\'' +
+                '}';
+    }
 }
