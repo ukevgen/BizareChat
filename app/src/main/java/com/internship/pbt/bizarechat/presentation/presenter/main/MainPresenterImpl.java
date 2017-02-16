@@ -18,7 +18,6 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
     @Override
     public void logout() {
-        // TODO: implement request to Sign Out
         onLogoutSuccess();
     }
 

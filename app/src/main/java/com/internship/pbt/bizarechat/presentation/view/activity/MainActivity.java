@@ -209,31 +209,41 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startNewChatView() {
+        if(presenter.isInRestoreState(this)){
+            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
+                getSupportFragmentManager().popBackStack();
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
         if(fragment != null){
+            getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
                     .commit();
             return;
         }
 
         transaction.replace(R.id.main_screen_container, new NewChatFragment(), newChatFragmentTag)
-                .addToBackStack(null)
+                .addToBackStack(newChatFragmentTag)
                 .commit();
     }
 
     @Override
     public void startUsersView() {
+        if(presenter.isInRestoreState(this)){
+            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
+                getSupportFragmentManager().popBackStack();
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
         if(fragment != null){
+            getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
                     .commit();
             return;
         }
 
         transaction.replace(R.id.main_screen_container, new UsersFragment(), usersFragmentTag)
-                .addToBackStack(null)
+                .addToBackStack(newChatFragmentTag)
                 .commit();
     }
 
