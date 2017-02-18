@@ -74,4 +74,7 @@
     <string name="no_friends_error">Please add Friends first</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="sign_out">SIGN OUT</string>
+
+    <string name="you_have_no_permissions_for_edit_this_chat">You have no permissions for edit this chat</string>
+    <string name="successfully_edited">Successfully edited</string>
 </resources>
