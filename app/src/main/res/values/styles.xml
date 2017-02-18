@@ -66,6 +66,14 @@
         <item name="android:textColor">@color/invalid_info_test_color</item>
     </style>
 
+    <style name="NewChatTextInputEditText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/new_chat_edit_text_hint_color</item>
+    </style>
+
+    <style name="NewChatButtonCreate">
+        <item name="android:background">@drawable/new_chat_button_create</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/image_chooser_dialog_accent</item>
@@ -77,5 +85,6 @@
         <item name="android:layout_width">@dimen/forgot_password_width</item>
         <item name="android:layout_height">@dimen/forgot_password_height</item>
     </style>
+
 
 </resources>

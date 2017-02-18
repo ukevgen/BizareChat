@@ -1,17 +1,23 @@
 buildscript {
     repositories {
+        mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco'
 
 repositories {
+    maven {
+        url "https://dl.bintray.com/hani-momanii/maven"
+    }
     maven {
         url 'https://maven.fabric.io/public'
     }
@@ -101,6 +107,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -132,7 +139,21 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
+    compile 'com.androidadvance:topsnackbar:1.1.1'
 
+    //Moxy
+    compile 'com.arello-mobile:moxy:1.4.5'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
+    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+
+    //Swipe layout (delete row in RecyclerView)
+    compile "com.daimajia.swipelayout:library:1.2.0"
+    //Emoji
+    compile 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
+    //DataBase
+    compile 'de.greenrobot:greendao:2.1.0'
+    compile 'de.greenrobot:greendao-generator:2.1.0'
+    compile 'org.greenrobot:greendao:3.2.0'
     //Phone utils
     compile "ru.tinkoff.decoro:decoro:1.1.1"
     //Permission

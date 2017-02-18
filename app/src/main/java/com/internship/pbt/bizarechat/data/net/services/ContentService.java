@@ -4,17 +4,19 @@ package com.internship.pbt.bizarechat.data.net.services;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.data.net.JsonAndXmlConverters.Xml;
 import com.internship.pbt.bizarechat.data.net.requests.FileCreateRequest;
 import com.internship.pbt.bizarechat.data.net.requests.FileUploadConfirmRequest;
-import com.internship.pbt.bizarechat.data.net.JsonAndXmlConverters.Xml;
 import com.internship.pbt.bizarechat.data.net.requests.UserUpdateBlobId;
 
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -51,4 +53,9 @@ public interface ContentService {
     @PUT("/users/{user_id}.json")
     Observable<Response<Void>> updateUserBlobId(@Path (value = "user_id") Long id,
                                                 @Body UserUpdateBlobId userUpdateBlobId);
+
+    @Headers({"QuickBlox-REST-API-Version: 0.1.0"})
+    @GET("/blobs/{blob_id}/download.json")
+    Observable<ResponseBody> downloadFile(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                          @Path(value = "blob_id") Integer blobId);
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
+import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -37,6 +38,7 @@ public class RetrofitApi {
     private SessionService sessionService;
     private UserService userService;
     private ContentService contentService;
+    private DialogsService dialogsService;
 
     private RetrofitApi() {
 
@@ -74,6 +76,7 @@ public class RetrofitApi {
         sessionService = retrofit.create(SessionService.class);
         userService = retrofit.create(UserService.class);
         contentService = retrofit.create(ContentService.class);
+        dialogsService = retrofit.create(DialogsService.class);
     }
 
     public SessionService getSessionService() {
@@ -84,11 +87,13 @@ public class RetrofitApi {
         return userService;
     }
 
-
     public ContentService getContentService() {
         return contentService;
     }
 
+    public DialogsService getDialogsService() {
+        return dialogsService;
+    }
 
     private OkHttpClient createClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Log.d("OkHttp", message));

@@ -10,6 +10,7 @@ import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpRequestM;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -35,4 +36,8 @@ public interface SessionService {
     Observable<ResponseSignUpModel> signUpUser(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                                @Body SignUpRequestM signUpRequestModel);
 
+
+    @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
+    @POST("/login.json")
+    Observable<Response<Void>> signOut(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader);
 }
