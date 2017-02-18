@@ -16,7 +16,7 @@ public class UserModel {
     @Property(nameInDb = "user_id")
     @SerializedName("id")
     @Expose
-    private Integer userId;
+    private Long userId;
 
     @Property(nameInDb = "full_name")
     @SerializedName("full_name")
@@ -93,8 +93,8 @@ public class UserModel {
     @Expose
     private String userTags;
 
-    @Generated(hash = 1906899707)
-    public UserModel(long dbId, Integer userId, String fullName, String email,
+    @Generated(hash = 618196826)
+    public UserModel(long dbId, Long userId, String fullName, String email,
             String login, String phone, String website, String createdAt,
             String updatedAt, String lastRequestAt, Integer externalUserId,
             Long facebookId, String twitterId, Integer twitterDigitsId,
@@ -122,11 +122,11 @@ public class UserModel {
     public UserModel() {
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

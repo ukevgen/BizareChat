@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,7 +47,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private AlertDialog dialog;
     private TextInputEditText emailEditTextInPasswordRecovery;
     private ProgressBar progressBar;
-    private CheckBox keepMeSignIn;
+    private AppCompatCheckBox keepMeSignIn;
     private NotificationManager notificationManager;
     private OnLoginSuccess onLoginSuccess;
 
@@ -331,7 +331,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         passwordEditText = (EditText) view.findViewById(R.id.password);
         forgotPasswordTextView = (TextView) view.findViewById(R.id.forgot_password);
         progressBar = (ProgressBar) getActivity().findViewById(R.id.progress_bar);
-        keepMeSignIn = (CheckBox) view.findViewById(R.id.keep_me_check);
+        keepMeSignIn = (AppCompatCheckBox) view.findViewById(R.id.keep_me_check);
         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         TextView txtView = (TextView) getActivity().findViewById(R.id.toolbar_title);
         txtView.setText(R.string.sign_in);

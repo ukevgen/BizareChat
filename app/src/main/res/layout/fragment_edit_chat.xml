@@ -26,7 +26,7 @@
         </android.support.design.widget.TextInputLayout>
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/edit_chat_image"
-            android:background="@drawable/invite_users_icon"
+            android:background="@drawable/group_icon"
             android:layout_gravity="bottom"
             android:layout_width="@dimen/image_size_main"
             android:layout_height="@dimen/image_size_main" />

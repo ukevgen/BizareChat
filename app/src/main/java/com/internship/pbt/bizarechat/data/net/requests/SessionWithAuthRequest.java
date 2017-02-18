@@ -25,7 +25,7 @@ public class SessionWithAuthRequest {
     @Expose
     private String signature;
 
-    @SerializedName("userRequestModel")
+    @SerializedName("user")
     @Expose
     private UserRequestModel userRequestModel;
 

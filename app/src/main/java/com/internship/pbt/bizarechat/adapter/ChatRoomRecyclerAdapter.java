@@ -60,6 +60,7 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
     @Override
     public void onBindViewHolder(MessageHolder holder, int position) {
         ChatMessageModel message = messageList.get(position);
+        Bitmap photo = occupantsPhotos.get(message.getUserId());
         holder.userName.setText(message.getUserName());
         holder.messageText.setText(message.getText());
         holder.time.setText(message.getTime());
@@ -79,7 +80,8 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
                     break;
             }
         }
-        holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getUserId()));
+        if(photo != null)
+            holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getUserId()));
     }
 
     @Override

@@ -7,9 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
 
-/**
- * Created by user on 10.02.2017.
- */
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;

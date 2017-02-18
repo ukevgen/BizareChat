@@ -10,3 +10,4 @@
 /captures
 .externalNativeBuild
 .gradle.properties
+.idea/codeStyleSettings.xml

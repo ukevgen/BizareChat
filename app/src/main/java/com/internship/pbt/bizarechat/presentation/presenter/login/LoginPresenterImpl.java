@@ -1,7 +1,5 @@
 package com.internship.pbt.bizarechat.presentation.presenter.login;
 
-import android.util.Log;
-
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.LoginUserUseCase;
@@ -135,7 +133,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onError(Throwable e) {
-                if(loginView !=null) {
+                if(loginView != null) {
                     String message = ErrorMessageFactory.
                             createMessageOnLogin(loginView.getContextActivity(), e);
                     loginView.hideLoading();
@@ -147,12 +145,14 @@ public class LoginPresenterImpl implements LoginPresenter {
             public void onNext(UserLoginResponse userLoginResponse) {
                 if (currentUser.getKeepMeSignIn())
                     currentUser.setAuthorized(true);
-
                 else
                     currentUser.setAuthorized(false);
 
                 currentUser.setCurrentEmail(email);
                 currentUser.setCurrentPasswrod(password);
+                currentUser.setCurrentUserId(userLoginResponse.getId());
+                if(userLoginResponse.getBlobId() != null)
+                    currentUser.setAvatarBlobId(Long.valueOf(userLoginResponse.getBlobId()));
             }
         });
     }

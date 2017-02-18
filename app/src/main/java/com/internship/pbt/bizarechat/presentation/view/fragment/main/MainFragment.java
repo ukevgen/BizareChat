@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenter;
-import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
 public class MainFragment extends BaseFragment implements MainView { //TODO Change to better name
@@ -29,7 +28,7 @@ public class MainFragment extends BaseFragment implements MainView { //TODO Chan
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        mainPresenter = new MainPresenterImpl();
+        //mainPresenter = new MainPresenterImpl();
 
         Toast.makeText(getActivity(), " " + CurrentUser.getInstance().getAvatarBlobId(), Toast.LENGTH_LONG).show();
 

@@ -1,10 +1,12 @@
 package com.internship.pbt.bizarechat.data.repository;
 
+import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
@@ -22,6 +24,7 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
 import rx.functions.Func1;
@@ -33,10 +36,34 @@ public class ContentDataRepository implements ContentRepository {
     private String name;
     private volatile String blobId = "";
     private CacheSharedPreferences cache;
+    private CacheUsersPhotos cacheUsersPhotos;
 
-    public ContentDataRepository(ContentService retrofitApi, CacheSharedPreferences cache) {
+    public ContentDataRepository(ContentService retrofitApi,
+                                 CacheSharedPreferences cache,
+                                 CacheUsersPhotos cacheUsersPhotos) {
+        this.cacheUsersPhotos = cacheUsersPhotos;
         contentService = retrofitApi;
         this.cache = cache;
+    }
+
+    public Observable<Bitmap> getPhoto(final Integer blobId) {
+        return Observable.fromCallable(() -> cacheUsersPhotos.getPhoto(blobId))
+                .flatMap(new Func1<Bitmap, Observable<Bitmap>>() {
+                    @Override
+                    public Observable<Bitmap> call(Bitmap bitmap) {
+                        if (bitmap != null)
+                            return Observable.just(bitmap);
+                        else {
+                            return contentService.downloadFile(UserToken.getInstance().getToken(), blobId)
+                                    .flatMap(new Func1<ResponseBody, Observable<Bitmap>>() {
+                                        @Override
+                                        public Observable<Bitmap> call(ResponseBody responseBody) {
+                                            return Observable.just(cacheUsersPhotos.savePhoto(responseBody, blobId));
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     @Override

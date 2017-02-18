@@ -17,6 +17,7 @@ import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import java.util.Random;
 
+import retrofit2.Response;
 import rx.Observable;
 
 
@@ -57,7 +58,8 @@ public class SessionDataRepository implements SessionRepository {
         int nonce = randomizer.nextInt();
         if (nonce < NIL) nonce = -nonce;
         long timestamp = System.currentTimeMillis() / MILSECONDS;
-        String signature = HmacSha1Signature.calculateSignatureWithAuth(requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
+        String signature = HmacSha1Signature.calculateSignatureWithAuth(
+                requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);
 
         SessionWithAuthRequest request = new SessionWithAuthRequest(
                 ApiConstants.APP_ID,
@@ -83,6 +85,11 @@ public class SessionDataRepository implements SessionRepository {
     public Observable<ResponseSignUpModel> signUpUser(SignUpRequestM requestModel) {
         return sessionService.signUpUser(UserToken.getInstance().getToken(), requestModel);
 
+    }
+
+    @Override
+    public Observable<Response<Void>> signOutUser() {
+        return sessionService.signOut(UserToken.getInstance().getToken());
     }
 
 

@@ -37,5 +37,6 @@
     <color name="new_chat_member_name_checked">#000000</color>
     <color name="new_chat_create_button">#327780</color>
     <color name="new_chat_create_button_pressed">#1c5b63</color>
+    <color name="new_chat_edit_text_hint_color">#757575</color>
     <color name="chat_message_user_date_color">#bdbdbd</color>
 </resources>

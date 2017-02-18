@@ -15,4 +15,10 @@ public interface MainView extends MvpView {
     void hideNavigationElements();
 
     void navigateToLoginScreen();
+
+    void startUsersView();
+
+    void confirmLogOut();
+
+    void startBackPressed();
 }
