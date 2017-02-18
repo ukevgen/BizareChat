@@ -42,6 +42,8 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
             @Override
             public void onNext(Response<Void> voidResponse) {
                 Log.d("TAG", "ok");
+                getViewState().navigateToLoginScreen();
+                clearCurrentUserCache();
             }
         });
 
