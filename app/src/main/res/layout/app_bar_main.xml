@@ -33,7 +33,6 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             app:tabIndicatorColor="@android:color/white"
             app:tabIndicatorHeight="8dp"
             app:tabSelectedTextColor="@android:color/white"

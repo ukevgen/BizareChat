@@ -104,6 +104,15 @@ public class CacheSharedPreferences {
             return id;
     }
 
+    public String getFirebaseToken(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, null);
+    }
+
+    public void putFirebaseToken(String token){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, token);
+        mEditor.apply();
+    }
+
     public void putKeppMeSignIn(boolean keepMeSignIn) {
         mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_KEEP_ME_SIGN_IN, keepMeSignIn);
         mEditor.apply();
