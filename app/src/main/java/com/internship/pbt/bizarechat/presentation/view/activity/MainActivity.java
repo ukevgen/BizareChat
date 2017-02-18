@@ -1,10 +1,13 @@
 package com.internship.pbt.bizarechat.presentation.view.activity;
 
 import android.animation.ValueAnimator;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,6 +35,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.events.FirebaseTokenRefreshCompleteEvent;
+import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
@@ -40,9 +46,18 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatF
 import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersFragment;
+import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
+import com.internship.pbt.bizarechat.service.messageservice.MessageServiceBinder;
+import com.internship.pbt.bizarechat.service.util.NotificationUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends MvpAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private boolean dialogsExist = false;
 
     private final String newChatFragmentTag = "newChatFragment";
@@ -68,6 +83,9 @@ public class MainActivity extends MvpAppCompatActivity implements
     private TabLayout mTabLayout;
     private FloatingActionButton fab;
     private ActionBarDrawerToggle toggle;
+    private BizareChatMessageService messageService;
+    private ServiceConnection messageServiceConnection;
+    private Intent messageServiceIntent;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -77,6 +95,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_base_layout);
+        messageServiceIntent = new Intent(this, BizareChatMessageService.class);
 
         findViews();
         setToolbarAndNavigationDrawer();
@@ -221,31 +240,41 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startNewChatView() {
+        if(presenter.isInRestoreState(this)){
+            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
+                getSupportFragmentManager().popBackStack();
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
-        if (fragment != null) {
+        if(fragment != null){
+            getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
                     .commit();
             return;
         }
 
         transaction.replace(R.id.main_screen_container, new NewChatFragment(), newChatFragmentTag)
-                .addToBackStack(null)
+                .addToBackStack(newChatFragmentTag)
                 .commit();
     }
 
     @Override
     public void startUsersView() {
+        if(presenter.isInRestoreState(this)){
+            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
+                getSupportFragmentManager().popBackStack();
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
-        if (fragment != null) {
+        if(fragment != null){
+            getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
                     .commit();
             return;
         }
 
         transaction.replace(R.id.main_screen_container, new UsersFragment(), usersFragmentTag)
-                .addToBackStack(null)
+                .addToBackStack(newChatFragmentTag)
                 .commit();
     }
 
@@ -306,9 +335,55 @@ public class MainActivity extends MvpAppCompatActivity implements
         startActionBarToggleAnim(0, 1);
     }
 
+
     @Override
     public void navigateToLoginScreen() {
         navigator.navigateToLoginActivity(this);
     }
 
+    @SuppressWarnings("unchecked")
+    private void bindMessageService(){
+        messageServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                messageService = ((MessageServiceBinder<BizareChatMessageService>)service).getService();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                messageService = null;
+            }
+        };
+        bindService(messageServiceIntent, messageServiceConnection, 0);
+    }
+
+    private void unbindMessageService(){
+        unbindService(messageServiceConnection);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onFirebaseTokenRefreshComplete(FirebaseTokenRefreshCompleteEvent event){
+        Log.d(TAG, event.getRefreshedToken());
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onGsmMessageReceived(GcmMessageReceivedEvent event){
+        Log.d(TAG, event.getMessage());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NotificationUtils.clearNotifications(getApplicationContext());
+        EventBus.getDefault().register(this);
+//        bindMessageService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+//        unbindMessageService();
+    }
 }
