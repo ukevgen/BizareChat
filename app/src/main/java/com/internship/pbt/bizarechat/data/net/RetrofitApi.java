@@ -7,6 +7,7 @@ import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
+import com.internship.pbt.bizarechat.data.net.services.NotificationService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -39,6 +40,7 @@ public class RetrofitApi {
     private UserService userService;
     private ContentService contentService;
     private DialogsService dialogsService;
+    private NotificationService notificationService;
 
     private RetrofitApi() {
 
@@ -77,6 +79,7 @@ public class RetrofitApi {
         userService = retrofit.create(UserService.class);
         contentService = retrofit.create(ContentService.class);
         dialogsService = retrofit.create(DialogsService.class);
+        notificationService = retrofit.create(NotificationService.class);
     }
 
     public SessionService getSessionService() {
@@ -93,6 +96,10 @@ public class RetrofitApi {
 
     public DialogsService getDialogsService() {
         return dialogsService;
+    }
+
+    public NotificationService getNotificationService() {
+        return notificationService;
     }
 
     private OkHttpClient createClient() {

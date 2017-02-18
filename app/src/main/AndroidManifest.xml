@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:name=".presentation.BizareChatApp"
@@ -43,6 +44,21 @@
             android:value="@string/facebook_app_id" />
 
         <receiver android:name=".service.AlertReceiver" />
+        <service android:name=".service.messageservice.BizareChatMessageService"/>
+
+        <!-- Firebase Notifications -->
+        <service android:name=".service.gcm.BizareChatFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".service.gcm.BizareChatFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
     </application>
 
 </manifest>

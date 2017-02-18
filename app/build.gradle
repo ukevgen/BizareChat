@@ -5,7 +5,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -23,6 +22,9 @@ repositories {
     }
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
+        url 'https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/'
     }
     jcenter {
         url "http://jcenter.bintray.com/"
@@ -42,12 +44,13 @@ def versionBuild = 0
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.internship.pbt.bizarechat"
         minSdkVersion 19
         targetSdkVersion 24
+        multiDexEnabled true
         versionCode versionMajor + 10000 + versionMinor + 1000 + versionPatch + 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -60,6 +63,10 @@ android {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     applicationVariants.all { variant ->
@@ -115,6 +122,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.android.support:multidex:1.0.1'
+
+    //gsm
+    compile 'com.google.firebase:firebase-core:10.2.0'
+    compile 'com.google.firebase:firebase-messaging:10.2.0'
 
     // Crashlytics
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
@@ -133,6 +145,7 @@ dependencies {
 
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
+    compile "org.igniterealtime.smack:smack-extensions:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
 
@@ -145,6 +158,9 @@ dependencies {
     compile 'com.arello-mobile:moxy:1.4.5'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
 
     //Swipe layout (delete row in RecyclerView)
     compile "com.daimajia.swipelayout:library:1.2.0"
@@ -175,3 +191,5 @@ dependencies {
     })
     androidTestCompile("com.android.support.test.espresso:espresso-intents:2.2.2")
 }
+
+apply plugin: 'com.google.gms.google-services'

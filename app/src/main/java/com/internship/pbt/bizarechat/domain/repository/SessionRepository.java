@@ -19,4 +19,6 @@ public interface SessionRepository {
 
     Observable<ResponseSignUpModel> signUpUser(SignUpRequestM requestModel);
 
+    Observable<Response<Void>> signOutUser();
+
 }

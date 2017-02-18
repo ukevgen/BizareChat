@@ -5,5 +5,5 @@ import com.arellomobile.mvp.MvpView;
 
 public interface InviteFriendsView extends MvpView {
 
-    void showContacts();
+    void sendEmail();
 }

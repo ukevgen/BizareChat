@@ -2,20 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="@dimen/sing_up_element_width"
-        android:layout_height="@dimen/sing_up_element_height"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:background="@color/cardSignBackground"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
+    android:orientation="vertical"
+    android:padding="12dp">
 
 
     <TextView
@@ -34,7 +22,30 @@
         android:id="@+id/friends_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_below="@+id/select_members_tv">
 
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="@dimen/sing_up_element_width"
+        android:layout_height="@dimen/sing_up_element_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/cardSignBackground"
+        android:onClick="onClick"
+
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/sorry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/sorry"
+        android:visibility="gone" />
 </RelativeLayout>

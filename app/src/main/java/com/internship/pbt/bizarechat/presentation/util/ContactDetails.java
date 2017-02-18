@@ -47,9 +47,14 @@ public class ContactDetails {
                     ContactsFriends friend = new ContactsFriends();
                     friend.setName(cur.getString(1));
                     friend.setEmail(cur.getString(3));
-                    friend.setPhotoId(Integer.parseInt(cur.getString(2)));
-                    friend.setUserPic(queryContactImage(friend.getPhotoId()));
-                    contactsFriendses.add(friend);
+                    friend.setPhotoId(cur.getString(2));
+                    try {
+                        friend.setUserPic(queryContactImage(Integer.parseInt(friend.getPhotoId())));
+                    } catch (Exception e) {
+
+                    } finally {
+                        contactsFriendses.add(friend);
+                    }
                 }
 
             } while (cur.moveToNext());

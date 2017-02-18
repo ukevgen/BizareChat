@@ -9,4 +9,5 @@ public interface UserRepository {
     Observable<Response<Void>> resetUserPassword(String email);
 
     Observable<AllUsersResponse> getAllUsers(Integer page);
+
 }
