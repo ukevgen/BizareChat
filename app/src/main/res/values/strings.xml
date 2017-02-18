@@ -74,11 +74,8 @@
     <string name="no_friends_error">Please add Friends first</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="sign_out">SIGN OUT</string>
-<<<<<<< HEAD
-
     <string name="you_have_no_permissions_for_edit_this_chat">You have no permissions for edit this chat</string>
     <string name="successfully_edited">Successfully edited</string>
-=======
     <string name="select_members">SELECT MEMBERS</string>
     <string name="save">SAVE</string>
     <string name="friend_name">Friend name</string>
@@ -88,5 +85,4 @@
     <string name="sorry">Sorry, but you have not any friends with email</string>
     <string name="new_chat_title">NEW CHAT</string>
     <string name="users_title">USERS</string>
->>>>>>> 08a108b56aa54671e542c3b1e5e96e8f8e594217
 </resources>
