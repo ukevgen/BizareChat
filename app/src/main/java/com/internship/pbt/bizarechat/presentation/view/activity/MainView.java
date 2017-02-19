@@ -4,6 +4,11 @@ import com.arellomobile.mvp.MvpView;
 
 
 public interface MainView extends MvpView {
+
+    void hideEmptyScreen();
+
+    void showEmptyScreen();
+
     void showLackOfFriends();
 
     void startNewChatView();
@@ -21,4 +26,12 @@ public interface MainView extends MvpView {
     void confirmLogOut();
 
     void startBackPressed();
+
+    void showDialogs();
+
+    void showPublicDialogs();
+
+    void showPrivateDialogs();
+
+
 }

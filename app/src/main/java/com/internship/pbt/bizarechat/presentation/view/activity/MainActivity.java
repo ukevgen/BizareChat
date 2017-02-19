@@ -34,17 +34,19 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.events.FirebaseTokenRefreshCompleteEvent;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateDialogsFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PublicDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatFragment;
-import com.internship.pbt.bizarechat.presentation.view.fragment.privateChat.PrivateChatFragment;
-import com.internship.pbt.bizarechat.presentation.view.fragment.publicChat.PublicChatFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersFragment;
 import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
 import com.internship.pbt.bizarechat.service.messageservice.MessageServiceBinder;
@@ -63,6 +65,9 @@ public class MainActivity extends MvpAppCompatActivity implements
     private final String newChatFragmentTag = "newChatFragment";
     private final String usersFragmentTag = "usersFragment";
     private final static String INVITE_FRIENDS_FR_TAG = "inviteFriendsFragment";
+    private final static String PUBLIC_DIALOGS_FR_TAG = "publicDialogsFragment";
+    private final static String PRIVATE_DIALOGS_FR_TAG = "privateDialogsFragment";
+
 
     @InjectPresenter
     MainPresenterImpl presenter;
@@ -70,7 +75,10 @@ public class MainActivity extends MvpAppCompatActivity implements
     @ProvidePresenter
     MainPresenterImpl provideMainPresenter() {
         return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
-                getInstance().getSessionService())));
+                getInstance().getSessionService())),
+                new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
+                BizareChatApp.getInstance().getDaoSession());
     }
 
     private RelativeLayout mLayout;
@@ -103,6 +111,8 @@ public class MainActivity extends MvpAppCompatActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        presenter.onPublicTab();
     }
 
     private void setToolbarAndNavigationDrawer() {
@@ -120,16 +130,10 @@ public class MainActivity extends MvpAppCompatActivity implements
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_screen_container, new PublicChatFragment())
-                            .commit();
+                    presenter.onPublicTab();
                 }
                 if (tab.getPosition() == 1) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_screen_container, new PrivateChatFragment())
-                            .commit();
+                    presenter.onPrivateTab();
                 }
             }
 
@@ -234,6 +238,16 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
+    public void hideEmptyScreen() {
+        findViewById(R.id.layout_chat_empty).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyScreen() {
+        findViewById(R.id.layout_chat_empty).setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showLackOfFriends() {
         Snackbar.make(mDrawer, R.string.no_friends_error, Snackbar.LENGTH_SHORT).show();
     }
@@ -291,6 +305,43 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onBackPressed();
     }
 
+    @Override
+    public void showDialogs() {
+
+    }
+
+    @Override
+    public void showPublicDialogs() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(PUBLIC_DIALOGS_FR_TAG);
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, PUBLIC_DIALOGS_FR_TAG)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new PublicDialogsFragment(),
+                PUBLIC_DIALOGS_FR_TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showPrivateDialogs() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(PRIVATE_DIALOGS_FR_TAG);
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, PRIVATE_DIALOGS_FR_TAG)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new PrivateDialogsFragment(),
+                PRIVATE_DIALOGS_FR_TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
     private void startActionBarToggleAnim(float start, float end) {
         ValueAnimator anim = ValueAnimator.ofFloat(start, end);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -340,6 +391,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void navigateToLoginScreen() {
         navigator.navigateToLoginActivity(this);
     }
+
 
     @SuppressWarnings("unchecked")
     private void bindMessageService(){

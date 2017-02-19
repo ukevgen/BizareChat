@@ -58,7 +58,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="chat">CHAT</string>
     <string name="search_title">Search</string>
-    <string name="there_are_no_chats_yet">There are no chats yet.</string>
+    <string name="there_are_no_chats_yet">There are no dialogs yet.</string>
     <string name="main_invite_friends"><u>Invite friends</u></string>
     <string name="main_and_start_a_new_chat">\u0020and start a new chat</string>
     <string name="chat_name">CHAT NAME</string>

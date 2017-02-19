@@ -15,7 +15,7 @@ public class AllDialogsResponse {
     @SerializedName("skip")
     @Expose
     private Integer skip;
-    @SerializedName("dialogModels")
+    @SerializedName("items")
     @Expose
     private List<DialogModel> dialogModels = null;
 
