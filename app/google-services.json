@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "59594820814",
+    "firebase_url": "https://bizarechat.firebaseio.com",
+    "project_id": "bizarechat",
+    "storage_bucket": "bizarechat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59594820814:android:b1561c9ccbb1f2af",
+        "android_client_info": {
+          "package_name": "com.internship.pbt.bizarechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59594820814-7kbqr7plgkfal5aog2lppch93lqjad61.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnE-CqbGNRycOo_ZRTHjBLYPXtykBgd5Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

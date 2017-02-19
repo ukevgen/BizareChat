@@ -11,6 +11,8 @@ public class ApiConstants {
     public static final String ACCOUNT_KEY = "tCjYy95ssiZCecTch1YU";
     public static final String API_END_POINT = "https://api.quickblox.com";
     public static final String CHAT_END_POINT = "chat.quickblox.com";
+    public static final String MULTI_USERS_CHAT_ENDPOINT = "muc.chat.quickblox.com";
+
     public static final String TOKEN_HEADER_NAME = "QB-Token";
 
     //Constants for uploading file to amazon server
@@ -31,4 +33,9 @@ public class ApiConstants {
     //Constants for retrieving users
     public static final String ORDER_ASC_FULL_NAME = "asc+string+full_name";
     public static final Integer USERS_PER_PAGE = 20;
+
+    //Constants for notification subscribing
+    public static final String NOTIFICATION_CHANNELS = "gcm";
+    public static final String ENVIRONMENT = "development";
+    public static final String PLATFORM = "android";
 }

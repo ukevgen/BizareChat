@@ -16,6 +16,6 @@ public class DialogsDataRepository implements DialogsRepository{
 
     @Override
     public Observable<AllDialogsResponse> getAllDialogs() {
-        return dialogsService.getAllDialogs(UserToken.getInstance().getToken());
+        return dialogsService.getDialogs(UserToken.getInstance().getToken(), null);
     }
 }
