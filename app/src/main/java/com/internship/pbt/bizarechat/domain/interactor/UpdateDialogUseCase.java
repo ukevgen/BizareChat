@@ -13,14 +13,20 @@ public class UpdateDialogUseCase extends UseCase<DialogUpdateResponseModel>{
     private DialogUpdateRequestModel requestModel;
 
 
-    public UpdateDialogUseCase(DialogsRepository dialogsRepository, String dialogId, DialogUpdateRequestModel requestModel) {
+    public UpdateDialogUseCase(DialogsRepository dialogsRepository) {
         this.dialogsRepository = dialogsRepository;
-        this.dialogId = dialogId;
-        this.requestModel = requestModel;
     }
 
     @Override
     protected Observable<DialogUpdateResponseModel> buildUseCaseObservable() {
         return dialogsRepository.updateDialog(dialogId, requestModel);
+    }
+
+    public void setDialogId(String dialogId) {
+        this.dialogId = dialogId;
+    }
+
+    public void setRequestModel(DialogUpdateRequestModel requestModel) {
+        this.requestModel = requestModel;
     }
 }

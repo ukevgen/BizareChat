@@ -67,7 +67,7 @@ public class ContentDataRepository implements ContentRepository {
     }
 
     @Override
-    public Observable<Response<Void>> uploadFile(String contentType, File file, String name) {
+    public Observable<Integer> uploadFile(String contentType, File file, String name) {
         FileCreateRequest.Blob createBlob = new FileCreateRequest.Blob();
         createBlob.setContentType(contentType);
         createBlob.setName(file.getName());
@@ -100,7 +100,7 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
-                        if (name.equals(CurrentUser.CURRENT_AVATAR) )
+                        if (name.equals(CurrentUser.CURRENT_AVATAR))
                             cache.putAccountAvatarBlobId(Long.parseLong(blobId));
 
                         return contentService.confirmFileUploaded(
@@ -114,6 +114,12 @@ public class ContentDataRepository implements ContentRepository {
                                         new UserUpdateBlobId(Integer.parseInt(blobId)));
                             }
                         });
+                    }
+                }).flatMap(new Func1<Response<Void>, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(Response<Void> response) {
+                        Integer blobIds = Integer.parseInt(blobId);
+                        return Observable.just(blobIds);
                     }
                 });
     }

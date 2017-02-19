@@ -3,7 +3,7 @@ package com.internship.pbt.bizarechat.data.net.requests.dialog;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.Set;
 
 public class DialogUpdateRequestModel {
 
@@ -52,32 +52,40 @@ public class DialogUpdateRequestModel {
         this.pushAll = pushAll;
     }
 
-    public class PullAll {
+    public static class PullAll {
 
         @SerializedName("occupants_ids")
         @Expose
-        private List<Integer> occupantsIds = null;
+        private Set<Long> occupantsIds = null;
 
-        public List<Integer> getOccupantsIds() {
+        public PullAll(Set<Long> occupantsIds) {
+            this.occupantsIds = occupantsIds;
+        }
+
+        public Set<Long> getOccupantsIds() {
             return occupantsIds;
         }
 
-        public void setOccupantsIds(List<Integer> occupantsIds) {
+        public void setOccupantsIds(Set<Long> occupantsIds) {
             this.occupantsIds = occupantsIds;
         }
     }
 
-    public class PushAll {
+    public static class PushAll {
 
         @SerializedName("occupants_ids")
         @Expose
-        private List<Integer> occupantsIds = null;
+        private Set<Long> occupantsIds = null;
 
-        public List<Integer> getOccupantsIds() {
+        public PushAll(Set<Long> occupantsIds) {
+            this.occupantsIds = occupantsIds;
+        }
+
+        public Set<Long> getOccupantsIds() {
             return occupantsIds;
         }
 
-        public void setOccupantsIds(List<Integer> occupantsIds) {
+        public void setOccupantsIds(Set<Long> occupantsIds) {
             this.occupantsIds = occupantsIds;
         }
     }

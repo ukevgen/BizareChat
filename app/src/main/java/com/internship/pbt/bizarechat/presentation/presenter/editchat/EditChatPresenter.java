@@ -1,9 +1,9 @@
 package com.internship.pbt.bizarechat.presentation.presenter.editchat;
 
 
-import android.net.Uri;
+import com.internship.pbt.bizarechat.presentation.presenter.Presenter;
 
-public interface EditChatPresenter {
+public interface EditChatPresenter extends Presenter{
 
     void saveChanges();
 
@@ -13,7 +13,7 @@ public interface EditChatPresenter {
 
     void editChatTitle(String newTitle);
 
-    void removeUsersFromPrivateGroupChat();
+    void onCheckBoxClickPush(Long id);
 
-    void editChatImage(Uri newImage);
+    void onCheckBoxClickPull(Long id);
 }
