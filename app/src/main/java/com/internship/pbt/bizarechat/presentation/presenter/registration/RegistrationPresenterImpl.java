@@ -162,7 +162,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 }
 
                 @Override
-                public void onNext(Response<Void> response) {
+                public void onNext(Response<Void> response) { // Now is return Integer blobId
                     onRegistrationSuccess();
                 }
             });

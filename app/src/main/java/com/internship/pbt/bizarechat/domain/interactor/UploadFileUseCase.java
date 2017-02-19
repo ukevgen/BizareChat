@@ -4,10 +4,9 @@ import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 
 import java.io.File;
 
-import retrofit2.Response;
 import rx.Observable;
 
-public class UploadFileUseCase extends UseCase<Response<Void>> {
+public class UploadFileUseCase extends UseCase<Integer> {
 
     private ContentRepository contentDataRepository;
     private String contentType;
@@ -25,7 +24,7 @@ public class UploadFileUseCase extends UseCase<Response<Void>> {
     }
 
     @Override
-    protected Observable<Response<Void>> buildUseCaseObservable() {
+    protected Observable<Integer> buildUseCaseObservable() {
         return contentDataRepository.uploadFile(contentType, file, name);
     }
 }
