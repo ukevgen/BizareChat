@@ -373,6 +373,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         Glide.with(this).load(file).centerCrop().into(mAvatarImage);
     }
 
+
     @Override
     public Context getContextActivity() {
         return getActivity();

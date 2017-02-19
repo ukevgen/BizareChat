@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.presentation;
 import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
@@ -23,7 +24,7 @@ import org.greenrobot.greendao.database.Database;
 
 import io.fabric.sdk.android.Fabric;
 
-public class BizareChatApp extends Application {
+public class BizareChatApp extends MultiDexApplication {
 
     private static BizareChatApp INSTANCE = null;
 

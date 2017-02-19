@@ -162,7 +162,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 }
 
                 @Override
-                public void onNext(Response<Void> response) {
+                public void onNext(Response<Void> response) { // Now is return Integer blobId
                     onRegistrationSuccess();
                 }
             });
@@ -210,11 +210,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
-            mRegisterView.loadAvatarToImageView(fileToUpload);
+            loadAvatar();
         } else {
-            mRegisterView.showTooLargeImage();
+            showTooLargeImage();
             fileToUpload = null;
         }
+    }
+
+    private void loadAvatar() {
+        mRegisterView.loadAvatarToImageView(fileToUpload);
+    }
+
+    private void showTooLargeImage() {
+        mRegisterView.showTooLargeImage();
     }
 
     @Override

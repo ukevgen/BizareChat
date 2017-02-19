@@ -97,4 +97,12 @@ public class CurrentUser implements AuthStore {
     public void setCurrentUserId(Long id) {
         cache.putUserId(id);
     }
+
+    public String getFirebaseToken(){
+        return cache.getFirebaseToken();
+    }
+
+    public void setFirebaseToken(String token){
+        cache.putFirebaseToken(token);
+    }
 }

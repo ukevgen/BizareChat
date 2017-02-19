@@ -1,7 +1,5 @@
 package com.internship.pbt.bizarechat.presentation;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 
 import com.internship.pbt.bizarechat.data.net.requests.signup.SignUpUserM;
@@ -13,7 +11,6 @@ import com.internship.pbt.bizarechat.presentation.presenter.registration.Registr
 import com.internship.pbt.bizarechat.presentation.presenter.registration.RegistrationPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
-import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.presentation.view.fragment.register.RegistrationView;
 
 import org.junit.Before;
@@ -31,7 +28,6 @@ import ru.tinkoff.decoro.watchers.FormatWatcher;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,18 +36,13 @@ import static org.mockito.Mockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
         CurrentUser.class,
-        Converter.class
 })
 public class RegistrationPresenterUnitTest {
-    private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
-    private String[] positiveTestPasswordLengthData = {"111111", "1111111", "11111111111", "111111111111"};
     private static final String PHONE_FORMAT = "+38 (0__) ___-__-__";
-
+    private String[] negativeTestPasswordLengthData = {"11111", "1111111111111", ""};
+    private String[] positiveTestPasswordLengthData = {"11111111", "1111111", "11111111111", "111111111111"};
     @Mock
     private RegistrationView mRegistrationFragment;
-
-    @Mock
-    private Context context;
 
     @Mock
     private Uri uri;
@@ -74,71 +65,68 @@ public class RegistrationPresenterUnitTest {
     @Mock
     private CurrentUser currentUser;
 
+    @Mock
+    private Validator validator;
+
     private FormatWatcher formatWatcher;
 
     private RegistrationPresenter mRegistrationPresenter;
 
-    private SignUpUserM SignUpUserM;
+    private SignUpUserM signUpUserM;
 
     @Before
     public void prepareData() {
-        PowerMockito.mockStatic(Converter.class);
-        when(converter.convertUriToFile(any(Uri.class))).thenReturn(avatarFile); // TODO STUB
         PowerMockito.mockStatic(CurrentUser.class);
         when(CurrentUser.getInstance()).thenReturn(currentUser);
-        when(mRegistrationFragment.getContextActivity()).thenReturn(context);
-
-        SignUpUserM = new SignUpUserM();
-        SignUpUserM.setEmail("roman-kapshuk@ukr.net");
-        SignUpUserM.setPassword("QA1we2");
-        SignUpUserM.setPhone("0797878796");
+        signUpUserM = new SignUpUserM();
+        signUpUserM.setEmail("roman-kapshuk@ukr.net");
+        signUpUserM.setPassword("QA1we2");
+        signUpUserM.setPhone("0797878796");
         mRegistrationPresenter = new RegistrationPresenterImpl(
                 registrationModel,
                 contentRepository,
                 sessionRepository,
-                new Validator(),
-                new Converter(context),
-                currentUser); // TODO STUB
+                validator,
+                converter,
+                currentUser);
         mRegistrationPresenter.setRegistrationView(mRegistrationFragment);
 
-
-
     }
-
 
 
     @Test
     public void checkPasswordLengthNotMatches() {
         for (String value : negativeTestPasswordLengthData) {
-            SignUpUserM.setPassword(value);
-            mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
+            signUpUserM.setPassword(value);
+            mRegistrationPresenter.validateInformation(signUpUserM, "QA1we2");
             verify(mRegistrationFragment, atLeastOnce()).showErrorPasswordLength();
         }
     }
 
     @Test
     public void checkPasswordLengthMatches() {
-        for (String value : positiveTestPasswordLengthData) {
-            SignUpUserM.setPassword(value);
-            mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
-            verify(mRegistrationFragment, never()).showErrorPasswordLength();
-        }
+            when(validator.isPasswordLengthMatches(anyString())).thenReturn(false);
+        mRegistrationPresenter.validateInformation(signUpUserM, "QA1we2");
+            verify(mRegistrationFragment).showErrorPasswordLength();
     }
 
     @Test
     public void checkIfUserEnteredInvalidEmail() {
-        SignUpUserM.setEmail("Invalid");
-        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
-
+        when(validator.isValidEmail(anyString())).thenReturn(false);
+        when(validator.isValidPhoneNumber(anyString())).thenReturn(true);
+        when(validator.isValidPassword(anyString())).thenReturn(true);
+        mRegistrationPresenter.validateInformation(signUpUserM, "");
         verify(mRegistrationFragment).showErrorInvalidEmail();
-        verify(mRegistrationFragment, never()).showErrorInvalidPassword();
         verify(mRegistrationFragment, never()).showErrorInvalidPhone();
+        verify(mRegistrationFragment, never()).showErrorInvalidPassword();
     }
 
     @Test
     public void checkIfUserEnteredInvalidPassword() {
-        SignUpUserM.setPassword("Invalid");
-        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
+        when(validator.isValidEmail(anyString())).thenReturn(true);
+        when(validator.isValidPhoneNumber(anyString())).thenReturn(true);
+        when(validator.isValidPassword(anyString())).thenReturn(false);
+        mRegistrationPresenter.validateInformation(signUpUserM, "QA1we2");
 
         verify(mRegistrationFragment).showErrorInvalidPassword();
         verify(mRegistrationFragment, never()).showErrorInvalidEmail();
@@ -147,8 +135,10 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void checkIfUserEnteredInvalidPhone() {
-        SignUpUserM.setPhone("Invalid");
-        mRegistrationPresenter.validateInformation(SignUpUserM, "QA1we2");
+        when(validator.isValidEmail(anyString())).thenReturn(true);
+        when(validator.isValidPhoneNumber(anyString())).thenReturn(false);
+        when(validator.isValidPassword(anyString())).thenReturn(true);
+        mRegistrationPresenter.validateInformation(signUpUserM, "QA1we2");
 
         verify(mRegistrationFragment).showErrorInvalidPhone();
         verify(mRegistrationFragment, never()).showErrorInvalidPassword();
@@ -157,21 +147,16 @@ public class RegistrationPresenterUnitTest {
 
     @Test
     public void checkAvatarSizeValidBehavior() {
-        when(avatarFile.length()).thenReturn((long) (1024 * 1024 - 1));
-        mRegistrationPresenter.verifyAndLoadAvatar(uri);
-
-        verify(mRegistrationFragment).loadAvatarToImageView(avatarFile);
+        when(validator.isValidAvatarSize(any(File.class))).thenReturn(true);
+        mRegistrationPresenter.verifyAndLoadAvatar(any(Uri.class));
+        verify(mRegistrationFragment, atLeastOnce()).loadAvatarToImageView(any(File.class));
     }
 
     @Test
     public void checkAvatarSizeInvalidBehavior() {
-        long[] testData = {1024 * 1024, 1024 * 1024 + 1, 0};
-        for (long value : testData) {
-            when(avatarFile.length()).thenReturn(value);
-            mRegistrationPresenter.verifyAndLoadAvatar(uri);
-
-            verify(mRegistrationFragment, atMost(testData.length)).showError(anyString());
-        }
+        when(validator.isValidAvatarSize(any(File.class))).thenReturn(false);
+        mRegistrationPresenter.verifyAndLoadAvatar(uri);
+        verify(mRegistrationFragment, atLeastOnce()).showTooLargeImage();
     }
 
 
@@ -179,16 +164,6 @@ public class RegistrationPresenterUnitTest {
     public void checkPhoneMask() {
         assert formatWatcher.getMask().equals(PHONE_FORMAT);
 
-    }
-
-
-    @Test
-    public void navigateToMainActivityTest() {
-        mRegistrationPresenter.onRegistrationSuccess();
-        mRegistrationFragment.goToMainActivity();
-        PowerMockito.mockStatic(MainActivity.class);
-        Intent intent = new Intent(context, MainActivity.class);
-        verify(context).startActivity(intent);
     }
 
 
