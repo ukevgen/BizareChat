@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.presentation;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
@@ -53,7 +55,7 @@ public class BizareChatApp extends Application {
         daoSession = new DaoMaster(db).newSession();
     }
 
-    public CacheUsersPhotos getCacheUsersPhotos(){
+    public CacheUsersPhotos getCacheUsersPhotos() {
         return CacheUsersPhotos.getInstance(this);
     }
 
@@ -73,11 +75,16 @@ public class BizareChatApp extends Application {
         return RetrofitApi.getRetrofitApi().getSessionService();
     }
 
-    public DialogsService getDialogsService(){
+    public DialogsService getDialogsService() {
         return RetrofitApi.getRetrofitApi().getDialogsService();
     }
 
     public DaoSession getDaoSession() {
         return daoSession;
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

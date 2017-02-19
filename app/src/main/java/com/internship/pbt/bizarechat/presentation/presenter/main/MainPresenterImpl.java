@@ -6,10 +6,12 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
 import retrofit2.Response;
@@ -21,6 +23,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     private SignOutUseCase signOutUseCase;
     private GetAllDialogsUseCase dialogsUseCase;
     private DaoSession daoSession;
+    private long dialogsCount;
 
     public MainPresenterImpl(SignOutUseCase signOutUseCase, GetAllDialogsUseCase dialogsUseCase,
                              DaoSession daoSession) {
@@ -99,27 +102,59 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().hideNavigationElements();
     }
 
+
     @Override
-    public void getAllDialogs() {
-        dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
-            @Override
-            public void onCompleted() {
+    public void onPublicTab() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d("TAG", e.toString());
-            }
-
-            @Override
-            public void onNext(AllDialogsResponse response) {
-                Log.d("TAG", response.toString());
-                DialogModelDao modelDao = daoSession.getDialogModelDao();
-                modelDao.insertOrReplace(response.getDialogModels().get(0));
-
-                Log.d("TAG", String.valueOf(modelDao.count()));
-            }
-        });
+        updateDialogsDao();
+        getViewState().showPublicDialogs();
+        if (!isDialogDaoEmpty())
+            getViewState().hideEmptyScreen();
     }
+
+    @Override
+    public void onPrivateTab() {
+        updateDialogsDao();
+        getViewState().showPrivateDialogs();
+        if (!isDialogDaoEmpty())
+            getViewState().hideEmptyScreen();
+    }
+
+    private boolean isDialogDaoEmpty() {
+        dialogsCount = daoSession.getDialogModelDao().count();
+        return dialogsCount == 0;
+    }
+
+    private void updateDialogsDao() {
+        if (BizareChatApp.getInstance().isNetworkConnected()) {
+
+            dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.d("TAG", e.toString());
+                }
+
+                @Override
+                public void onNext(AllDialogsResponse response) {
+
+                    DialogModelDao modelDao = daoSession.getDialogModelDao();
+                    //modelDao.insertOrReplaceInTx(response.getDialogModels());
+                    //response.getDialogModels().forEach(modelDao::insertOrReplace);
+                    for (DialogModel m : response.getDialogModels()) {
+                        modelDao.insertOrReplace(m);
+                        Log.d("TAG", modelDao.getAllColumns().toString());
+                    }
+
+                }
+            });
+        }
+    }
+
+
 }
+

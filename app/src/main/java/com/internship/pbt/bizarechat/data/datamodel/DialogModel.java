@@ -8,16 +8,21 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 @Entity(nameInDb = "Dialog")
 public class DialogModel {
     @Id(autoincrement = true)
     private long dbId;
+    @Unique
     @Property(nameInDb = "dialog_id")
     @SerializedName("_id")
     @Expose
@@ -70,8 +75,8 @@ public class DialogModel {
 
     @Generated(hash = 268633615)
     public DialogModel(long dbId, String dialogId, String createdAt, String updatedAt, String lastMessage,
-            long lastMessageDateSent, int lastMessageUserId, String name, String photo,
-            List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
+                       long lastMessageDateSent, int lastMessageUserId, String name, String photo, List<Integer> occupantsIds,
+                       Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dbId = dbId;
         this.dialogId = dialogId;
         this.createdAt = createdAt;
@@ -210,13 +215,13 @@ public class DialogModel {
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
         @Override
         public List<Integer> convertToEntityProperty(String databaseValue) {
-            if(databaseValue == null)
+            if (databaseValue == null)
                 return null;
 
             List<Integer> result = new ArrayList<>();
-            databaseValue = databaseValue.substring(1, databaseValue.length()-1);
+            databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
 
-            for(String entry : databaseValue.split("\\s*,\\s*")){
+            for (String entry : databaseValue.split("\\s*,\\s*")) {
                 result.add(Integer.parseInt(entry));
             }
 
@@ -246,5 +251,17 @@ public class DialogModel {
                 ", unreadMessagesCount=" + unreadMessagesCount +
                 ", xmppRoomJid='" + xmppRoomJid + '\'' +
                 '}';
+    }
+
+    public String getLastMessageTime() {
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
+        Date dt = new Date(lastMessageDateSent * 1000);
+        Date today = new Date();
+        String now = new SimpleDateFormat("dd/mm/yy", new Locale("en", "UA")).format(today).toString();
+        String messageDate = new SimpleDateFormat("dd/mm/yy", new Locale("en", "UA")).format(dt).toString();
+        if (now.equals(messageDate))
+            return localDateFormat.format(dt).toString();
+        else
+            return messageDate;
     }
 }
