@@ -67,11 +67,11 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         if(message.getUserId() == currentUserId){
             holder.userName.setText(context.getString(R.string.me));
             switch(message.getState()){
-                case MessageState.SENT:
+                case MessageState.DELIVERED:
                     holder.deliveryStatus.setImageDrawable(
                             context.getResources().getDrawable(R.drawable.single_check_mark));
                     break;
-                case MessageState.DELIVERED:
+                case MessageState.READ:
                     holder.deliveryStatus.setImageDrawable(
                             context.getResources().getDrawable(R.drawable.double_check_mark));
                     break;
