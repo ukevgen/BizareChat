@@ -8,7 +8,6 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import java.text.SimpleDateFormat;
@@ -20,9 +19,7 @@ import java.util.Locale;
 
 @Entity(nameInDb = "Dialog")
 public class DialogModel {
-    @Id(autoincrement = true)
-    private long dbId;
-    @Unique
+    @Id
     @Property(nameInDb = "dialog_id")
     @SerializedName("_id")
     @Expose
@@ -73,11 +70,10 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 268633615)
-    public DialogModel(long dbId, String dialogId, String createdAt, String updatedAt, String lastMessage,
-                       long lastMessageDateSent, int lastMessageUserId, String name, String photo, List<Integer> occupantsIds,
-                       Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
-        this.dbId = dbId;
+    @Generated(hash = 866263801)
+    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent,
+            int lastMessageUserId, String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount,
+            String xmppRoomJid) {
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -192,24 +188,8 @@ public class DialogModel {
         this.xmppRoomJid = xmppRoomJid;
     }
 
-    public long getId() {
-        return this.dbId;
-    }
-
-    public void setId(long id) {
-        this.dbId = id;
-    }
-
     public void setLastMessageUserId(int lastMessageUserId) {
         this.lastMessageUserId = lastMessageUserId;
-    }
-
-    public long getDbId() {
-        return this.dbId;
-    }
-
-    public void setDbId(long dbId) {
-        this.dbId = dbId;
     }
 
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
@@ -220,6 +200,8 @@ public class DialogModel {
 
             List<Integer> result = new ArrayList<>();
             databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
+
+            if(databaseValue.isEmpty()) return result;
 
             for (String entry : databaseValue.split("\\s*,\\s*")) {
                 result.add(Integer.parseInt(entry));
@@ -237,8 +219,7 @@ public class DialogModel {
     @Override
     public String toString() {
         return "DialogModel{" +
-                "dbId=" + dbId +
-                ", dialogId='" + dialogId + '\'' +
+                " dialogId='" + dialogId + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", lastMessage='" + lastMessage + '\'' +

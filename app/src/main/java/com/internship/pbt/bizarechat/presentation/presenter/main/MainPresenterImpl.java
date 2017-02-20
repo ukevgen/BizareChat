@@ -9,9 +9,14 @@ import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
+import com.internship.pbt.bizarechat.data.net.RetrofitApi;
+import com.internship.pbt.bizarechat.data.repository.PushNotificationsRepository;
+import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
 import retrofit2.Response;
@@ -19,7 +24,7 @@ import rx.Subscriber;
 
 @InjectViewState
 public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPresenter {
-
+    private static final String TAG = MainPresenterImpl.class.getSimpleName();
     private SignOutUseCase signOutUseCase;
     private GetAllDialogsUseCase dialogsUseCase;
     private DaoSession daoSession;
@@ -59,6 +64,30 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
             }
         });
 
+    }
+
+    public void sendSubscriptionToServer() {
+        CreateSubscriptionUseCase useCase = new CreateSubscriptionUseCase(
+                new PushNotificationsRepository(RetrofitApi.getRetrofitApi().getNotificationService()));
+        useCase.setFirebaseToken(CurrentUser.getInstance().getFirebaseToken());
+
+        useCase.execute(new Subscriber<CreateSubscriptionResponse[]>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+
+            @Override
+            public void onNext(CreateSubscriptionResponse[] response) {
+                CurrentUser.getInstance().setSubscribed(true);
+                Log.d(TAG, "sendRegistrationToServer: " + CurrentUser.getInstance().getFirebaseToken());
+            }
+        });
     }
 
     public void navigateToUsers() {

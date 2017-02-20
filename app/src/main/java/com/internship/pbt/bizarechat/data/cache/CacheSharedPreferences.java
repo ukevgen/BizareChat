@@ -127,4 +127,13 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
+    public void putIsSubscribed(boolean status) {
+        mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_IS_SUBSCRIBED, status);
+        mEditor.apply();
+    }
+
+    public boolean isSubscribed() {
+        return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_IS_SUBSCRIBED, false);
+    }
+
 }

@@ -36,11 +36,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
-import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
-import com.internship.pbt.bizarechat.domain.events.FirebaseTokenRefreshCompleteEvent;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateDialogsFragment;
@@ -104,6 +104,9 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_base_layout);
         messageServiceIntent = new Intent(this, BizareChatMessageService.class);
+
+        if(!CurrentUser.getInstance().isSubscribed())
+            presenter.sendSubscriptionToServer();
 
         findViews();
         setToolbarAndNavigationDrawer();
@@ -254,10 +257,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startNewChatView() {
-        if(presenter.isInRestoreState(this)){
-            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
-                getSupportFragmentManager().popBackStack();
-        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
         if(fragment != null){
@@ -274,10 +273,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void startUsersView() {
-        if(presenter.isInRestoreState(this)){
-            if(getSupportFragmentManager().getBackStackEntryCount() > 1)
-                getSupportFragmentManager().popBackStack();
-        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
         if(fragment != null){
@@ -322,7 +317,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         transaction.replace(R.id.main_screen_container, new PublicDialogsFragment(),
                 PUBLIC_DIALOGS_FR_TAG)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -338,7 +332,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         transaction.replace(R.id.main_screen_container, new PrivateDialogsFragment(),
                 PRIVATE_DIALOGS_FR_TAG)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -411,12 +404,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     private void unbindMessageService(){
         unbindService(messageServiceConnection);
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onFirebaseTokenRefreshComplete(FirebaseTokenRefreshCompleteEvent event){
-        Log.d(TAG, event.getRefreshedToken());
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)

@@ -1,12 +1,12 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponseWrapper;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
 import com.internship.pbt.bizarechat.domain.repository.NotificationsRepository;
 
 import rx.Observable;
 
 
-public class CreateSubscriptionUseCase extends UseCase<CreateSubscriptionResponseWrapper> {
+public class CreateSubscriptionUseCase extends UseCase<CreateSubscriptionResponse[]> {
     private NotificationsRepository repository;
     private String firebaseToken;
 
@@ -15,7 +15,7 @@ public class CreateSubscriptionUseCase extends UseCase<CreateSubscriptionRespons
     }
 
     @Override
-    protected Observable<CreateSubscriptionResponseWrapper> buildUseCaseObservable() {
+    protected Observable<CreateSubscriptionResponse[]> buildUseCaseObservable() {
         return repository.createSubscription(firebaseToken);
     }
 

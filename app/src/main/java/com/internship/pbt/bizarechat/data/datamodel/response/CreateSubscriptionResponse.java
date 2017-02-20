@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.data.datamodel.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class CreateSubscriptionResponse {
     @SerializedName("subscription")
     @Expose
