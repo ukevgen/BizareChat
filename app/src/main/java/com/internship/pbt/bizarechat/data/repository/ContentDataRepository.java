@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.repository;
 
 import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
@@ -66,20 +67,18 @@ public class ContentDataRepository implements ContentRepository {
     }
 
     @Override
-    public Observable<Response<Void>> uploadFile(String contentType, File file, String name) {
+    public Observable<Integer> uploadFile(String contentType, File file, String name) {
         FileCreateRequest.Blob createBlob = new FileCreateRequest.Blob();
         createBlob.setContentType(contentType);
         createBlob.setName(file.getName());
 
         FileCreateRequest fileCreateRequest = new FileCreateRequest();
         fileCreateRequest.setBlob(createBlob);
-        Log.d("uploadAvatar", "create file " + file.getName());
 
         return contentService.createFile(UserToken.getInstance().getToken(), fileCreateRequest)
                 .flatMap(new Func1<CreateFileResponse, Observable<UploadFileResponse>>() {
                     @Override
                     public Observable<UploadFileResponse> call(CreateFileResponse createFileResponse) {
-                        Log.d("uploadAvatar", "-1.5 confirm " + blobId);
 
                         blobId = createFileResponse.getBlob().getId();
                         String params = createFileResponse.getBlob().getBlobObjectAccess().getParams();
@@ -87,7 +86,6 @@ public class ContentDataRepository implements ContentRepository {
 
                         Map<String, RequestBody> paramsMap = composeFormParamsMap(params);
                         MultipartBody.Part filePart = prepareFilePart(file, contentType, name);
-                        Log.d("uploadAvatar", "-1 confirm " + blobId);
 
                         return contentService.uploadFile(ApiConstants.AMAZON_END_POINT, paramsMap, filePart);
                     }
@@ -102,9 +100,8 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
-                        if (name.equals(CurrentUser.CURRENT_AVATAR) )
+                        if (name.equals(CurrentUser.CURRENT_AVATAR))
                             cache.putAccountAvatarBlobId(Long.parseLong(blobId));
-                        Log.d("uploadAvatar", "confirm " + blobId);
 
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
@@ -117,6 +114,12 @@ public class ContentDataRepository implements ContentRepository {
                                         new UserUpdateBlobId(Integer.parseInt(blobId)));
                             }
                         });
+                    }
+                }).flatMap(new Func1<Response<Void>, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(Response<Void> response) {
+                        Integer blobIds = Integer.parseInt(blobId);
+                        return Observable.just(blobIds);
                     }
                 });
     }
@@ -156,6 +159,7 @@ public class ContentDataRepository implements ContentRepository {
         return result;
     }
 
+    @NonNull
     private MultipartBody.Part prepareFilePart(File file, String contentType, String name) {
         RequestBody requestFile = RequestBody.create(MediaType.parse(contentType), file);
         if (name == null)

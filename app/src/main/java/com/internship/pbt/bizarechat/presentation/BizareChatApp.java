@@ -1,5 +1,8 @@
 package com.internship.pbt.bizarechat.presentation;
 
+import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
@@ -53,7 +56,7 @@ public class BizareChatApp extends MultiDexApplication {
         daoSession = new DaoMaster(db).newSession();
     }
 
-    public CacheUsersPhotos getCacheUsersPhotos(){
+    public CacheUsersPhotos getCacheUsersPhotos() {
         return CacheUsersPhotos.getInstance(this);
     }
 
@@ -73,11 +76,16 @@ public class BizareChatApp extends MultiDexApplication {
         return RetrofitApi.getRetrofitApi().getSessionService();
     }
 
-    public DialogsService getDialogsService(){
+    public DialogsService getDialogsService() {
         return RetrofitApi.getRetrofitApi().getDialogsService();
     }
 
     public DaoSession getDaoSession() {
         return daoSession;
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

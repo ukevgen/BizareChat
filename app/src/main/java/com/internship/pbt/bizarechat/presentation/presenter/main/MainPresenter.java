@@ -13,4 +13,10 @@ public interface MainPresenter {
 
     void inviteFriends();
 
+    //void getDialogsCount();
+
+    void onPublicTab();
+
+    void onPrivateTab();
+
 }

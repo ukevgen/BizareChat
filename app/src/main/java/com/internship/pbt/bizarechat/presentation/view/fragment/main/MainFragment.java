@@ -13,7 +13,7 @@ import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.BaseFragment;
 
-public class MainFragment extends BaseFragment implements MainView { //TODO Change to better name
+public class MainFragment extends BaseFragment implements MainView {
 
     private Button logoutTestButton;
     private MainPresenter mainPresenter;

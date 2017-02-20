@@ -55,10 +55,10 @@ public interface RegistrationView extends LoadDataView {
 
     void showIsAvatarUploadedMessage();
 
-    void showTooLargeImage();
-
     void showUserLinkedWithFacebook();
 
-    public String getStringFromRes(int r);
+    void showTooLargeImage();
+
+    String getStringFromRes(int r);
 
 }

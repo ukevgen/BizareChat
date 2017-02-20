@@ -58,7 +58,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="chat">CHAT</string>
     <string name="search_title">Search</string>
-    <string name="there_are_no_chats_yet">There are no chats yet.</string>
+    <string name="there_are_no_chats_yet">There are no dialogs yet.</string>
     <string name="main_invite_friends"><u>Invite friends</u></string>
     <string name="main_and_start_a_new_chat">\u0020and start a new chat</string>
     <string name="chat_name">CHAT NAME</string>
@@ -74,6 +74,8 @@
     <string name="no_friends_error">Please add Friends first</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="you_have_no_permissions_for_edit_this_chat">You have no permissions for edit this chat</string>
+    <string name="successfully_edited">Successfully edited</string>
     <string name="select_members">SELECT MEMBERS</string>
     <string name="save">SAVE</string>
     <string name="friend_name">Friend name</string>

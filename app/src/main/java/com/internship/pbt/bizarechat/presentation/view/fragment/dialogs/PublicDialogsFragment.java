@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.presentation.view.fragment.publicChat;
+package com.internship.pbt.bizarechat.presentation.view.fragment.dialogs;
 
 
 import android.os.Bundle;
@@ -13,19 +13,28 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
-import com.internship.pbt.bizarechat.presentation.presenter.chats.PublicChatPresenter;
+import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
-public class PublicChatFragment extends MvpAppCompatFragment implements PublicChatView {
+public class PublicDialogsFragment extends MvpAppCompatFragment implements DialogsView {
+
     @InjectPresenter
-    PublicChatPresenter presenter;
+    DialogsPresenterImp presenter;
 
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
 
     @ProvidePresenter
-    PublicChatPresenter provideChatPresenter() {
-        return new PublicChatPresenter(BizareChatApp.getInstance().getDaoSession());
+    DialogsPresenterImp provideNewDialogsPresenter() {
+        return new DialogsPresenterImp(BizareChatApp.getInstance().getDaoSession(),
+                DialogsType.ONE);
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -33,22 +42,24 @@ public class PublicChatFragment extends MvpAppCompatFragment implements PublicCh
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_dialogs, container, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView = (RecyclerView) view.findViewById(R.id.users_users_container);
+        recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
+
+        presenter.loadDialogs();
+
         return view;
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void showDialogs() {
+        recyclerView.setAdapter(presenter.getAdapter());
     }
 
-    public static PublicChatFragment newInstance() {
-        PublicChatFragment fragment = new PublicChatFragment();
-        return fragment;
+    @Override
+    public void updateDialogs() {
+
     }
-
-
 }
