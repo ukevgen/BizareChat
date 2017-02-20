@@ -18,15 +18,13 @@ import retrofit2.http.QueryMap;
 import rx.Observable;
 
 public interface DialogsService {
-    @GET("chat/Dialog.json")
-    Observable<AllDialogsResponse> getAllDialogs(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader);
-
     @Headers("Content-Type: application/json")
     @PUT("/chat/Dialog/{dialog_id}.json")
     Observable<DialogUpdateResponseModel> updateDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                                        @Path("dialog_id") String dialogId,
                                                        @Body DialogUpdateRequestModel updateRequestModel);
 
+    @GET("/chat/Dialog.json")
     Observable<AllDialogsResponse> getDialogs(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                               @QueryMap Map<String, String> parameters);
 }
