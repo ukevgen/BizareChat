@@ -90,4 +90,5 @@
     <string name="action_filter">Filter</string>
     <string name="users_screen_search_hint">Find users...</string>
     <string name="users_screen_filter_hint">Filter users...</string>
+    <string name="delete">Delete</string>
 </resources>

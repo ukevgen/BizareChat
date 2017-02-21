@@ -83,7 +83,9 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
 
     @Override
     public void showDialogs() {
-
+        if (presenter.getAdapter().getItemCount() == 0)
+            getActivity().findViewById(R.id.layout_chat_empty).setVisibility(View.VISIBLE);
+        recyclerView.setAdapter(presenter.getAdapter());
     }
 
     @Override
@@ -93,6 +95,6 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
 
     @Override
     public void onDialogDelete(int position) {
-        presenter.deleteDialog(position);
+        //presenter.deleteDialog(position);
     }
 }
