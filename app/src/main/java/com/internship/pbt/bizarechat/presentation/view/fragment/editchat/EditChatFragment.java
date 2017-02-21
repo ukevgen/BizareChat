@@ -67,7 +67,8 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
                         new DialogsDataRepository(BizareChatApp.getInstance().getDialogsService())),
                 new GetAllUsersUseCase(
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
-                new GetPhotoUseCase(new ContentDataRepository(
+                new GetPhotoUseCase(
+                        new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
                         CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
