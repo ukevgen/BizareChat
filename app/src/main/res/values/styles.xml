@@ -81,6 +81,12 @@
         <item name="android:background">@color/image_chooser_dialog_background</item>
     </style>
 
+    <style name="AlertDialogConfirmStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/button_disabled_text</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/button_sign_in_pressed</item>
+    </style>
+
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:layout_width">@dimen/forgot_password_width</item>
         <item name="android:layout_height">@dimen/forgot_password_height</item>
