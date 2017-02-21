@@ -47,8 +47,6 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        presenter.loadDialogs();
-
         return view;
     }
 
@@ -57,6 +55,14 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
         if (presenter.getAdapter().getItemCount() == 0)
             getActivity().findViewById(R.id.layout_chat_empty).setVisibility(View.VISIBLE);
         recyclerView.setAdapter(presenter.getAdapter());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        recyclerView.setAdapter(presenter.getAdapter()
+                .setContext(getActivity()));
+        presenter.loadDialogs();
     }
 
     @Override

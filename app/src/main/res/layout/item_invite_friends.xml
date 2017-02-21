@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:textSize="13dp"
         android:id="@+id/friend_email"
@@ -34,16 +34,16 @@
         android:layout_marginStart="8dp"
         android:src="@drawable/user_icon" />
 
-    <CheckBox
 
-        android:textColor="@color/colorPrimaryDark"
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/check_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
         android:layout_alignTop="@+id/friend_name"
         android:layout_alignParentEnd="true"
-        android:checked="false" />
+        android:checked="false"
+        app:buttonTint="@color/colorPrimary"/>
 
 
 </RelativeLayout>
