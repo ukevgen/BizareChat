@@ -63,26 +63,25 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
             public void onNext(AllUsersResponse response) {
                 UserModel user;
                 int insertCounter = 0;
-                for(AllUsersResponse.Item item : response.getItems()){
+                for (AllUsersResponse.Item item : response.getItems()) {
                     user = item.getUser();
 
-                    if(user.getUserId().equals(currentUserId))
+                    if (user.getUserId().equals(currentUserId))
                         continue;
 
                     users.add(user);
                     insertCounter++;
 
-                    if(user.getBlobId() != null){
-                        getAndAddPhoto(users.size()-1, user.getUserId(), user.getBlobId());
-                    } else{
+                    if (user.getBlobId() != null) {
+                        getAndAddPhoto(users.size() - 1, user.getUserId(), user.getBlobId());
+                    } else {
                         usersPhotos.put(user.getUserId(), null);
                     }
                 }
-                if(usersCount == 0) {
+                if (usersCount == 0) {
                     usersCount = response.getTotalEntries();
-                }
-                else{
-                    adapter.notifyItemRangeInserted(users.size()-insertCounter, insertCounter);
+                } else {
+                    adapter.notifyItemRangeInserted(users.size() - insertCounter, insertCounter);
                 }
             }
         });

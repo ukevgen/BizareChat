@@ -16,10 +16,12 @@ public class UserDataRepository implements UserRepository {
         this.userService = userService;
     }
 
+    @Override
     public Observable<Response<Void>> resetUserPassword(String email){
         return userService.resetUserPassword(UserToken.getInstance().getToken(), email);
     }
 
+    @Override
     public Observable<AllUsersResponse> getAllUsers(Integer page){
         return userService.getAllUsers(
                 UserToken.getInstance().getToken(),
@@ -28,7 +30,12 @@ public class UserDataRepository implements UserRepository {
                 ApiConstants.ORDER_ASC_FULL_NAME);
     }
 
-
-
-
+    @Override
+    public Observable<AllUsersResponse> getUsersByFullName(Integer page, String query){
+        return userService.getUsersByFullName(
+                UserToken.getInstance().getToken(),
+                page,
+                ApiConstants.USERS_PER_PAGE,
+                query);
+    }
 }

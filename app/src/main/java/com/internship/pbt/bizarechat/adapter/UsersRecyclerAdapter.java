@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.adapter.filters.UsersSearchFilter;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdapter.UserHolder>{
+    private UsersSearchFilter filter;
     private List<UserModel> users;
     private Map<Long, Bitmap> usersPhotos;
     private Context context;
@@ -25,6 +27,7 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     public UsersRecyclerAdapter(List<UserModel> users, Map<Long, Bitmap> usersPhotos) {
         this.users = users;
         this.usersPhotos = usersPhotos;
+        filter = new UsersSearchFilter(users, this);
     }
 
     public UsersRecyclerAdapter setContext(Context context) {
@@ -38,6 +41,14 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
                 .inflate(R.layout.users_recycler_item, parent, false);
 
         return new UserHolder(view);
+    }
+
+    public void setUsers(List<UserModel> users) {
+        this.users = users;
+    }
+
+    public void filterList(String value){
+        filter.filter(value);
     }
 
     @Override

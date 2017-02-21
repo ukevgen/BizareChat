@@ -25,5 +25,10 @@ public interface UserService {
                                              @Query("per_page") Integer perPage,
                                              @Query("order") String order);
 
-
+    @GET("/users/by_full_name.json")
+    @Headers("QuickBlox-REST-API-Version: 0.1.0")
+    Observable<AllUsersResponse> getUsersByFullName(@Header(ApiConstants.TOKEN_HEADER_NAME) String token,
+                                                    @Query("page") Integer page,
+                                                    @Query("per_page") Integer perPage,
+                                                    @Query("full_name") String query);
 }
