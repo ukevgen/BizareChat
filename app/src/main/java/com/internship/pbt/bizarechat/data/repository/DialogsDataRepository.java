@@ -7,6 +7,8 @@ import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateReques
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
 
+import java.util.HashMap;
+
 import rx.Observable;
 
 public class DialogsDataRepository implements DialogsRepository{
@@ -18,7 +20,7 @@ public class DialogsDataRepository implements DialogsRepository{
 
     @Override
     public Observable<AllDialogsResponse> getAllDialogs() {
-        return dialogsService.getDialogs(UserToken.getInstance().getToken(), null);
+        return dialogsService.getDialogs(UserToken.getInstance().getToken(), new HashMap<>());
     }
 
     @Override

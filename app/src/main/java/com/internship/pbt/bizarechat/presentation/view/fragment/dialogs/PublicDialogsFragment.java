@@ -13,11 +13,13 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
-public class PublicDialogsFragment extends MvpAppCompatFragment implements DialogsView {
+public class PublicDialogsFragment extends MvpAppCompatFragment
+        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback{
 
     @InjectPresenter
     DialogsPresenterImp presenter;
@@ -47,19 +49,29 @@ public class PublicDialogsFragment extends MvpAppCompatFragment implements Dialo
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        presenter.loadDialogs();
-
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        recyclerView.setAdapter(presenter.getAdapter()
+                .setContext(getActivity()));
+        presenter.loadDialogs();
+    }
 
     @Override
     public void showDialogs() {
-        recyclerView.setAdapter(presenter.getAdapter());
+
     }
 
     @Override
     public void updateDialogs() {
 
+    }
+
+    @Override
+    public void onDialogDelete(int position) {
+        presenter.deleteDialog(position);
     }
 }

@@ -105,4 +105,12 @@ public class CurrentUser implements AuthStore {
     public void setFirebaseToken(String token){
         cache.putFirebaseToken(token);
     }
+
+    public boolean isSubscribed() {
+        return cache.isSubscribed();
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        cache.putIsSubscribed(subscribed);
+    }
 }

@@ -1,25 +1,44 @@
 package com.internship.pbt.bizarechat.adapter;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.daimajia.swipe.util.Attributes;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DialogsRecyclerViewAdapter extends RecyclerView.Adapter<DialogsRecyclerViewAdapter.DialogsHolder> {
-
+public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecyclerViewAdapter.DialogsHolder> {
+    private Context context;
     private List<DialogModel> dialogs;
+    private Map<String, Bitmap> dialogPhotos;
     OnNewMessageCallback newMessageCallback;
-    DialogDelete dialogDelete;
-    DialogClick dialogClick;
+    OnDialogDeleteCallback onDialogDeleteCallback;
+    OnDialogClickCallback onDialogClickCallback;
+
+    public DialogsRecyclerViewAdapter(List<DialogModel> dialogs, Map<String, Bitmap> dialogPhotos) {
+        this.dialogs = dialogs;
+        this.dialogPhotos = dialogPhotos;
+        mItemManger.setMode(Attributes.Mode.Single);
+    }
+
+    public DialogsRecyclerViewAdapter setContext(Context context) {
+        this.context = context;
+        return this;
+    }
 
     @Override
     public DialogsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,67 +50,80 @@ public class DialogsRecyclerViewAdapter extends RecyclerView.Adapter<DialogsRecy
 
     @Override
     public void onBindViewHolder(DialogsHolder holder, int position) {
-        holder.setDialogClick(dialogClick);
-        holder.setDialogDelete(dialogDelete);
-        holder.setNewMessageCallback(newMessageCallback);
-        holder.setPosition(position);
-        holder.mLastMessage.setText(dialogs.get(position).getLastMessage());
-        holder.mLastMessageDate.setText(dialogs.get(position).getLastMessage());
-        holder.mMessageAuthor.setText(dialogs.get(position).getLastMessageUserId());
-        holder.mNewMessageIndicator.setText(dialogs.get(position).getUnreadMessagesCount());
-        holder.mTitle.setText(dialogs.get(position).getName());
+        DialogModel dialog = dialogs.get(position);
+        holder.mLastMessage.setText(dialog.getLastMessage());
+        holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageDateSent()));
+        holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
+        holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+        holder.mTitle.setText(dialog.getName());
+        holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 
+        Bitmap photo = dialogPhotos.get(dialog.getDialogId());
+        if(photo != null)
+            holder.imageView.setImageBitmap(photo);
+        else
+            holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
 
-        // TODO implement logic
+        holder.deleteButton.setOnClickListener(
+                (View view) -> {
+                    onDialogDeleteCallback.onDialogDelete(position);
+                    mItemManger.removeShownLayouts(holder.swipeLayout);
+                    dialogs.remove(position);
+                    dialogPhotos.remove(dialog.getDialogId());
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, dialogs.size());
+                    mItemManger.closeAllItems();
+                });
+
+        mItemManger.bindView(holder.itemView, position);
+    }
+
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.chats_item_swipe_layout;
     }
 
     @Override
     public int getItemCount() {
-        return dialogs == null ? 0 : dialogs.size();
+        return dialogs.size();
     }
 
     public interface OnNewMessageCallback {
         void onNewMessageCallback();
     }
 
-    public interface DialogClick {
-        void chatClick();
+    public interface OnDialogClickCallback {
+        void onDialogClick();
     }
 
-    public interface DialogDelete {
-        void chatDelete();
+    public interface OnDialogDeleteCallback {
+        void onDialogDelete(int position);
     }
-
 
     public DialogsRecyclerViewAdapter setNewMessageCallback(OnNewMessageCallback callback) {
         this.newMessageCallback = callback;
         return this;
     }
 
-    public DialogsRecyclerViewAdapter setDialogDelete(DialogDelete dialogDelete) {
-        this.dialogDelete = dialogDelete;
+    public DialogsRecyclerViewAdapter setOnDialogDeleteCallback(OnDialogDeleteCallback onDialogDeleteCallback) {
+        this.onDialogDeleteCallback = onDialogDeleteCallback;
         return this;
     }
 
-    public DialogsRecyclerViewAdapter setDialogClick(DialogClick dialogClick) {
-        this.dialogClick = dialogClick;
+    public DialogsRecyclerViewAdapter setOnDialogClickCallback(OnDialogClickCallback onDialogClickCallback) {
+        this.onDialogClickCallback = onDialogClickCallback;
         return this;
     }
-
-    public void setDialogs(List<DialogModel> dialogs) {
-        this.dialogs = dialogs;
-    }
-
 
     public static class DialogsHolder extends RecyclerView.ViewHolder {
+        SwipeLayout swipeLayout;
+        Button deleteButton;
         CircleImageView imageView;
-        int position;
         TextView mMessageAuthor,
                 mLastMessage,
                 mLastMessageDate,
                 mNewMessageIndicator,
                 mTitle;
-
 
         public DialogsHolder(View itemView) {
             super(itemView);
@@ -101,44 +133,8 @@ public class DialogsRecyclerViewAdapter extends RecyclerView.Adapter<DialogsRecy
             mMessageAuthor = (TextView) itemView.findViewById(R.id.chats_item_last_message_author);
             imageView = (CircleImageView) itemView.findViewById(R.id.chats_item_chat_image);
             mTitle = (TextView) itemView.findViewById(R.id.chats_item_name);
-
-        }
-
-        public DialogsHolder setPosition(int position) {
-            this.position = position;
-            return this;
-        }
-
-        public DialogsHolder setNewMessageCallback(OnNewMessageCallback messageCallback) {
-            return this;
-        }
-
-        public DialogsHolder setDialogDelete(DialogDelete dialogDelete) {
-            return this;
-        }
-
-        public DialogsHolder setDialogClick(DialogClick dialogClick) {
-            return this;
-        }
-
-        public void setImageView(CircleImageView imageView) {
-            this.imageView = imageView;
-        }
-
-        public void setmMessageAuthor(TextView mMessageAuthor) {
-            this.mMessageAuthor = mMessageAuthor;
-        }
-
-        public void setmLastMessage(TextView mLastMessage) {
-            this.mLastMessage = mLastMessage;
-        }
-
-        public void setmLastMessageDate(TextView mLastMessageDate) {
-            this.mLastMessageDate = mLastMessageDate;
-        }
-
-        public void setmNewMessageIndicator(TextView mNewMessageIndicator) {
-            this.mNewMessageIndicator = mNewMessageIndicator;
+            swipeLayout = (SwipeLayout)itemView.findViewById(R.id.chats_item_swipe_layout);
+            deleteButton = (Button)itemView.findViewById(R.id.chats_item_delete_button);
         }
     }
 }
