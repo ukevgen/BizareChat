@@ -10,4 +10,5 @@ public interface UserRepository {
 
     Observable<AllUsersResponse> getAllUsers(Integer page);
 
+    Observable<AllUsersResponse> getUsersByFullName(Integer page, String query);
 }

@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,6 +23,7 @@ import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPrese
 
 public class PublicDialogsFragment extends MvpAppCompatFragment
         implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback{
+    private final int menuSearchId = 100;
 
     @InjectPresenter
     DialogsPresenterImp presenter;
@@ -48,6 +52,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -58,6 +63,22 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         recyclerView.setAdapter(presenter.getAdapter()
                 .setContext(getActivity()));
         presenter.loadDialogs();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(0, menuSearchId, 0, "Search").setIcon(R.drawable.search_icon)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == menuSearchId){
+            //TODO search logic
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

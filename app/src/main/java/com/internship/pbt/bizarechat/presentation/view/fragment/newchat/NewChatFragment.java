@@ -32,6 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewChatFragment extends MvpAppCompatFragment implements
         NewChatView, View.OnClickListener, NewChatUsersRecyclerAdapter.OnCheckBoxClickListener {
+
     @InjectPresenter
     NewChatPresenterImpl presenter;
 
@@ -108,14 +109,10 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
+        getActivity().supportInvalidateOptionsMenu();
+        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
         toolbarTitle.setText(R.string.new_chat_title);
         recyclerView.setAdapter(presenter.getAdapter().setListener(this).setContext(getActivity()));
         presenter.getAllUsers();
