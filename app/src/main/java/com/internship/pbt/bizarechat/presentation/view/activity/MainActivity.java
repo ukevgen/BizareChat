@@ -126,16 +126,23 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     private void setUserInformation() {
+
+        View headerView = mNavigationView.getHeaderView(0);
+
+        TextView email = (TextView) headerView.findViewById(R.id.header_email);
+        CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail();
+        email.setText(CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail());
+
         //TextView login = (TextView) findViewById(R.id.user_login);
         //login.setText(CacheSharedPreferences.getInstance());
-        TextView email = (TextView) findViewById(R.id.email);
-        email.setText(CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail());
-        CircleImageView avatar = (CircleImageView) findViewById(R.id.user_pic);
+
+        CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
-        Bitmap bitmap = converter.decodeBase64(CacheSharedPreferences
-                .getInstance(getApplicationContext())
-                .getStringAvatar());
+        String s = CacheSharedPreferences.getInstance(getApplicationContext()).getStringAvatar();
+        Bitmap bitmap = converter.decodeBase64(s);
+        if (bitmap != null)
+            avatar.setImageBitmap(bitmap);
 
     }
 

@@ -45,6 +45,7 @@ public class CacheSharedPreferences {
 
     public void putStringAvatar(String s) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, s);
+        mEditor.apply();
     }
 
     public String getStringAvatar() {

@@ -39,26 +39,26 @@ public class Converter {
         return Compressor.getDefault(context).compressToFile(src);
     }
 
-    public String convertPhotoToString(Uri uri) {
-        Bitmap bitmap;
+    public String encodeAvatarTobase64(Uri uri) {
+        Bitmap bitmap = null;
         String imageEncoded = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
             imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return imageEncoded;
     }
 
-    public Bitmap decodeBase64(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory
-                .decodeByteArray(decodedByte, 0, decodedByte.length);
-    }
+    public Bitmap decodeBase64(String stringAvatar) {
+        byte[] decodedByte = new byte[0];
+        if (stringAvatar != null)
+            decodedByte = Base64.decode(stringAvatar, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 
+    }
 }

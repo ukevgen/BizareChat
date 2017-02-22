@@ -97,7 +97,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onNext(Object o) {
-                queryBuilder.removeDialog(adapter.getDialogs().get(position));
+              //  queryBuilder.removeDialog(adapter.getDialogs().get(position));
             }
         });
 
