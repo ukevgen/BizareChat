@@ -47,6 +47,10 @@ public class CacheSharedPreferences {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, s);
     }
 
+    public String getStringAvatar() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, null);
+    }
+
     public Long getAccountAvatarBlobId() {
         long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, -1);
         if (id == -1)

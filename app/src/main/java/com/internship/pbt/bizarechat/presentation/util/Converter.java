@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat.presentation.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -52,6 +53,12 @@ public class Converter {
         }
 
         return imageEncoded;
+    }
+
+    public Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
 }
