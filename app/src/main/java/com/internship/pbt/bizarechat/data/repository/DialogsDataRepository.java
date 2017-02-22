@@ -9,12 +9,13 @@ import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
 
 import java.util.HashMap;
 
+import retrofit2.Response;
 import rx.Observable;
 
-public class DialogsDataRepository implements DialogsRepository{
+public class DialogsDataRepository implements DialogsRepository {
     private DialogsService dialogsService;
 
-    public DialogsDataRepository(DialogsService dialogsService){
+    public DialogsDataRepository(DialogsService dialogsService) {
         this.dialogsService = dialogsService;
     }
 
@@ -26,5 +27,10 @@ public class DialogsDataRepository implements DialogsRepository{
     @Override
     public Observable<DialogUpdateResponseModel> updateDialog(String dialogId, DialogUpdateRequestModel updateRequestModel) {
         return dialogsService.updateDialog(UserToken.getInstance().getToken(), dialogId, updateRequestModel);
+    }
+
+    @Override
+    public Observable<Response<Void>> deleteDialogForCurrentUser(String dialogId) {
+        return dialogsService.geleteDialog(UserToken.getInstance().getToken(), dialogId);
     }
 }

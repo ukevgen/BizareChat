@@ -15,11 +15,13 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
 public class PublicDialogsFragment extends MvpAppCompatFragment
-        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback{
+        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback {
 
     @InjectPresenter
     DialogsPresenterImp presenter;
@@ -29,7 +31,10 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
 
     @ProvidePresenter
     DialogsPresenterImp provideNewDialogsPresenter() {
-        return new DialogsPresenterImp(BizareChatApp.getInstance().getDaoSession(),
+        return new DialogsPresenterImp(
+                new DeleteDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
+                BizareChatApp.getInstance().getDaoSession(),
                 DialogsType.ONE);
     }
 

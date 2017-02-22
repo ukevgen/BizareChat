@@ -8,7 +8,9 @@ import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateReques
 
 import java.util.Map;
 
+import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -27,4 +29,9 @@ public interface DialogsService {
     @GET("/chat/Dialog.json")
     Observable<AllDialogsResponse> getDialogs(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                               @QueryMap Map<String, String> parameters);
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/chat/Dialog/{dialog_id}.json")
+    Observable<Response<Void>> geleteDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                            @Path("dialog_id") String dialogId);
 }
