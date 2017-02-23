@@ -81,6 +81,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
     @Override
     public void onDialogDelete(int position) {
+        DialogModel model = adapter.getDialogs().get(position);
         String dialogId = adapter.getDialogs().get(position).getDialogId();
         deleteDialogUseCase.setDialogId(dialogId);
 
@@ -97,7 +98,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onNext(Object o) {
-              //  queryBuilder.removeDialog(adapter.getDialogs().get(position));
+                queryBuilder.removeDialog(model);
             }
         });
 

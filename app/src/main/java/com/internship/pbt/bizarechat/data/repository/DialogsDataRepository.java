@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.repository;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
@@ -32,5 +33,11 @@ public class DialogsDataRepository implements DialogsRepository {
     @Override
     public Observable<Response<Void>> deleteDialogForCurrentUser(String dialogId) {
         return dialogsService.geleteDialog(UserToken.getInstance().getToken(), dialogId);
+    }
+
+    @Override
+    public Observable<CreateDialogResponse> createDialog(String type, String name, String occupants_ids) {
+        return dialogsService.createDialog(UserToken.getInstance().getToken(),
+                type, name, occupants_ids);
     }
 }

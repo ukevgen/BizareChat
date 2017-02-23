@@ -63,11 +63,13 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        recyclerView.setAdapter(presenter.getAdapter()
-                .setContext(getActivity()));
-        presenter.loadDialogs();
+    public void onResume() {
+        super.onResume();
+        if (recyclerView.getAdapter() == null) {
+            recyclerView.setAdapter(presenter.getAdapter()
+                    .setContext(getActivity()));
+            presenter.loadDialogs();
+        }
     }
 
     @Override

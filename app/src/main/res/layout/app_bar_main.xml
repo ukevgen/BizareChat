@@ -54,7 +54,7 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:gravity="center"
-        >
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/icon_main"
@@ -83,9 +83,9 @@
 
             <TextView
                 android:id="@+id/invite_friends"
-                android:onClick="onClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onClick"
                 android:text="@string/main_invite_friends"
                 android:textColor="@color/main_screen_invite_friends_text" />
 

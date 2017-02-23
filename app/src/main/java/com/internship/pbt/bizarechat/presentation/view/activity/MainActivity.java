@@ -139,7 +139,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
-        String s = CacheSharedPreferences.getInstance(getApplicationContext()).getStringAvatar();
+        String s = CacheSharedPreferences.getInstance(getApplication()).getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)
             avatar.setImageBitmap(bitmap);
@@ -325,6 +325,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             showNavigationElements();
         }
+
         super.onBackPressed();
     }
 
@@ -453,4 +454,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         EventBus.getDefault().unregister(this);
 //        unbindMessageService();
     }
+
+
 }

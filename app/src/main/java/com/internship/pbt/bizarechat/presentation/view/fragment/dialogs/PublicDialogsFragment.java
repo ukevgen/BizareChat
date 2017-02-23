@@ -57,12 +57,22 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         return view;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
-        recyclerView.setAdapter(presenter.getAdapter()
-                .setContext(getActivity()));
-        presenter.loadDialogs();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recyclerView.getAdapter() == null) {
+            recyclerView.setAdapter(presenter.getAdapter()
+                    .setContext(getActivity()));
+            presenter.loadDialogs();
+        }
     }
 
     @Override
@@ -76,6 +86,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     public void updateDialogs() {
 
     }
+
 
     @Override
     public void onDialogDelete(int position) {

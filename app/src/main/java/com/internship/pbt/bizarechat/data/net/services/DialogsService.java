@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.data.net.services;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
@@ -14,6 +15,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -34,4 +36,12 @@ public interface DialogsService {
     @DELETE("/chat/Dialog/{dialog_id}.json")
     Observable<Response<Void>> geleteDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                             @Path("dialog_id") String dialogId);
+
+    @Headers("Content-Type: application/json")
+    @POST("/chat/Dialog.json")
+    Observable<CreateDialogResponse> createDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                                  @Path("type") String type,
+                                                  @Path("name") String name,
+                                                  @Path("occupants_ids") String occupants_ids);
+
 }

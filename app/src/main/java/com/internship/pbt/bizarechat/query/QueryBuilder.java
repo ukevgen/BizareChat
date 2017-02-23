@@ -55,9 +55,11 @@ public class QueryBuilder {
     }
 
     public boolean removeDialog(DialogModel model) {
-        daoSession
-                .getDialogModelDao()
-                .delete(model);
+        DialogModelDao modelDao = daoSession.getDialogModelDao();
+        modelDao.deleteByKey(model.getDialogId());
+        daoSession.getDialogModelDao().count();
+        daoSession.clear();
+
         return true;
     }
 }

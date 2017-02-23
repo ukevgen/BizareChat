@@ -84,7 +84,7 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_chat, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.edit_chat_members_container);
-        chatImageView = (CircleImageView) view.findViewById(R.id.edit_chat_image); // TODO insert chat image by default
+        chatImageView = (CircleImageView) view.findViewById(R.id.edit_chat_image);
         chatNameEditText = (TextInputEditText) view.findViewById(R.id.new_chat_name_edit); // TODO insert chatName by default
         saveButton = (Button) view.findViewById(R.id.edit_chat_button_create);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -141,7 +141,7 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
         Glide.with(this).load(file).centerCrop().into(chatImageView);
     }
 
-    public void showPictureChooser() {
+    private void showPictureChooser() {
         final CharSequence[] items = {getText(R.string.device_camera),
                 getText(R.string.photo_gallery)};
         AlertDialog.Builder builder =

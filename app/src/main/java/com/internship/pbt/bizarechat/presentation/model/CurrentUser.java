@@ -117,4 +117,8 @@ public class CurrentUser implements AuthStore {
     public void setStringAvatar(String s) {
         cache.putStringAvatar(s);
     }
+
+    public String getStringAvatar() {
+        return cache.getStringAvatar();
+    }
 }
