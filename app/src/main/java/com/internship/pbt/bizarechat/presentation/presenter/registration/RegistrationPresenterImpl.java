@@ -210,7 +210,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
+            currentUser.setStringAvatar(converter.encodeAvatarTobase64(uri));
             loadAvatar();
+
         } else {
             showTooLargeImage();
             fileToUpload = null;
@@ -279,6 +281,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void onRegistrationSuccess() {
         mRegisterView.hideLoading();
         currentUser.setAuthorized(true);
+
         //mRegisterView.goToMainActivity();
         mRegisterView.onRegistrationSuccess();
     }

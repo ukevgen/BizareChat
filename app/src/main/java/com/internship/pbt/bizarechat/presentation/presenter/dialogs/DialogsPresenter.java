@@ -10,5 +10,4 @@ public interface DialogsPresenter {
 
     void loadDialogs();
 
-    void deleteUserFromCurrentDialogOnServer();
 }
