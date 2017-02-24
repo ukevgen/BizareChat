@@ -18,6 +18,12 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
+import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
@@ -33,7 +39,15 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
 
     @ProvidePresenter
     DialogsPresenterImp provideNewDialogsPresenter() {
-        return new DialogsPresenterImp(BizareChatApp.getInstance().getDaoSession(),
+        return new DialogsPresenterImp(
+                new DeleteDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
+                new GetPhotoUseCase(new ContentDataRepository(
+                        BizareChatApp.getInstance().getContentService(),
+                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
+                        CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
+                BizareChatApp.getInstance().getDaoSession(),
+
                 DialogsType.ONE);
     }
 
@@ -57,12 +71,22 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         return view;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
-        recyclerView.setAdapter(presenter.getAdapter()
-                .setContext(getActivity()));
-        presenter.loadDialogs();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recyclerView.getAdapter() == null) {
+            recyclerView.setAdapter(presenter.getAdapter()
+                    .setContext(getActivity()));
+            presenter.loadDialogs();
+        }
     }
 
     @Override
@@ -92,6 +116,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     public void updateDialogs() {
 
     }
+
 
     @Override
     public void onDialogDelete(int position) {

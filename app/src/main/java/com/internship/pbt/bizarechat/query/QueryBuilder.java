@@ -4,7 +4,11 @@ import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 
+import org.greenrobot.greendao.query.DeleteQuery;
+
 import java.util.List;
+
+
 
 /**
  * Created by ukevgen on 21.02.2017.
@@ -55,9 +59,20 @@ public class QueryBuilder {
     }
 
     public boolean removeDialog(DialogModel model) {
-        daoSession
+
+        DeleteQuery<DialogModel> deleteQuery = daoSession
                 .getDialogModelDao()
-                .delete(model);
+                .queryBuilder()
+                .where(DialogModelDao.Properties.DialogId.eq(model.getDialogId()))
+                .buildDelete();
+        deleteQuery.executeDeleteWithoutDetachingEntities();
+
+        /*DialogModelDao modelDao = daoSession.getDialogModelDao();
+
+        modelDao.deleteByKey(model.getDialogId());
+        daoSession.getDialogModelDao().count();
+        daoSession.clear();*/
+
         return true;
     }
 }
