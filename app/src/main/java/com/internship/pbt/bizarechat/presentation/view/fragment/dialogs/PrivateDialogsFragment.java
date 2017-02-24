@@ -14,8 +14,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.constans.DialogsType;
+import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
@@ -32,6 +36,10 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
         return new DialogsPresenterImp(
                 new DeleteDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
                         .getDialogsService())),
+                new GetPhotoUseCase(new ContentDataRepository(
+                        BizareChatApp.getInstance().getContentService(),
+                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
+                        CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 BizareChatApp.getInstance().getDaoSession(),
                 DialogsType.TRHEE);
     }

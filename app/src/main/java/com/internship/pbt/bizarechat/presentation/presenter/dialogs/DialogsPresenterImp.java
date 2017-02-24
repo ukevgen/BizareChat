@@ -9,6 +9,7 @@ import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
 import com.internship.pbt.bizarechat.query.QueryBuilder;
 
@@ -27,14 +28,17 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private QueryBuilder queryBuilder;
     private DialogsRecyclerViewAdapter adapter;
     private DeleteDialogUseCase deleteDialogUseCase;
+    private GetPhotoUseCase photoUseCase;
     private int dialogsType;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
 
 
     public DialogsPresenterImp(DeleteDialogUseCase deleteDialogUseCase,
+                               GetPhotoUseCase photoUseCase,
                                DaoSession daoSession, int dialogsType) {
         this.deleteDialogUseCase = deleteDialogUseCase;
+        this.photoUseCase = photoUseCase;
         this.daoSession = daoSession;
         this.dialogsType = dialogsType;
         dialogs = new ArrayList<>();
@@ -70,6 +74,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                 buffer = queryBuilder.getPublicDialogs(dialogsType);
             }
             dialogs.addAll(buffer);
+            for (DialogModel d : buffer) {
+                // TODO  getAndAddPhoto(d.getDialogId(),d.getPhoto()); change getPhoto to int
+            }
         }
         adapter.notifyDataSetChanged();
         return dialogs;
@@ -101,6 +108,27 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                 queryBuilder.removeDialog(model);
             }
         });
-
     }
+
+
+    private void getAndAddPhoto(String dialogId, Integer blobId) {
+        photoUseCase.setBlobId(blobId);
+        photoUseCase.execute(new Subscriber<Bitmap>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(Bitmap bitmap) {
+                dialogPhotos.put(dialogId, bitmap);
+                //adapter.notifyItemChanged(position);
+            }
+        });
+    }
+
 }
