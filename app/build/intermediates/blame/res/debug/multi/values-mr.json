@@ -1,0 +1,368 @@
+[
+    {
+        "outputFile": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 169,
+                    "endOffset": 270
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 169,
+                        "endOffset": 220
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 275,
+                    "endColumn": 110,
+                    "endOffset": 381
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 225,
+                        "endColumn": 110,
+                        "endOffset": 331
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 386,
+                    "endColumn": 115,
+                    "endOffset": 497
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 336,
+                        "endColumn": 115,
+                        "endOffset": 447
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 502,
+                    "endColumn": 95,
+                    "endOffset": 593
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 452,
+                        "endColumn": 95,
+                        "endOffset": 543
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 598,
+                    "endColumn": 66,
+                    "endOffset": 660
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 548,
+                        "endColumn": 66,
+                        "endOffset": 610
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 665,
+                    "endColumn": 68,
+                    "endOffset": 729
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 615,
+                        "endColumn": 68,
+                        "endOffset": 679
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 734,
+                    "endColumn": 63,
+                    "endOffset": 793
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 684,
+                        "endColumn": 63,
+                        "endOffset": 743
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 798,
+                    "endColumn": 73,
+                    "endOffset": 867
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 748,
+                        "endColumn": 73,
+                        "endOffset": 817
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 872,
+                    "endColumn": 75,
+                    "endOffset": 943
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 822,
+                        "endColumn": 75,
+                        "endOffset": 893
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 948,
+                    "endColumn": 89,
+                    "endOffset": 1033
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 898,
+                        "endColumn": 89,
+                        "endOffset": 983
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1038,
+                    "endColumn": 77,
+                    "endOffset": 1111
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 988,
+                        "endColumn": 77,
+                        "endOffset": 1061
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1116,
+                    "endColumn": 77,
+                    "endOffset": 1189
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1066,
+                        "endColumn": 77,
+                        "endOffset": 1139
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1194,
+                    "endColumn": 88,
+                    "endOffset": 1278
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1144,
+                        "endColumn": 88,
+                        "endOffset": 1228
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1283,
+                    "endColumn": 101,
+                    "endOffset": 1380
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1233,
+                        "endColumn": 101,
+                        "endOffset": 1330
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1385,
+                    "endColumn": 63,
+                    "endOffset": 1444
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1335,
+                        "endColumn": 63,
+                        "endOffset": 1394
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1449,
+                    "endColumn": 70,
+                    "endOffset": 1515
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1399,
+                        "endColumn": 70,
+                        "endOffset": 1465
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1520,
+                    "endColumn": 142,
+                    "endOffset": 1658
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1470,
+                        "endColumn": 142,
+                        "endOffset": 1608
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1663,
+                    "endColumn": 201,
+                    "endOffset": 1860
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-basement\\10.2.0\\res\\values-mr\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 0,
+                        "startOffset": 285,
+                        "endColumn": 201,
+                        "endOffset": 486
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1865,
+                    "endColumn": 60,
+                    "endOffset": 1921
+                },
+                "from": {
+                    "file": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\values-mr\\values-mr.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1613,
+                        "endColumn": 60,
+                        "endOffset": 1669
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -6,4 +6,6 @@ public interface DialogsView extends MvpView {
     void showDialogs();
 
     void updateDialogs();
+
+
 }

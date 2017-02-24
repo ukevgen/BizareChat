@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/users_search_edit_text"
+    android:drawableEnd="@drawable/clear_icon"
+    android:hint="@string/users_screen_search_hint"
+    android:textColorHint="@color/white"
+    android:maxLines="1"
+    android:inputType="text"
+    android:imeOptions="actionSearch">
+
+</EditText>

@@ -1,12 +1,14 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
-import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
@@ -14,6 +16,7 @@ import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.repository.PushNotificationsRepository;
 import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -167,16 +170,12 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
                     Log.d("TAG", e.toString());
                 }
 
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onNext(AllDialogsResponse response) {
 
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
-                    //modelDao.insertOrReplaceInTx(response.getDialogModels());
-                    //response.getDialogModels().forEach(modelDao::insertOrReplace);
-                    for (DialogModel m : response.getDialogModels()) {
-                        modelDao.insertOrReplace(m);
-                        Log.d("TAG", modelDao.getAllColumns().toString());
-                    }
+                    modelDao.insertOrReplaceInTx(response.getDialogModels());
 
                 }
             });

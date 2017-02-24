@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\animator\\exit_to_right.xml",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\animator\\exit_to_right.xml"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\animator\\enter_from_right.xml",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\animator\\enter_from_right.xml"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\animator\\enter_from_left.xml",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\animator\\enter_from_left.xml"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\animator\\exit_to_left.xml",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\animator\\exit_to_left.xml"
+    }
+]

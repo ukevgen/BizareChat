@@ -1,0 +1,482 @@
+[
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_000.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_000.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\messenger_bubble_large_white.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\messenger_bubble_large_white.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_action_send_now.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\ic_action_send_now.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_menu_share_mtrl_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_menu_share_mtrl_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_divider_vertical.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_divider_vertical.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_black_48dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_black_48dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_black_bottomnub.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_black_bottomnub.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_primary_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_scrubber_primary_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_flags.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_flags.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_symbols_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_symbols_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_popup_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_popup_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\smiley.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\smiley.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_right_mtrl_dark.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_right_mtrl_dark.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_food.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_food.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_backspace_back_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_backspace_back_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_textfield_default_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_textfield_default_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_category_objects.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_category_objects.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_location_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_location_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_dark.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_dark.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_nature.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_nature.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_activity.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_activity.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attachments_arrow_reversed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attachments_arrow_reversed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_check_to_on_mtrl_015.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_check_to_on_mtrl_015.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_objects_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_objects_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_pressed_holo_dark.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_pressed_holo_dark.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_tab.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_tab.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_half_black_16dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_half_black_16dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_textfield_activated_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_textfield_activated_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_recent.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_recent.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\messenger_button_send_round_shadow.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\messenger_button_send_round_shadow.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_close.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_close.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_middle_mtrl_dark.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_middle_mtrl_dark.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_travel.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_travel.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_middle_mtrl_light.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_middle_mtrl_light.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_blue_background.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_blue_background.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_blue_bottomnub.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_blue_bottomnub.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_divider_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_divider_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\messenger_bubble_small_white.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\messenger_bubble_small_white.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_x.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_x.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_half_black_48dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_half_black_48dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_longpressed_holo.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_longpressed_holo.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_black_xout.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_black_xout.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_photo_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_photo_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_category_cars.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_category_cars.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_camera_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_camera_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_popup_active_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_popup_active_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_photo_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_photo_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_tab_active.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_tab_active.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_menu_copy_mtrl_am_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_menu_copy_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_people_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_people_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_button_icon_white.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_button_icon_white.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_tab_dark.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_tab_dark.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_blue_xout.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_blue_xout.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_check_to_on_mtrl_000.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_check_to_on_mtrl_000.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_black_16dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_black_16dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_divider_horizontal.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_divider_horizontal.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_symbols.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_symbols.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_more_front_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_more_front_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_radio_to_on_mtrl_000.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_nature_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_nature_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\leak_canary_icon.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.5\\res\\drawable-hdpi-v4\\leak_canary_icon.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_dark.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_dark.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_right_mtrl_light.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_right_mtrl_light.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_commit_search_api_mtrl_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_commit_search_api_mtrl_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_action_keyboard.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\ic_action_keyboard.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_radio_to_on_mtrl_015.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_radio_to_on_mtrl_015.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_button_like_icon_selected.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_button_like_icon_selected.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attachments_arrow.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attachments_arrow.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_tab_pressed.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_tab_pressed.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_people.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_people.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_category_punctuation.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_category_punctuation.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_recent_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_recent_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_menu_selectall_mtrl_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_menu_selectall_mtrl_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_half_black_36dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_more_front_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_more_front_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_popup_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_popup_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_top_divider.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_top_divider.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_objects.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_objects.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_category_people.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_category_people.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_travel_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_travel_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_focused_holo.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_focused_holo.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_spinner_mtrl_am_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_textfield_search_activated_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_button_send_icon_blue.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_button_send_icon_blue.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_category_nature.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_category_nature.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_switch_track_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_light.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_star_black_36dp.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_star_black_36dp.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_light.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_light.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_popup_background_mtrl_mult.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_popup_background_mtrl_mult.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_menu_hardkey_panel_mtrl_mult.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_menu_hardkey_panel_mtrl_mult.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_track_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_scrubber_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_camera_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_camera_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_button_icon_blue.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_button_icon_blue.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_food_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_food_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_backspace_front_pressed.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_backspace_front_pressed.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\keyboard_background_holo.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\keyboard_background_holo.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\messenger_bubble_large_blue.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\messenger_bubble_large_blue.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_list_pressed_holo_light.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_list_pressed_holo_light.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_menu_paste_mtrl_am_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_menu_paste_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\messenger_bubble_small_blue.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\messenger_bubble_small_blue.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_more_back_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_more_back_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_black_topnub.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_black_topnub.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_attach_location_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_attach_location_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_composer_popup_active_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_composer_popup_active_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_blue_topnub.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_blue_topnub.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_tooltip_black_background.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_tooltip_black_background.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\sym_keyboard_delete_holo_dark.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\sym_keyboard_delete_holo_dark.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\emoji_activity_focus.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\emoji_activity_focus.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\com_facebook_button_send_icon_white.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable-hdpi-v4\\com_facebook_button_send_icon_white.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable-hdpi-v4\\abc_scrubber_control_off_mtrl_alpha.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\orca_emoji_backspace_front_normal.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\hani.momanii.supernova_emoji_library\\supernova-emoji-library\\0.0.2\\res\\drawable-hdpi-v4\\orca_emoji_backspace_front_normal.png"
+    }
+]

@@ -1,0 +1,15 @@
+int attr dragEdge 0x7f010000
+int attr flingVelocity 0x7f010002
+int attr minDistRequestDisallowParent 0x7f010003
+int attr mode 0x7f010001
+int id bottom 0x7f020000
+int id left 0x7f020001
+int id normal 0x7f020004
+int id right 0x7f020002
+int id same_level 0x7f020005
+int id top 0x7f020003
+int[] styleable SwipeRevealLayout { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003 }
+int styleable SwipeRevealLayout_dragEdge 0
+int styleable SwipeRevealLayout_flingVelocity 2
+int styleable SwipeRevealLayout_minDistRequestDisallowParent 3
+int styleable SwipeRevealLayout_mode 1

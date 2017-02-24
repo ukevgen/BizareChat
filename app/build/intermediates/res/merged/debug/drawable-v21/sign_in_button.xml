@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:colorControlHighlight">
+    <item>
+        <selector>
+            <item android:state_enabled="false">
+                <shape android:shape="rectangle">
+                    <corners android:radius="@dimen/cardCornerRadius" />
+                    <solid android:color="@color/button_sign_in_disabled" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="@dimen/cardCornerRadius" />
+                    <solid android:color="@color/button_sign_in" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

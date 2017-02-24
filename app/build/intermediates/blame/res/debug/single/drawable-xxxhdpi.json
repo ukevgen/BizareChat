@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\userpic.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\userpic.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\fb_icon.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\fb_icon.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\incoming_message.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\incoming_message.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\logo_name.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\logo_name.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\outgoing_message.9.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\outgoing_message.9.png"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi\\logo.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable-xxxhdpi\\logo.png"
+    }
+]
