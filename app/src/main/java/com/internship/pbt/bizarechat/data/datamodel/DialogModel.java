@@ -10,11 +10,11 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 @Entity(nameInDb = "Dialog")
@@ -72,8 +72,8 @@ public class DialogModel {
 
     @Generated(hash = 866263801)
     public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent,
-            int lastMessageUserId, String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount,
-            String xmppRoomJid) {
+                       int lastMessageUserId, String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount,
+                       String xmppRoomJid) {
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -201,7 +201,7 @@ public class DialogModel {
             List<Integer> result = new ArrayList<>();
             databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
 
-            if(databaseValue.isEmpty()) return result;
+            if (databaseValue.isEmpty()) return result;
 
             for (String entry : databaseValue.split("\\s*,\\s*")) {
                 result.add(Integer.parseInt(entry));
@@ -236,10 +236,11 @@ public class DialogModel {
 
     public String getLastMessageTime() {
         SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
+        Format formatter = new SimpleDateFormat("dd/MM/yy");
         Date dt = new Date(lastMessageDateSent * 1000);
-        Date today = new Date();
-        String now = new SimpleDateFormat("dd/mm/yy", new Locale("en", "UA")).format(today).toString();
-        String messageDate = new SimpleDateFormat("dd/mm/yy", new Locale("en", "UA")).format(dt).toString();
+
+        String now = formatter.format(new Date());
+        String messageDate = formatter.format(dt);
         if (now.equals(messageDate))
             return localDateFormat.format(dt).toString();
         else

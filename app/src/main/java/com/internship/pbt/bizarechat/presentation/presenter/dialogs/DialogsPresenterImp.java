@@ -7,8 +7,8 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
-import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
+import com.internship.pbt.bizarechat.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,31 +17,33 @@ import java.util.Map;
 
 @InjectViewState
 public class DialogsPresenterImp extends MvpPresenter<DialogsView>
-        implements DialogsRecyclerViewAdapter.OnDialogDeleteCallback{
+        implements DialogsRecyclerViewAdapter.OnDialogDeleteCallback, DialogsPresenter {
     private static final int THREE = 3;
     private DaoSession daoSession;
+    private QueryBuilder queryBuilder;
     private DialogsRecyclerViewAdapter adapter;
     private int dialogsType;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
 
+
     public DialogsPresenterImp(DaoSession daoSession, int dialogsType) {
         this.daoSession = daoSession;
         this.dialogsType = dialogsType;
         dialogs = new ArrayList<>();
+        queryBuilder = QueryBuilder.getQueryBuilder(daoSession);
         dialogPhotos = new HashMap<>();
         adapter = new DialogsRecyclerViewAdapter(dialogs, dialogPhotos);
         adapter.setOnDialogDeleteCallback(this);
     }
 
+    @Override
     public void checkConnectionProblem() {
 
     }
 
-    public void deleteDialog(int position) {
 
-    }
-
+    @Override
     public void openDialog() {
 
     }
@@ -51,23 +53,18 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         getViewState().showDialogs();
     }
 
+    @Override
+    public void deleteUserFromCurrentDialogOnServer() {
+
+    }
+
     private List<DialogModel> getDialogsFromDao() {
         if (daoSession.getDialogModelDao().count() != 0) {
             List<DialogModel> buffer;
-            if (dialogsType != THREE) {
-                buffer = daoSession
-                        .getDialogModelDao()
-                        .queryBuilder()
-                        .where(DialogModelDao.Properties.Type.notEq(THREE))
-                        .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
-                        .list();
+            if (dialogsType == THREE) {
+                buffer = queryBuilder.getPrivateDialogs(THREE);
             } else {
-                buffer = daoSession
-                        .getDialogModelDao()
-                        .queryBuilder()
-                        .where(DialogModelDao.Properties.Type.eq(dialogsType))
-                        .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
-                        .list();
+                buffer = queryBuilder.getPublicDialogs(dialogsType);
             }
             dialogs.addAll(buffer);
         }
@@ -81,6 +78,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
     @Override
     public void onDialogDelete(int position) {
-
+        queryBuilder.removeDialog(adapter.getDialogs().get(position));
+        deleteUserFromCurrentDialogOnServer();
     }
 }

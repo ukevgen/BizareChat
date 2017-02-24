@@ -102,3 +102,4 @@ public class EditChatRecyclerViewAdapter extends RecyclerView.Adapter<EditChatRe
         void onCheckBoxClickPull(Long id);
     }
 }
+

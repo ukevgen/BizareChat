@@ -103,4 +103,5 @@
     <string name="no_web_apps_error">Please install web browser first</string>
     <string name="calls_unavailable_error">You cannot make calls from your device right now.</string>
     <string name="transition_user_full_name">userFullName</string>
+    <string name="delete">Delete</string>
 </resources>
