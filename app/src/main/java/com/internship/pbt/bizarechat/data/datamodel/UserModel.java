@@ -9,10 +9,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 
 @Entity(nameInDb = "User")
-public class UserModel {
-    @Id(autoincrement = true)
-    private long dbId;
-
+public class UserModel{
+    @Id
     @Property(nameInDb = "user_id")
     @SerializedName("id")
     @Expose
@@ -93,13 +91,12 @@ public class UserModel {
     @Expose
     private String userTags;
 
-    @Generated(hash = 618196826)
-    public UserModel(long dbId, Long userId, String fullName, String email,
-            String login, String phone, String website, String createdAt,
-            String updatedAt, String lastRequestAt, Integer externalUserId,
-            Long facebookId, String twitterId, Integer twitterDigitsId,
-            Integer blobId, String customData, String userTags) {
-        this.dbId = dbId;
+    @Generated(hash = 11920562)
+    public UserModel(Long userId, String fullName, String email, String login,
+            String phone, String website, String createdAt, String updatedAt,
+            String lastRequestAt, Integer externalUserId, Long facebookId,
+            String twitterId, Integer twitterDigitsId, Integer blobId,
+            String customData, String userTags) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -249,21 +246,4 @@ public class UserModel {
     public void setUserTags(String userTags) {
         this.userTags = userTags;
     }
-
-    public long getId() {
-        return this.dbId;
-    }
-
-    public void setId(long id) {
-        this.dbId = id;
-    }
-
-    public long getDbId() {
-        return this.dbId;
-    }
-
-    public void setDbId(long dbId) {
-        this.dbId = dbId;
-    }
-
 }

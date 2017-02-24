@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -92,6 +94,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Navigator navigator = Navigator.getInstance();
     private DrawerLayout mDrawer;
     private Toolbar mToolbar;
+    private CollapsingToolbarLayout toolbarLayout;
     private AppBarLayout.LayoutParams toolbarParams;
     private TabLayout mTabLayout;
     private FloatingActionButton fab;
@@ -99,6 +102,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private BizareChatMessageService messageService;
     private ServiceConnection messageServiceConnection;
     private Intent messageServiceIntent;
+    private ProgressBar progressBar;
     private Converter converter;
 
     public static Intent getCallingIntent(Context context) {
@@ -189,10 +193,14 @@ public class MainActivity extends MvpAppCompatActivity implements
         mTabLayout.addTab(mTabLayout.newTab().setText("Private"));
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarParams = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        toolbarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
         setSupportActionBar(mToolbar);
         mTextOnToolbar = (TextView) findViewById(R.id.chat_toolbar_title);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        progressBar = (ProgressBar)findViewById(R.id.main_progress_bar);
+        progressBar.getIndeterminateDrawable()
+                .setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -258,7 +266,7 @@ public class MainActivity extends MvpAppCompatActivity implements
                 break;
             case R.id.invite_friends:
                 presenter.inviteFriends();
-
+                break;
         }
     }
 
