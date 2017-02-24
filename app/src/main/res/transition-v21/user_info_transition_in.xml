@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    android:transitionOrdering="together"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/decelerate_quad">
+    <slide android:slideEdge="bottom"/>
+    <targets>
+        <target android:targetId="@id/user_info_email_layout"/>
+        <target android:targetId="@id/user_info_phone_layout"/>
+        <target android:targetId="@id/user_info_website_layout"/>
+        <target android:targetId="@id/user_info_fab"/>
+    </targets>
+</transitionSet>

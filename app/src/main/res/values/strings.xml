@@ -90,4 +90,17 @@
     <string name="action_filter">Filter</string>
     <string name="users_screen_search_hint">Find users...</string>
     <string name="users_screen_filter_hint">Filter users...</string>
+    <string name="users_name_default">Name is empty</string>
+    <string name="users_filter_default_title">Clear Sort (created_at)</string>
+    <string name="users_filter_name_asc_title">By name (ASC)</string>
+    <string name="users_filter_name_desc_title">By name (DESC)</string>
+    <string name="users_alone_message">Seems like you are the only User :)</string>
+    <string name="transition_user_avatar_name">userImage</string>
+    <string name="user_info_website_title">WEBSITE</string>
+    <string name="user_info_phone_title">PHONE</string>
+    <string name="user_info_email_title">EMAIL</string>
+    <string name="no_email_apps_error">Please install email client app first</string>
+    <string name="no_web_apps_error">Please install web browser first</string>
+    <string name="calls_unavailable_error">You cannot make calls from your device right now.</string>
+    <string name="transition_user_full_name">userFullName</string>
 </resources>

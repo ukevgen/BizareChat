@@ -2,13 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/users_action_filter"
+        android:id="@+id/users_action_sort"
         android:icon="@drawable/filter_icon"
         android:title="@string/action_filter"
-        app:actionViewClass="android.widget.EditText"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|always">
+        <menu>
+            <item
+                android:id="@+id/filter_default"
+                android:title="@string/users_filter_default_title"/>
+
+            <item
+                android:id="@+id/filter_name_asc"
+                android:title="@string/users_filter_name_asc_title"/>
+
+            <item
+                android:id="@+id/filter_name_desc"
+                android:title="@string/users_filter_name_desc_title"/>
+        </menu>
+    </item>
     <item
-        android:id="@+id/users_action_search"
+        android:id="@+id/users_action_filter"
         android:icon="@drawable/search_icon"
         android:title="@string/action_search"
         app:actionViewClass="android.widget.EditText"
