@@ -45,6 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class NewChatFragment extends MvpAppCompatFragment implements
         NewChatView, View.OnClickListener, NewChatUsersRecyclerAdapter.OnCheckBoxClickListener {
+
     @InjectPresenter
     NewChatPresenterImpl presenter;
 
@@ -132,6 +133,8 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().supportInvalidateOptionsMenu();
+        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
         toolbarTitle.setText(R.string.new_chat_title);
         recyclerView.setAdapter(presenter.getAdapter().setListener(this).setContext(getActivity()));
         presenter.getAllUsers();

@@ -402,6 +402,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void hideNavigationElements() {
         fab.hide();
+        supportInvalidateOptionsMenu();
         toolbarParams.setScrollFlags(0);
         mTabLayout.setVisibility(View.GONE);
         mLayout.setVisibility(View.GONE);
@@ -413,7 +414,6 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void navigateToLoginScreen() {
         navigator.navigateToLoginActivity(this);
     }
-
 
     @SuppressWarnings("unchecked")
     private void bindMessageService() {
