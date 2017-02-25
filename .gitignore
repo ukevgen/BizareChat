@@ -41,4 +41,9 @@ Thumbs.db
 /.idea/workspace.xml
 /.idea/libraries
 /build
+*/build
 /captures
+.externalNativeBuild
+gradle.properties
+.idea/codeStyleSettings.xml
+intermediates

@@ -10,13 +10,16 @@ import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllUsersUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
-import com.internship.pbt.bizarechat.domain.interactor.GetUsersByFullName;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersView;
 
 import java.net.SocketTimeoutException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,31 +28,31 @@ import rx.Subscriber;
 
 
 @InjectViewState
-public class UsersPresenter extends MvpPresenter<UsersView> {
+public class UsersPresenter extends MvpPresenter<UsersView>
+        implements UsersRecyclerAdapter.OnUserClickListener{
+    private boolean filtering = false;
+    private String currentSortOrder;
+    private String currentFilterQuery;
     private Long currentUserId = CurrentUser.getInstance().getCurrentUserId();
-    private String currentQuery;
     private Integer currentUsersPage = 0;
     private Integer usersCount = 0;
-    private Integer currentQueryUsersPage = 0;
-    private Integer usersQueryCount = 0;
     private List<UserModel> users;
-    private List<UserModel> usersByFullName;
     private Map<Long, Bitmap> usersPhotos;
     private GetAllUsersUseCase allUsersUseCase;
     private GetPhotoUseCase photoUseCase;
     private UsersRecyclerAdapter adapter;
-    private GetUsersByFullName usersByNameUseCase;
+    private boolean allUsersLoaded;
 
     public UsersPresenter(GetAllUsersUseCase allUsersUseCase,
-                          GetPhotoUseCase photoUseCase,
-                          GetUsersByFullName usersByNameUseCase) {
+                          GetPhotoUseCase photoUseCase) {
         this.allUsersUseCase = allUsersUseCase;
         this.photoUseCase = photoUseCase;
-        this.usersByNameUseCase = usersByNameUseCase;
         users = new ArrayList<>();
-        usersByFullName = new ArrayList<>();
         usersPhotos = new HashMap<>();
         adapter = new UsersRecyclerAdapter(users, usersPhotos);
+        adapter.setUserClickListener(this);
+        currentSortOrder = ApiConstants.ORDER_DEFAULT;
+        allUsersLoaded = false;
     }
 
     public UsersRecyclerAdapter getAdapter() {
@@ -57,25 +60,29 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
     }
 
     public void getAllUsers() {
-        if (!BizareChatApp.getInstance().isNetworkConnected())
+        if(filtering) return;
+
+        if (!BizareChatApp.getInstance().isNetworkConnected()) {
             getViewState().showNetworkError();
-
-        getViewState().showLoading();
-
-        if(currentQuery != null){
-            getUsersByFullName(currentQuery);
             return;
         }
 
-        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
+        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) {
+            allUsersLoaded = true;
+            return;
+        }
+
+        getViewState().showLoading();
 
         allUsersUseCase.setPage(++currentUsersPage);
+        allUsersUseCase.setOrder(currentSortOrder);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
             @Override
             public void onCompleted() {}
 
             @Override
             public void onError(Throwable e) {
+                getViewState().hideLoading();
                 if (e instanceof SocketTimeoutException)
                     getViewState().showNetworkError();
                 e.printStackTrace();
@@ -90,6 +97,10 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
 
                     if (user.getUserId().equals(currentUserId))
                         continue;
+
+                    if(user.getFullName() == null){
+                        user.setFullName("");
+                    }
 
                     users.add(user);
                     insertCounter++;
@@ -131,71 +142,99 @@ public class UsersPresenter extends MvpPresenter<UsersView> {
         });
     }
 
-    public void getUsersByFullName(String query){
-        if (usersQueryCount != 0 && currentQueryUsersPage * ApiConstants.USERS_PER_PAGE >= usersQueryCount) return;
-
-        if(currentQuery == null || !currentQuery.equals(query)){
-            usersByFullName.clear();
-            adapter.setUsers(usersByFullName);
-            adapter.notifyDataSetChanged();
-            currentQuery = query;
-            usersQueryCount = 0;
-            currentQueryUsersPage = 1;
-        } else{
-            currentQueryUsersPage++;
-        }
-
-        usersByNameUseCase.setPage(currentQueryUsersPage);
-        usersByNameUseCase.setQuery(currentQuery);
-        usersByNameUseCase.execute(new Subscriber<AllUsersResponse>() {
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {
-                if (e instanceof SocketTimeoutException)
-                    getViewState().showNetworkError();
-                getViewState().hideLoading();
-                onSearchClose();
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(AllUsersResponse response) {
-                UserModel user;
-                int insertCounter = 0;
-                for (AllUsersResponse.Item item : response.getItems()) {
-                    user = item.getUser();
-
-                    if (user.getUserId().equals(currentUserId))
-                        continue;
-
-                    usersByFullName.add(user);
-                    insertCounter++;
-
-                    if (user.getBlobId() != null) {
-                        getAndAddPhoto(usersByFullName.size() - 1, user.getUserId(), user.getBlobId());
-                    } else {
-                        usersPhotos.put(user.getUserId(), null);
-                    }
-                }
-                if (currentQueryUsersPage == 0)
-                    currentQueryUsersPage = response.getTotalEntries();
-                else {
-                    adapter.notifyItemRangeInserted(usersByFullName.size() - insertCounter, insertCounter);
-                }
-                getViewState().hideLoading();
-            }
-        });
-    }
-
     public void performFilter(String newText) {
+        currentFilterQuery = newText;
+        filtering = true;
         adapter.filterList(newText);
     }
 
-    public void onSearchClose(){
-        currentQuery = null;
-        adapter.setUsers(users);
+    public void onFilterClose(){
+        filtering = false;
+    }
+
+    public void sortByNameAsc(){
+        if(currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME))
+            return;
+        currentSortOrder = ApiConstants.ORDER_ASC_FULL_NAME;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorNameAsc());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
         adapter.notifyDataSetChanged();
+        getAllUsers();
+    }
+
+    public void sortByNameDesc(){
+        if(currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME))
+            return;
+        currentSortOrder = ApiConstants.ORDER_DESC_FULL_NAME;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorNameDesc());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
+        adapter.notifyDataSetChanged();
+        getAllUsers();
+    }
+
+    public void sortDefault(){
+        if(currentSortOrder.equals(ApiConstants.ORDER_DEFAULT))
+            return;
+        currentSortOrder = ApiConstants.ORDER_DEFAULT;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorDefault());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
+        adapter.notifyDataSetChanged();
+        getAllUsers();
+    }
+
+    public static class ComparatorNameAsc implements Comparator<UserModel> {
+        @Override
+        public int compare(UserModel user1, UserModel user2) {
+            return user1.getFullName().compareToIgnoreCase(user2.getFullName());
+        }
+    }
+
+    public static class ComparatorNameDesc implements Comparator<UserModel>{
+        @Override
+        public int compare(UserModel user1, UserModel user2) {
+            return user2.getFullName().compareToIgnoreCase(user1.getFullName());
+        }
+    }
+
+    public static class ComparatorDefault implements Comparator<UserModel>{
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        @Override
+        public int compare(UserModel user1, UserModel user2) {
+            try {
+                return format.parse(user2.getCreatedAt()).compareTo(format.parse(user1.getCreatedAt()));
+            } catch (ParseException ex){
+                throw new IllegalArgumentException(ex);
+            }
+        }
+    }
+
+    @Override
+    public void onUserClick(int position) {
+        getViewState().showUserInfo(users.get(position));
+    }
+
+    public String getCurrentFilterQuery() {
+        return currentFilterQuery;
     }
 }

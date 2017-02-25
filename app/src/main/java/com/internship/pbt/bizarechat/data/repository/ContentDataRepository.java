@@ -116,7 +116,8 @@ public class ContentDataRepository implements ContentRepository {
                             @Override
                             public Observable<Response<Void>> call(Response<Void> response) {
                                 Log.d("uploadAvatar", "updateUserID");
-                                return contentService.updateUserBlobId(CurrentUser.getInstance().getCurrentUserId(),
+                                return contentService.updateUserBlobId(UserToken.getInstance().getToken(),
+                                        CurrentUser.getInstance().getCurrentUserId(),
                                         new UserUpdateBlobId(Integer.parseInt(blobId)));
                             }
                         });

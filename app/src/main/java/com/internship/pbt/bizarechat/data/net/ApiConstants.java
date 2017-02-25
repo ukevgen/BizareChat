@@ -32,6 +32,8 @@ public class ApiConstants {
 
     //Constants for retrieving users
     public static final String ORDER_ASC_FULL_NAME = "asc+string+full_name";
+    public static final String ORDER_DESC_FULL_NAME = "desc+string+full_name";
+    public static final String ORDER_DEFAULT = "desc+date+created_at";
     public static final Integer USERS_PER_PAGE = 20;
 
     //Constants for notification subscribing

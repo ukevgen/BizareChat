@@ -35,7 +35,6 @@ import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.newchat.NewChatPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
-import com.internship.pbt.bizarechat.presentation.util.Validator;
 
 import java.io.File;
 
@@ -94,6 +93,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
         chatNameInputLayout = (TextInputLayout) view.findViewById(R.id.new_chat_name_layout);
         chatNameEditText = (TextInputEditText) view.findViewById(R.id.new_chat_name_edit);
         chatPhoto = (CircleImageView) view.findViewById(R.id.new_chat_image);
+        chatPhoto.setOnClickListener(this);
         publicRadioButton = (AppCompatRadioButton) view.findViewById(R.id.radio_public);
         publicRadioButton.setOnClickListener(this);
         privateRadioButton = (AppCompatRadioButton) view.findViewById(R.id.radio_private);
@@ -134,7 +134,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     public void onStart() {
         super.onStart();
         getActivity().supportInvalidateOptionsMenu();
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
+        toolbarTitle = (TextView) getActivity().findViewById(R.id.chat_toolbar_title);
         toolbarTitle.setText(R.string.new_chat_title);
         recyclerView.setAdapter(presenter.getAdapter().setListener(this).setContext(getActivity()));
         presenter.getAllUsers();
@@ -149,7 +149,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
             case R.id.radio_public:
                 presenter.onPublicClick();
                 break;
-            case R.id.edit_chat_image:
+            case R.id.new_chat_image:
                 showPictureChooser();
                 break;
             case R.id.new_chat_button_create:
