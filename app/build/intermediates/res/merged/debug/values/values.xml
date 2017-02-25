@@ -692,7 +692,7 @@
     <string name="chat_name">CHAT NAME</string>
     <string name="chat_room_enter_message_hint">Type your message</string>
     <string name="choose_source_for_getting_image">Choose source for getting image</string>
-    <string name="com.crashlytics.android.build_id" ns1:ignore="UnusedResources,TypographyDashes" translatable="false">b978c70c-675b-4cf6-8b82-2f8e6887750f</string>
+    <string name="com.crashlytics.android.build_id" ns1:ignore="UnusedResources,TypographyDashes" translatable="false">11cca8d8-1f47-4315-bdee-ff10ba887947</string>
     <string name="com_facebook_device_auth_instructions">Visit &lt;b>facebook.com/device&lt;/b> on your smartphone or computer and enter this code</string>
     <string name="com_facebook_image_download_unknown_error">Unexpected error while downloading an image.</string>
     <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>

@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.data.net;
 
 import android.util.Log;
 
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
@@ -136,8 +137,8 @@ public class RetrofitApi {
                 sessionRepository.getSessionWithAuth(
                         new UserRequestModel(CurrentUser.getInstance().getCurrentEmail(),
                                 CurrentUser.getInstance().getCurrentPassword()))
-                        .subscribeOn(Schedulers.immediate())
-                        .observeOn(Schedulers.immediate())
+                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
+                        .observeOn(Schedulers.newThread())
                         .subscribe(new Subscriber<Session>() {
                             @Override
                             public void onCompleted() {
@@ -157,8 +158,8 @@ public class RetrofitApi {
 
             } else if (!CurrentUser.getInstance().isAuthorized()) {
                 sessionRepository.getSession()
-                        .subscribeOn(Schedulers.immediate())
-                        .observeOn(Schedulers.immediate())
+                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
+                        .observeOn(Schedulers.newThread())
                         .subscribe(new Subscriber<Session>() {
                             @Override
                             public void onCompleted() {
