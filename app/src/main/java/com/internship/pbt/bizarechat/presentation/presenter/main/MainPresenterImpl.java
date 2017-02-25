@@ -1,7 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -14,9 +13,9 @@ import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.repository.PushNotificationsRepository;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
-import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -41,9 +40,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     private void clearCurrentUserCache() {
-        /*UserToken.getInstance().deleteToken();
+        UserToken.getInstance().deleteToken();
         CurrentUser.getInstance().setAuthorized(false);
-        CurrentUser.getInstance().clearCurrentUser();*/
+        CurrentUser.getInstance().clearCurrentUser();
     }
 
     @Override
@@ -152,11 +151,15 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     private boolean isDialogDaoEmpty() {
+
         dialogsCount = daoSession.getDialogModelDao().count();
         return dialogsCount == 0;
     }
 
     private void updateDialogsDao() {
+        if (BizareChatApp.getInstance().getDaoSession() == null)
+            daoSession = BizareChatApp.getInstance().getDaoSession();
+
         if (BizareChatApp.getInstance().isNetworkConnected()) {
 
             dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
@@ -176,6 +179,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
                     modelDao.insertOrReplaceInTx(response.getDialogModels());
+
 
                 }
             });

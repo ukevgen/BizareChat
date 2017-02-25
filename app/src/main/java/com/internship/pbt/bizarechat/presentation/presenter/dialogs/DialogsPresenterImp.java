@@ -11,7 +11,7 @@ import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
-import com.internship.pbt.bizarechat.query.QueryBuilder;
+import com.internship.pbt.bizarechat.db.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,12 +90,12 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     public void onDialogDelete(int position) {
         DialogModel model = adapter.getDialogs().get(position);
         String dialogId = adapter.getDialogs().get(position).getDialogId();
-        deleteDialogUseCase.setDialogId(dialogId);
+        queryBuilder.removeDialog(model);
 
+        deleteDialogUseCase.setDialogId(dialogId);
         deleteDialogUseCase.execute(new Subscriber() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
@@ -105,7 +105,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onNext(Object o) {
-                queryBuilder.removeDialog(model);
+
             }
         });
     }
