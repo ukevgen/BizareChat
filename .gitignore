@@ -7,6 +7,7 @@
 /.idea/libraries
 .DS_Store
 /build
+*/build
 /captures
 .externalNativeBuild
 gradle.properties
