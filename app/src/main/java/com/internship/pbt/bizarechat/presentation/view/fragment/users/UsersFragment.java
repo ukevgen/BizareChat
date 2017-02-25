@@ -67,6 +67,7 @@ public class UsersFragment extends MvpAppCompatFragment
     private ProgressBar progressBar;
     private TSnackbar connProblemSnack;
     private TextView aloneMessage;
+    private String sortQuery;
 
     private int pastVisibleItems, visibleItemCount, totalItemCount;
 
@@ -98,6 +99,9 @@ public class UsersFragment extends MvpAppCompatFragment
                 }
             }
         });
+        if(savedInstanceState != null){
+            sortQuery = presenter.getCurrentFilterQuery();
+        }
         return view;
     }
 
@@ -124,6 +128,15 @@ public class UsersFragment extends MvpAppCompatFragment
             @Override
             public void afterTextChanged(Editable s) {}
         });
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(sortQuery != null && !sortQuery.isEmpty()) {
+            filterItem.expandActionView();
+            filterEditText.setText(sortQuery);
+        }
     }
 
     @Override
@@ -174,11 +187,6 @@ public class UsersFragment extends MvpAppCompatFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

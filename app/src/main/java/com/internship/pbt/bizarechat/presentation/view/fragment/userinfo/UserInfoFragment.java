@@ -78,7 +78,6 @@ public class UserInfoFragment extends MvpAppCompatFragment
         phoneTextView = (TextView) view.findViewById(R.id.user_info_phone_value);
         websiteTextView = (TextView) view.findViewById(R.id.user_info_website_value);
         userInfoFab = (FloatingActionButton) view.findViewById(R.id.user_info_fab);
-        titleShadow = (TextView) view.findViewById(R.id.user_info_title_shadow);
 
         view.findViewById(R.id.user_info_email_layout).setOnClickListener(this);
         view.findViewById(R.id.user_info_phone_layout).setOnClickListener(this);
@@ -101,8 +100,6 @@ public class UserInfoFragment extends MvpAppCompatFragment
             phoneTextView.setText(phone);
         if (!TextUtils.isEmpty(website))
             websiteTextView.setText(website);
-
-        titleShadow.setText(fullName);
     }
 
     @Override

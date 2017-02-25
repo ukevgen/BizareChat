@@ -22,12 +22,12 @@ public class UserDataRepository implements UserRepository {
     }
 
     @Override
-    public Observable<AllUsersResponse> getAllUsers(Integer page){
+    public Observable<AllUsersResponse> getAllUsers(Integer page, String order){
         return userService.getAllUsers(
                 UserToken.getInstance().getToken(),
+                order,
                 page,
-                ApiConstants.USERS_PER_PAGE,
-                ApiConstants.ORDER_ASC_FULL_NAME);
+                ApiConstants.USERS_PER_PAGE);
     }
 
     @Override

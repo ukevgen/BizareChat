@@ -31,6 +31,8 @@ import rx.Subscriber;
 public class UsersPresenter extends MvpPresenter<UsersView>
         implements UsersRecyclerAdapter.OnUserClickListener{
     private boolean filtering = false;
+    private String currentSortOrder;
+    private String currentFilterQuery;
     private Long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private Integer currentUsersPage = 0;
     private Integer usersCount = 0;
@@ -39,6 +41,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     private GetAllUsersUseCase allUsersUseCase;
     private GetPhotoUseCase photoUseCase;
     private UsersRecyclerAdapter adapter;
+    private boolean allUsersLoaded;
 
     public UsersPresenter(GetAllUsersUseCase allUsersUseCase,
                           GetPhotoUseCase photoUseCase) {
@@ -48,6 +51,8 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         usersPhotos = new HashMap<>();
         adapter = new UsersRecyclerAdapter(users, usersPhotos);
         adapter.setUserClickListener(this);
+        currentSortOrder = ApiConstants.ORDER_DEFAULT;
+        allUsersLoaded = false;
     }
 
     public UsersRecyclerAdapter getAdapter() {
@@ -62,11 +67,15 @@ public class UsersPresenter extends MvpPresenter<UsersView>
             return;
         }
 
-        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
+        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) {
+            allUsersLoaded = true;
+            return;
+        }
 
         getViewState().showLoading();
 
         allUsersUseCase.setPage(++currentUsersPage);
+        allUsersUseCase.setOrder(currentSortOrder);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
             @Override
             public void onCompleted() {}
@@ -88,6 +97,10 @@ public class UsersPresenter extends MvpPresenter<UsersView>
 
                     if (user.getUserId().equals(currentUserId))
                         continue;
+
+                    if(user.getFullName() == null){
+                        user.setFullName("");
+                    }
 
                     users.add(user);
                     insertCounter++;
@@ -130,6 +143,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void performFilter(String newText) {
+        currentFilterQuery = newText;
         filtering = true;
         adapter.filterList(newText);
     }
@@ -139,18 +153,57 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void sortByNameAsc(){
-        Collections.sort(users, new ComparatorNameAsc());
+        if(currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME))
+            return;
+        currentSortOrder = ApiConstants.ORDER_ASC_FULL_NAME;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorNameAsc());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
+        adapter.notifyDataSetChanged();
+        getAllUsers();
     }
 
     public void sortByNameDesc(){
-        Collections.sort(users, new ComparatorNameDesc());
+        if(currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME))
+            return;
+        currentSortOrder = ApiConstants.ORDER_DESC_FULL_NAME;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorNameDesc());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
+        adapter.notifyDataSetChanged();
+        getAllUsers();
     }
 
     public void sortDefault(){
-        Collections.sort(users, new ComparatorDefault());
+        if(currentSortOrder.equals(ApiConstants.ORDER_DEFAULT))
+            return;
+        currentSortOrder = ApiConstants.ORDER_DEFAULT;
+
+        if(allUsersLoaded) {
+            Collections.sort(users, new ComparatorDefault());
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        currentUsersPage = 0;
+        users.clear();
+        adapter.notifyDataSetChanged();
+        getAllUsers();
     }
 
-    public static class ComparatorNameAsc implements Comparator<UserModel>{
+    public static class ComparatorNameAsc implements Comparator<UserModel> {
         @Override
         public int compare(UserModel user1, UserModel user2) {
             return user1.getFullName().compareToIgnoreCase(user2.getFullName());
@@ -179,5 +232,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     @Override
     public void onUserClick(int position) {
         getViewState().showUserInfo(users.get(position));
+    }
+
+    public String getCurrentFilterQuery() {
+        return currentFilterQuery;
     }
 }
