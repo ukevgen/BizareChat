@@ -22,6 +22,57 @@ public class UsersView$$State extends MvpViewState<UsersView> implements UsersVi
 	}
 
 	@Override
+	public  void showLoading() {
+		ShowLoadingCommand showLoadingCommand = new ShowLoadingCommand();
+		mViewCommands.beforeApply(showLoadingCommand);
+
+		if (mViews == null || mViews.isEmpty()) {
+			return;
+		}
+
+		for(UsersView view : mViews) {
+			getCurrentState(view).add(showLoadingCommand);
+			view.showLoading();
+		}
+
+		mViewCommands.afterApply(showLoadingCommand);
+	}
+
+	@Override
+	public  void hideLoading() {
+		HideLoadingCommand hideLoadingCommand = new HideLoadingCommand();
+		mViewCommands.beforeApply(hideLoadingCommand);
+
+		if (mViews == null || mViews.isEmpty()) {
+			return;
+		}
+
+		for(UsersView view : mViews) {
+			getCurrentState(view).add(hideLoadingCommand);
+			view.hideLoading();
+		}
+
+		mViewCommands.afterApply(hideLoadingCommand);
+	}
+
+	@Override
+	public  void showNetworkError() {
+		ShowNetworkErrorCommand showNetworkErrorCommand = new ShowNetworkErrorCommand();
+		mViewCommands.beforeApply(showNetworkErrorCommand);
+
+		if (mViews == null || mViews.isEmpty()) {
+			return;
+		}
+
+		for(UsersView view : mViews) {
+			getCurrentState(view).add(showNetworkErrorCommand);
+			view.showNetworkError();
+		}
+
+		mViewCommands.afterApply(showNetworkErrorCommand);
+	}
+
+	@Override
 	public  void showAloneMessage() {
 		ShowAloneMessageCommand showAloneMessageCommand = new ShowAloneMessageCommand();
 		mViewCommands.beforeApply(showAloneMessageCommand);
@@ -38,6 +89,42 @@ public class UsersView$$State extends MvpViewState<UsersView> implements UsersVi
 		mViewCommands.afterApply(showAloneMessageCommand);
 	}
 
+
+	public class ShowLoadingCommand extends ViewCommand<UsersView> {
+		ShowLoadingCommand() {
+			super("showLoading", com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy.class);
+		}
+
+		@Override
+		public void apply(UsersView mvpView) {
+			mvpView.showLoading();
+			getCurrentState(mvpView).add(this);
+		}
+	}
+
+	public class HideLoadingCommand extends ViewCommand<UsersView> {
+		HideLoadingCommand() {
+			super("hideLoading", com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy.class);
+		}
+
+		@Override
+		public void apply(UsersView mvpView) {
+			mvpView.hideLoading();
+			getCurrentState(mvpView).add(this);
+		}
+	}
+
+	public class ShowNetworkErrorCommand extends ViewCommand<UsersView> {
+		ShowNetworkErrorCommand() {
+			super("showNetworkError", com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy.class);
+		}
+
+		@Override
+		public void apply(UsersView mvpView) {
+			mvpView.showNetworkError();
+			getCurrentState(mvpView).add(this);
+		}
+	}
 
 	public class ShowAloneMessageCommand extends ViewCommand<UsersView> {
 		ShowAloneMessageCommand() {

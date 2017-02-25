@@ -89,6 +89,40 @@ public class NewChatView$$State extends MvpViewState<NewChatView> implements New
 		mViewCommands.afterApply(hideChatPhotoCommand);
 	}
 
+	@Override
+	public  void showTooLargePicture() {
+		ShowTooLargePictureCommand showTooLargePictureCommand = new ShowTooLargePictureCommand();
+		mViewCommands.beforeApply(showTooLargePictureCommand);
+
+		if (mViews == null || mViews.isEmpty()) {
+			return;
+		}
+
+		for(NewChatView view : mViews) {
+			getCurrentState(view).add(showTooLargePictureCommand);
+			view.showTooLargePicture();
+		}
+
+		mViewCommands.afterApply(showTooLargePictureCommand);
+	}
+
+	@Override
+	public  void loadAvatarToImageView(java.io.File file) {
+		LoadAvatarToImageViewCommand loadAvatarToImageViewCommand = new LoadAvatarToImageViewCommand(file);
+		mViewCommands.beforeApply(loadAvatarToImageViewCommand);
+
+		if (mViews == null || mViews.isEmpty()) {
+			return;
+		}
+
+		for(NewChatView view : mViews) {
+			getCurrentState(view).add(loadAvatarToImageViewCommand);
+			view.loadAvatarToImageView(file);
+		}
+
+		mViewCommands.afterApply(loadAvatarToImageViewCommand);
+	}
+
 
 	public class ShowUsersViewCommand extends ViewCommand<NewChatView> {
 		ShowUsersViewCommand() {
@@ -134,6 +168,33 @@ public class NewChatView$$State extends MvpViewState<NewChatView> implements New
 		@Override
 		public void apply(NewChatView mvpView) {
 			mvpView.hideChatPhoto();
+			getCurrentState(mvpView).add(this);
+		}
+	}
+
+	public class ShowTooLargePictureCommand extends ViewCommand<NewChatView> {
+		ShowTooLargePictureCommand() {
+			super("showTooLargePicture", com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy.class);
+		}
+
+		@Override
+		public void apply(NewChatView mvpView) {
+			mvpView.showTooLargePicture();
+			getCurrentState(mvpView).add(this);
+		}
+	}
+
+	public class LoadAvatarToImageViewCommand extends ViewCommand<NewChatView> {
+		public final java.io.File file;
+
+		LoadAvatarToImageViewCommand(java.io.File file) {
+			super("loadAvatarToImageView", com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy.class);
+			this.file = file;
+		}
+
+		@Override
+		public void apply(NewChatView mvpView) {
+			mvpView.loadAvatarToImageView(file);
 			getCurrentState(mvpView).add(this);
 		}
 	}

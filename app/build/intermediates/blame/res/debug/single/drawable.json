@@ -76,12 +76,12 @@
         "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable\\userpic.png"
     },
     {
-        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\logo_grey.png",
-        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable\\logo_grey.png"
-    },
-    {
         "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messenger_button_blue_bg_selector.xml",
         "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.16.1\\res\\drawable\\messenger_button_blue_bg_selector.xml"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\logo_grey.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable\\logo_grey.png"
     },
     {
         "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\clear_icon.png",
@@ -100,12 +100,12 @@
         "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
-        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\group_icon.png",
-        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable\\group_icon.png"
-    },
-    {
         "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
         "source": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.1\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\group_icon.png",
+        "source": "D:\\AndroidProjects\\BizareChat\\app\\src\\main\\res\\drawable\\group_icon.png"
     },
     {
         "merged": "D:\\AndroidProjects\\BizareChat\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\selector_emoji_travel.xml",
