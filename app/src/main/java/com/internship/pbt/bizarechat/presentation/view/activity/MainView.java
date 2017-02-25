@@ -1,8 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.activity;
 
 import com.arellomobile.mvp.MvpView;
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
-import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 
@@ -14,33 +13,33 @@ public interface MainView extends MvpView {
 
     void showLackOfFriends();
 
-    @StateStrategyType(SingleStateStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void startNewChatView();
 
-    @StateStrategyType(SingleStateStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void showInviteFriendsScreen();
 
     void showNavigationElements();
 
     void hideNavigationElements();
 
-    @StateStrategyType(SingleStateStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void navigateToLoginScreen();
 
-    @StateStrategyType(SingleStateStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void startUsersView();
 
     void confirmLogOut();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void startBackPressed();
 
     void showDialogs();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void showPublicDialogs();
 
-    @StateStrategyType(AddToEndSingleStrategy.class)
+    @StateStrategyType(SkipStrategy.class)
     void showPrivateDialogs();
 
 
