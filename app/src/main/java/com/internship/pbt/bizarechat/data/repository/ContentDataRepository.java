@@ -20,6 +20,7 @@ import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -47,7 +48,12 @@ public class ContentDataRepository implements ContentRepository {
     }
 
     public Observable<Bitmap> getPhoto(final Integer blobId) {
-        return Observable.fromCallable(() -> cacheUsersPhotos.getPhoto(blobId))
+        return Observable.fromCallable(new Callable<Bitmap>() {
+            @Override
+            public Bitmap call() throws Exception {
+                return cacheUsersPhotos.getPhoto(blobId);
+            }
+        })
                 .flatMap(new Func1<Bitmap, Observable<Bitmap>>() {
                     @Override
                     public Observable<Bitmap> call(Bitmap bitmap) {
@@ -65,6 +71,9 @@ public class ContentDataRepository implements ContentRepository {
                     }
                 });
     }
+
+
+
 
     @Override
     public Observable<Integer> uploadFile(String contentType, File file, String name) {

@@ -43,6 +43,15 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
+    public void putStringAvatar(String s) {
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, s);
+        mEditor.apply();
+    }
+
+    public String getStringAvatar() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, null);
+    }
+
     public Long getAccountAvatarBlobId() {
         long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, -1);
         if (id == -1)
@@ -104,11 +113,11 @@ public class CacheSharedPreferences {
             return id;
     }
 
-    public String getFirebaseToken(){
+    public String getFirebaseToken() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, null);
     }
 
-    public void putFirebaseToken(String token){
+    public void putFirebaseToken(String token) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, token);
         mEditor.apply();
     }

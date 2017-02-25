@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -36,6 +37,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
@@ -45,6 +47,7 @@ import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PublicDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
@@ -57,6 +60,8 @@ import com.internship.pbt.bizarechat.service.util.NotificationUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends MvpAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
@@ -98,6 +103,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private ServiceConnection messageServiceConnection;
     private Intent messageServiceIntent;
     private ProgressBar progressBar;
+    private Converter converter;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -109,7 +115,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         setContentView(R.layout.activity_drawer_base_layout);
         messageServiceIntent = new Intent(this, BizareChatMessageService.class);
 
-        if(!CurrentUser.getInstance().isSubscribed())
+        if (!CurrentUser.getInstance().isSubscribed())
             presenter.sendSubscriptionToServer();
 
         findViews();
@@ -119,7 +125,29 @@ public class MainActivity extends MvpAppCompatActivity implements
         getSupportActionBar().setHomeButtonEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+        setUserInformation();
         presenter.onPublicTab();
+    }
+
+    private void setUserInformation() {
+
+        View headerView = mNavigationView.getHeaderView(0);
+
+        TextView email = (TextView) headerView.findViewById(R.id.header_email);
+        CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail();
+        email.setText(CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail());
+
+        //TextView login = (TextView) findViewById(R.id.user_login);
+        //login.setText(CacheSharedPreferences.getInstance());
+
+        CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
+        if (converter == null)
+            converter = new Converter(getApplicationContext());
+        String s = CacheSharedPreferences.getInstance(getApplication()).getStringAvatar();
+        Bitmap bitmap = converter.decodeBase64(s);
+        if (bitmap != null)
+            avatar.setImageBitmap(bitmap);
+
     }
 
     private void setToolbarAndNavigationDrawer() {
@@ -267,7 +295,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void startNewChatView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
-        if(fragment != null){
+        if (fragment != null) {
             getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
                     .commit();
@@ -283,7 +311,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void startUsersView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
-        if(fragment != null){
+        if (fragment != null) {
             getSupportFragmentManager().popBackStack();
             transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
                     .commit();
@@ -305,6 +333,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             showNavigationElements();
         }
+
         super.onBackPressed();
     }
 
@@ -395,11 +424,11 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @SuppressWarnings("unchecked")
-    private void bindMessageService(){
+    private void bindMessageService() {
         messageServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                messageService = ((MessageServiceBinder<BizareChatMessageService>)service).getService();
+                messageService = ((MessageServiceBinder<BizareChatMessageService>) service).getService();
             }
 
             @Override
@@ -410,12 +439,12 @@ public class MainActivity extends MvpAppCompatActivity implements
         bindService(messageServiceIntent, messageServiceConnection, 0);
     }
 
-    private void unbindMessageService(){
+    private void unbindMessageService() {
         unbindService(messageServiceConnection);
     }
 
     @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onGsmMessageReceived(GcmMessageReceivedEvent event){
+    public void onGsmMessageReceived(GcmMessageReceivedEvent event) {
         Log.d(TAG, event.getMessage());
     }
 
@@ -433,4 +462,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         EventBus.getDefault().unregister(this);
 //        unbindMessageService();
     }
+
+
 }
