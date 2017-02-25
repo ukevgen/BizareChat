@@ -58,7 +58,7 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         DialogModel dialog = dialogs.get(position);
         holder.setPosition(position);
         holder.mLastMessage.setText(dialog.getLastMessage());
-        holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageDateSent()));
+        holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageTime()));
         holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
         holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
         holder.mTitle.setText(dialog.getName());

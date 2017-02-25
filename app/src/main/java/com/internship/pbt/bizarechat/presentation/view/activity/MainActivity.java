@@ -127,6 +127,13 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         setUserInformation();
         presenter.onPublicTab();
+        mTabLayout.getTabAt(0).select();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void setUserInformation() {
@@ -198,7 +205,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         setSupportActionBar(mToolbar);
         mTextOnToolbar = (TextView) findViewById(R.id.chat_toolbar_title);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        progressBar = (ProgressBar)findViewById(R.id.main_progress_bar);
+        progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
         progressBar.getIndeterminateDrawable()
                 .setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
     }
