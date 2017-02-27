@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.domain.repository;
 
 
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
@@ -17,5 +19,5 @@ public interface DialogsRepository {
 
     Observable<Response<Void>> deleteDialogForCurrentUser(String dialogId);
 
-    Observable<CreateDialogResponse> createDialog(String type, String name, String occupants_ids);
+    Observable<DialogModel> createDialog(NewDialog dialog);
 }

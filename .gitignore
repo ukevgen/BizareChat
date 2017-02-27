@@ -11,3 +11,4 @@
 .externalNativeBuild
 gradle.properties
 .idea/codeStyleSettings.xml
+app/build

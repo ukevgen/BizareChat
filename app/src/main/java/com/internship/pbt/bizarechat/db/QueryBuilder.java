@@ -3,13 +3,10 @@ package com.internship.pbt.bizarechat.db;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 
 import java.util.List;
 
-
-/**
- * Created by ukevgen on 21.02.2017.
- */
 
 public class QueryBuilder {
     private static final int THREE = 3;
@@ -58,6 +55,11 @@ public class QueryBuilder {
 
     public boolean removeDialog(DialogModel model) {
         daoSession.getDialogModelDao().delete(model);
+        return true;
+    }
+
+    public boolean saveNewDialog(DialogModel model) {
+        daoSession.getDialogModelDao().insertOrReplace(model);
         return true;
     }
 }

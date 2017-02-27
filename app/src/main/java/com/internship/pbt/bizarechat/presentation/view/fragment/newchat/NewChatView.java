@@ -5,7 +5,7 @@ import com.arellomobile.mvp.MvpView;
 
 import java.io.File;
 
-public interface NewChatView extends MvpView{
+public interface NewChatView extends MvpView {
     void showUsersView();
 
     void hideUsersView();
@@ -16,7 +16,21 @@ public interface NewChatView extends MvpView{
 
     void showTooLargePicture();
 
-    void  loadAvatarToImageView(File file);
+    void loadAvatarToImageView(File file);
+
+    void showErrorMassage(String s);
+
+    void setChatType(int type);
+
+    void getChatProperties();
+
+    void showLoading();
+
+    void hideLoading();
+
+    void showChatRoom();
+
+    void showNetworkError();
 
 
 }

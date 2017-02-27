@@ -9,7 +9,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 
 @Entity(nameInDb = "User")
-public class UserModel{
+public class UserModel {
     @Id
     @Property(nameInDb = "user_id")
     @SerializedName("id")
@@ -91,12 +91,14 @@ public class UserModel{
     @Expose
     private String userTags;
 
+    private boolean checked = false;
+
     @Generated(hash = 11920562)
     public UserModel(Long userId, String fullName, String email, String login,
-            String phone, String website, String createdAt, String updatedAt,
-            String lastRequestAt, Integer externalUserId, Long facebookId,
-            String twitterId, Integer twitterDigitsId, Integer blobId,
-            String customData, String userTags) {
+                     String phone, String website, String createdAt, String updatedAt,
+                     String lastRequestAt, Integer externalUserId, Long facebookId,
+                     String twitterId, Integer twitterDigitsId, Integer blobId,
+                     String customData, String userTags) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -117,6 +119,14 @@ public class UserModel{
 
     @Generated(hash = 782181818)
     public UserModel() {
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public Long getUserId() {
