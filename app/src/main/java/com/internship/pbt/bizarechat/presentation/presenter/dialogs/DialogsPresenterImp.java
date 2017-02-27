@@ -6,8 +6,10 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
+import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
 import rx.Subscriber;
 
 @InjectViewState
@@ -28,6 +31,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private QueryBuilder queryBuilder;
     private DialogsRecyclerViewAdapter adapter;
     private DeleteDialogUseCase deleteDialogUseCase;
+    private ContentDataRepository dataRepository;
+    private CacheUsersPhotos usersPhotos;
     private GetPhotoUseCase photoUseCase;
     private int dialogsType;
     private List<DialogModel> dialogs;
@@ -112,7 +117,18 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
 
     private void getAndAddPhoto(String dialogId, Integer blobId) {
-        photoUseCase.setBlobId(blobId);
+        for (DialogModel model : adapter.getDialogs()) {
+            if (model.getType() == THREE) {
+                //TODO Download user photo
+            }
+            else
+            {
+             Observable<Bitmap> bitmap = dataRepository.getPhoto(1);
+            }
+        }
+
+
+        /*photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
             @Override
             public void onCompleted() {
@@ -128,7 +144,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                 dialogPhotos.put(dialogId, bitmap);
                 //adapter.notifyItemChanged(position);
             }
-        });
+        });*/
     }
 
 }
