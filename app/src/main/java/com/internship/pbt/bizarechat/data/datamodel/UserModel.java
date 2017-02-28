@@ -93,12 +93,12 @@ public class UserModel {
 
     private boolean checked = false;
 
-    @Generated(hash = 11920562)
-    public UserModel(Long userId, String fullName, String email, String login,
-                     String phone, String website, String createdAt, String updatedAt,
-                     String lastRequestAt, Integer externalUserId, Long facebookId,
-                     String twitterId, Integer twitterDigitsId, Integer blobId,
-                     String customData, String userTags) {
+    @Generated(hash = 282106214)
+    public UserModel(Long userId, String fullName, String email, String login, String phone,
+            String website, String createdAt, String updatedAt, String lastRequestAt,
+            Integer externalUserId, Long facebookId, String twitterId,
+            Integer twitterDigitsId, Integer blobId, String customData, String userTags,
+            boolean checked) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -115,6 +115,7 @@ public class UserModel {
         this.blobId = blobId;
         this.customData = customData;
         this.userTags = userTags;
+        this.checked = checked;
     }
 
     @Generated(hash = 782181818)
@@ -255,5 +256,9 @@ public class UserModel {
 
     public void setUserTags(String userTags) {
         this.userTags = userTags;
+    }
+
+    public boolean getChecked() {
+        return this.checked;
     }
 }

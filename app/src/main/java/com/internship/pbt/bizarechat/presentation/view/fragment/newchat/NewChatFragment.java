@@ -286,7 +286,10 @@ public class NewChatFragment extends MvpAppCompatFragment implements
             message.setGravity(Gravity.CENTER);
         }
         connProblemSnack.show();
+
     }
 }
+
+
 
 

@@ -3,15 +3,21 @@ package com.internship.pbt.bizarechat.data.datamodel;
 
 public class NewDialog {
     private int type;
-    private String chatName;
-    private String occupants;
-    private int blobId;
+    private String name;
+    private String occupants_ids;
+    private int photo;
 
-    public NewDialog(int type, String chatName, String occupants, int blobId) {
+    public NewDialog(int type, String name, String occupants_ids, int photo) {
         this.type = type;
-        this.chatName = chatName;
-        this.occupants = occupants;
-        this.blobId = blobId;
+        this.name = name;
+        this.occupants_ids = occupants_ids;
+        this.photo = photo;
+    }
+
+    public NewDialog(int type, String name, String occupants_ids) {
+        this.type = type;
+        this.name = name;
+        this.occupants_ids = occupants_ids;
     }
 
     public int getType() {
@@ -22,27 +28,29 @@ public class NewDialog {
         this.type = type;
     }
 
-    public String getChatName() {
-        return chatName;
+    public String getName() {
+        return name;
     }
 
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getOccupants() {
-        return occupants;
+    public String getOccupants_ids() {
+        return occupants_ids;
     }
 
-    public void setOccupants(String occupants) {
-        this.occupants = occupants;
+    public void setOccupants_ids(String occupants_ids) {
+        this.occupants_ids = occupants_ids;
     }
 
-    public int getBlobId() {
-        return blobId;
+    public int getPhoto() {
+        return photo;
     }
 
-    public void setBlobId(int blobId) {
-        this.blobId = blobId;
+    public void setPhoto(int photo) {
+        this.photo = photo;
     }
 }
+
+

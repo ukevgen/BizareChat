@@ -14,7 +14,6 @@ import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.db.QueryBuilder;
 import com.internship.pbt.bizarechat.domain.interactor.CreateDialogUseCase;
@@ -207,15 +206,16 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
 
         //  uploadChatPhoto();
-
+        NewDialog dialog = null;
         String occupants = converter.getOccupantsArray(adapter.getUsers());
         if (type == PRIVATE_CHAT && occupants.equals("")) {
             getViewState().showErrorMassage("Choose one or more friends");
+            dialog = new NewDialog(type, chatName, occupants);
         }
-        if (checkTypeOfDialog(adapter.getUsers()) != PRIVATE_CHAT)
+        if (checkTypeOfDialog(adapter.getUsers()) != PRIVATE_CHAT) {
             type = PUBLIC_CHAT;
-
-        NewDialog dialog = new NewDialog(type, chatName, occupants, blobId);
+            dialog = new NewDialog(type, chatName, occupants, blobId);
+        }
 
         createDialogUseCase.setDialog(dialog);
         createDialogUseCase.execute(new Subscriber<DialogModel>() {
@@ -226,14 +226,13 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                Log.d("TAG", e.getLocalizedMessage());
+                Log.d("TAG", e.toString());
             }
 
             @Override
-            public void onNext(DialogModel model) {
-                Log.d("TAG", model.toString());
-                queryBuilder.saveNewDialog(model);
-                getViewState().showChatRoom();
+            public void onNext(DialogModel response) {
+                Log.d("TAG", response.toString());
+                queryBuilder.saveNewDialog(response);
             }
         });
         getViewState().hideLoading();
@@ -275,19 +274,23 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                 public void onNext(Integer response) {
                     Log.d("TAG", "blod id = " + response);
                     blobId = response;
+                    getViewState().getChatProperties();
                 }
             });
         }
+
     }
 
     @Override
     public void checkConnection() {
         if (BizareChatApp.getInstance().isNetworkConnected()) {
             uploadChatPhoto();
-            getViewState().getChatProperties();
-        } else
+        } else {
             getViewState().showNetworkError();
+        }
     }
 }
+
+
 
 
