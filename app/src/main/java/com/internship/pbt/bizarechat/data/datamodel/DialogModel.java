@@ -51,7 +51,7 @@ public class DialogModel {
     @Property(nameInDb = "photo")
     @SerializedName("photo")
     @Expose
-    private String photo;
+    private Integer photo;
     @Property(nameInDb = "occupants_ids")
     @Convert(converter = OccupantsIdsConverter.class, columnType = String.class)
     @SerializedName("occupants_ids")
@@ -70,10 +70,9 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 866263801)
-    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent,
-                       int lastMessageUserId, String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount,
-                       String xmppRoomJid) {
+    @Generated(hash = 165913975)
+    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
+            String name, Integer photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -148,11 +147,11 @@ public class DialogModel {
         this.name = name;
     }
 
-    public String getPhoto() {
+    public Integer getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(Integer photo) {
         this.photo = photo;
     }
 

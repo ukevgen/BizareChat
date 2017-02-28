@@ -87,8 +87,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             }
             dialogs.addAll(buffer);
             for (DialogModel m : buffer) {
-                // getAndAddPhoto(m);
-                //   dialogPhotos.put(m.getDialogId(), dialogBitmap);
+                getAndAddPhoto(m);
+                dialogPhotos.put(m.getDialogId(), dialogBitmap);
             }
             adapter.setDialogPhotos(dialogPhotos);
         }
@@ -130,13 +130,14 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             //TODO use occupantsId to find other user
             setUserPhotoId(getOccupantIdFromPrivateDialog(dialogModel));
         } else {
-            if (dialogModel.getPhoto() != "")
-                setDialogPhotos(Integer.parseInt(dialogModel.getPhoto()));
+            if (dialogModel.getPhoto() != null)
+                setDialogPhotos(dialogModel.getPhoto());
         }
 
     }
 
-    private void setDialogPhotos(int blobId) {
+    private void setDialogPhotos(Integer blobId) {
+
         dialogBitmap = null;
         photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
@@ -158,10 +159,12 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         });
     }
 
-    private void setUserPhotoId(int lastUserId) {
+    private void setUserPhotoId(Integer lastUserId) {
         //TODO check user exist in dao if not than download photo
         if (queryBuilder.isUserExist(lastUserId)) {
-            setDialogPhotos(queryBuilder.getUserBlobId(lastUserId));
+            Integer blobId = queryBuilder.getUserBlobId(lastUserId);
+            if (blobId != null)
+                setDialogPhotos(blobId);
         } else {
             getUserByIdUseCase.setId(lastUserId);
             getUserByIdUseCase.execute(new Subscriber<UserModel>() {
@@ -172,7 +175,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
                 @Override
                 public void onError(Throwable e) {
-
+                    Log.d("TAG", e.getLocalizedMessage());
                 }
 
                 @Override
@@ -186,7 +189,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     }
 
     private int getOccupantIdFromPrivateDialog(DialogModel dialogModel) {
-        int currentUser = cache.getUserIntId();
+        int currentUser = cache.getUserId().intValue();
         Integer occupantId = null;
         List<Integer> users = dialogModel.getOccupantsIds();
         for (Integer i : users) {

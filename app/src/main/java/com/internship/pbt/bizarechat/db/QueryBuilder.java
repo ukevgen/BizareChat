@@ -69,24 +69,27 @@ public class QueryBuilder {
         return true;
     }
 
-    public boolean isUserExist(int lastUserId) {
-        long count = daoSession
+    public boolean isUserExist(long userId) {
+        List<UserModel> users = daoSession
                 .getUserModelDao()
                 .queryBuilder()
-                .where(UserModelDao.Properties.UserId.eq(lastUserId))
-                .count();
-        return count == 0;
+                .where(UserModelDao.Properties.UserId.eq(userId))
+                .list();
+        for (UserModel m : users) {
+            if (m.getUserId() == userId)
+                break;
+        }
+
+        return users.size() != 0;
     }
 
-    public int getUserBlobId(int lastUserId) {
-        List<UserModel> user = daoSession
+    public Integer getUserBlobId(long lastUserId) {
+        List<UserModel> users = daoSession
                 .getUserModelDao()
                 .queryBuilder()
                 .where(UserModelDao.Properties.UserId.eq(lastUserId))
                 .list();
-        if (user.size() != 0)
-            return user.get(0).getBlobId();
-        else
-            return -1;
+
+        return users.get(0).getBlobId();
     }
 }
