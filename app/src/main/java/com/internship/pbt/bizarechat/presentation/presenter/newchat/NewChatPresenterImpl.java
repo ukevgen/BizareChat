@@ -61,7 +61,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     private File fileToUpload;
     private Converter converter;
     private Validator validator;
-    private int blobId;
+    private String blobId;
 
     public NewChatPresenterImpl(Converter converter,
                                 GetAllUsersUseCase allUsersUseCase,
@@ -146,6 +146,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
     public void onPrivateClick() {
         isPublicButtonChecked = false;
+        fileToUpload = null;
         setChatPhotoVisibility();
         getViewState().showUsersView();
         getViewState().setChatType(PRIVATE_CHAT);
@@ -209,8 +210,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
         //  uploadChatPhoto();
         NewDialog dialog = null;
         String occupants = converter.getOccupantsArray(adapter.getUsers());
-        if (type == PRIVATE_CHAT && occupants.equals("")) {
-            getViewState().showErrorMassage("Choose one or more friends");
+        if (type == PRIVATE_CHAT) {
             dialog = new NewDialog(type, chatName, occupants);
         }
         if (checkTypeOfDialog(adapter.getUsers()) != PRIVATE_CHAT) {
@@ -228,15 +228,16 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
             @Override
             public void onError(Throwable e) {
                 Log.d("TAG", e.toString());
+                getViewState().hideLoading();
             }
 
             @Override
             public void onNext(DialogModel response) {
                 Log.d("TAG", response.toString());
                 queryBuilder.saveNewDialog(response);
+                getViewState().hideLoading();
             }
         });
-        getViewState().hideLoading();
     }
 
     private int checkTypeOfDialog(List<UserModel> users) {
@@ -268,24 +269,27 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                     if (getViewState() != null) {
                         getViewState().hideLoading();
                         getViewState().showErrorMassage(e.getLocalizedMessage());
+                        getViewState().getChatProperties();
                     }
                 }
 
                 @Override
                 public void onNext(Integer response) {
                     Log.d("TAG", "blod id = " + response);
-                    blobId = response;
+                    blobId = String.valueOf(response);
                     getViewState().getChatProperties();
                 }
             });
-        }
 
+        }
+        //  getViewState().getChatProperties();
     }
 
     @Override
     public void checkConnection() {
         if (BizareChatApp.getInstance().isNetworkConnected()) {
             uploadChatPhoto();
+            //getViewState().getChatProperties();
         } else {
             getViewState().showNetworkError();
         }

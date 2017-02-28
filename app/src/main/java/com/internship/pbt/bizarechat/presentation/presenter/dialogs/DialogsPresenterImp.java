@@ -7,22 +7,17 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
-import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
-import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.db.QueryBuilder;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
-import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
-import com.internship.pbt.bizarechat.db.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,8 +87,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             }
             dialogs.addAll(buffer);
             for (DialogModel m : buffer) {
-                getAndAddPhoto(m);
-                dialogPhotos.put(m.getDialogId(), dialogBitmap);
+                // getAndAddPhoto(m);
+                //   dialogPhotos.put(m.getDialogId(), dialogBitmap);
             }
             adapter.setDialogPhotos(dialogPhotos);
         }
@@ -135,7 +130,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             //TODO use occupantsId to find other user
             setUserPhotoId(getOccupantIdFromPrivateDialog(dialogModel));
         } else {
-            setDialogPhotos(Integer.parseInt(dialogModel.getPhoto()));
+            if (dialogModel.getPhoto() != "")
+                setDialogPhotos(Integer.parseInt(dialogModel.getPhoto()));
         }
 
     }

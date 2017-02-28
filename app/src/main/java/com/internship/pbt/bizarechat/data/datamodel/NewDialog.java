@@ -5,9 +5,9 @@ public class NewDialog {
     private int type;
     private String name;
     private String occupants_ids;
-    private int photo;
+    private String photo;
 
-    public NewDialog(int type, String name, String occupants_ids, int photo) {
+    public NewDialog(int type, String name, String occupants_ids, String photo) {
         this.type = type;
         this.name = name;
         this.occupants_ids = occupants_ids;
@@ -44,11 +44,11 @@ public class NewDialog {
         this.occupants_ids = occupants_ids;
     }
 
-    public int getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(int photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 }
