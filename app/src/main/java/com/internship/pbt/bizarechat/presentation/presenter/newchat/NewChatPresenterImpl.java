@@ -106,6 +106,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                         continue;
 
                     users.add(user);
+                    queryBuilder.addUserToUsersDao(user);
                     insertCounter++;
 
                     if (user.getBlobId() != null) {

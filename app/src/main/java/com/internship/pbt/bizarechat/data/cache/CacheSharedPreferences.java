@@ -113,6 +113,19 @@ public class CacheSharedPreferences {
             return id;
     }
 
+
+    public int getUserIntId() {
+        int id = mSharedPreferences.getInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, -1);
+        return id;
+    }
+
+
+    public void putUserId(Integer id) {
+        mEditor.putInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, id);
+        mEditor.apply();
+    }
+
+
     public String getFirebaseToken() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, null);
     }

@@ -3,7 +3,8 @@ package com.internship.pbt.bizarechat.db;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
+import com.internship.pbt.bizarechat.data.datamodel.UserModelDao;
 
 import java.util.List;
 
@@ -61,5 +62,31 @@ public class QueryBuilder {
     public boolean saveNewDialog(DialogModel model) {
         daoSession.getDialogModelDao().insertOrReplace(model);
         return true;
+    }
+
+    public boolean addUserToUsersDao(UserModel user) {
+        daoSession.getUserModelDao().insertOrReplace(user);
+        return true;
+    }
+
+    public boolean isUserExist(int lastUserId) {
+        long count = daoSession
+                .getUserModelDao()
+                .queryBuilder()
+                .where(UserModelDao.Properties.UserId.eq(lastUserId))
+                .count();
+        return count == 0;
+    }
+
+    public int getUserBlobId(int lastUserId) {
+        List<UserModel> user = daoSession
+                .getUserModelDao()
+                .queryBuilder()
+                .where(UserModelDao.Properties.UserId.eq(lastUserId))
+                .list();
+        if (user.size() != 0)
+            return user.get(0).getBlobId();
+        else
+            return -1;
     }
 }

@@ -6,44 +6,56 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
+import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
 import com.internship.pbt.bizarechat.db.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
 import rx.Subscriber;
 
 @InjectViewState
 public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         implements DialogsRecyclerViewAdapter.OnDialogDeleteCallback, DialogsPresenter {
-    private static final int THREE = 3;
+    private static final int PRIVATE_DIALOG = 3;
     private DaoSession daoSession;
     private QueryBuilder queryBuilder;
     private DialogsRecyclerViewAdapter adapter;
     private DeleteDialogUseCase deleteDialogUseCase;
-    private ContentDataRepository dataRepository;
-    private CacheUsersPhotos usersPhotos;
     private GetPhotoUseCase photoUseCase;
+    private GetUserByIdUseCase getUserByIdUseCase;
+    private CacheSharedPreferences cache;
     private int dialogsType;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
+    private Bitmap dialogBitmap;
+    private Integer currentUserPhotoBlobId;
 
 
     public DialogsPresenterImp(DeleteDialogUseCase deleteDialogUseCase,
                                GetPhotoUseCase photoUseCase,
-                               DaoSession daoSession, int dialogsType) {
+                               GetUserByIdUseCase getUserByIdUseCase,
+                               DaoSession daoSession,
+                               CacheSharedPreferences cache,
+                               int dialogsType) {
         this.deleteDialogUseCase = deleteDialogUseCase;
         this.photoUseCase = photoUseCase;
+        this.getUserByIdUseCase = getUserByIdUseCase;
+        this.cache = cache;
         this.daoSession = daoSession;
         this.dialogsType = dialogsType;
         dialogs = new ArrayList<>();
@@ -73,15 +85,17 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private List<DialogModel> getDialogsFromDao() {
         if (daoSession.getDialogModelDao().count() != 0) {
             List<DialogModel> buffer;
-            if (dialogsType == THREE) {
-                buffer = queryBuilder.getPrivateDialogs(THREE);
+            if (dialogsType == PRIVATE_DIALOG) {
+                buffer = queryBuilder.getPrivateDialogs(PRIVATE_DIALOG);
             } else {
                 buffer = queryBuilder.getPublicDialogs(dialogsType);
             }
             dialogs.addAll(buffer);
-            for (DialogModel d : buffer) {
-                // TODO  getAndAddPhoto(d.getDialogId(),d.getPhoto()); change getPhoto to int
+            for (DialogModel m : buffer) {
+                getAndAddPhoto(m);
+                dialogPhotos.put(m.getDialogId(), dialogBitmap);
             }
+            adapter.setDialogPhotos(dialogPhotos);
         }
         adapter.notifyDataSetChanged();
         return dialogs;
@@ -116,19 +130,19 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     }
 
 
-    private void getAndAddPhoto(String dialogId, Integer blobId) {
-        for (DialogModel model : adapter.getDialogs()) {
-            if (model.getType() == THREE) {
-                //TODO Download user photo
-            }
-            else
-            {
-             Observable<Bitmap> bitmap = dataRepository.getPhoto(1);
-            }
+    private void getAndAddPhoto(DialogModel dialogModel) {
+        if (dialogModel.getType() == PRIVATE_DIALOG) {
+            //TODO use occupantsId to find other user
+            setUserPhotoId(getOccupantIdFromPrivateDialog(dialogModel));
+        } else {
+            setDialogPhotos(Integer.parseInt(dialogModel.getPhoto()));
         }
 
+    }
 
-        /*photoUseCase.setBlobId(blobId);
+    private void setDialogPhotos(int blobId) {
+        dialogBitmap = null;
+        photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
             @Override
             public void onCompleted() {
@@ -141,10 +155,50 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onNext(Bitmap bitmap) {
-                dialogPhotos.put(dialogId, bitmap);
+                dialogBitmap = bitmap;
+                //dialogPhotos.put(dialogId, bitmap);
                 //adapter.notifyItemChanged(position);
             }
-        });*/
+        });
+    }
+
+    private void setUserPhotoId(int lastUserId) {
+        //TODO check user exist in dao if not than download photo
+        if (queryBuilder.isUserExist(lastUserId)) {
+            setDialogPhotos(queryBuilder.getUserBlobId(lastUserId));
+        } else {
+            getUserByIdUseCase.setId(lastUserId);
+            getUserByIdUseCase.execute(new Subscriber<UserModel>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(UserModel userModel) {
+                    currentUserPhotoBlobId = userModel.getBlobId();
+                    queryBuilder.addUserToUsersDao(userModel);
+
+                }
+            });
+        }
+    }
+
+    private int getOccupantIdFromPrivateDialog(DialogModel dialogModel) {
+        int currentUser = cache.getUserIntId();
+        Integer occupantId = null;
+        List<Integer> users = dialogModel.getOccupantsIds();
+        for (Integer i : users) {
+            if (i != currentUser)
+                occupantId = i;
+        }
+        return occupantId;
+
     }
 
 }

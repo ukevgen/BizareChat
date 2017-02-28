@@ -21,8 +21,10 @@ import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
+import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
@@ -44,7 +46,10 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
                         BizareChatApp.getInstance().getContentService(),
                         CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
+                new GetUserByIdUseCase(new UserDataRepository(
+                        BizareChatApp.getInstance().getUserService())),
                 BizareChatApp.getInstance().getDaoSession(),
+                CacheSharedPreferences.getInstance(getContext()),
                 DialogsType.TRHEE);
     }
 
@@ -77,7 +82,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == menuSearchId){
+        if (item.getItemId() == menuSearchId) {
             //TODO search logic
             return true;
         }
