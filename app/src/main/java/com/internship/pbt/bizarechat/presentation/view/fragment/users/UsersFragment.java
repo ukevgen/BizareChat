@@ -136,6 +136,7 @@ public class UsersFragment extends MvpAppCompatFragment
         if(sortQuery != null && !sortQuery.isEmpty()) {
             filterItem.expandActionView();
             filterEditText.setText(sortQuery);
+            filterEditText.requestFocus();
         }
     }
 

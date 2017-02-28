@@ -150,6 +150,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
 
     public void onFilterClose(){
         filtering = false;
+        adapter.filterList("");
     }
 
     public void sortByNameAsc(){

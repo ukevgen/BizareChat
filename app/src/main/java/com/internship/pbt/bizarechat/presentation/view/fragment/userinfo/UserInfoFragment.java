@@ -78,6 +78,8 @@ public class UserInfoFragment extends MvpAppCompatFragment
         phoneTextView = (TextView) view.findViewById(R.id.user_info_phone_value);
         websiteTextView = (TextView) view.findViewById(R.id.user_info_website_value);
         userInfoFab = (FloatingActionButton) view.findViewById(R.id.user_info_fab);
+        toolbarLayout.setTitleEnabled(true);
+        toolbarLayout.setTitle(fullName);
 
         view.findViewById(R.id.user_info_email_layout).setOnClickListener(this);
         view.findViewById(R.id.user_info_phone_layout).setOnClickListener(this);
@@ -124,15 +126,13 @@ public class UserInfoFragment extends MvpAppCompatFragment
     public void onStart() {
         super.onStart();
         getActivity().findViewById(R.id.collapsing_toolbar_layout).setVisibility(View.GONE);
-        toolbarLayout.setTitleEnabled(true);
-        toolbarLayout.setTitle(fullName);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         getActivity().findViewById(R.id.collapsing_toolbar_layout).setVisibility(View.VISIBLE);
-        toolbarLayout.setTitleEnabled(false);
+        avatarImage.setVisibility(View.INVISIBLE);
     }
 
     @Override
