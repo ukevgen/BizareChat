@@ -130,7 +130,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.0'
 
     // Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
 
