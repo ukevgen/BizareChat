@@ -147,12 +147,16 @@ dependencies {
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile "org.igniterealtime.smack:smack-extensions:4.1.9"
+    compile "org.igniterealtime.smack:smack-im:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
+    compile 'com.androidadvance:topsnackbar:1.1.1'
+
+    //SnackBar on steroids
     compile 'com.androidadvance:topsnackbar:1.1.1'
 
     //Moxy

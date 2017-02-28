@@ -2,18 +2,25 @@ package com.internship.pbt.bizarechat.presentation.presenter.newchat;
 
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.NewChatUsersRecyclerAdapter;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.domain.interactor.CreateDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllUsersUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.util.Validator;
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +37,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     private Integer usersCount = 0;
     private GetAllUsersUseCase allUsersUseCase;
     private GetPhotoUseCase photoUseCase;
+    private CreateDialogUseCase createDialogUseCase;
     private List<UserModel> users;
     private Map<Long, Bitmap> usersPhotos;
     //use this field to get all checked users and add them to "create chat request"
@@ -37,22 +45,33 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     private NewChatUsersRecyclerAdapter adapter;
     private boolean isPublicButtonChecked = true;
 
-    public NewChatPresenterImpl(GetAllUsersUseCase allUsersUseCase, GetPhotoUseCase photoUseCase){
+    private File fileToUpload;
+    private Converter converter;
+    private Validator validator;
+
+    public NewChatPresenterImpl(Converter converter,
+                                GetAllUsersUseCase allUsersUseCase,
+                                GetPhotoUseCase photoUseCase,
+                                CreateDialogUseCase createDialogUseCase) {
+        this.createDialogUseCase = createDialogUseCase;
+        this.converter = converter;
         this.allUsersUseCase = allUsersUseCase;
         this.photoUseCase = photoUseCase;
         users = new ArrayList<>();
         usersPhotos = new HashMap<>();
         checkedUsers = new HashSet<>();
         adapter = new NewChatUsersRecyclerAdapter(users, usersPhotos, checkedUsers);
+        validator = new Validator();
     }
 
-    public void getAllUsers(){
-        if(usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
+    public void getAllUsers() {
+        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
 
         allUsersUseCase.setPage(++currentUsersPage);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -63,36 +82,36 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
             public void onNext(AllUsersResponse response) {
                 UserModel user;
                 int insertCounter = 0;
-                for(AllUsersResponse.Item item : response.getItems()){
+                for (AllUsersResponse.Item item : response.getItems()) {
                     user = item.getUser();
 
-                    if(user.getUserId().equals(currentUserId))
+                    if (user.getUserId().equals(currentUserId))
                         continue;
 
                     users.add(user);
                     insertCounter++;
 
-                    if(user.getBlobId() != null){
-                        getAndAddPhoto(users.size()-1, user.getUserId(), user.getBlobId());
-                    } else{
+                    if (user.getBlobId() != null) {
+                        getAndAddPhoto(users.size() - 1, user.getUserId(), user.getBlobId());
+                    } else {
                         usersPhotos.put(user.getUserId(), null);
                     }
                 }
-                if(usersCount == 0) {
+                if (usersCount == 0) {
                     usersCount = response.getTotalEntries();
-                }
-                else{
-                    adapter.notifyItemRangeInserted(users.size()-insertCounter, insertCounter);
+                } else {
+                    adapter.notifyItemRangeInserted(users.size() - insertCounter, insertCounter);
                 }
             }
         });
     }
 
-    private void getAndAddPhoto(int position, Long userId, Integer blobId){
+    private void getAndAddPhoto(int position, Long userId, Integer blobId) {
         photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -107,29 +126,79 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
         });
     }
 
-    public void onPrivateClick(){
+    public void onPrivateClick() {
         isPublicButtonChecked = false;
         setChatPhotoVisibility();
         getViewState().showUsersView();
     }
 
-    public void onPublicClick(){
+    public void onPublicClick() {
         isPublicButtonChecked = true;
         setChatPhotoVisibility();
         getViewState().hideUsersView();
     }
 
-    public void setChatPhotoVisibility(){
-        if(!isPublicButtonChecked && checkedUsers.size() > 1)
+    public void setChatPhotoVisibility() {
+        if (!isPublicButtonChecked && checkedUsers.size() > 1)
             getViewState().showChatPhoto();
-        else if(isPublicButtonChecked)
+        else if (isPublicButtonChecked)
             getViewState().showChatPhoto();
-        else{
+        else {
             getViewState().hideChatPhoto();
         }
     }
 
     public NewChatUsersRecyclerAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    public void verifyAndLoadAvatar(Uri uri) {
+        fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
+
+        if (validator.isValidAvatarSize(fileToUpload)) {
+            loadAvatar();
+        } else {
+            showTooLargeImage();
+            fileToUpload = null;
+        }
+
+    }
+
+    private void loadAvatar() {
+        if (fileToUpload != null)
+            getViewState().loadAvatarToImageView(fileToUpload);
+    }
+
+    @Override
+    public void showTooLargeImage() {
+        getViewState().showTooLargePicture();
+    }
+
+    @Override
+    public void createNewChat() {
+        /*createDialogUseCase.setName();
+        createDialogUseCase.setOccupants_ids();
+        createDialogUseCase.setType(;);*/ //TODO set fields
+       /* createDialogUseCase.execute(new Subscriber<CreateDialogResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(CreateDialogResponse createDialogResponse) {
+                uploadChatPhoto();
+            }
+        });
+*/
+    }
+
+    private void uploadChatPhoto() {
     }
 }

@@ -5,9 +5,9 @@ public interface DialogsPresenter {
 
     void checkConnectionProblem();
 
-    void deleteDialog();
 
     void openDialog();
 
     void loadDialogs();
+
 }

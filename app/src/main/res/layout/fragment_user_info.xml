@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/userAppBarLayout"
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/user_collapsing_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="36dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/user_collapsing_toolbar_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:transitionName="@string/transition_user_avatar_name"
+                app:layout_collapseMode="parallax" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/user_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/user_info_email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="20dp"
+                android:paddingStart="20dp">
+                <ImageView
+                    android:id="@+id/user_info_email_icon"
+                    android:src="@drawable/email_icon"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp" />
+                <TextView
+                    android:id="@+id/user_info_email_title"
+                    android:layout_toEndOf="@id/user_info_email_icon"
+                    android:layout_marginStart="32dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/user_info_title"
+                    android:layout_alignBaseline="@id/user_info_email_icon"
+                    android:text="@string/user_info_email_title"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/user_info_email_value"
+                    android:layout_below="@id/user_info_email_title"
+                    android:layout_alignStart="@id/user_info_email_title"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/user_info_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_marginTop="20dp"
+                    android:layout_alignStart="@id/user_info_email_title"
+                    android:layout_below="@id/user_info_email_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/user_info_delimiter" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/user_info_phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingTop="20dp"
+                android:paddingStart="20dp">
+                <ImageView
+                    android:id="@+id/user_info_phone_icon"
+                    android:src="@drawable/phone_icon"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+                <TextView
+                    android:id="@+id/user_info_phone_title"
+                    android:layout_toEndOf="@id/user_info_phone_icon"
+                    android:layout_marginStart="32dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/user_info_title"
+                    android:layout_alignBaseline="@id/user_info_phone_icon"
+                    android:text="@string/user_info_phone_title"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/user_info_phone_value"
+                    android:layout_below="@id/user_info_phone_title"
+                    android:layout_alignStart="@id/user_info_phone_title"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/user_info_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <View
+                    android:layout_marginTop="20dp"
+                    android:layout_alignStart="@id/user_info_phone_title"
+                    android:layout_below="@id/user_info_phone_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/user_info_delimiter" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/user_info_website_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="20dp">
+                <ImageView
+                    android:id="@+id/user_info_website_icon"
+                    android:src="@drawable/site_icon"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView
+                    android:id="@+id/user_info_website_title"
+                    android:layout_toEndOf="@id/user_info_website_icon"
+                    android:layout_marginStart="32dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/user_info_title"
+                    android:layout_alignBaseline="@id/user_info_website_icon"
+                    android:text="@string/user_info_website_title"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/user_info_website_value"
+                    android:layout_below="@id/user_info_website_title"
+                    android:layout_alignStart="@id/user_info_website_title"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/user_info_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/user_info_fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_chat"
+        app:fabSize="normal"
+        app:useCompatPadding="true"
+        app:backgroundTint="@color/button_add_chat"
+        app:layout_anchor="@id/userAppBarLayout"
+        app:layout_anchorGravity="bottom|right|end" />
+
+</android.support.design.widget.CoordinatorLayout>

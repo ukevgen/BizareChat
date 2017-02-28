@@ -215,6 +215,8 @@ public class MessageModel {
             List<Integer> result = new ArrayList<>();
             databaseValue = databaseValue.substring(1, databaseValue.length()-1);
 
+            if(databaseValue.isEmpty()) return result;
+
             for(String entry : databaseValue.split("\\s*,\\s*")){
                 result.add(Integer.parseInt(entry));
             }

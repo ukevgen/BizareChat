@@ -7,7 +7,7 @@ public class Validator {
 
     private static final String TAG = "Validator";
 
-    private static final int SIX = 6;
+    private static final int SIX = 8;
     private static final int TWELVE = 12;
     public static final String LETTERS = "[\\D+]";
     private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";

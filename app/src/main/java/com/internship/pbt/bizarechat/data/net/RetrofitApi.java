@@ -3,7 +3,6 @@ package com.internship.pbt.bizarechat.data.net;
 
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.requests.UserRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.ContentService;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
@@ -134,12 +133,11 @@ public class RetrofitApi {
             if (CurrentUser.getInstance().isAuthorized() &&
                     CurrentUser.getInstance().getCurrentPassword() != null &&
                     CurrentUser.getInstance().getCurrentEmail() != null) {
-                Log.d("432", "sessionRepository.getSessionWithAuth");
                 sessionRepository.getSessionWithAuth(
                         new UserRequestModel(CurrentUser.getInstance().getCurrentEmail(),
                                 CurrentUser.getInstance().getCurrentPassword()))
-                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
-                        .observeOn(Schedulers.newThread())
+                        .subscribeOn(Schedulers.immediate())
+                        .observeOn(Schedulers.immediate())
                         .subscribe(new Subscriber<Session>() {
                             @Override
                             public void onCompleted() {
@@ -158,11 +156,9 @@ public class RetrofitApi {
                         });
 
             } else if (!CurrentUser.getInstance().isAuthorized()) {
-                Log.d("432", "sessionRepository.getSession");
-
                 sessionRepository.getSession()
-                        .subscribeOn(Schedulers.from(JobExecutor.getInstance()))
-                        .observeOn(Schedulers.newThread())
+                        .subscribeOn(Schedulers.immediate())
+                        .observeOn(Schedulers.immediate())
                         .subscribe(new Subscriber<Session>() {
                             @Override
                             public void onCompleted() {

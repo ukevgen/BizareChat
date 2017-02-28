@@ -33,7 +33,6 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.register.Registr
 
 import java.io.File;
 
-import retrofit2.Response;
 import ru.tinkoff.decoro.MaskImpl;
 import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
 import ru.tinkoff.decoro.slots.Slot;
@@ -143,7 +142,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                     ApiConstants.CONTENT_TYPE_IMAGE_JPEG,
                     fileToUpload,
                     CurrentUser.CURRENT_AVATAR);
-            uploadFileUseCase.execute(new Subscriber<Response<Void>>() {
+            uploadFileUseCase.execute(new Subscriber<Integer>() {
                 @Override
                 public void onCompleted() {
                     mRegisterView.showIsAvatarUploadedMessage();
@@ -158,11 +157,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                         mRegisterView.hideLoading();
                         mRegisterView.showError("UploadAvatar " + message);
                     }
-                    currentUser.setAvatarBlobId(null);
                 }
 
                 @Override
-                public void onNext(Response<Void> response) { // Now is return Integer blobId
+                public void onNext(Integer response) { // Now is return Integer blobId
+                    currentUser.setAvatarBlobId(Long.valueOf(response));
                     onRegistrationSuccess();
                 }
             });
@@ -210,6 +209,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
+            currentUser.setStringAvatar(converter.encodeAvatarTobase64(fileToUpload));
             loadAvatar();
         } else {
             showTooLargeImage();
@@ -279,6 +279,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
     public void onRegistrationSuccess() {
         mRegisterView.hideLoading();
         currentUser.setAuthorized(true);
+
         //mRegisterView.goToMainActivity();
         mRegisterView.onRegistrationSuccess();
     }
@@ -313,7 +314,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-
+                if (fileToUpload != null)
+                    uploadAvatar();
+                else
+                    onRegistrationSuccess();
             }
 
             @Override
@@ -328,10 +332,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onNext(UserLoginResponse session) {
-                if (fileToUpload != null)
-                    uploadAvatar();
-                else
-                    onRegistrationSuccess();
             }
         });
     }

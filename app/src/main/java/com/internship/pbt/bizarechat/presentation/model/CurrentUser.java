@@ -98,11 +98,27 @@ public class CurrentUser implements AuthStore {
         cache.putUserId(id);
     }
 
-    public String getFirebaseToken(){
+    public String getFirebaseToken() {
         return cache.getFirebaseToken();
     }
 
-    public void setFirebaseToken(String token){
+    public void setFirebaseToken(String token) {
         cache.putFirebaseToken(token);
+    }
+
+    public boolean isSubscribed() {
+        return cache.isSubscribed();
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        cache.putIsSubscribed(subscribed);
+    }
+
+    public void setStringAvatar(String s) {
+        cache.putStringAvatar(s);
+    }
+
+    public String getStringAvatar() {
+        return cache.getStringAvatar();
     }
 }

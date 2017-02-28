@@ -9,6 +9,7 @@ import rx.Observable;
 public class GetAllUsersUseCase extends UseCase<AllUsersResponse> {
     private UserRepository userRepository;
     private Integer page;
+    private String order;
 
     public GetAllUsersUseCase(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -17,14 +18,14 @@ public class GetAllUsersUseCase extends UseCase<AllUsersResponse> {
 
     @Override
     protected Observable<AllUsersResponse> buildUseCaseObservable() {
-        return userRepository.getAllUsers(page);
-    }
-
-    public Integer getPage() {
-        return page;
+        return userRepository.getAllUsers(page, order);
     }
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

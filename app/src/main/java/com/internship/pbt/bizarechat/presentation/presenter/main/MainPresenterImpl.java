@@ -1,17 +1,24 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
-import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
+import com.internship.pbt.bizarechat.data.net.RetrofitApi;
+import com.internship.pbt.bizarechat.data.repository.PushNotificationsRepository;
+import com.internship.pbt.bizarechat.data.repository.UserToken;
+import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
 import retrofit2.Response;
@@ -19,7 +26,7 @@ import rx.Subscriber;
 
 @InjectViewState
 public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPresenter {
-
+    private static final String TAG = MainPresenterImpl.class.getSimpleName();
     private SignOutUseCase signOutUseCase;
     private GetAllDialogsUseCase dialogsUseCase;
     private DaoSession daoSession;
@@ -33,9 +40,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     private void clearCurrentUserCache() {
-        /*UserToken.getInstance().deleteToken();
+        UserToken.getInstance().deleteToken();
         CurrentUser.getInstance().setAuthorized(false);
-        CurrentUser.getInstance().clearCurrentUser();*/
+        CurrentUser.getInstance().clearCurrentUser();
     }
 
     @Override
@@ -59,6 +66,30 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
             }
         });
 
+    }
+
+    public void sendSubscriptionToServer() {
+        CreateSubscriptionUseCase useCase = new CreateSubscriptionUseCase(
+                new PushNotificationsRepository(RetrofitApi.getRetrofitApi().getNotificationService()));
+        useCase.setFirebaseToken(CurrentUser.getInstance().getFirebaseToken());
+
+        useCase.execute(new Subscriber<CreateSubscriptionResponse[]>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+
+            @Override
+            public void onNext(CreateSubscriptionResponse[] response) {
+                CurrentUser.getInstance().setSubscribed(true);
+                Log.d(TAG, "sendRegistrationToServer: " + CurrentUser.getInstance().getFirebaseToken());
+            }
+        });
     }
 
     public void navigateToUsers() {
@@ -120,11 +151,15 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     private boolean isDialogDaoEmpty() {
+
         dialogsCount = daoSession.getDialogModelDao().count();
         return dialogsCount == 0;
     }
 
     private void updateDialogsDao() {
+        if (BizareChatApp.getInstance().getDaoSession() == null)
+            daoSession = BizareChatApp.getInstance().getDaoSession();
+
         if (BizareChatApp.getInstance().isNetworkConnected()) {
 
             dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
@@ -138,16 +173,13 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
                     Log.d("TAG", e.toString());
                 }
 
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onNext(AllDialogsResponse response) {
 
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
-                    //modelDao.insertOrReplaceInTx(response.getDialogModels());
-                    //response.getDialogModels().forEach(modelDao::insertOrReplace);
-                    for (DialogModel m : response.getDialogModels()) {
-                        modelDao.insertOrReplace(m);
-                        Log.d("TAG", modelDao.getAllColumns().toString());
-                    }
+                    modelDao.insertOrReplaceInTx(response.getDialogModels());
+
 
                 }
             });

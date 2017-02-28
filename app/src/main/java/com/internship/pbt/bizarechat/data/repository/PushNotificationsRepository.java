@@ -1,7 +1,7 @@
 package com.internship.pbt.bizarechat.data.repository;
 
 
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponseWrapper;
+import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.CreateSubscriptionRequest;
 import com.internship.pbt.bizarechat.data.net.services.NotificationService;
@@ -17,7 +17,7 @@ public class PushNotificationsRepository implements NotificationsRepository{
         this.service = service;
     }
 
-    public Observable<CreateSubscriptionResponseWrapper> createSubscription(String token){
+    public Observable<CreateSubscriptionResponse[]> createSubscription(String token){
         int nonce = (int)(Math.random() * 1000);
         long timestamp = System.currentTimeMillis();
         String udid = HmacSha1Signature.calculateSignature(nonce, timestamp);

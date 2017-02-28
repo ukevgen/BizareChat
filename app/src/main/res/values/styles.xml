@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
         <item name="textColorError">@color/invalid_info_test_color</item>
     </style>
 
@@ -79,6 +80,12 @@
         <item name="colorAccent">@color/image_chooser_dialog_accent</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:background">@color/image_chooser_dialog_background</item>
+    </style>
+
+    <style name="AlertDialogConfirmStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/button_disabled_text</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/button_sign_in_pressed</item>
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">

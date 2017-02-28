@@ -51,7 +51,8 @@ public interface ContentService {
 
     @Headers({"Content-Type: application/json", "QuickBlox-REST-API-Version: 0.1.0"})
     @PUT("/users/{user_id}.json")
-    Observable<Response<Void>> updateUserBlobId(@Path (value = "user_id") Long id,
+    Observable<Response<Void>> updateUserBlobId(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                                @Path (value = "user_id") Long id,
                                                 @Body UserUpdateBlobId userUpdateBlobId);
 
     @Headers({"QuickBlox-REST-API-Version: 0.1.0"})

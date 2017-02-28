@@ -16,19 +16,26 @@ public class UserDataRepository implements UserRepository {
         this.userService = userService;
     }
 
+    @Override
     public Observable<Response<Void>> resetUserPassword(String email){
         return userService.resetUserPassword(UserToken.getInstance().getToken(), email);
     }
 
-    public Observable<AllUsersResponse> getAllUsers(Integer page){
+    @Override
+    public Observable<AllUsersResponse> getAllUsers(Integer page, String order){
         return userService.getAllUsers(
+                UserToken.getInstance().getToken(),
+                order,
+                page,
+                ApiConstants.USERS_PER_PAGE);
+    }
+
+    @Override
+    public Observable<AllUsersResponse> getUsersByFullName(Integer page, String query){
+        return userService.getUsersByFullName(
                 UserToken.getInstance().getToken(),
                 page,
                 ApiConstants.USERS_PER_PAGE,
-                ApiConstants.ORDER_ASC_FULL_NAME);
+                query);
     }
-
-
-
-
 }

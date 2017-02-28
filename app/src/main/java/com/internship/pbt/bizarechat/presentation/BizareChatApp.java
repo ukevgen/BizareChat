@@ -1,6 +1,5 @@
 package com.internship.pbt.bizarechat.presentation;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
@@ -19,6 +18,7 @@ import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.data.net.services.SessionService;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
+import com.internship.pbt.bizarechat.db.DBHelper;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -27,8 +27,10 @@ import io.fabric.sdk.android.Fabric;
 public class BizareChatApp extends MultiDexApplication {
 
     private static BizareChatApp INSTANCE = null;
-
+    private DBHelper dbHelper = new DBHelper(this);
     private DaoSession daoSession;
+    private DaoMaster daoMaster;
+    private Database db;
 
     public static BizareChatApp getInstance() {
         return INSTANCE;
@@ -51,9 +53,10 @@ public class BizareChatApp extends MultiDexApplication {
         UserToken.getInstance().initSharedPreferences(this);
 
         //DB init
-        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
-        Database db = openHelper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        /*DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
+        db = openHelper.getWritableDb();*/
+
+
     }
 
     public CacheUsersPhotos getCacheUsersPhotos() {
@@ -80,9 +83,20 @@ public class BizareChatApp extends MultiDexApplication {
         return RetrofitApi.getRetrofitApi().getDialogsService();
     }
 
-    public DaoSession getDaoSession() {
+    /*public DaoSession getDaoSession() {
+        if (daoSession == null)
+            daoSession = getDaoMaster().newSession();
         return daoSession;
+    }*/
+
+    public DaoSession getDaoSession() {
+        return getInstance().dbHelper.getSession(false);
     }
+    /*private DaoMaster getDaoMaster() {
+        if (daoMaster == null)
+            daoMaster = new DaoMaster(db);
+        return daoMaster;
+    }*/
 
     public boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

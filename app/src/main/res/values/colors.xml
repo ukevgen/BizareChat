@@ -27,6 +27,8 @@
     <color name="main_screen_empty_text">#b2b2b3</color>
     <color name="main_screen_background">#f7f7f9</color>
     <color name="main_screen_invite_friends_text">#327780</color>
+    <color name="main_screen_connection_problem_text">#f73500</color>
+    <color name="main_screen_connection_problem_background">#e9e9e9</color>
     <color name="chats_item_last_message">#bdbdbd</color>
     <color name="chats_item_last_message_author">#757575</color>
     <color name="chats_item_name">#212121</color>
@@ -39,4 +41,7 @@
     <color name="new_chat_create_button_pressed">#1c5b63</color>
     <color name="new_chat_edit_text_hint_color">#757575</color>
     <color name="chat_message_user_date_color">#bdbdbd</color>
+    <color name="user_info_title">#757575</color>
+    <color name="user_info_value">#000000</color>
+    <color name="user_info_delimiter">#e0e0e0</color>
 </resources>
