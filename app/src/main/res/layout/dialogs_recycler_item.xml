@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chats_item_swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp">
+
+    <LinearLayout
+        android:id="@+id/chats_item_bottom_view"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/chats_item_delete_button"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/delete_icon" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/chats_item_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/chats_item_chat_image"
+                    android:layout_width="@dimen/image_size_main"
+                    android:layout_height="@dimen/image_size_main"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/user_icon" />
+
+                <TextView
+                    android:id="@+id/chats_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@id/chats_item_chat_image"
+                    android:text="Title"
+                    android:textColor="@color/chats_item_name" />
+
+                <TextView
+                    android:id="@+id/chats_item_last_message_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/chats_item_name"
+                    android:layout_below="@id/chats_item_name"
+                    android:layout_marginBottom="8dp"
+                    android:text="Last Author"
+                    android:textColor="@color/chats_item_last_message_author" />
+
+                <TextView
+                    android:id="@+id/chats_item_last_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/chats_item_name"
+                    android:layout_below="@id/chats_item_last_message_author"
+                    android:text="Last Message"
+                    android:textColor="@color/chats_item_last_message" />
+
+                <TextView
+                    android:id="@+id/chats_item_last_message_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignTop="@id/chats_item_name"
+                    android:text="00:00"
+                    android:textColor="@color/chats_item_last_message_date" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:id="@+id/new_message_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/new_message_indicator"
+            android:paddingBottom="4dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="4dp"
+            android:text="+1"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </FrameLayout>
+</com.daimajia.swipe.SwipeLayout>
