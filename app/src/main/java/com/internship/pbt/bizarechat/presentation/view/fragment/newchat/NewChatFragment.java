@@ -2,9 +2,11 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.newchat;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,12 +14,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -50,6 +56,8 @@ public class NewChatFragment extends MvpAppCompatFragment implements
 
     private static final int DEVICE_CAMERA = 0;
     private static final int PHOTO_GALLERY = 1;
+    private int type = 2;
+    private ProgressBar mProgressBar;
 
     @ProvidePresenter
     NewChatPresenterImpl provideNewChatPresenter() {
@@ -61,7 +69,8 @@ public class NewChatFragment extends MvpAppCompatFragment implements
                         CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new CreateDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService()))
+                        .getDialogsService())),
+                new ContentDataRepository(BizareChatApp.getInstance().getContentService())
         );
     }
 
@@ -81,6 +90,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     private Button createButton;
     private TextView toolbarTitle;
     private TextView membersTitle;
+    private TSnackbar connProblemSnack;
 
     private boolean loading = true;
     private int pastVisibleItems, visibleItemCount, totalItemCount;
@@ -98,6 +108,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
         publicRadioButton.setOnClickListener(this);
         privateRadioButton = (AppCompatRadioButton) view.findViewById(R.id.radio_private);
         privateRadioButton.setOnClickListener(this);
+        mProgressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
         recyclerView = (RecyclerView) view.findViewById(R.id.new_chat_members_container);
         createButton = (Button) view.findViewById(R.id.new_chat_button_create);
         createButton.setOnClickListener(this);
@@ -153,7 +164,9 @@ public class NewChatFragment extends MvpAppCompatFragment implements
                 showPictureChooser();
                 break;
             case R.id.new_chat_button_create:
-                presenter.createNewChat();
+                /*presenter.uploadChatPhoto();
+                presenter.createNewChat();*/
+                presenter.checkConnection();
                 break;
         }
     }
@@ -185,6 +198,24 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     @Override
     public void loadAvatarToImageView(File file) {
         Glide.with(this).load(file).centerCrop().into(chatPhoto);
+    }
+
+    @Override
+    public void setChatType(int type) {
+        this.type = type;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void getChatProperties() {
+        String chatName = String.valueOf(chatNameEditText.getText());
+        presenter.createRequestForNewChat(chatName, type);
+    }
+
+
+    @Override
+    public void showErrorMassage(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -225,4 +256,40 @@ public class NewChatFragment extends MvpAppCompatFragment implements
             presenter.verifyAndLoadAvatar(data.getData());
         }
     }
+
+    @Override
+    public void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+
+    @Override
+    public void hideLoading() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showChatRoom() {
+        // TODO start new dialog
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
+            connProblemSnack = TSnackbar.make(recyclerView,
+                    R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
+            connProblemSnack.getView().setBackgroundColor(getResources()
+                    .getColor(R.color.main_screen_connection_problem_background));
+            TextView message = (TextView) connProblemSnack.getView()
+                    .findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+            message.setTextColor(getResources().getColor(R.color.main_screen_connection_problem_text));
+            message.setGravity(Gravity.CENTER);
+        }
+        connProblemSnack.show();
+
+    }
 }
+
+
+
+

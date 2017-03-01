@@ -11,7 +11,7 @@ public class GetUsersByFullName extends UseCase<AllUsersResponse> {
     private Integer page;
     private String query;
 
-    public GetUsersByFullName(UserRepository userRepository){
+    public GetUsersByFullName(UserRepository userRepository) {
         this.userRepository = userRepository;
         page = 1;
     }

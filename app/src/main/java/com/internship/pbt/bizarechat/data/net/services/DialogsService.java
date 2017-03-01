@@ -1,6 +1,8 @@
 package com.internship.pbt.bizarechat.data.net.services;
 
 
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
@@ -39,9 +41,7 @@ public interface DialogsService {
 
     @Headers("Content-Type: application/json")
     @POST("/chat/Dialog.json")
-    Observable<CreateDialogResponse> createDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
-                                                  @Path("type") String type,
-                                                  @Path("name") String name,
-                                                  @Path("occupants_ids") String occupants_ids);
+    Observable<DialogModel> createDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                         @Body NewDialog dialog);
 
 }

@@ -121,4 +121,9 @@ public class CurrentUser implements AuthStore {
     public String getStringAvatar() {
         return cache.getStringAvatar();
     }
+
+    public void setCurrentUserIntId(Integer currentUserIntId) {
+        cache.putUserId(currentUserIntId);
+    }
+
 }

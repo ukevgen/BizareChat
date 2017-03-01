@@ -41,6 +41,10 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         return this;
     }
 
+    public void setDialogPhotos(Map<String, Bitmap> dialogPhotos) {
+        this.dialogPhotos = dialogPhotos;
+    }
+
     public List<DialogModel> getDialogs() {
         return dialogs;
     }

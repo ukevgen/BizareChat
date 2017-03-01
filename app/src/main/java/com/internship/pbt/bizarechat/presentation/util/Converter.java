@@ -9,9 +9,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
 
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import id.zelory.compressor.Compressor;
 
@@ -60,5 +63,17 @@ public class Converter {
             decodedByte = Base64.decode(stringAvatar, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 
+    }
+
+    public String getOccupantsArray(List<UserModel> users) {
+        StringBuilder builder = new StringBuilder();
+        for (UserModel m : users) {
+            if (m.isChecked())
+                builder.append(m.getUserId()).append(",");
+        }
+        if (builder.length() > 0)
+            builder.setLength(builder.length() - 1);
+
+        return builder.toString();
     }
 }

@@ -262,6 +262,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             public void onNext(ResponseSignUpModel signUpModel) {
                 Log.d(TAG, signUpModel.toString());
                 currentUser.setCurrentUserId(Long.valueOf(signUpModel.getUser().getId()));
+                currentUser.setCurrentUserIntId(signUpModel.getUser().getId());
                 authorize();
             }
         });

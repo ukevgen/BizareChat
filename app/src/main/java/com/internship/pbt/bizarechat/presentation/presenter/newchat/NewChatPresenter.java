@@ -12,4 +12,7 @@ public interface NewChatPresenter {
 
     void createNewChat();
 
+    void createRequestForNewChat(String chatName, int type);
+
+    void checkConnection();
 }

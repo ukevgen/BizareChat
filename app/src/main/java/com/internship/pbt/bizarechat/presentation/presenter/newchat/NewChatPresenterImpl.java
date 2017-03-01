@@ -3,18 +3,26 @@ package com.internship.pbt.bizarechat.presentation.presenter.newchat;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.NewChatUsersRecyclerAdapter;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.db.QueryBuilder;
 import com.internship.pbt.bizarechat.domain.interactor.CreateDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllUsersUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
+import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
@@ -27,11 +35,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import rx.Subscriber;
 
 @InjectViewState
 public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements NewChatPresenter {
+    private static final int PRIVATE_CHAT = 3;
+    private static final int PUBLIC_CHAT = 2;
+    private final ContentRepository contentRepository;
     private Long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private Integer currentUsersPage = 0;
     private Integer usersCount = 0;
@@ -40,28 +52,33 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     private CreateDialogUseCase createDialogUseCase;
     private List<UserModel> users;
     private Map<Long, Bitmap> usersPhotos;
+    private QueryBuilder queryBuilder;
     //use this field to get all checked users and add them to "create chat request"
     private Set<Long> checkedUsers;
     private NewChatUsersRecyclerAdapter adapter;
     private boolean isPublicButtonChecked = true;
-
+    private UseCase uploadFileUseCase;
     private File fileToUpload;
     private Converter converter;
     private Validator validator;
+    private String blobId;
 
     public NewChatPresenterImpl(Converter converter,
                                 GetAllUsersUseCase allUsersUseCase,
                                 GetPhotoUseCase photoUseCase,
-                                CreateDialogUseCase createDialogUseCase) {
+                                CreateDialogUseCase createDialogUseCase,
+                                ContentRepository contentRepository) {
         this.createDialogUseCase = createDialogUseCase;
         this.converter = converter;
         this.allUsersUseCase = allUsersUseCase;
         this.photoUseCase = photoUseCase;
+        this.contentRepository = contentRepository;
         users = new ArrayList<>();
         usersPhotos = new HashMap<>();
         checkedUsers = new HashSet<>();
         adapter = new NewChatUsersRecyclerAdapter(users, usersPhotos, checkedUsers);
         validator = new Validator();
+        queryBuilder = QueryBuilder.getQueryBuilder(BizareChatApp.getInstance().getDaoSession());
     }
 
     public void getAllUsers() {
@@ -89,6 +106,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                         continue;
 
                     users.add(user);
+                    queryBuilder.addUserToUsersDao(user);
                     insertCounter++;
 
                     if (user.getBlobId() != null) {
@@ -128,14 +146,17 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
     public void onPrivateClick() {
         isPublicButtonChecked = false;
+        fileToUpload = null;
         setChatPhotoVisibility();
         getViewState().showUsersView();
+        getViewState().setChatType(PRIVATE_CHAT);
     }
 
     public void onPublicClick() {
         isPublicButtonChecked = true;
         setChatPhotoVisibility();
         getViewState().hideUsersView();
+        getViewState().setChatType(PUBLIC_CHAT);
     }
 
     public void setChatPhotoVisibility() {
@@ -177,10 +198,28 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
     @Override
     public void createNewChat() {
-        /*createDialogUseCase.setName();
-        createDialogUseCase.setOccupants_ids();
-        createDialogUseCase.setType(;);*/ //TODO set fields
-       /* createDialogUseCase.execute(new Subscriber<CreateDialogResponse>() {
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void createRequestForNewChat(String chatName, int type) {
+
+
+        //  uploadChatPhoto();
+        NewDialog dialog = null;
+        String occupants = converter.getOccupantsArray(adapter.getUsers());
+        if (type == PRIVATE_CHAT) {
+            dialog = new NewDialog(type, chatName, occupants);
+        }
+        if (checkTypeOfDialog(adapter.getUsers()) != PRIVATE_CHAT) {
+            type = PUBLIC_CHAT;
+            dialog = new NewDialog(type, chatName, occupants, blobId);
+        }
+
+        createDialogUseCase.setDialog(dialog);
+        createDialogUseCase.execute(new Subscriber<DialogModel>() {
             @Override
             public void onCompleted() {
 
@@ -188,17 +227,75 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-
+                Log.d("TAG", e.toString());
+                getViewState().hideLoading();
             }
 
             @Override
-            public void onNext(CreateDialogResponse createDialogResponse) {
-                uploadChatPhoto();
+            public void onNext(DialogModel response) {
+                Log.d("TAG", response.toString());
+                queryBuilder.saveNewDialog(response);
+                getViewState().hideLoading();
             }
         });
-*/
     }
 
-    private void uploadChatPhoto() {
+    private int checkTypeOfDialog(List<UserModel> users) {
+        int count = PUBLIC_CHAT;
+        for (UserModel m : users) {
+            if (m.isChecked())
+                count++;
+        }
+        return count;
+    }
+
+    public void uploadChatPhoto() {
+        String fileName = UUID.randomUUID().toString();
+        if (fileToUpload != null) {
+            getViewState().showLoading();
+            this.uploadFileUseCase = new UploadFileUseCase(contentRepository,
+                    ApiConstants.CONTENT_TYPE_IMAGE_JPEG,
+                    fileToUpload,
+                    fileName);
+
+            uploadFileUseCase.execute(new Subscriber<Integer>() {
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.d("TAG", e.getLocalizedMessage());
+                    if (getViewState() != null) {
+                        getViewState().hideLoading();
+                        getViewState().showErrorMassage(e.getLocalizedMessage());
+                        getViewState().getChatProperties();
+                    }
+                }
+
+                @Override
+                public void onNext(Integer response) {
+                    Log.d("TAG", "blod id = " + response);
+                    blobId = String.valueOf(response);
+                    getViewState().getChatProperties();
+                }
+            });
+
+        }
+        //  getViewState().getChatProperties();
+    }
+
+    @Override
+    public void checkConnection() {
+        if (BizareChatApp.getInstance().isNetworkConnected()) {
+            uploadChatPhoto();
+            //getViewState().getChatProperties();
+        } else {
+            getViewState().showNetworkError();
+        }
     }
 }
+
+
+
+
