@@ -111,9 +111,6 @@ public class ContentDataRepository implements ContentRepository {
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
 
-                        if (name.equals(CurrentUser.CURRENT_AVATAR))
-                            cache.putAccountAvatarBlobId(Long.parseLong(blobId));
-
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),
                                 blobId,

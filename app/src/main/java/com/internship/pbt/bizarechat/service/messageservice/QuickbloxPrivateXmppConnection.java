@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceipt;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceiptManager;
 
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
@@ -16,6 +18,7 @@ import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.packet.id.StanzaIdUtil;
+import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smackx.receipts.DeliveryReceipt;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
@@ -23,6 +26,7 @@ import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Random;
 
 public final class QuickbloxPrivateXmppConnection
         implements ConnectionListener, ChatMessageListener, ReceiptReceivedListener {
@@ -33,7 +37,9 @@ public final class QuickbloxPrivateXmppConnection
     private DeliveryReceiptManager deliveryReceiptManager;
     private WeakReference<BizareChatMessageService> messageService;
 
-    private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService){
+    private ReceiptReceivedListener receiptReceivedListener;
+
+    private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
     }
 
@@ -48,13 +54,27 @@ public final class QuickbloxPrivateXmppConnection
         return INSTANCE;
     }
 
-    public void sendMessage(String body, String receiverJid, long timestamp) throws SmackException{
-        Log.d(TAG,"Sending message to : "+ receiverJid);
+    public void sendReadReceipt(String receiverJid, String stanzaId) {
+        Message message = new Message(receiverJid);
+        ReadReceipt read = new ReadReceipt(stanzaId);
+        message.addExtension(read);
+        try {
+            privateChatConnection.sendStanza(message);
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String body, String receiverJid, long timestamp) throws SmackException {
+        Random random = new Random(timestamp + body.length() + receiverJid.length());
+        Log.d(TAG, "Sending message to : " + receiverJid);
         Chat chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
 
-        Message message = new Message();
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
+
+        Message message = new Message();
+        message.setStanzaId(receiverJid + random.nextInt());
         message.setBody(body);
         message.addExtension(extension);
         message.addExtension(new DeliveryReceipt(StanzaIdUtil.newStanzaId()));
@@ -63,7 +83,7 @@ public final class QuickbloxPrivateXmppConnection
     }
 
     @Override
-    public void processMessage(Chat chat, Message message){
+    public void processMessage(Chat chat, Message message) {
         messageService.get().processPrivateMessage(message);
     }
 
@@ -73,13 +93,19 @@ public final class QuickbloxPrivateXmppConnection
     }
 
     public void connect() throws IOException, XMPPException, SmackException {
+        ProviderManager.addExtensionProvider(ReadReceipt.ELEMENT, ReadReceipt.NAMESPACE, new ReadReceipt.Provider());
+        receiptReceivedListener = (fromJid, toJid, receiptId, receipt) -> {
+            // TODO Handle read event
+        };
+        ReadReceiptManager.getInstanceFor(privateChatConnection).addReadReceivedListener(receiptReceivedListener);
         initPrivateConnection();
         privateChatConnection.connect();
         privateChatConnection.login();
     }
 
-    public void disconnect(){
-        if(privateChatConnection != null)
+    public void disconnect() {
+        ReadReceiptManager.getInstanceFor(privateChatConnection).removeRemoveReceivedListener(receiptReceivedListener);
+        if (privateChatConnection != null)
             privateChatConnection.disconnect();
         privateChatConnection = null;
     }
@@ -101,7 +127,7 @@ public final class QuickbloxPrivateXmppConnection
 
     @Override
     public void connectionClosedOnError(Exception e) {
-        Log.d(TAG, "Connection closed on error; error "+ e.toString());
+        Log.d(TAG, "Connection closed on error; error " + e.toString());
     }
 
     @Override

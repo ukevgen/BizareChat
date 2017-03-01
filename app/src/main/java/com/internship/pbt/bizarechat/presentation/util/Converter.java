@@ -42,11 +42,11 @@ public class Converter {
         return Compressor.getDefault(context).compressToFile(src);
     }
 
-    public String encodeAvatarTobase64(Uri uri) {
+    public String encodeAvatarTobase64(File file) {
         Bitmap bitmap = null;
         String imageEncoded = null;
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(file));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
