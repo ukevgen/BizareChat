@@ -30,7 +30,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.NewChatUsersRecyclerAdapter;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
@@ -56,7 +55,6 @@ public class NewChatFragment extends MvpAppCompatFragment implements
 
     private static final int DEVICE_CAMERA = 0;
     private static final int PHOTO_GALLERY = 1;
-    private int type = 2;
     private ProgressBar mProgressBar;
 
     @ProvidePresenter
@@ -66,11 +64,12 @@ public class NewChatFragment extends MvpAppCompatFragment implements
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
                 new GetPhotoUseCase(new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new CreateDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
                         .getDialogsService())),
-                new ContentDataRepository(BizareChatApp.getInstance().getContentService())
+                new ContentDataRepository(
+                        BizareChatApp.getInstance().getContentService(),
+                        CacheUsersPhotos.getInstance(getActivity()))
         );
     }
 
@@ -200,6 +199,18 @@ public class NewChatFragment extends MvpAppCompatFragment implements
         Glide.with(this).load(file).centerCrop().into(chatPhoto);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void getChatProperties() {
+        String chatName = String.valueOf(chatNameEditText.getText());
+        presenter.createRequestForNewChat(chatName);
+    }
+
+    @Override
+    public void showErrorMassage(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void setChatType(int type) {
         this.type = type;
@@ -222,7 +233,6 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     public void onCheckBoxClick() {
         presenter.setChatPhotoVisibility();
     }
-
 
     private void showPictureChooser() {
         final CharSequence[] items = {getText(R.string.device_camera),
@@ -286,7 +296,6 @@ public class NewChatFragment extends MvpAppCompatFragment implements
             message.setGravity(Gravity.CENTER);
         }
         connProblemSnack.show();
-
     }
 }
 

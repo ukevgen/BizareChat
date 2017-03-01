@@ -59,7 +59,7 @@ public class LoginPresenterUnitTest {
         loginPresenter = new LoginPresenterImpl(resetPasswordUseCase,
                 sessionRepository,
                 new Validator(),
-                currentUser); // TODO STUB
+                currentUser);
         loginPresenter.setLoginView(loginView);
     }
 

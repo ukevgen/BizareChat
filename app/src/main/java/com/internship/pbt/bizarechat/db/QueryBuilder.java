@@ -8,7 +8,6 @@ import com.internship.pbt.bizarechat.data.datamodel.UserModelDao;
 
 import java.util.List;
 
-
 public class QueryBuilder {
     private static final int THREE = 3;
     private volatile static QueryBuilder INSTANCE;

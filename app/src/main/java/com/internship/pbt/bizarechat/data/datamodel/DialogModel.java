@@ -70,9 +70,9 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 165913975)
+    @Generated(hash = 866263801)
     public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
-            String name, Integer photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
+            String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

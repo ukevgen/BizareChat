@@ -41,14 +41,6 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         return this;
     }
 
-    public void setDialogPhotos(Map<String, Bitmap> dialogPhotos) {
-        this.dialogPhotos = dialogPhotos;
-    }
-
-    public List<DialogModel> getDialogs() {
-        return dialogs;
-    }
-
     @Override
     public DialogsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -64,13 +56,20 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         holder.mLastMessage.setText(dialog.getLastMessage());
         holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageTime()));
         holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
-        holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+        if(dialog.getUnreadMessagesCount() != 0) {
+            holder.mNewMessageIndicator.setVisibility(View.VISIBLE);
+            holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+        } else {
+            holder.mNewMessageIndicator.setVisibility(View.GONE);
+        }
         holder.mTitle.setText(dialog.getName());
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 
         Bitmap photo = dialogPhotos.get(dialog.getDialogId());
         if (photo != null)
             holder.imageView.setImageBitmap(photo);
+        else
+            holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
 
         mItemManger.bindView(holder.itemView, position);
     }

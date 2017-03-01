@@ -30,7 +30,6 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
@@ -54,7 +53,6 @@ public class UsersFragment extends MvpAppCompatFragment
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
                 new GetPhotoUseCase(new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))));
     }
 
@@ -136,6 +134,7 @@ public class UsersFragment extends MvpAppCompatFragment
         if(sortQuery != null && !sortQuery.isEmpty()) {
             filterItem.expandActionView();
             filterEditText.setText(sortQuery);
+            filterEditText.requestFocus();
         }
     }
 

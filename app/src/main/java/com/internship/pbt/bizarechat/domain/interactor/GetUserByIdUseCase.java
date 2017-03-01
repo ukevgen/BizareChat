@@ -2,7 +2,6 @@ package com.internship.pbt.bizarechat.domain.interactor;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
-import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.domain.repository.UserRepository;
 
 import rx.Observable;

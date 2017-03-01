@@ -3,13 +3,12 @@ package com.internship.pbt.bizarechat.presentation.presenter.newchat;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.adapter.NewChatUsersRecyclerAdapter;
+import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
@@ -41,8 +40,6 @@ import rx.Subscriber;
 
 @InjectViewState
 public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements NewChatPresenter {
-    private static final int PRIVATE_CHAT = 3;
-    private static final int PUBLIC_CHAT = 2;
     private final ContentRepository contentRepository;
     private Long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private Integer currentUsersPage = 0;
@@ -202,20 +199,19 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void createRequestForNewChat(String chatName, int type) {
-
-
+    public void createRequestForNewChat(String chatName) {
         //  uploadChatPhoto();
-        NewDialog dialog = null;
-        String occupants = converter.getOccupantsArray(adapter.getUsers());
-        if (type == PRIVATE_CHAT) {
-            dialog = new NewDialog(type, chatName, occupants);
+        NewDialog dialog;
+        String occupants = converter.getOccupantsArray(checkedUsers);
+        if (!isPublicButtonChecked && checkedUsers.size() == 1) {
+            dialog = new NewDialog(DialogsType.PRIVATE_CHAT, chatName, occupants);
         }
-        if (checkTypeOfDialog(adapter.getUsers()) != PRIVATE_CHAT) {
-            type = PUBLIC_CHAT;
-            dialog = new NewDialog(type, chatName, occupants, blobId);
+        else if (!isPublicButtonChecked && checkedUsers.size() > 1) {
+            dialog = new NewDialog(DialogsType.GROUP_CHAT, chatName, occupants, blobId);
+        }
+        else {
+            dialog = new NewDialog(DialogsType.PUBLIC_GROUP_CHAT, chatName, occupants, blobId);
         }
 
         createDialogUseCase.setDialog(dialog);
@@ -236,17 +232,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                 Log.d("TAG", response.toString());
                 queryBuilder.saveNewDialog(response);
                 getViewState().hideLoading();
+                getViewState().showChatRoom();
             }
         });
-    }
-
-    private int checkTypeOfDialog(List<UserModel> users) {
-        int count = PUBLIC_CHAT;
-        for (UserModel m : users) {
-            if (m.isChecked())
-                count++;
-        }
-        return count;
     }
 
     public void uploadChatPhoto() {

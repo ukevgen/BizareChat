@@ -160,7 +160,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                 }
 
                 @Override
-                public void onNext(Integer response) { // Now is return Integer blobId
+                public void onNext(Integer response) {
                     currentUser.setAvatarBlobId(Long.valueOf(response));
                     onRegistrationSuccess();
                 }
