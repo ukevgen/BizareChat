@@ -14,4 +14,5 @@ public interface EditChatView extends MvpView {
     void loadAvatarToImageView(File file);
 
     void showTooLargePicture();
+
 }

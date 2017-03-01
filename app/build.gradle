@@ -147,6 +147,7 @@ dependencies {
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile "org.igniterealtime.smack:smack-extensions:4.1.9"
+    compile "org.igniterealtime.smack:smack-im:4.1.9"
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
 

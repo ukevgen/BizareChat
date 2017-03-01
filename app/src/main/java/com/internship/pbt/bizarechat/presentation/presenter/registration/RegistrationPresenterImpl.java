@@ -157,7 +157,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                         mRegisterView.hideLoading();
                         mRegisterView.showError("UploadAvatar " + message);
                     }
-                    currentUser.setAvatarBlobId(null);
                 }
 
                 @Override
@@ -210,9 +209,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
-            currentUser.setStringAvatar(converter.encodeAvatarTobase64(uri));
+            currentUser.setStringAvatar(converter.encodeAvatarTobase64(fileToUpload));
             loadAvatar();
-
         } else {
             showTooLargeImage();
             fileToUpload = null;
@@ -316,7 +314,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-
+                if (fileToUpload != null)
+                    uploadAvatar();
+                else
+                    onRegistrationSuccess();
             }
 
             @Override
@@ -331,10 +332,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onNext(UserLoginResponse session) {
-                if (fileToUpload != null)
-                    uploadAvatar();
-                else
-                    onRegistrationSuccess();
             }
         });
     }
