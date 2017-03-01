@@ -71,9 +71,8 @@ public class DialogModel {
     private String xmppRoomJid;
 
     @Generated(hash = 866263801)
-    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent,
-                       int lastMessageUserId, String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount,
-                       String xmppRoomJid) {
+    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
+            String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

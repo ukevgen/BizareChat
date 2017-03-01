@@ -6,9 +6,6 @@ import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
 
 import rx.Observable;
 
-/**
- * Created by ukevgen on 24.01.2017.
- */
 
 public class SignUpUseCase extends UseCase {
 

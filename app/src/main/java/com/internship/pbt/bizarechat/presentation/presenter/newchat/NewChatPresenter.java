@@ -3,8 +3,6 @@ package com.internship.pbt.bizarechat.presentation.presenter.newchat;
 
 import android.net.Uri;
 
-import java.io.File;
-
 public interface NewChatPresenter {
     void verifyAndLoadAvatar(Uri uri);
 
@@ -12,4 +10,7 @@ public interface NewChatPresenter {
 
     void createNewChat();
 
+    void createRequestForNewChat(String chatName);
+
+    void checkConnection();
 }

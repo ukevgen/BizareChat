@@ -12,6 +12,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import id.zelory.compressor.Compressor;
 
@@ -60,5 +61,16 @@ public class Converter {
             decodedByte = Base64.decode(stringAvatar, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 
+    }
+
+    public String getOccupantsArray(Set<Long> users) {
+        StringBuilder builder = new StringBuilder();
+        for (long value : users) {
+                builder.append(value).append(",");
+        }
+        if (builder.length() > 0)
+            builder.setLength(builder.length() - 1);
+
+        return builder.toString();
     }
 }

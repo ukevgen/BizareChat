@@ -126,7 +126,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                 new RegistrationModel(),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache(),
                         BizareChatApp.getInstance().getCacheUsersPhotos()),
                 new SessionDataRepository(
                         BizareChatApp.getInstance().getSessionService()),

@@ -9,7 +9,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 
 @Entity(nameInDb = "User")
-public class UserModel{
+public class UserModel {
     @Id
     @Property(nameInDb = "user_id")
     @SerializedName("id")
@@ -92,11 +92,10 @@ public class UserModel{
     private String userTags;
 
     @Generated(hash = 11920562)
-    public UserModel(Long userId, String fullName, String email, String login,
-            String phone, String website, String createdAt, String updatedAt,
-            String lastRequestAt, Integer externalUserId, Long facebookId,
-            String twitterId, Integer twitterDigitsId, Integer blobId,
-            String customData, String userTags) {
+    public UserModel(Long userId, String fullName, String email, String login, String phone,
+            String website, String createdAt, String updatedAt, String lastRequestAt,
+            Integer externalUserId, Long facebookId, String twitterId, Integer twitterDigitsId,
+            Integer blobId, String customData, String userTags) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -246,4 +245,5 @@ public class UserModel{
     public void setUserTags(String userTags) {
         this.userTags = userTags;
     }
+
 }

@@ -12,8 +12,6 @@ public class SplashPresenter implements SplashScreenPresenter {
     private WeakReference<SplashActivity> activity;
     private SessionService sessionService;
 
-    // TODO: 1/30/17 [Code Review] You should not use anything related to Android SDK +-
-    // in your Presenter classes. Why don't you use View layer at all?
     public SplashPresenter(SplashActivity activity, SessionService sessionService) {
         this.activity = new WeakReference<>(activity);
         this.sessionService = sessionService;

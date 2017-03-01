@@ -103,7 +103,7 @@ public class SessionServiceUnitTest {
         sessionRepository = spy(new SessionDataRepository(BizareChatApp.getInstance().getSessionService()));
         getTokenUseCase = spy(new GetTokenUseCase(
                 sessionRepository));
-        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository, validator, CurrentUser.getInstance()); //TODO STUB
+        presenter = new LoginPresenterImpl(resetPasswordUseCase, sessionRepository, validator, CurrentUser.getInstance());
         presenter.setLoginView(view);
     }
 

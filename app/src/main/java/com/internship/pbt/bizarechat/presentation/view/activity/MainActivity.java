@@ -67,8 +67,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private boolean dialogsExist = false;
-
     private final String newChatFragmentTag = "newChatFragment";
     private final String usersFragmentTag = "usersFragment";
     private final static String INVITE_FRIENDS_FR_TAG = "inviteFriendsFragment";
@@ -126,9 +124,8 @@ public class MainActivity extends MvpAppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setUserInformation();
-        presenter.onPublicTab();
-        mTabLayout.getTabAt(0).select();
-
+        showPublicDialogs();
+        presenter.updateDialogsDao();
     }
 
     @Override
@@ -172,10 +169,11 @@ public class MainActivity extends MvpAppCompatActivity implements
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    presenter.onPublicTab();
+                    showPublicDialogs();
+                    return;
                 }
                 if (tab.getPosition() == 1) {
-                    presenter.onPrivateTab();
+                    showPrivateDialogs();
                 }
             }
 
@@ -407,8 +405,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         toolbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                 | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mTabLayout.setVisibility(View.VISIBLE);
-        if (!dialogsExist)
-            mLayout.setVisibility(View.VISIBLE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
         startActionBarToggleAnim(1, 0);

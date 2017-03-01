@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,17 +17,27 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
+import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
+import com.internship.pbt.bizarechat.domain.events.DialogsUpdatedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetUnreadMessagesCountUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
-public class PrivateDialogsFragment extends MvpAppCompatFragment implements DialogsView {
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+public class PrivateDialogsFragment extends MvpAppCompatFragment
+        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback,
+        SwipeRefreshLayout.OnRefreshListener {
     private final int menuSearchId = 100;
 
     @InjectPresenter
@@ -34,6 +45,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
 
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @ProvidePresenter
     DialogsPresenterImp provideNewDialogsPresenter() {
@@ -42,10 +54,15 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
                         .getDialogsService())),
                 new GetPhotoUseCase(new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
+                new GetUserByIdUseCase(new UserDataRepository(
+                        BizareChatApp.getInstance().getUserService())),
+                new GetUnreadMessagesCountUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
+                new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService())),
                 BizareChatApp.getInstance().getDaoSession(),
-                DialogsType.TRHEE);
+                DialogsType.PRIVATE_CHAT);
     }
 
 
@@ -63,6 +80,9 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.dialogs_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         setHasOptionsMenu(true);
 
         return view;
@@ -77,7 +97,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == menuSearchId){
+        if (item.getItemId() == menuSearchId) {
             //TODO search logic
             return true;
         }
@@ -85,25 +105,37 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment implements Dial
     }
 
     @Override
-    public void showDialogs() {
-        if (presenter.getAdapter().getItemCount() == 0)
-            getActivity().findViewById(R.id.layout_chat_empty).setVisibility(View.VISIBLE);
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+        presenter.loadDialogs();
         recyclerView.setAdapter(presenter.getAdapter());
+        presenter.getAdapter().setContext(getActivity());
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (recyclerView.getAdapter() == null) {
-            recyclerView.setAdapter(presenter.getAdapter()
-                    .setContext(getActivity()));
-            presenter.loadDialogs();
-        }
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onDialogsUpdated(DialogsUpdatedEvent event) {
+        presenter.onDialogsUpdated();
     }
 
     @Override
-    public void updateDialogs() {
-
+    public void onDialogDelete(int position) {
+        //presenter.deleteDialog(position);
     }
 
+    @Override
+    public void onRefresh() {
+        presenter.refreshDialogsInfo();
+    }
+
+    @Override
+    public void stopRefreshing(){
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }

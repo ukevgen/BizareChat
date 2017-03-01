@@ -29,7 +29,7 @@ import rx.Subscriber;
 
 @InjectViewState
 public class UsersPresenter extends MvpPresenter<UsersView>
-        implements UsersRecyclerAdapter.OnUserClickListener{
+        implements UsersRecyclerAdapter.OnUserClickListener {
     private boolean filtering = false;
     private String currentSortOrder;
     private String currentFilterQuery;
@@ -60,7 +60,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void getAllUsers() {
-        if(filtering) return;
+        if (filtering) return;
 
         if (!BizareChatApp.getInstance().isNetworkConnected()) {
             getViewState().showNetworkError();
@@ -78,7 +78,8 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         allUsersUseCase.setOrder(currentSortOrder);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -98,7 +99,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                     if (user.getUserId().equals(currentUserId))
                         continue;
 
-                    if(user.getFullName() == null){
+                    if (user.getFullName() == null) {
                         user.setFullName("");
                     }
 
@@ -127,7 +128,8 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         photoUseCase.setBlobId(blobId);
         photoUseCase.execute(new Subscriber<Bitmap>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
             public void onError(Throwable e) {
@@ -148,17 +150,17 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         adapter.filterList(newText);
     }
 
-    public void onFilterClose(){
+    public void onFilterClose() {
         filtering = false;
         adapter.filterList("");
     }
 
-    public void sortByNameAsc(){
-        if(currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME))
+    public void sortByNameAsc() {
+        if (currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME))
             return;
         currentSortOrder = ApiConstants.ORDER_ASC_FULL_NAME;
 
-        if(allUsersLoaded) {
+        if (allUsersLoaded) {
             Collections.sort(users, new ComparatorNameAsc());
             adapter.notifyDataSetChanged();
             return;
@@ -170,12 +172,12 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         getAllUsers();
     }
 
-    public void sortByNameDesc(){
-        if(currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME))
+    public void sortByNameDesc() {
+        if (currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME))
             return;
         currentSortOrder = ApiConstants.ORDER_DESC_FULL_NAME;
 
-        if(allUsersLoaded) {
+        if (allUsersLoaded) {
             Collections.sort(users, new ComparatorNameDesc());
             adapter.notifyDataSetChanged();
             return;
@@ -187,12 +189,12 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         getAllUsers();
     }
 
-    public void sortDefault(){
-        if(currentSortOrder.equals(ApiConstants.ORDER_DEFAULT))
+    public void sortDefault() {
+        if (currentSortOrder.equals(ApiConstants.ORDER_DEFAULT))
             return;
         currentSortOrder = ApiConstants.ORDER_DEFAULT;
 
-        if(allUsersLoaded) {
+        if (allUsersLoaded) {
             Collections.sort(users, new ComparatorDefault());
             adapter.notifyDataSetChanged();
             return;
@@ -211,20 +213,21 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         }
     }
 
-    public static class ComparatorNameDesc implements Comparator<UserModel>{
+    public static class ComparatorNameDesc implements Comparator<UserModel> {
         @Override
         public int compare(UserModel user1, UserModel user2) {
             return user2.getFullName().compareToIgnoreCase(user1.getFullName());
         }
     }
 
-    public static class ComparatorDefault implements Comparator<UserModel>{
+    public static class ComparatorDefault implements Comparator<UserModel> {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
         @Override
         public int compare(UserModel user1, UserModel user2) {
             try {
                 return format.parse(user2.getCreatedAt()).compareTo(format.parse(user1.getCreatedAt()));
-            } catch (ParseException ex){
+            } catch (ParseException ex) {
                 throw new IllegalArgumentException(ex);
             }
         }

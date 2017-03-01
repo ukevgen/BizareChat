@@ -5,7 +5,6 @@ import android.net.UrlQuerySanitizer;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
@@ -36,15 +35,12 @@ public class ContentDataRepository implements ContentRepository {
     private ContentService contentService;
     private String name;
     private volatile String blobId = "";
-    private CacheSharedPreferences cache;
     private CacheUsersPhotos cacheUsersPhotos;
 
     public ContentDataRepository(ContentService retrofitApi,
-                                 CacheSharedPreferences cache,
                                  CacheUsersPhotos cacheUsersPhotos) {
         this.cacheUsersPhotos = cacheUsersPhotos;
         contentService = retrofitApi;
-        this.cache = cache;
     }
 
     public Observable<Bitmap> getPhoto(final Integer blobId) {
@@ -71,8 +67,6 @@ public class ContentDataRepository implements ContentRepository {
                     }
                 });
     }
-
-
 
 
     @Override
