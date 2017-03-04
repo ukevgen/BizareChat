@@ -146,12 +146,14 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
         fileToUpload = null;
         setChatPhotoVisibility();
         getViewState().showUsersView();
+        getViewState().setChatType(PRIVATE_CHAT);
     }
 
     public void onPublicClick() {
         isPublicButtonChecked = true;
         setChatPhotoVisibility();
         getViewState().hideUsersView();
+        getViewState().setChatType(PUBLIC_CHAT);
     }
 
     public void setChatPhotoVisibility() {

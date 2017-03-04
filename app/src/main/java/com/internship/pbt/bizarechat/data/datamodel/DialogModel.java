@@ -51,7 +51,7 @@ public class DialogModel {
     @Property(nameInDb = "photo")
     @SerializedName("photo")
     @Expose
-    private String photo;
+    private Integer photo;
     @Property(nameInDb = "occupants_ids")
     @Convert(converter = OccupantsIdsConverter.class, columnType = String.class)
     @SerializedName("occupants_ids")
@@ -147,11 +147,11 @@ public class DialogModel {
         this.name = name;
     }
 
-    public String getPhoto() {
+    public Integer getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(Integer photo) {
         this.photo = photo;
     }
 

@@ -212,6 +212,24 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     }
 
     @Override
+    public void setChatType(int type) {
+        this.type = type;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void getChatProperties() {
+        String chatName = String.valueOf(chatNameEditText.getText());
+        presenter.createRequestForNewChat(chatName, type);
+    }
+
+
+    @Override
+    public void showErrorMassage(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onCheckBoxClick() {
         presenter.setChatPhotoVisibility();
     }

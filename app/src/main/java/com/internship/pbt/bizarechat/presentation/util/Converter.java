@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
 
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
