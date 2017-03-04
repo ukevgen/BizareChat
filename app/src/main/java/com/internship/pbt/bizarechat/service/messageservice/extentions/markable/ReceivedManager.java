@@ -1,4 +1,4 @@
-package com.internship.pbt.bizarechat.service.messageservice.extentions.read;
+package com.internship.pbt.bizarechat.service.messageservice.extentions.markable;
 
 import org.jivesoftware.smack.Manager;
 import org.jivesoftware.smack.XMPPConnection;
@@ -15,42 +15,42 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class ReadReceiptManager extends Manager {
-    private static final StanzaFilter MESSAGES_WITH_READ_RECEIPT = new AndFilter(StanzaTypeFilter.MESSAGE,
-            new StanzaExtensionFilter(ReadReceipt.ELEMENT, ReadReceipt.NAMESPACE));
 
-    private static Map<XMPPConnection, ReadReceiptManager> instances = new WeakHashMap<>();
+public class ReceivedManager extends Manager {
+    private static final StanzaFilter MESSAGES_WITH_RECEIVED = new AndFilter(StanzaTypeFilter.MESSAGE,
+            new StanzaExtensionFilter(Received.ELEMENT, Received.NAMESPACE));
+
+    private static Map<XMPPConnection, ReceivedManager> instances = new WeakHashMap<>();
     private Set<ReceiptReceivedListener> receiptReceivedListeners = new CopyOnWriteArraySet<>();
 
-    private ReadReceiptManager(XMPPConnection connection) {
+    private ReceivedManager(XMPPConnection connection) {
         super(connection);
         ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(connection);
-        sdm.addFeature(ReadReceipt.NAMESPACE);
+        sdm.addFeature(Received.NAMESPACE);
         connection.addAsyncStanzaListener(packet -> {
-            ReadReceipt receipt = ReadReceipt.from((Message)packet);
+            Received receipt = Received.from((Message)packet);
             for(ReceiptReceivedListener listener : receiptReceivedListeners){
                 listener.onReceiptReceived(packet.getFrom(), packet.getTo(), receipt.getId(), packet);
             }
-        }, MESSAGES_WITH_READ_RECEIPT);
+        }, MESSAGES_WITH_RECEIVED);
     }
 
-    public static synchronized ReadReceiptManager getInstanceFor(XMPPConnection connection) {
-        ReadReceiptManager receiptManager = instances.get(connection);
+    public static synchronized ReceivedManager getInstanceFor(XMPPConnection connection) {
+        ReceivedManager receivedManager = instances.get(connection);
 
-        if (receiptManager == null) {
-            receiptManager = new ReadReceiptManager(connection);
-            instances.put(connection, receiptManager);
+        if (receivedManager == null) {
+            receivedManager = new ReceivedManager(connection);
+            instances.put(connection, receivedManager);
         }
 
-        return receiptManager;
+        return receivedManager;
     }
 
-    public void addReadReceivedListener(ReceiptReceivedListener listener) {
+    public void addReceivedListener(ReceiptReceivedListener listener) {
         receiptReceivedListeners.add(listener);
     }
 
-    public void removeRemoveReceivedListener(ReceiptReceivedListener listener) {
+    public void removeReceivedListener(ReceiptReceivedListener listener) {
         receiptReceivedListeners.remove(listener);
     }
-
 }

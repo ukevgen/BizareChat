@@ -5,39 +5,36 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
-import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceipt;
-import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceiptManager;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Displayed;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.DisplayedManager;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Markable;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Received;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.ReceivedManager;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
-import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.packet.id.StanzaIdUtil;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smackx.receipts.DeliveryReceipt;
-import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
-import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 public final class QuickbloxPrivateXmppConnection
-        implements ConnectionListener, ChatMessageListener, ReceiptReceivedListener {
+        implements ConnectionListener, ChatMessageListener {
     private static final String TAG = QuickbloxPrivateXmppConnection.class.getSimpleName();
     private static volatile QuickbloxPrivateXmppConnection INSTANCE;
 
     private XMPPTCPConnection privateChatConnection;
-    private DeliveryReceiptManager deliveryReceiptManager;
     private WeakReference<BizareChatMessageService> messageService;
-
-    private ReceiptReceivedListener receiptReceivedListener;
 
     private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
@@ -54,32 +51,49 @@ public final class QuickbloxPrivateXmppConnection
         return INSTANCE;
     }
 
-    public void sendReadReceipt(String receiverJid, String stanzaId) {
+    public void sendDisplayedReceipt(String receiverJid, String stanzaId, String dialog_id) throws SmackException {
         Message message = new Message(receiverJid);
-        ReadReceipt read = new ReadReceipt(stanzaId);
+        Displayed read = new Displayed(stanzaId);
+        QuickbloxChatExtension extension = new QuickbloxChatExtension();
+        extension.setProperty("dialog_id", dialog_id);
+
+        message.setStanzaId(StanzaIdUtil.newStanzaId());
+        message.setType(Message.Type.chat);
         message.addExtension(read);
-        try {
-            privateChatConnection.sendStanza(message);
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        }
+        message.addExtension(extension);
+
+        privateChatConnection.sendStanza(message);
     }
 
-    public void sendMessage(String body, String receiverJid, long timestamp) throws SmackException {
-        Random random = new Random(timestamp + body.length() + receiverJid.length());
+    public void sendReceivedReceipt(String receiverJid, String stanzaId, String dialog_id) throws SmackException {
+        Message message = new Message(receiverJid);
+        Received delivered = new Received(stanzaId);
+        QuickbloxChatExtension extension = new QuickbloxChatExtension();
+        extension.setProperty("dialog_id", dialog_id);
+
+        message.setStanzaId(StanzaIdUtil.newStanzaId());
+        message.setType(Message.Type.chat);
+        message.addExtension(delivered);
+        message.addExtension(extension);
+
+        privateChatConnection.sendStanza(message);
+    }
+
+    public void sendMessage(String body, String receiverJid, long timestamp, String stanzaId) throws SmackException {
         Log.d(TAG, "Sending message to : " + receiverJid);
-        Chat chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
 
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
+        extension.setProperty("save_to_history", "1");
 
-        Message message = new Message();
-        message.setStanzaId(receiverJid + random.nextInt());
+        Message message = new Message(receiverJid);
+        message.setStanzaId(stanzaId);
         message.setBody(body);
+        message.setType(Message.Type.chat);
+        message.addExtension(new Markable());
         message.addExtension(extension);
-        message.addExtension(new DeliveryReceipt(StanzaIdUtil.newStanzaId()));
 
-        chat.sendMessage(message);
+        privateChatConnection.sendStanza(message);
     }
 
     @Override
@@ -87,24 +101,13 @@ public final class QuickbloxPrivateXmppConnection
         messageService.get().processPrivateMessage(message);
     }
 
-    @Override
-    public void onReceiptReceived(String fromJid, String toJid, String receiptId, Stanza receipt) {
-        messageService.get().onReceiptReceived();
-    }
-
     public void connect() throws IOException, XMPPException, SmackException {
-        ProviderManager.addExtensionProvider(ReadReceipt.ELEMENT, ReadReceipt.NAMESPACE, new ReadReceipt.Provider());
-        receiptReceivedListener = (fromJid, toJid, receiptId, receipt) -> {
-            // TODO Handle read event
-        };
-        ReadReceiptManager.getInstanceFor(privateChatConnection).addReadReceivedListener(receiptReceivedListener);
         initPrivateConnection();
         privateChatConnection.connect();
         privateChatConnection.login();
     }
 
     public void disconnect() {
-        ReadReceiptManager.getInstanceFor(privateChatConnection).removeRemoveReceivedListener(receiptReceivedListener);
         if (privateChatConnection != null)
             privateChatConnection.disconnect();
         privateChatConnection = null;
@@ -148,12 +151,31 @@ public final class QuickbloxPrivateXmppConnection
     private void initPrivateConnection() {
         long currentUserId = CurrentUser.getInstance().getCurrentUserId();
         String currentUserPassword = CurrentUser.getInstance().getCurrentPassword();
-        String jid = currentUserId + "-" + ApiConstants.APP_ID;
-        privateChatConnection = new XMPPTCPConnection(
-                jid, currentUserPassword, ApiConstants.CHAT_END_POINT);
+        String userName = currentUserId + "-" + ApiConstants.APP_ID;
+        XMPPTCPConnectionConfiguration.Builder configBuilder = XMPPTCPConnectionConfiguration.builder();
+        configBuilder.setUsernameAndPassword(userName, currentUserPassword);
+        configBuilder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+        configBuilder.setServiceName(ApiConstants.CHAT_END_POINT);
+        configBuilder.setHost(ApiConstants.CHAT_END_POINT);
+
+        privateChatConnection = new XMPPTCPConnection(configBuilder.build());
         privateChatConnection.addConnectionListener(this);
-        deliveryReceiptManager = DeliveryReceiptManager.getInstanceFor(privateChatConnection);
-        deliveryReceiptManager.setAutoReceiptMode(DeliveryReceiptManager.AutoReceiptMode.always);
-        deliveryReceiptManager.addReceiptReceivedListener(this);
+
+        ReconnectionManager manager = ReconnectionManager.getInstanceFor(privateChatConnection);
+        manager.enableAutomaticReconnection();
+        manager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
+        manager.setFixedDelay(15);
+
+        ProviderManager.addExtensionProvider(Displayed.ELEMENT, Displayed.NAMESPACE, new Displayed.Provider());
+        DisplayedManager.getInstanceFor(privateChatConnection).addDisplayedListener(
+                (fromJid, toJid, receiptId, receipt) -> {
+                    messageService.get().processDisplayed(fromJid, toJid, receiptId, receipt);
+        });
+
+        ProviderManager.addExtensionProvider(Received.ELEMENT, Received.NAMESPACE, new Received.Provider());
+        ReceivedManager.getInstanceFor(privateChatConnection).addReceivedListener(
+                (fromJid, toJid, receiptId, receipt) -> {
+                    messageService.get().processReceived(fromJid, toJid, receiptId, receipt);
+        });
     }
 }

@@ -88,9 +88,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         if (daoSession.getDialogModelDao().count() != 0) {
             List<DialogModel> buffer;
             if (dialogsType == DialogsType.PRIVATE_CHAT) {
-                buffer = queryBuilder.getPrivateDialogs(DialogsType.PRIVATE_CHAT);
+                buffer = queryBuilder.getPrivateDialogs();
             } else {
-                buffer = queryBuilder.getPublicDialogs(dialogsType);
+                buffer = queryBuilder.getPublicDialogs();
             }
             dialogs.addAll(buffer);
             for (int i = 0; i < dialogs.size(); i++) {
@@ -183,7 +183,6 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                 public void onNext(UserModel userModel) {
                     if(userModel.getBlobId() != null)
                         setDialogPhotos(userModel.getBlobId(), dialog);
-                    queryBuilder.addUserToUsersDao(userModel);
                 }
             });
         }
@@ -272,6 +271,11 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                 getViewState().stopRefreshing();
             }
         });
+    }
+
+    public void onDialogClick(int position){
+        DialogModel dialog = dialogs.get(position);
+        getViewState().showChatRoom(dialog);
     }
 
     public static class ComparatorDefault implements Comparator<DialogModel> {

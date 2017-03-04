@@ -20,6 +20,7 @@ import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
@@ -37,11 +38,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class PrivateDialogsFragment extends MvpAppCompatFragment
         implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        DialogsRecyclerViewAdapter.OnDialogClickCallback {
     private final int menuSearchId = 100;
 
     @InjectPresenter
     DialogsPresenterImp presenter;
+
+    private OnPrivateDialogClickListener dialogClickListener;
 
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -65,6 +69,9 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
                 DialogsType.PRIVATE_CHAT);
     }
 
+    public void setDialogClickListener(OnPrivateDialogClickListener dialogClickListener) {
+        this.dialogClickListener = dialogClickListener;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +118,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
         presenter.loadDialogs();
         recyclerView.setAdapter(presenter.getAdapter());
         presenter.getAdapter().setContext(getActivity());
+        presenter.getAdapter().setOnDialogClickCallback(this);
     }
 
     @Override
@@ -130,6 +138,16 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
     }
 
     @Override
+    public void onDialogClick(int position) {
+        presenter.onDialogClick(position);
+    }
+
+    @Override
+    public void showChatRoom(DialogModel dialogModel){
+        dialogClickListener.onPrivateDialogClick(dialogModel);
+    }
+
+    @Override
     public void onRefresh() {
         presenter.refreshDialogsInfo();
     }
@@ -137,5 +155,9 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
     @Override
     public void stopRefreshing(){
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public interface OnPrivateDialogClickListener {
+        void onPrivateDialogClick(DialogModel dialog);
     }
 }

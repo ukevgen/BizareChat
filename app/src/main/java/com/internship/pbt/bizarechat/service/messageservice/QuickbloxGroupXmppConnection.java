@@ -13,6 +13,7 @@ import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.id.StanzaIdUtil;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -76,9 +77,10 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
         Message message = new Message();
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
-        message.setStanzaId(chatJid + random.nextInt());
+        message.setStanzaId(StanzaIdUtil.newStanzaId());
         message.setBody(body);
         message.addExtension(extension);
+        message.setType(Message.Type.chat);
 
         chat.sendMessage(message);
     }

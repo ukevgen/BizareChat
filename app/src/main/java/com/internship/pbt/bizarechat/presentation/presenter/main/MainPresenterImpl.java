@@ -6,6 +6,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
@@ -162,14 +163,22 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
                 public void onNext(AllDialogsResponse response) {
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
                     modelDao.insertOrReplaceInTx(response.getDialogModels());
-                    if (!isDialogDaoEmpty())
-                        getViewState().hideEmptyScreen();
+                    if (isDialogDaoEmpty())
+                        getViewState().showEmptyScreen();
                     EventBus.getDefault().post(new DialogsUpdatedEvent());
                 }
             });
         }
     }
 
+    public void navigateToPrivateChatRoom(DialogModel dialogModel) {
+        getViewState().showPrivateChatRoom(dialogModel);
+        getViewState().hideNavigationElements();
+    }
 
+    public void navigateToPublicChatRoom(DialogModel dialogModel) {
+        getViewState().showPublicChatRoom(dialogModel);
+        getViewState().hideNavigationElements();
+    }
 }
 

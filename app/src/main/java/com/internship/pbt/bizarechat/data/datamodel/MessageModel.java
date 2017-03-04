@@ -16,8 +16,7 @@ import java.util.List;
 
 @Entity(nameInDb = "Message")
 public class MessageModel {
-    @Id(autoincrement = true)
-    private long dbId;
+    @Id
     @Property(nameInDb = "message_id")
     @SerializedName("_id")
     @Expose
@@ -70,12 +69,10 @@ public class MessageModel {
     @Expose
     private Integer read;
 
-    @Generated(hash = 1965344788)
-    public MessageModel(long dbId, String messageId, String createdAt, String updatedAt,
-            List<Object> attachments, List<Integer> readIds, List<Integer> deliveredIds,
-            String chatDialogId, long dateSent, String message, Integer recipientId, Integer senderId,
-            Integer read) {
-        this.dbId = dbId;
+    @Generated(hash = 469757593)
+    public MessageModel(String messageId, String createdAt, String updatedAt, List<Object> attachments,
+            List<Integer> readIds, List<Integer> deliveredIds, String chatDialogId, long dateSent,
+            String message, Integer recipientId, Integer senderId, Integer read) {
         this.messageId = messageId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -190,22 +187,6 @@ public class MessageModel {
         this.read = read;
     }
 
-    public long getId() {
-        return this.dbId;
-    }
-
-    public void setId(long id) {
-        this.dbId = id;
-    }
-
-    public long getDbId() {
-        return this.dbId;
-    }
-
-    public void setDbId(long dbId) {
-        this.dbId = dbId;
-    }
-
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
         @Override
         public List<Integer> convertToEntityProperty(String databaseValue) {
@@ -233,12 +214,12 @@ public class MessageModel {
     public static class AttachmentsConverter implements PropertyConverter<List<Object>, String> {
         @Override
         public List<Object> convertToEntityProperty(String databaseValue) {
-            return null;
+            return new ArrayList<>();
         }
 
         @Override
         public String convertToDatabaseValue(List<Object> entityProperty) {
-            return null;
+            return entityProperty.toString();
         }
     }
 }

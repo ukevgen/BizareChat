@@ -1,5 +1,6 @@
 package com.internship.pbt.bizarechat.db;
 
+import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
@@ -9,7 +10,6 @@ import com.internship.pbt.bizarechat.data.datamodel.UserModelDao;
 import java.util.List;
 
 public class QueryBuilder {
-    private static final int THREE = 3;
     private volatile static QueryBuilder INSTANCE;
 
     private DaoSession daoSession;
@@ -31,23 +31,23 @@ public class QueryBuilder {
     }
 
 
-    public List<DialogModel> getPrivateDialogs(int type) {
+    public List<DialogModel> getPrivateDialogs() {
         List<DialogModel> modelList;
         modelList = daoSession
                 .getDialogModelDao()
                 .queryBuilder()
-                .where(DialogModelDao.Properties.Type.eq(type))
+                .where(DialogModelDao.Properties.Type.eq(DialogsType.PRIVATE_CHAT))
                 .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
                 .list();
         return modelList;
     }
 
-    public List<DialogModel> getPublicDialogs(int type) {
+    public List<DialogModel> getPublicDialogs() {
         List<DialogModel> modelList;
         modelList = daoSession
                 .getDialogModelDao()
                 .queryBuilder()
-                .where(DialogModelDao.Properties.Type.notEq(THREE))
+                .where(DialogModelDao.Properties.Type.notEq(DialogsType.PRIVATE_CHAT))
                 .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
                 .list();
         return modelList;

@@ -25,6 +25,7 @@
         </activity>
 
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".presentation.view.activity.MainActivity"
             android:theme="@style/AppTheme" />
 

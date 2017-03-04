@@ -38,6 +38,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
@@ -48,6 +49,7 @@ import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.navigation.Navigator;
 import com.internship.pbt.bizarechat.presentation.presenter.main.MainPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PublicDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
@@ -61,10 +63,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends MvpAppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView {
+        NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainView,
+        PrivateDialogsFragment.OnPrivateDialogClickListener, PublicDialogsFragment.OnPublicDialogClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final String newChatFragmentTag = "newChatFragment";
@@ -126,6 +131,10 @@ public class MainActivity extends MvpAppCompatActivity implements
         setUserInformation();
         showPublicDialogs();
         presenter.updateDialogsDao();
+    }
+
+    public BizareChatMessageService getMessageService() {
+        return messageService;
     }
 
     @Override
@@ -357,7 +366,9 @@ public class MainActivity extends MvpAppCompatActivity implements
             return;
         }
 
-        transaction.replace(R.id.main_screen_container, new PublicDialogsFragment(),
+        PublicDialogsFragment publicDialogsFragment = new PublicDialogsFragment();
+        publicDialogsFragment.setDialogClickListener(this);
+        transaction.replace(R.id.main_screen_container, publicDialogsFragment,
                 PUBLIC_DIALOGS_FR_TAG)
                 .commit();
     }
@@ -372,8 +383,58 @@ public class MainActivity extends MvpAppCompatActivity implements
             return;
         }
 
-        transaction.replace(R.id.main_screen_container, new PrivateDialogsFragment(),
+        PrivateDialogsFragment privateDialogsFragment = new PrivateDialogsFragment();
+        privateDialogsFragment.setDialogClickListener(this);
+        transaction.replace(R.id.main_screen_container, privateDialogsFragment,
                 PRIVATE_DIALOGS_FR_TAG)
+                .commit();
+    }
+
+    @Override
+    public void onPrivateDialogClick(DialogModel dialog) {
+        presenter.navigateToPrivateChatRoom(dialog);
+    }
+
+    @Override
+    public void onPublicDialogClick(DialogModel dialog) {
+        presenter.navigateToPublicChatRoom(dialog);
+    }
+
+    @Override
+    public void showPrivateChatRoom(DialogModel dialogModel){
+        Fragment fragment = new ChatRoomFragment();
+        Bundle args = new Bundle();
+        args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
+        args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
+        args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
+        ArrayList<Integer> list = new ArrayList<>(dialogModel.getOccupantsIds());
+        args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
+
+        fragment.setArguments(args);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_screen_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showPublicChatRoom(DialogModel dialogModel){
+        Fragment fragment = new ChatRoomFragment();
+        Bundle args = new Bundle();
+        args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
+        args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
+        args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
+        ArrayList<Integer> list = new ArrayList<>(dialogModel.getOccupantsIds());
+        args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
+
+        fragment.setArguments(args);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_screen_container, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -423,6 +484,7 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void navigateToLoginScreen() {
+        stopService(new Intent(this, BizareChatMessageService.class));
         navigator.navigateToLoginActivity(this);
     }
 
@@ -456,14 +518,15 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onStart();
         NotificationUtils.clearNotifications(getApplicationContext());
         EventBus.getDefault().register(this);
-//        bindMessageService();
+        startService(new Intent(getApplicationContext(), BizareChatMessageService.class));
+        bindMessageService();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-//        unbindMessageService();
+        unbindMessageService();
     }
 
 
