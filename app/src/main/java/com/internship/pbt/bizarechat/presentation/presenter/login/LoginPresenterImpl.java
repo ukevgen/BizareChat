@@ -150,6 +150,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
                 currentUser.setCurrentEmail(email);
                 currentUser.setCurrentPasswrod(password);
+                currentUser.setFullName(userLoginResponse.getFullName());
                 currentUser.setCurrentUserId(userLoginResponse.getId());
                 if(userLoginResponse.getBlobId() != null)
                     currentUser.setAvatarBlobId(Long.valueOf(userLoginResponse.getBlobId()));

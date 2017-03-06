@@ -113,6 +113,15 @@ public class CacheSharedPreferences {
             return id;
     }
 
+    public void putFullName(String fullName){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, fullName);
+        mEditor.apply();
+    }
+
+    public String getFullName(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, null);
+    }
+
     public String getFirebaseToken() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, null);
     }

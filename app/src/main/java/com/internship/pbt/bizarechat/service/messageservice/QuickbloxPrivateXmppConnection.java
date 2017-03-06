@@ -25,6 +25,8 @@ import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
+import org.jivesoftware.smack.chat.ChatManager;
+import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.id.StanzaIdUtil;
@@ -34,10 +36,12 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class QuickbloxPrivateXmppConnection
-        implements ConnectionListener, ChatMessageListener {
+        implements ConnectionListener, ChatMessageListener, ChatManagerListener {
     private volatile boolean connected = false;
     private static final String TAG = QuickbloxPrivateXmppConnection.class.getSimpleName();
     private static volatile QuickbloxPrivateXmppConnection INSTANCE;
@@ -45,10 +49,12 @@ public final class QuickbloxPrivateXmppConnection
     private XMPPTCPConnection privateChatConnection;
     private WeakReference<BizareChatMessageService> messageService;
     private ConcurrentLinkedQueue<Message> offlineMessages;
+    private Map<String, Chat> privateChats;
 
     private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
         offlineMessages = new ConcurrentLinkedQueue<>();
+        privateChats = new HashMap<>();
     }
 
     public static QuickbloxPrivateXmppConnection getInstance(BizareChatMessageService messageService) {
@@ -63,6 +69,12 @@ public final class QuickbloxPrivateXmppConnection
     }
 
     public void sendDisplayedReceipt(String receiverJid, String stanzaId, String dialog_id) {
+        Chat chat;
+        if((chat = privateChats.get(receiverJid)) == null) {
+            chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
+            privateChats.put(receiverJid, chat);
+        }
+
         Message message = new Message(receiverJid);
         Displayed read = new Displayed(stanzaId);
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
@@ -74,13 +86,19 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            privateChatConnection.sendStanza(message);
+            chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
             offlineMessages.add(message);
         }
     }
 
     public void sendReceivedReceipt(String receiverJid, String stanzaId, String dialog_id) {
+        Chat chat;
+        if((chat = privateChats.get(receiverJid)) == null) {
+            chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
+            privateChats.put(receiverJid, chat);
+        }
+
         Message message = new Message(receiverJid);
         Received delivered = new Received(stanzaId);
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
@@ -92,7 +110,7 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            privateChatConnection.sendStanza(message);
+            chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
             offlineMessages.add(message);
         }
@@ -100,6 +118,12 @@ public final class QuickbloxPrivateXmppConnection
 
     public void sendPrivateMessage(String body, String receiverJid, long timestamp, String stanzaId) {
         Log.d(TAG, "Sending message to : " + receiverJid);
+
+        Chat chat;
+        if((chat = privateChats.get(receiverJid)) == null) {
+            chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
+            privateChats.put(receiverJid, chat);
+        }
 
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
@@ -113,7 +137,7 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            privateChatConnection.sendStanza(message);
+            chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
             offlineMessages.add(message);
         }
@@ -141,11 +165,21 @@ public final class QuickbloxPrivateXmppConnection
 
     @Override
     public void processMessage(Chat chat, Message message) {
-        if (message.getFrom().split("@")[1].contains("muc")) {
+        if(message.getBody() == null) return;
+
+        if (message.getType() == Message.Type.groupchat) {
             messageService.get().processPublicMessage(message);
             return;
         }
+
         messageService.get().processPrivateMessage(message);
+    }
+
+    @Override public void chatCreated(Chat chat, boolean createdLocally) {
+        if(!privateChats.containsKey(chat.getParticipant())){
+            chat.addMessageListener(this);
+            privateChats.put(chat.getParticipant().split("/")[0], chat);
+        }
     }
 
     public void connect() throws IOException, XMPPException, SmackException {
@@ -170,7 +204,7 @@ public final class QuickbloxPrivateXmppConnection
     public void authenticated(XMPPConnection xmppConnection, boolean b) {
         Log.d(TAG, "Authenticated Successfully");
         connected = true;
-
+        ChatManager.getInstanceFor(privateChatConnection).addChatListener(this);
     }
 
     @Override
@@ -234,6 +268,7 @@ public final class QuickbloxPrivateXmppConnection
         configBuilder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
         configBuilder.setServiceName(ApiConstants.CHAT_END_POINT);
         configBuilder.setHost(ApiConstants.CHAT_END_POINT);
+        configBuilder.setDebuggerEnabled(true);
 
         privateChatConnection = new XMPPTCPConnection(configBuilder.build());
         privateChatConnection.addConnectionListener(this);

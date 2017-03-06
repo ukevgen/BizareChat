@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class UserInfoFragment extends MvpAppCompatFragment
         implements UserInfoView, View.OnClickListener {
-    public static final String ID_BUNDLE_KEY = "userEmail";
+    public static final String ID_BUNDLE_KEY = "userId";
     public static final String EMAIL_BUNDLE_KEY = "userEmail";
     public static final String PHONE_BUNDLE_KEY = "userPhone";
     public static final String WEBSITE_BUNDLE_KEY = "userWebsite";
