@@ -74,7 +74,7 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated()
+    @Generated(hash = 908108986)
     public DialogModel(String dialogId, long adminId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
             String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
@@ -92,7 +92,7 @@ public class DialogModel {
         this.xmppRoomJid = xmppRoomJid;
     }
 
-    @Generated()
+    @Generated(hash = 174413608)
     public DialogModel() {
     }
 
