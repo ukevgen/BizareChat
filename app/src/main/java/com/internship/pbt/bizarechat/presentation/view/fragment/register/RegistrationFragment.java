@@ -58,7 +58,8 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     private TextInputLayout mEmailLayout,
             mPasswordLayout,
             mPasswordConfLayout,
-            mPhoneLayout;
+            mPhoneLayout,
+            mFullNameLayout;
     private FrameLayout mImageWrapper;
 
     private ProgressBar mProgressBar;
@@ -126,7 +127,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
                 new RegistrationModel(),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache(),
                         BizareChatApp.getInstance().getCacheUsersPhotos()),
                 new SessionDataRepository(
                         BizareChatApp.getInstance().getSessionService()),
@@ -269,8 +269,18 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
+    public void hideErrorEmptyFullName(){
+        mFullNameLayout.setError(null);
+    }
+
+    @Override
     public void showErrorInvalidEmail() {
         mEmailLayout.setError(getString(R.string.invalid_email));
+    }
+
+    @Override
+    public void showErrorEmptyFullName(){
+        mFullNameLayout.setError(getString(R.string.full_name_error));
     }
 
     @Override
@@ -404,6 +414,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
+        mFullNameLayout = (TextInputLayout) v.findViewById(R.id.text_input_full_name) ;
 
         mEmailEditText = (EditText) v.findViewById(R.id.register_email);
         //mEmailEditText.requestFocus(View.VISIBLE);

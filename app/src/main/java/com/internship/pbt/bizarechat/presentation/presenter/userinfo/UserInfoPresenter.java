@@ -1,12 +1,30 @@
 package com.internship.pbt.bizarechat.presentation.presenter.userinfo;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.domain.interactor.GetPrivateDialogByUserId;
 import com.internship.pbt.bizarechat.presentation.view.fragment.userinfo.UserInfoView;
+
+import rx.Subscriber;
 
 
 @InjectViewState
 public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
+    private final static String TAG = UserInfoPresenter.class.getSimpleName();
+    private long userId;
+    private GetPrivateDialogByUserId getDialog;
+
+    public UserInfoPresenter(GetPrivateDialogByUserId getDialog) {
+        this.getDialog = getDialog;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
     public void sendEmail(String email){
         if(email != null && !email.isEmpty()){
             getViewState().startSendEmail(email);
@@ -23,5 +41,25 @@ public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
         if(website != null && !website.isEmpty()){
             getViewState().startOpenWebsite(website);
         }
+    }
+
+    public void startUserChat(){
+        getViewState().showLoading();
+        getDialog.setUserId(userId);
+        getDialog.execute(new Subscriber<DialogModel>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+                getViewState().hideLoading();
+                Log.d(TAG, e.getCause().getMessage(), e.getCause());
+            }
+
+            @Override public void onNext(DialogModel dialog) {
+                getViewState().hideLoading();
+                getViewState().showChatRoom(dialog);
+            }
+        });
     }
 }

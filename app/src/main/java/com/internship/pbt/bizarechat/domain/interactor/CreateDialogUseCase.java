@@ -3,7 +3,6 @@ package com.internship.pbt.bizarechat.domain.interactor;
 
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
 
 import rx.Observable;

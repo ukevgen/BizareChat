@@ -4,10 +4,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:interpolator="@android:interpolator/accelerate_cubic">
     <slide android:slideEdge="bottom"/>
-    <targets>
-        <target android:targetId="@id/user_info_email_layout"/>
-        <target android:targetId="@id/user_info_phone_layout"/>
-        <target android:targetId="@id/user_info_website_layout"/>
-        <target android:targetId="@id/user_info_fab"/>
-    </targets>
+    <targets android:excludeName="@string/transition_user_avatar_name"/>
 </transitionSet>

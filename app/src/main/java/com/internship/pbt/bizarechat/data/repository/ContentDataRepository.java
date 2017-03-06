@@ -5,8 +5,8 @@ import android.net.UrlQuerySanitizer;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateFileResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.UploadFileResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
@@ -19,6 +19,7 @@ import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -28,23 +29,52 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 public class ContentDataRepository implements ContentRepository {
+    private final static String TAG = ContentDataRepository.class.getSimpleName();
 
     private ContentService contentService;
     private String name;
     private volatile String blobId = "";
-    private CacheSharedPreferences cache;
     private CacheUsersPhotos cacheUsersPhotos;
 
     public ContentDataRepository(ContentService retrofitApi,
-                                 CacheSharedPreferences cache,
                                  CacheUsersPhotos cacheUsersPhotos) {
         this.cacheUsersPhotos = cacheUsersPhotos;
         contentService = retrofitApi;
-        this.cache = cache;
+    }
+
+    @Override
+    public Observable<Map<Long, Bitmap>> getUsersPhotos(List<UserModel> users){
+        final Map<Long, Bitmap> usersPhotos = new HashMap<>();
+        return Observable.fromCallable(() -> {
+            for(UserModel user : users){
+                if(user.getBlobId() == null)
+                    usersPhotos.put(user.getUserId(), null);
+                else
+                    getPhoto(user.getBlobId())
+                            .subscribeOn(Schedulers.immediate())
+                            .observeOn(Schedulers.immediate())
+                            .subscribe(new Subscriber<Bitmap>() {
+                                @Override public void onCompleted() {
+
+                                }
+
+                                @Override public void onError(Throwable e) {
+                                    Log.e(TAG, e.getMessage(), e);
+                                }
+
+                                @Override public void onNext(Bitmap bitmap) {
+                                    usersPhotos.put(user.getUserId(), bitmap);
+                                }
+                            });
+            }
+            return usersPhotos;
+        });
     }
 
     public ContentDataRepository(ContentService contentService) {
@@ -110,9 +140,6 @@ public class ContentDataRepository implements ContentRepository {
 
                         FileUploadConfirmRequest confirmRequest = new FileUploadConfirmRequest();
                         confirmRequest.setBlob(confirmBlob);
-
-                        if (name.equals(CurrentUser.CURRENT_AVATAR))
-                            cache.putAccountAvatarBlobId(Long.parseLong(blobId));
 
                         return contentService.confirmFileUploaded(
                                 UserToken.getInstance().getToken(),

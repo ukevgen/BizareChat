@@ -91,13 +91,11 @@ public class UserModel {
     @Expose
     private String userTags;
 
-    private boolean checked = false;
-
-    @Generated(hash = 282106214)
+    @Generated(hash = 11920562)
     public UserModel(Long userId, String fullName, String email, String login, String phone,
-            String website, String createdAt, String updatedAt, String lastRequestAt,
-            Integer externalUserId, Long facebookId, String twitterId, Integer twitterDigitsId,
-            Integer blobId, String customData, String userTags, boolean checked) {
+                     String website, String createdAt, String updatedAt, String lastRequestAt,
+                     Integer externalUserId, Long facebookId, String twitterId, Integer twitterDigitsId,
+                     Integer blobId, String customData, String userTags) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -114,19 +112,10 @@ public class UserModel {
         this.blobId = blobId;
         this.customData = customData;
         this.userTags = userTags;
-        this.checked = checked;
     }
 
     @Generated(hash = 782181818)
     public UserModel() {
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     public Long getUserId() {
@@ -257,7 +246,4 @@ public class UserModel {
         this.userTags = userTags;
     }
 
-    public boolean getChecked() {
-        return this.checked;
-    }
 }

@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,44 +19,59 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
+import com.internship.pbt.bizarechat.domain.events.DialogsUpdatedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.DeleteDialogUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetUnreadMessagesCountUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.dialogs.DialogsPresenterImp;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 public class PublicDialogsFragment extends MvpAppCompatFragment
-        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback {
+        implements DialogsView, DialogsRecyclerViewAdapter.OnDialogDeleteCallback,
+        SwipeRefreshLayout.OnRefreshListener,
+        DialogsRecyclerViewAdapter.OnDialogClickCallback {
     private final int menuSearchId = 100;
 
     @InjectPresenter
     DialogsPresenterImp presenter;
 
+    private OnPublicDialogClickListener dialogClickListener;
+
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @ProvidePresenter
     DialogsPresenterImp provideNewDialogsPresenter() {
         return new DialogsPresenterImp(
                 new DeleteDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 new GetPhotoUseCase(new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new GetUserByIdUseCase(new UserDataRepository(
                         BizareChatApp.getInstance().getUserService())),
+                new GetUnreadMessagesCountUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
+                new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 BizareChatApp.getInstance().getDaoSession(),
-                CacheSharedPreferences.getInstance(getContext()),
-
-                DialogsType.ONE);
+                DialogsType.PUBLIC_GROUP_CHAT);
     }
 
+    public void setDialogClickListener(OnPublicDialogClickListener dialogClickListener) {
+        this.dialogClickListener = dialogClickListener;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +87,9 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.dialogs_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         setHasOptionsMenu(true);
 
         return view;
@@ -80,18 +99,21 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
+        presenter.loadDialogs();
+        recyclerView.setAdapter(presenter.getAdapter());
+        presenter.getAdapter().setContext(getActivity());
+        presenter.getAdapter().setOnDialogClickCallback(this);
+    }
 
-
+    @Override public void onResume() {
+        super.onResume();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (recyclerView.getAdapter() == null) {
-            recyclerView.setAdapter(presenter.getAdapter()
-                    .setContext(getActivity()));
-            presenter.loadDialogs();
-        }
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -110,21 +132,36 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void showDialogs() {
-        if (presenter.getAdapter().getItemCount() == 0)
-            getActivity().findViewById(R.id.layout_chat_empty).setVisibility(View.VISIBLE);
-        recyclerView.setAdapter(presenter.getAdapter());
+    @Subscribe
+    public void onDialogsUpdated(DialogsUpdatedEvent event) {
+        presenter.onDialogsUpdated();
     }
-
-    @Override
-    public void updateDialogs() {
-
-    }
-
 
     @Override
     public void onDialogDelete(int position) {
         //presenter.deleteDialog(position);
+    }
+
+    @Override public void onDialogClick(int position) {
+        presenter.onDialogClick(position);
+    }
+
+    @Override
+    public void showChatRoom(DialogModel dialogModel){
+        dialogClickListener.onPublicDialogClick(dialogModel);
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.refreshDialogsInfo();
+    }
+
+    @Override
+    public void stopRefreshing(){
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public interface OnPublicDialogClickListener {
+        void onPublicDialogClick(DialogModel dialog);
     }
 }

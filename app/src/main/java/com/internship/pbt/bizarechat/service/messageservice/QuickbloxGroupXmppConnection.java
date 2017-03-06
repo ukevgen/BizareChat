@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceipt;
+import com.internship.pbt.bizarechat.service.messageservice.extentions.read.ReadReceiptManager;
 
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.MessageListener;
@@ -11,12 +13,16 @@ import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.id.StanzaIdUtil;
+import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Random;
 
 
 public final class QuickbloxGroupXmppConnection implements ConnectionListener, MessageListener {
@@ -26,7 +32,9 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
     private XMPPTCPConnection groupChatConnection;
     private WeakReference<BizareChatMessageService> messageService;
 
-    private QuickbloxGroupXmppConnection(BizareChatMessageService messageService){
+    private ReceiptReceivedListener receiptReceivedListener;
+
+    private QuickbloxGroupXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
     }
 
@@ -42,19 +50,26 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
     }
 
     public void connect() throws IOException, XMPPException, SmackException {
+        ProviderManager.addExtensionProvider(ReadReceipt.ELEMENT, ReadReceipt.NAMESPACE, new ReadReceipt.Provider());
+        receiptReceivedListener = (fromJid, toJid, receiptId, receipt) -> {
+            // TODO Handle read event
+        };
+        ReadReceiptManager.getInstanceFor(groupChatConnection).addReadReceivedListener(receiptReceivedListener);
         initGroupConnection();
         groupChatConnection.connect();
         groupChatConnection.login();
     }
 
-    public void disconnect(){
-        if(groupChatConnection != null)
+    public void disconnect() {
+        ReadReceiptManager.getInstanceFor(groupChatConnection).removeRemoveReceivedListener(receiptReceivedListener);
+        if (groupChatConnection != null)
             groupChatConnection.disconnect();
         groupChatConnection = null;
     }
 
-    public void sendMessage(String body, String chatJid, long timestamp) throws SmackException{
-        Log.d(TAG,"Sending message to : "+ chatJid);
+    public void sendMessage(String body, String chatJid, long timestamp) throws SmackException {
+        Random random = new Random(timestamp + body.length() + chatJid.length());
+        Log.d(TAG, "Sending message to : " + chatJid);
         MultiUserChat chat = MultiUserChatManager.getInstanceFor(groupChatConnection)
                 .getMultiUserChat(chatJid);
         chat.addMessageListener(this);
@@ -62,8 +77,10 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
         Message message = new Message();
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
+        message.setStanzaId(StanzaIdUtil.newStanzaId());
         message.setBody(body);
         message.addExtension(extension);
+        message.setType(Message.Type.chat);
 
         chat.sendMessage(message);
     }
@@ -90,7 +107,7 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
 
     @Override
     public void connectionClosedOnError(Exception e) {
-        Log.d(TAG, "Connection closed on error; error "+ e.toString());
+        Log.d(TAG, "Connection closed on error; error " + e.toString());
     }
 
     @Override
@@ -108,7 +125,7 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
         Log.d(TAG, "Reconnection failed on error; error " + e.toString());
     }
 
-    private void initGroupConnection(){
+    private void initGroupConnection() {
         long currentUserId = CurrentUser.getInstance().getCurrentUserId();
         String currentUserPassword = CurrentUser.getInstance().getCurrentPassword();
         String jid = currentUserId + "-" + ApiConstants.APP_ID;

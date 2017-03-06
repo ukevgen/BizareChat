@@ -133,7 +133,6 @@ public class RetrofitApi {
             if (CurrentUser.getInstance().isAuthorized() &&
                     CurrentUser.getInstance().getCurrentPassword() != null &&
                     CurrentUser.getInstance().getCurrentEmail() != null) {
-                Log.d("432", "sessionRepository.getSessionWithAuth");
                 sessionRepository.getSessionWithAuth(
                         new UserRequestModel(CurrentUser.getInstance().getCurrentEmail(),
                                 CurrentUser.getInstance().getCurrentPassword()))
@@ -157,8 +156,6 @@ public class RetrofitApi {
                         });
 
             } else if (!CurrentUser.getInstance().isAuthorized()) {
-                Log.d("432", "sessionRepository.getSession");
-
                 sessionRepository.getSession()
                         .subscribeOn(Schedulers.immediate())
                         .observeOn(Schedulers.immediate())

@@ -92,6 +92,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidEmail();
     }
 
+    public void showErrorEmptyFullName(){
+        mRegisterView.showErrorEmptyFullName();
+    }
+
     @Override
     public void showErrorInvalidPhoneNumber() {
         mRegisterView.showErrorInvalidPhone();
@@ -122,6 +126,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
+        mRegisterView.hideErrorEmptyFullName();
     }
 
     @Override
@@ -157,11 +162,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                         mRegisterView.hideLoading();
                         mRegisterView.showError("UploadAvatar " + message);
                     }
-                    currentUser.setAvatarBlobId(null);
                 }
 
                 @Override
-                public void onNext(Integer response) { // Now is return Integer blobId
+                public void onNext(Integer response) {
+                    currentUser.setAvatarBlobId(Long.valueOf(response));
                     onRegistrationSuccess();
                 }
             });
@@ -173,6 +178,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (mRegisterView != null) mRegisterView.showLoading();
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
+        if(informationOnCheck.getFullName().trim().isEmpty()){
+            isValidationSuccess = false;
+            this.showErrorEmptyFullName();
+        }
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
             this.showErrorInvalidEmail();
@@ -209,9 +218,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         fileToUpload = converter.compressPhoto(converter.convertUriToFile(uri));
 
         if (mValidator.isValidAvatarSize(fileToUpload)) {
-            currentUser.setStringAvatar(converter.encodeAvatarTobase64(uri));
+            currentUser.setStringAvatar(converter.encodeAvatarTobase64(fileToUpload));
             loadAvatar();
-
         } else {
             showTooLargeImage();
             fileToUpload = null;
@@ -263,7 +271,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             public void onNext(ResponseSignUpModel signUpModel) {
                 Log.d(TAG, signUpModel.toString());
                 currentUser.setCurrentUserId(Long.valueOf(signUpModel.getUser().getId()));
-                currentUser.setCurrentUserIntId(signUpModel.getUser().getId());
                 authorize();
             }
         });
@@ -316,7 +323,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-
+                if (fileToUpload != null)
+                    uploadAvatar();
+                else
+                    onRegistrationSuccess();
             }
 
             @Override
@@ -331,10 +341,6 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onNext(UserLoginResponse session) {
-                if (fileToUpload != null)
-                    uploadAvatar();
-                else
-                    onRegistrationSuccess();
             }
         });
     }

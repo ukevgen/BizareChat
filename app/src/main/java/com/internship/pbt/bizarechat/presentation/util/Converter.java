@@ -9,12 +9,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
 
-import com.internship.pbt.bizarechat.data.datamodel.UserModel;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import id.zelory.compressor.Compressor;
 
@@ -42,11 +40,11 @@ public class Converter {
         return Compressor.getDefault(context).compressToFile(src);
     }
 
-    public String encodeAvatarTobase64(Uri uri) {
+    public String encodeAvatarTobase64(File file) {
         Bitmap bitmap = null;
         String imageEncoded = null;
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(file));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
@@ -65,11 +63,10 @@ public class Converter {
 
     }
 
-    public String getOccupantsArray(List<UserModel> users) {
+    public String getOccupantsArray(Set<Long> users) {
         StringBuilder builder = new StringBuilder();
-        for (UserModel m : users) {
-            if (m.isChecked())
-                builder.append(m.getUserId()).append(",");
+        for (long value : users) {
+            builder.append(value).append(",");
         }
         if (builder.length() > 0)
             builder.setLength(builder.length() - 1);

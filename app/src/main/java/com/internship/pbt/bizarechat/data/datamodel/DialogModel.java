@@ -24,6 +24,10 @@ public class DialogModel {
     @SerializedName("_id")
     @Expose
     private String dialogId;
+    @Property(nameInDb = "user_id")
+    @SerializedName("user_id")
+    @Expose
+    private long adminId;
     @Property(nameInDb = "created_at")
     @SerializedName("created_at")
     @Expose
@@ -51,7 +55,7 @@ public class DialogModel {
     @Property(nameInDb = "photo")
     @SerializedName("photo")
     @Expose
-    private Integer photo;
+    private String photo;
     @Property(nameInDb = "occupants_ids")
     @Convert(converter = OccupantsIdsConverter.class, columnType = String.class)
     @SerializedName("occupants_ids")
@@ -70,10 +74,11 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 165913975)
-    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
-            String name, Integer photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
+    @Generated(hash = 908108986)
+    public DialogModel(String dialogId, long adminId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
+                       String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
+        this.adminId = adminId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.lastMessage = lastMessage;
@@ -105,6 +110,14 @@ public class DialogModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(long adminId) {
+        this.adminId = adminId;
     }
 
     public String getUpdatedAt() {
@@ -147,11 +160,11 @@ public class DialogModel {
         this.name = name;
     }
 
-    public Integer getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Integer photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 

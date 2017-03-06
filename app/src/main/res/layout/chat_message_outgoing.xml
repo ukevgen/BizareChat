@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:minWidth="100sp"
-            android:text="My Message"/>
+            android:textSize="18sp"
+            emojicon:emojiconSize="18sp"/>
         <RelativeLayout
             android:layout_below="@id/message_text"
             android:layout_width="wrap_content"
@@ -42,8 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:textSize="12sp"
-                android:textColor="@color/chat_message_user_date_color"
-                android:text="@string/outgoing_message_author"/>
+                android:textColor="@color/chat_message_user_date_color"/>
             <TextView
                 android:id="@+id/message_time"
                 android:layout_width="wrap_content"
@@ -51,8 +52,7 @@
                 android:layout_toEndOf="@id/message_user_name"
                 android:textSize="12sp"
                 android:textColor="@color/chat_message_user_date_color"
-                android:layout_marginStart="16dp"
-                android:text="18:32"/>
+                android:layout_marginStart="16dp"/>
             <ImageView
                 android:id="@+id/message_status"
                 android:background="@drawable/single_check_mark"

@@ -6,13 +6,15 @@ import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
+
+import java.util.Map;
 
 import retrofit2.Response;
 import rx.Observable;
 
 public interface DialogsRepository {
-    Observable<AllDialogsResponse> getAllDialogs();
+
+    Observable<AllDialogsResponse> getAllDialogs(Map<String, String> parameters);
 
     Observable<DialogUpdateResponseModel> updateDialog(String dialogId,
                                                        DialogUpdateRequestModel updateRequestModel);
@@ -20,4 +22,8 @@ public interface DialogsRepository {
     Observable<Response<Void>> deleteDialogForCurrentUser(String dialogId);
 
     Observable<DialogModel> createDialog(NewDialog dialog);
+
+    Observable<Map<String, Integer>> getUnreadMessagesCount();
+
+    Observable<DialogModel> getPrivateDialogByUserId(long id);
 }

@@ -1,25 +1,29 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.CreateSubscriptionResponse;
 import com.internship.pbt.bizarechat.data.net.RetrofitApi;
 import com.internship.pbt.bizarechat.data.repository.PushNotificationsRepository;
 import com.internship.pbt.bizarechat.data.repository.UserToken;
+import com.internship.pbt.bizarechat.domain.events.DialogsUpdatedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 
 import retrofit2.Response;
 import rx.Subscriber;
@@ -32,7 +36,8 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     private DaoSession daoSession;
     private long dialogsCount;
 
-    public MainPresenterImpl(SignOutUseCase signOutUseCase, GetAllDialogsUseCase dialogsUseCase,
+    public MainPresenterImpl(SignOutUseCase signOutUseCase,
+                             GetAllDialogsUseCase dialogsUseCase,
                              DaoSession daoSession) {
         this.signOutUseCase = signOutUseCase;
         this.dialogsUseCase = dialogsUseCase;
@@ -132,36 +137,17 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().hideNavigationElements();
     }
 
-
-    @Override
-    public void onPublicTab() {
-
-        updateDialogsDao();
-        getViewState().showPublicDialogs();
-        if (!isDialogDaoEmpty())
-            getViewState().hideEmptyScreen();
-    }
-
-    @Override
-    public void onPrivateTab() {
-        updateDialogsDao();
-        getViewState().showPrivateDialogs();
-        if (!isDialogDaoEmpty())
-            getViewState().hideEmptyScreen();
-    }
-
     private boolean isDialogDaoEmpty() {
-
         dialogsCount = daoSession.getDialogModelDao().count();
         return dialogsCount == 0;
     }
 
-    private void updateDialogsDao() {
+    public void updateDialogsDao() {
         if (BizareChatApp.getInstance().getDaoSession() == null)
             daoSession = BizareChatApp.getInstance().getDaoSession();
 
         if (BizareChatApp.getInstance().isNetworkConnected()) {
-
+            dialogsUseCase.setParameters(new HashMap<>());
             dialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
                 @Override
                 public void onCompleted() {
@@ -170,22 +156,28 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.d("TAG", e.toString());
+                    Log.e(TAG, e.toString(), e);
                 }
 
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onNext(AllDialogsResponse response) {
-
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
                     modelDao.insertOrReplaceInTx(response.getDialogModels());
-
-
+                    if (isDialogDaoEmpty())
+                        getViewState().showEmptyScreen();
+                    EventBus.getDefault().post(new DialogsUpdatedEvent());
                 }
             });
         }
     }
 
+    public void navigateToPrivateChatRoom(DialogModel dialogModel) {
+        getViewState().showPrivateChatRoom(dialogModel);
+        getViewState().hideNavigationElements();
+    }
 
+    public void navigateToPublicChatRoom(DialogModel dialogModel) {
+        getViewState().showPublicChatRoom(dialogModel);
+        getViewState().hideNavigationElements();
+    }
 }
-

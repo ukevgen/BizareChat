@@ -15,8 +15,5 @@ public interface MainPresenter {
 
     //void getDialogsCount();
 
-    void onPublicTab();
-
-    void onPrivateTab();
 
 }

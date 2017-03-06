@@ -92,11 +92,9 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
                         if (isChecked) {
                             checkedUsers.add(users.get(getAdapterPosition()).getUserId());
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name_checked));
-                            users.get(getAdapterPosition()).setChecked(isChecked);
                         } else {
                             checkedUsers.remove(users.get(getAdapterPosition()).getUserId());
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name));
-                            users.get(getAdapterPosition()).setChecked(isChecked);
                         }
                         listener.onCheckBoxClick();
                     });
