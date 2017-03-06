@@ -86,8 +86,10 @@ public class MainActivity extends MvpAppCompatActivity implements
     MainPresenterImpl provideMainPresenter() {
         return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
                 getInstance().getSessionService())),
-                new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                new GetAllDialogsUseCase(
+                        new DialogsDataRepository(
+                                BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession())),
                 BizareChatApp.getInstance().getDaoSession());
     }
 
@@ -405,6 +407,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         Fragment fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
         args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
         args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
         args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
@@ -424,6 +427,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         Fragment fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
         args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
         args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
         args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());

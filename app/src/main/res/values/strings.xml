@@ -104,4 +104,6 @@
     <string name="calls_unavailable_error">You cannot make calls from your device right now.</string>
     <string name="transition_user_full_name">userFullName</string>
     <string name="delete">Delete</string>
+    <string name="not_admin_error">You are not an owner of this chat</string>
+    <string name="full_name_error">Full name can\'t be empty</string>
 </resources>

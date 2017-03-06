@@ -63,7 +63,8 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
     EditChatPresenterImpl provideEditChatPresenter() {
         return new EditChatPresenterImpl(
                 new UpdateDialogUseCase(
-                        new DialogsDataRepository(BizareChatApp.getInstance().getDialogsService())),
+                        new DialogsDataRepository(BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession())),
                 new GetAllUsersUseCase(
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
                 new GetPhotoUseCase(

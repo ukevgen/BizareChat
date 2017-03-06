@@ -234,6 +234,7 @@ public class UsersFragment extends MvpAppCompatFragment
         TextView textView = presenter.getAdapter().getClickedTextView();
 
         Bundle bundle = new Bundle();
+        bundle.putLong(UserInfoFragment.ID_BUNDLE_KEY, user.getUserId());
         bundle.putString(UserInfoFragment.EMAIL_BUNDLE_KEY, user.getEmail());
         bundle.putString(UserInfoFragment.PHONE_BUNDLE_KEY, user.getPhone());
         bundle.putString(UserInfoFragment.WEBSITE_BUNDLE_KEY, user.getWebsite());

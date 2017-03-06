@@ -92,6 +92,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidEmail();
     }
 
+    public void showErrorEmptyFullName(){
+        mRegisterView.showErrorEmptyFullName();
+    }
+
     @Override
     public void showErrorInvalidPhoneNumber() {
         mRegisterView.showErrorInvalidPhone();
@@ -122,6 +126,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.hideErrorInvalidPassword();
         mRegisterView.hideErrorInvalidPhone();
         mRegisterView.hideErrorPasswordConfirm();
+        mRegisterView.hideErrorEmptyFullName();
     }
 
     @Override
@@ -173,6 +178,10 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (mRegisterView != null) mRegisterView.showLoading();
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
+        if(informationOnCheck.getFullName().trim().isEmpty()){
+            isValidationSuccess = false;
+            this.showErrorEmptyFullName();
+        }
         if (!mValidator.isValidEmail(informationOnCheck.getEmail())) {
             isValidationSuccess = false;
             this.showErrorInvalidEmail();

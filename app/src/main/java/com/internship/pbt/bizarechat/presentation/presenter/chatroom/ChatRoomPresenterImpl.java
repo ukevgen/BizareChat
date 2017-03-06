@@ -39,6 +39,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     private int type;
     private String dialogId;
     private String dialogRoomJid;
+    private long adminId;
+    private String chatName;
     private List<Integer> occupantsIds;
     private GetUsersPhotosByIdsUseCase usersPhotosUseCase;
     private GetUsersByIdsUseCase usersByIdsUseCase;
@@ -65,6 +67,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     public void init(){
+        getViewState().showLoading();
         initUsers();
     }
 
@@ -76,6 +79,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
             }
 
             @Override public void onError(Throwable e) {
+                getViewState().hideLoading();
                 Log.e(TAG, e.getMessage(), e);
             }
 
@@ -97,6 +101,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
             }
 
             @Override public void onError(Throwable e) {
+                getViewState().hideLoading();
                 Log.e(TAG, e.getMessage(), e);
             }
 
@@ -112,15 +117,21 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         messages = daoSession.getMessageModelDao()
                 .queryBuilder()
                 .where(MessageModelDao.Properties.ChatDialogId.eq(dialogId))
+                .orderAsc(MessageModelDao.Properties.DateSent)
                 .list();
         adapter.setMessageList(messages);
         adapter.notifyDataSetChanged();
         getViewState().scrollToEnd();
-        messageService.get().sendPrivateReadStatusMessage(
-                privateOccupantJid,
-                StanzaIdUtil.newStanzaId(),
-                dialogId
-        );
+        getViewState().hideLoading();
+        if(messages != null) {
+            MessageModel lastMessage = messages.get(messages.size() - 1);
+            if(lastMessage.getRead() != MessageState.READ)
+                messageService.get().sendPrivateReadStatusMessage(
+                        privateOccupantJid,
+                        lastMessage.getMessageId(),
+                        dialogId
+                );
+        }
     }
 
     public void setType(int type) {
@@ -151,8 +162,28 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
+    public void setAdminId(long adminId) {
+        this.adminId = adminId;
+    }
+
+    public String getChatName() {
+        return chatName;
+    }
+
+    public void setChatName(String chatName) {
+        this.chatName = chatName;
+    }
+
     public void setMessageService(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
+    }
+
+    public void showEditChat(){
+        if(currentUserId == adminId){
+            getViewState().showEditChat();
+        } else {
+            getViewState().showNotAdminError();
+        }
     }
 
     public void sendMessage(String message) {
@@ -167,7 +198,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     public void sendPublicMessage(String message, long timestamp, String stanzaId){
-        //TODO
+        messageService.get().sendPublicMessage(message, dialogRoomJid, timestamp, stanzaId);
     }
 
     private void sendPrivateMessage(String message, long timestamp, String stanzaId) {
@@ -209,7 +240,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     private int getPrivateDialogOccupant() {
-        if (occupantsIds.isEmpty()) return 0;
+        if (occupantsIds.isEmpty() && occupantsIds.size() > 2) return 0;
         for (Integer id : occupantsIds) {
             if (id != currentUserId)
                 return id;
@@ -219,6 +250,15 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     public void processPrivateMessage(MessageModel message){
         if(message.getSenderId() == getPrivateDialogOccupant()){
+            messages.add(message);
+            adapter.notifyItemInserted(messages.lastIndexOf(message));
+            getViewState().scrollToEnd();
+            messageService.get().sendPrivateReadStatusMessage(privateOccupantJid, message.getMessageId(), dialogId);
+        }
+    }
+
+    public void processPublicMessage(MessageModel message){
+        if(message.getChatDialogId().equals(dialogId)){
             messages.add(message);
             adapter.notifyItemInserted(messages.lastIndexOf(message));
             getViewState().scrollToEnd();
@@ -232,6 +272,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                     if(this.messages.get(i).getMessageId().equals(message.getMessageId())){
                         this.messages.get(i).setRead(MessageState.DELIVERED);
                         adapter.notifyItemChanged(i);
+                        break;
                     }
                 }
             }
@@ -245,8 +286,19 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                     if(this.messages.get(i).getMessageId().equals(message.getMessageId())){
                         this.messages.get(i).setRead(MessageState.READ);
                         adapter.notifyItemChanged(i);
+                        break;
                     }
                 }
+            }
+        }
+    }
+
+    public void processSentPublicMessageEvent(String messageId){
+        for(int i = 0; i < this.messages.size(); i++){
+            if(messages.get(i).getMessageId().equals(messageId)){
+                this.messages.get(i).setRead(MessageState.DELIVERED);
+                adapter.notifyItemChanged(i);
+                break;
             }
         }
     }

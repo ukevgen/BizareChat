@@ -3,7 +3,13 @@ package com.internship.pbt.bizarechat.service.messageservice;
 
 import android.util.Log;
 
+import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModelDao;
+import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
+import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Displayed;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.DisplayedManager;
@@ -11,6 +17,7 @@ import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Received;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.ReceivedManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.ReconnectionManager;
@@ -27,17 +34,21 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class QuickbloxPrivateXmppConnection
         implements ConnectionListener, ChatMessageListener {
+    private volatile boolean connected = false;
     private static final String TAG = QuickbloxPrivateXmppConnection.class.getSimpleName();
     private static volatile QuickbloxPrivateXmppConnection INSTANCE;
 
     private XMPPTCPConnection privateChatConnection;
     private WeakReference<BizareChatMessageService> messageService;
+    private ConcurrentLinkedQueue<Message> offlineMessages;
 
     private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
+        offlineMessages = new ConcurrentLinkedQueue<>();
     }
 
     public static QuickbloxPrivateXmppConnection getInstance(BizareChatMessageService messageService) {
@@ -51,7 +62,7 @@ public final class QuickbloxPrivateXmppConnection
         return INSTANCE;
     }
 
-    public void sendDisplayedReceipt(String receiverJid, String stanzaId, String dialog_id) throws SmackException {
+    public void sendDisplayedReceipt(String receiverJid, String stanzaId, String dialog_id) {
         Message message = new Message(receiverJid);
         Displayed read = new Displayed(stanzaId);
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
@@ -62,10 +73,14 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(read);
         message.addExtension(extension);
 
-        privateChatConnection.sendStanza(message);
+        try {
+            privateChatConnection.sendStanza(message);
+        } catch (SmackException.NotConnectedException ex) {
+            offlineMessages.add(message);
+        }
     }
 
-    public void sendReceivedReceipt(String receiverJid, String stanzaId, String dialog_id) throws SmackException {
+    public void sendReceivedReceipt(String receiverJid, String stanzaId, String dialog_id) {
         Message message = new Message(receiverJid);
         Received delivered = new Received(stanzaId);
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
@@ -76,10 +91,14 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(delivered);
         message.addExtension(extension);
 
-        privateChatConnection.sendStanza(message);
+        try {
+            privateChatConnection.sendStanza(message);
+        } catch (SmackException.NotConnectedException ex) {
+            offlineMessages.add(message);
+        }
     }
 
-    public void sendMessage(String body, String receiverJid, long timestamp, String stanzaId) throws SmackException {
+    public void sendPrivateMessage(String body, String receiverJid, long timestamp, String stanzaId) {
         Log.d(TAG, "Sending message to : " + receiverJid);
 
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
@@ -93,11 +112,39 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(new Markable());
         message.addExtension(extension);
 
-        privateChatConnection.sendStanza(message);
+        try {
+            privateChatConnection.sendStanza(message);
+        } catch (SmackException.NotConnectedException ex) {
+            offlineMessages.add(message);
+        }
+    }
+
+    public void sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId) {
+        Log.d(TAG, "Sending message to : " + chatJid);
+
+        QuickbloxChatExtension extension = new QuickbloxChatExtension();
+        extension.setProperty("date_sent", timestamp + "");
+        extension.setProperty("save_to_history", "1");
+
+        Message message = new Message(chatJid);
+        message.setStanzaId(stanzaId);
+        message.setBody(body);
+        message.setType(Message.Type.groupchat);
+        message.addExtension(extension);
+
+        try {
+            privateChatConnection.sendStanza(message);
+        } catch (SmackException.NotConnectedException ex) {
+            offlineMessages.add(message);
+        }
     }
 
     @Override
     public void processMessage(Chat chat, Message message) {
+        if (message.getFrom().split("@")[1].contains("muc")) {
+            messageService.get().processPublicMessage(message);
+            return;
+        }
         messageService.get().processPrivateMessage(message);
     }
 
@@ -116,25 +163,54 @@ public final class QuickbloxPrivateXmppConnection
     @Override
     public void connected(XMPPConnection xmppConnection) {
         Log.d(TAG, "Connected Successfully");
+        connected = true;
     }
 
     @Override
     public void authenticated(XMPPConnection xmppConnection, boolean b) {
         Log.d(TAG, "Authenticated Successfully");
+        connected = true;
+
     }
 
     @Override
     public void connectionClosed() {
+        connected = false;
         Log.d(TAG, "Connection closed");
     }
 
     @Override
     public void connectionClosedOnError(Exception e) {
+        connected = false;
         Log.d(TAG, "Connection closed on error; error " + e.toString());
     }
 
     @Override
     public void reconnectionSuccessful() {
+        connected = true;
+        if (!offlineMessages.isEmpty()) {
+            JobExecutor.getInstance().execute(() -> {
+                while (!offlineMessages.isEmpty()) {
+                    try {
+                        Message message = offlineMessages.peek();
+                        privateChatConnection.sendStanza(message);
+                        if(message.getType() == Message.Type.groupchat) {
+                            EventBus.getDefault().post(new PublicMessageSentEvent(message.getStanzaId()));
+
+                            MessageModel messageModel = BizareChatApp.getInstance().getDaoSession().getMessageModelDao()
+                                    .queryBuilder()
+                                    .where(MessageModelDao.Properties.MessageId.eq(message.getStanzaId()))
+                                    .unique();
+                            messageModel.setRead(MessageState.DELIVERED);
+                            BizareChatApp.getInstance().getDaoSession().getMessageModelDao().updateInTx(messageModel);
+                        }
+                    } catch (SmackException ex) {
+                        break;
+                    }
+                    offlineMessages.poll();
+                }
+            });
+        }
         Log.d(TAG, "Reconnection successful");
     }
 
@@ -145,6 +221,7 @@ public final class QuickbloxPrivateXmppConnection
 
     @Override
     public void reconnectionFailed(Exception e) {
+        connected = false;
         Log.d(TAG, "Reconnection failed on error; error " + e.toString());
     }
 
@@ -170,12 +247,12 @@ public final class QuickbloxPrivateXmppConnection
         DisplayedManager.getInstanceFor(privateChatConnection).addDisplayedListener(
                 (fromJid, toJid, receiptId, receipt) -> {
                     messageService.get().processDisplayed(fromJid, toJid, receiptId, receipt);
-        });
+                });
 
         ProviderManager.addExtensionProvider(Received.ELEMENT, Received.NAMESPACE, new Received.Provider());
         ReceivedManager.getInstanceFor(privateChatConnection).addReceivedListener(
                 (fromJid, toJid, receiptId, receipt) -> {
                     messageService.get().processReceived(fromJid, toJid, receiptId, receipt);
-        });
+                });
     }
 }

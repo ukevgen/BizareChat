@@ -1,8 +1,6 @@
 package com.internship.pbt.bizarechat.data.repository;
 
 
-import android.util.Log;
-
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.UserModelDao;
@@ -76,6 +74,7 @@ public class UserDataRepository implements UserRepository {
     public Observable<List<UserModel>> getUsersByIds(List<Integer> ids){
         final List<UserModel> users = new ArrayList<>();
         return Observable.fromCallable(() -> {
+            Exception exception = new Exception();
             for(Integer id : ids){
                 getUserById(id).subscribeOn(Schedulers.immediate())
                         .observeOn(Schedulers.immediate())
@@ -85,7 +84,7 @@ public class UserDataRepository implements UserRepository {
                             }
 
                             @Override public void onError(Throwable e) {
-                                Log.e(TAG, e.getMessage(), e);
+                                exception.initCause(e);
                             }
 
                             @Override public void onNext(UserModel userModel) {
@@ -93,6 +92,8 @@ public class UserDataRepository implements UserRepository {
                             }
                         });
             }
+            if(exception.getCause() != null)
+                throw exception;
             return users;
         });
     }

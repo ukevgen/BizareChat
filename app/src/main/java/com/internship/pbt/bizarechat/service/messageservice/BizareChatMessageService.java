@@ -11,8 +11,11 @@ import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
 import com.internship.pbt.bizarechat.data.datamodel.MessageModelDao;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
+import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.domain.events.DisplayedEvent;
 import com.internship.pbt.bizarechat.domain.events.PrivateMessageEvent;
+import com.internship.pbt.bizarechat.domain.events.PublicMessageEvent;
+import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
 import com.internship.pbt.bizarechat.domain.events.ReceivedEvent;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
@@ -40,7 +43,6 @@ import rx.Observable;
 public class BizareChatMessageService extends Service {
     private static final String TAG = BizareChatMessageService.class.getSimpleName();
     private QuickbloxPrivateXmppConnection privateConnection;
-    private QuickbloxGroupXmppConnection groupConnection;
     private NotificationUtils notificationUtils;
     private DaoSession daoSession;
 
@@ -48,62 +50,77 @@ public class BizareChatMessageService extends Service {
     public void onCreate() {
         super.onCreate();
         privateConnection = QuickbloxPrivateXmppConnection.getInstance(this);
-        groupConnection = QuickbloxGroupXmppConnection.getInstance(this);
         notificationUtils = new NotificationUtils(this);
         daoSession = BizareChatApp.getInstance().getDaoSession();
     }
 
     public Observable<Boolean> sendPrivateMessage(String body, String receiverJid, long timestamp, String stanzaId){
         return Observable.fromCallable(() -> {
-            privateConnection.sendMessage(body, receiverJid, timestamp, stanzaId);
+            privateConnection.sendPrivateMessage(body, receiverJid, timestamp, stanzaId);
             return true;
         });
     }
 
     public void sendPrivateReadStatusMessage(String receiver, String stanzaId, String dialog_id){
         JobExecutor.getInstance().execute(() -> {
-            try{
-                privateConnection.sendDisplayedReceipt(receiver, stanzaId, dialog_id);
-            } catch (SmackException ex){
-                Log.d(TAG, ex.getMessage(), ex);
-            }
+            privateConnection.sendDisplayedReceipt(receiver, stanzaId, dialog_id);
         });
     }
 
     public void sendPrivateDeliveredStatusMessage(String receiver, String stanzaId, String dialog_id){
         JobExecutor.getInstance().execute(() -> {
-            try{
-                privateConnection.sendReceivedReceipt(receiver, stanzaId, dialog_id);
-            } catch (SmackException ex){
-                Log.d(TAG, ex.getMessage(), ex);
-            }
+            privateConnection.sendReceivedReceipt(receiver, stanzaId, dialog_id);
         });
     }
 
     void processPrivateMessage(Message message){
-        MessageModel messageModel = getMessageModel(message);
-        saveMessageToDb(messageModel);
-        if(NotificationUtils.isAppIsInBackground(getApplicationContext())){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            notificationUtils.showNotificationMessage(
-                    message.getFrom(),
-                    message.getBody(),
-                    System.currentTimeMillis() + "",
-                    intent);
-        } else {
-            EventBus.getDefault().post(new PrivateMessageEvent(messageModel));
-        }
+        JobExecutor.getInstance().execute(() -> {
+            MessageModel messageModel = getMessageModel(message);
+            saveMessageToDb(messageModel);
+            if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                notificationUtils.showNotificationMessage(
+                        message.getFrom(),
+                        message.getBody(),
+                        System.currentTimeMillis() + "",
+                        intent);
+            } else {
+                EventBus.getDefault().post(new PrivateMessageEvent(messageModel));
+            }
+        });
     }
 
-    public Observable<Boolean> sendPublicMessage(String body, String chatJid, long timestamp){
+    public Observable<Boolean> sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId){
         return Observable.fromCallable(() -> {
-            groupConnection.sendMessage(body, chatJid, timestamp);
+            privateConnection.sendPublicMessage(body, chatJid, timestamp, stanzaId);
+            EventBus.getDefault().post(new PublicMessageSentEvent(stanzaId));
+
+            MessageModel messageModel = daoSession.getMessageModelDao()
+                    .queryBuilder()
+                    .where(MessageModelDao.Properties.MessageId.eq(stanzaId))
+                    .unique();
+            messageModel.setRead(MessageState.DELIVERED);
+            daoSession.getMessageModelDao().updateInTx(messageModel);
+
             return true;
         });
     }
 
-    void processPublicMessage(Message message){
-//        EventBus.getDefault().post(new PublicMessageEvent(message));
+    void processPublicMessage(Message message) {
+        JobExecutor.getInstance().execute(() -> {
+            MessageModel messageModel = getMessageModel(message);
+            saveMessageToDb(messageModel);
+            if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                notificationUtils.showNotificationMessage(
+                        message.getFrom(),
+                        message.getBody(),
+                        System.currentTimeMillis() + "",
+                        intent);
+            } else {
+                EventBus.getDefault().post(new PublicMessageEvent(messageModel));
+            }
+        });
     }
 
     void processReceived(String fromJid, String toJid, String receiptId, Stanza receipt){
@@ -145,6 +162,7 @@ public class BizareChatMessageService extends Service {
 
             List<MessageModel> messages = builder.where(
                     builder.and(MessageModelDao.Properties.DateSent.le(messageModel.getDateSent()),
+                            MessageModelDao.Properties.ChatDialogId.eq(messageModel.getChatDialogId()),
                             MessageModelDao.Properties.SenderId.eq(CurrentUser.getInstance().getCurrentUserId().intValue()),
                             MessageModelDao.Properties.Read.notEq(MessageState.READ)))
                     .list();
@@ -161,6 +179,8 @@ public class BizareChatMessageService extends Service {
 
     private void saveMessageToDb(MessageModel message){
         JobExecutor.getInstance().execute(() -> {
+            String receiverJid = message.getSenderId() + "-" + ApiConstants.APP_ID + "@" + ApiConstants.CHAT_END_POINT;
+            sendPrivateDeliveredStatusMessage(receiverJid, message.getMessageId(), message.getChatDialogId());
             daoSession.getMessageModelDao().insert(message);
         });
     }
@@ -190,6 +210,16 @@ public class BizareChatMessageService extends Service {
             Log.e(TAG, ex.getMessage(), ex);
         }
 
+        int recipientId = 0;
+        int senderId = 0;
+
+        if(message.getType() == Message.Type.chat){
+            recipientId = Integer.valueOf(message.getTo().split("-")[0]);
+            senderId = Integer.valueOf(message.getFrom().split("-")[0]);
+        } else if(message.getType() == Message.Type.groupchat){
+            senderId = Integer.valueOf(message.getFrom().split("/")[1]);
+        }
+
         MessageModel messageModel = new MessageModel(
                 message.getStanzaId(),
                 "",
@@ -200,8 +230,8 @@ public class BizareChatMessageService extends Service {
                 dialog_id,
                 timestamp,
                 message.getBody(),
-                Integer.valueOf(message.getTo().split("-")[0]),
-                Integer.valueOf(message.getFrom().split("-")[0]),
+                recipientId,
+                senderId,
                 MessageState.DEFAULT);
         return messageModel;
     }
@@ -227,7 +257,6 @@ public class BizareChatMessageService extends Service {
         JobExecutor.getInstance().execute(() -> {
             try {
                 privateConnection.connect();
-//                groupConnection.connect();
             }catch (XMPPException | SmackException | IOException ex){
                 EventBus.getDefault().post(ex);
             }
@@ -238,7 +267,7 @@ public class BizareChatMessageService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        privateConnection.disconnect();
         privateConnection = null;
-        groupConnection = null;
     }
 }

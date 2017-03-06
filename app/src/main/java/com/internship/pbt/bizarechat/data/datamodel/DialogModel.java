@@ -24,6 +24,10 @@ public class DialogModel {
     @SerializedName("_id")
     @Expose
     private String dialogId;
+    @Property(nameInDb = "user_id")
+    @SerializedName("user_id")
+    @Expose
+    private long adminId;
     @Property(nameInDb = "created_at")
     @SerializedName("created_at")
     @Expose
@@ -70,10 +74,11 @@ public class DialogModel {
     @Expose
     private String xmppRoomJid;
 
-    @Generated(hash = 866263801)
-    public DialogModel(String dialogId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
+    @Generated()
+    public DialogModel(String dialogId, long adminId, String createdAt, String updatedAt, String lastMessage, long lastMessageDateSent, int lastMessageUserId,
             String name, String photo, List<Integer> occupantsIds, Integer type, Integer unreadMessagesCount, String xmppRoomJid) {
         this.dialogId = dialogId;
+        this.adminId = adminId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.lastMessage = lastMessage;
@@ -87,7 +92,7 @@ public class DialogModel {
         this.xmppRoomJid = xmppRoomJid;
     }
 
-    @Generated(hash = 174413608)
+    @Generated()
     public DialogModel() {
     }
 
@@ -105,6 +110,14 @@ public class DialogModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(long adminId) {
+        this.adminId = adminId;
     }
 
     public String getUpdatedAt() {

@@ -55,16 +55,16 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
     DialogsPresenterImp provideNewDialogsPresenter() {
         return new DialogsPresenterImp(
                 new DeleteDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 new GetPhotoUseCase(new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new GetUserByIdUseCase(new UserDataRepository(
                         BizareChatApp.getInstance().getUserService())),
                 new GetUnreadMessagesCountUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 new GetAllDialogsUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 BizareChatApp.getInstance().getDaoSession(),
                 DialogsType.PRIVATE_CHAT);
     }

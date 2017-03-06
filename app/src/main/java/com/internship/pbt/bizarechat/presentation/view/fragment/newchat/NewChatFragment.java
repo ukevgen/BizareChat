@@ -66,7 +66,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
                         BizareChatApp.getInstance().getContentService(),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new CreateDialogUseCase(new DialogsDataRepository(BizareChatApp.getInstance()
-                        .getDialogsService())),
+                        .getDialogsService(), BizareChatApp.getInstance().getDaoSession())),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
                         CacheUsersPhotos.getInstance(getActivity()))

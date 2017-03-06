@@ -15,6 +15,10 @@ public interface RegistrationView extends LoadDataView {
 
     void showErrorInvalidEmail();
 
+    void showErrorEmptyFullName();
+
+    void hideErrorEmptyFullName();
+
     void showErrorInvalidPassword();
 
     void showErrorInvalidPhone();

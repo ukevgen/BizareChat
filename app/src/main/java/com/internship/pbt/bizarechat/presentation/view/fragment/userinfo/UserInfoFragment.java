@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.TintTypedArray;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -18,17 +19,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
+import com.internship.pbt.bizarechat.domain.interactor.GetPrivateDialogByUserId;
+import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.userinfo.UserInfoPresenter;
+import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomFragment;
+
+import java.util.ArrayList;
 
 
 public class UserInfoFragment extends MvpAppCompatFragment
         implements UserInfoView, View.OnClickListener {
+    public static final String ID_BUNDLE_KEY = "userEmail";
     public static final String EMAIL_BUNDLE_KEY = "userEmail";
     public static final String PHONE_BUNDLE_KEY = "userPhone";
     public static final String WEBSITE_BUNDLE_KEY = "userWebsite";
@@ -48,13 +58,19 @@ public class UserInfoFragment extends MvpAppCompatFragment
     private FloatingActionButton userInfoFab;
     private CollapsingToolbarLayout toolbarLayout;
     private TextView titleShadow;
+    private ProgressBar progressBar;
 
     @InjectPresenter
     UserInfoPresenter presenter;
 
     @ProvidePresenter
     UserInfoPresenter provideUserInfoPresenter(){
-        return new UserInfoPresenter();
+        return new UserInfoPresenter(
+                new GetPrivateDialogByUserId(
+                    new DialogsDataRepository(
+                        BizareChatApp.getInstance().getDialogsService(),
+                        BizareChatApp.getInstance().getDaoSession()))
+        );
     }
 
     @Nullable
@@ -66,6 +82,7 @@ public class UserInfoFragment extends MvpAppCompatFragment
         phone = arguments.getString(PHONE_BUNDLE_KEY);
         website = arguments.getString(WEBSITE_BUNDLE_KEY);
         fullName = arguments.getString(FULL_NAME_BUNDLE_KEY);
+        presenter.setUserId(arguments.getLong(ID_BUNDLE_KEY));
 
         Toolbar toolbar = (Toolbar)view.findViewById(R.id.user_toolbar);
         final TintTypedArray a = TintTypedArray.obtainStyledAttributes(toolbar.getContext(),
@@ -95,6 +112,7 @@ public class UserInfoFragment extends MvpAppCompatFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         avatarImage = (ImageView)view.findViewById(R.id.user_collapsing_toolbar_image);
+        progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);
         avatarImage.setImageBitmap(arguments.getParcelable(AVATAR_BUNDLE_KEY));
         if (!TextUtils.isEmpty(email))
             emailTextView.setText(email);
@@ -117,7 +135,7 @@ public class UserInfoFragment extends MvpAppCompatFragment
                 presenter.openWebsite(website);
                 break;
             case R.id.user_info_fab:
-                //TODO implement start chat with user
+                presenter.startUserChat();
                 break;
         }
     }
@@ -169,5 +187,35 @@ public class UserInfoFragment extends MvpAppCompatFragment
             startActivity(websiteIntent);
         else
             Snackbar.make(websiteTextView, R.string.no_web_apps_error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLoading(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading(){
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showChatRoom(DialogModel dialogModel){
+        Fragment fragment = new ChatRoomFragment();
+        Bundle args = new Bundle();
+        args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
+        args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
+        args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
+        args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
+        ArrayList<Integer> list = new ArrayList<>(dialogModel.getOccupantsIds());
+        args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
+
+        fragment.setArguments(args);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_screen_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }
