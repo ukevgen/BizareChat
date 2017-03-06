@@ -123,14 +123,19 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         adapter.notifyDataSetChanged();
         getViewState().scrollToEnd();
         getViewState().hideLoading();
-        if(messages != null) {
-            MessageModel lastMessage = messages.get(messages.size() - 1);
-            if(lastMessage.getRead() != MessageState.READ)
-                messageService.get().sendPrivateReadStatusMessage(
-                        privateOccupantJid,
-                        lastMessage.getMessageId(),
-                        dialogId
-                );
+        if(messages != null && messages.size() > 0) {
+            MessageModel lastMessage;
+            for(int i = messages.size()-1; i >=0; i--) {
+                lastMessage = messages.get(i);
+                if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
+                    messageService.get().sendPrivateReadStatusMessage(
+                            privateOccupantJid,
+                            lastMessage.getMessageId(),
+                            dialogId
+                    );
+                    break;
+                }
+            }
         }
     }
 
@@ -269,7 +274,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         if(messages != null && !messages.isEmpty() && messages.get(0).getChatDialogId().equals(dialogId)){
             for(MessageModel message : messages){
                 for(int i = 0; i < this.messages.size(); i++){
-                    if(this.messages.get(i).getMessageId().equals(message.getMessageId())){
+                    if(this.messages.get(i).getMessageId().equals(message.getMessageId()) &&
+                            messages.get(i).getRead() != MessageState.READ){
                         this.messages.get(i).setRead(MessageState.DELIVERED);
                         adapter.notifyItemChanged(i);
                         break;

@@ -8,6 +8,7 @@ public final class CacheConstants {
     protected static final String CURRENT_ACCOUNT_AUTHORIZATION = "CURRENT_ACCOUNT_AUTHORIZATION";
     protected static final String CURRENT_ACCOUNT_PASSWORD = "CURRENT_ACCOUNT_PASSWORD";
     protected static final String CURRENT_ACCOUNT_EMAIL = "CURRENT_ACCOUNT_EMAIL";
+    protected static final String CURRENT_ACCOUNT_FULL_NAME = "CURRENT_ACCOUNT_FULL_NAME";
     protected static final String CURRENT_ACCOUNT_FACEBOOK_ID = "CURRENT_ACCOUNT_FACEBOOK_ID";
     protected static final String CURRENT_ACCOUNT_FACEBOOK_TOKEN = "CURRENT_ACCOUNT_FACEBOOK_TOKEN";
     protected static final String CURRENT_ACCOUNT_KEEP_ME_SIGN_IN = "CURRENT_ACCOUNT_KEEP_ME_SIGN_IN";

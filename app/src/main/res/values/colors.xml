@@ -44,4 +44,6 @@
     <color name="user_info_title">#757575</color>
     <color name="user_info_value">#000000</color>
     <color name="user_info_delimiter">#e0e0e0</color>
+    <color name="settings_thumb_color">#009688</color>
+    <color name="settings_track_color">#7fcac3</color>
 </resources>

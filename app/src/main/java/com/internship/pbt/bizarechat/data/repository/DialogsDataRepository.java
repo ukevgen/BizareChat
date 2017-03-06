@@ -71,7 +71,7 @@ public class DialogsDataRepository implements DialogsRepository {
 
             Exception exception = new Exception();
             DialogModel[] wrapper = new DialogModel[1];
-            createDialog(new NewDialog(DialogsType.PRIVATE_CHAT, String.valueOf(id), "", ""))
+            createDialog(new NewDialog(DialogsType.PRIVATE_CHAT, "", String.valueOf(id), ""))
                         .subscribeOn(Schedulers.immediate())
                         .observeOn(Schedulers.immediate())
                         .subscribe(new Subscriber<DialogModel>() {
@@ -85,6 +85,7 @@ public class DialogsDataRepository implements DialogsRepository {
 
                             @Override public void onNext(DialogModel dialogModel) {
                                 wrapper[0] = dialogModel;
+                                daoSession.getDialogModelDao().insertInTx(dialogModel);
                             }
                         });
 

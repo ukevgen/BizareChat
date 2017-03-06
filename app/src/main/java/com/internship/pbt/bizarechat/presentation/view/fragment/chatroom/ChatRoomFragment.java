@@ -38,6 +38,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.editchat.EditCha
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
@@ -97,7 +98,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         sendButton = (ImageButton)view.findViewById(R.id.chat_room_send_button);
         sendButton.setOnClickListener(this);
         messageEditText = (EmojiconEditText)view.findViewById(R.id.chat_room_enter_message);
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.toolbar_title);
+        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
         emojiButton = (ImageView)view.findViewById(R.id.chat_room_emoji_button);
         emojIconActions = new EmojIconActions(getActivity(), view, messageEditText, emojiButton);
         emojIconActions.ShowEmojIcon();
@@ -154,26 +155,26 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPrivateMessageEvent(PrivateMessageEvent event){
         if(presenter.getType() == DialogsType.PRIVATE_CHAT) {
             presenter.processPrivateMessage(event.getMessage());
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPublicMessageEvent(PublicMessageEvent event){
         if(presenter.getType() != DialogsType.PRIVATE_CHAT) {
             presenter.processPublicMessage(event.getMessage());
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeliveredReceipt(ReceivedEvent event){
         presenter.processDeliveredReceipt(event.getMessages());
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReadReceipt(DisplayedEvent event){
         presenter.processReadReceipt(event.getMessages());
     }

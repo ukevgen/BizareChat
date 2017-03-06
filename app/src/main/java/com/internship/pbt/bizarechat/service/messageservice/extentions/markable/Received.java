@@ -36,8 +36,8 @@ public class Received implements ExtensionElement {
     @Override
     public XmlStringBuilder toXML() {
         XmlStringBuilder builder = new XmlStringBuilder(this);
-        builder.closeEmptyElement();
         builder.attribute("id", id);
+        builder.closeEmptyElement();
         return builder;
     }
 

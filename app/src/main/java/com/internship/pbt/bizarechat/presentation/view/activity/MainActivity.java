@@ -37,7 +37,6 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
@@ -149,16 +148,15 @@ public class MainActivity extends MvpAppCompatActivity implements
         View headerView = mNavigationView.getHeaderView(0);
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
-        CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail();
-        email.setText(CacheSharedPreferences.getInstance(getApplicationContext()).getCurrentEmail());
+        email.setText(CurrentUser.getInstance().getCurrentEmail());
 
-        //TextView login = (TextView) findViewById(R.id.user_login);
-        //login.setText(CacheSharedPreferences.getInstance());
+        TextView login = (TextView) headerView.findViewById(R.id.user_login);
+        login.setText(CurrentUser.getInstance().getFullName());
 
         CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
-        String s = CacheSharedPreferences.getInstance(getApplication()).getStringAvatar();
+        String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)
             avatar.setImageBitmap(bitmap);
