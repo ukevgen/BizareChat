@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.data.cache;
 public final class CacheConstants {
 
     protected static final String CURRENT_ACCOUNT_ID = "CURRENT_ACCOUNT_ID";
+    protected static final String CURRENT_ACCOUNT_ID_IN_INT = "CURRENT_ACCOUNT_ID_IN_INT";
     protected static final String CURRENT_ACCOUNT_TOKEN = "CURRENT_ACCOUNT_TOKEN";
     protected static final String CURRENT_ACCOUNT_AVATAR = "CURRENT_ACCOUNT_AVATAR";
     protected static final String CURRENT_ACCOUNT_AUTHORIZATION = "CURRENT_ACCOUNT_AUTHORIZATION";

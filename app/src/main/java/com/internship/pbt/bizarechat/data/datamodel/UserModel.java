@@ -112,10 +112,19 @@ public class UserModel {
         this.blobId = blobId;
         this.customData = customData;
         this.userTags = userTags;
+        this.checked = checked;
     }
 
     @Generated(hash = 782181818)
     public UserModel() {
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public Long getUserId() {
@@ -245,5 +254,4 @@ public class UserModel {
     public void setUserTags(String userTags) {
         this.userTags = userTags;
     }
-
 }

@@ -138,6 +138,7 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     private boolean isDialogDaoEmpty() {
+
         dialogsCount = daoSession.getDialogModelDao().count();
         return dialogsCount == 0;
     }

@@ -47,6 +47,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private int dialogsType;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
+    private Bitmap dialogBitmap;
+    private Integer currentUserPhotoBlobId;
 
     public DialogsPresenterImp(DeleteDialogUseCase deleteDialogUseCase,
                                GetPhotoUseCase photoUseCase,
@@ -96,6 +98,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             for (int i = 0; i < dialogs.size(); i++) {
                 getAndAddPhoto(dialogs.get(i));
             }
+            adapter.setDialogPhotos(dialogPhotos);
         }
         adapter.notifyDataSetChanged();
         return dialogs;
@@ -115,7 +118,6 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         deleteDialogUseCase.execute(new Subscriber<Response<Void>>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
