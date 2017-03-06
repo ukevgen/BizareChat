@@ -48,6 +48,15 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
+    public void putUserLogin(String login) {
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_LOGIN, login);
+        mEditor.apply();
+    }
+
+    public String getUserLogin() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_LOGIN, null);
+    }
+
     public String getStringAvatar() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, null);
     }

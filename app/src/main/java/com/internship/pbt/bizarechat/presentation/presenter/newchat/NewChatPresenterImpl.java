@@ -275,7 +275,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     public void checkConnection() {
         if (BizareChatApp.getInstance().isNetworkConnected()) {
             uploadChatPhoto();
-            //getViewState().getChatProperties();
+            getViewState().getChatProperties();
         } else {
             getViewState().showNetworkError();
         }

@@ -16,4 +16,5 @@ public final class CacheConstants {
     protected static final String CURRENT_ACCOUNT_IS_SUBSCRIBED = "CURRENT_ACCOUNT_IS_SUBSCRIBED_PUSH";
     protected static final String CURRENT_ACCOUNT_AVATAR_STRING = "CURRENT_ACCOUNT_AVATAR_STRING";
 
+    public static final String CURRENT_ACCOUNT_LOGIN = "CURRENT_ACCOUNT_LOGIN";
 }

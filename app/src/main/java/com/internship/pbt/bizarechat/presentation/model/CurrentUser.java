@@ -122,4 +122,12 @@ public class CurrentUser implements AuthStore {
         return cache.getStringAvatar();
     }
 
+    public void setUserLogin(String login) {
+        cache.putUserLogin(login);
+    }
+
+    public String getUserLogin() {
+        return cache.getUserLogin();
+    }
+
 }
