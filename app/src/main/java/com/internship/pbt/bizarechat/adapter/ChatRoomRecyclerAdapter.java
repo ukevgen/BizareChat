@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.internship.pbt.bizarechat.R;
-import com.internship.pbt.bizarechat.domain.model.chatroom.ChatMessageModel;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
@@ -22,17 +22,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecyclerAdapter.MessageHolder> {
     private long currentUserId = CurrentUser.getInstance().getCurrentUserId();
-    private List<ChatMessageModel> messageList;
+    private List<MessageModel> messageList;
     private Map<Long, Bitmap> occupantsPhotos;
+    private Map<Long, String> userNames;
     private int self = Integer.MAX_VALUE;
     private Context context;
 
-    public ChatRoomRecyclerAdapter(Context context,
-                                   List<ChatMessageModel> messageList,
-                                   Map<Long, Bitmap> occupantsPhotos){
-        this.context = context;
+    public ChatRoomRecyclerAdapter(List<MessageModel> messageList,
+                                   Map<Long, Bitmap> occupantsPhotos,
+                                   Map<Long, String> userNames){
         this.messageList = messageList;
         this.occupantsPhotos = occupantsPhotos;
+        this.userNames = userNames;
+    }
+
+    public void setMessageList(List<MessageModel> messageList) {
+        this.messageList = messageList;
+    }
+
+    public void setOccupantsPhotos(Map<Long, Bitmap> occupantsPhotos) {
+        this.occupantsPhotos = occupantsPhotos;
+    }
+
+    public void setContext(Context context){
+        this.context = context;
     }
 
     @Override
@@ -50,8 +63,8 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
 
     @Override
     public int getItemViewType(int position) {
-        ChatMessageModel chatMessageModel = messageList.get(position);
-        if(chatMessageModel.getUserId() == currentUserId){
+        MessageModel messageModel = messageList.get(position);
+        if(messageModel.getSenderId() == currentUserId){
             return self;
         }
         return position;
@@ -59,14 +72,14 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
 
     @Override
     public void onBindViewHolder(MessageHolder holder, int position) {
-        ChatMessageModel message = messageList.get(position);
-        Bitmap photo = occupantsPhotos.get(message.getUserId());
-        holder.userName.setText(message.getUserName());
-        holder.messageText.setText(message.getText());
-        holder.time.setText(message.getTime());
-        if(message.getUserId() == currentUserId){
+        MessageModel message = messageList.get(position);
+        Bitmap photo = occupantsPhotos.get(message.getSenderId().longValue());
+        holder.userName.setText(userNames.get(message.getSenderId().longValue()));
+        holder.messageText.setText(message.getMessage());
+        holder.time.setText(String.valueOf(message.getDateSent()));
+        if(message.getSenderId().longValue() == currentUserId){
             holder.userName.setText(context.getString(R.string.me));
-            switch(message.getState()){
+            switch(message.getRead()){
                 case MessageState.DELIVERED:
                     holder.deliveryStatus.setImageDrawable(
                             context.getResources().getDrawable(R.drawable.single_check_mark));
@@ -75,13 +88,15 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
                     holder.deliveryStatus.setImageDrawable(
                             context.getResources().getDrawable(R.drawable.double_check_mark));
                     break;
-                case MessageState.NOT_SENT:
+                case MessageState.DEFAULT:
                     holder.deliveryStatus.setVisibility(View.INVISIBLE);
                     break;
             }
         }
         if(photo != null)
-            holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getUserId()));
+            holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getSenderId().longValue()));
+        else
+            holder.userPhoto.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
     }
 
     @Override

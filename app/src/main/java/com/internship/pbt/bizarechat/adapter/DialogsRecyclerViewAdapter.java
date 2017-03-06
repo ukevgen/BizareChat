@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -26,7 +27,6 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
     private Context context;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
-    OnNewMessageCallback newMessageCallback;
     OnDialogDeleteCallback onDialogDeleteCallback;
     OnDialogClickCallback onDialogClickCallback;
 
@@ -39,10 +39,6 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
     public DialogsRecyclerViewAdapter setContext(Context context) {
         this.context = context;
         return this;
-    }
-
-    public List<DialogModel> getDialogs() {
-        return dialogs;
     }
 
     @Override
@@ -60,13 +56,20 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         holder.mLastMessage.setText(dialog.getLastMessage());
         holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageTime()));
         holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
-        holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+        if(dialog.getUnreadMessagesCount() != 0) {
+            holder.mNewMessageIndicator.setVisibility(View.VISIBLE);
+            holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+        } else {
+            holder.mNewMessageIndicator.setVisibility(View.GONE);
+        }
         holder.mTitle.setText(dialog.getName());
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 
         Bitmap photo = dialogPhotos.get(dialog.getDialogId());
         if (photo != null)
             holder.imageView.setImageBitmap(photo);
+        else
+            holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
 
         mItemManger.bindView(holder.itemView, position);
     }
@@ -81,21 +84,12 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         return dialogs.size();
     }
 
-    public interface OnNewMessageCallback {
-        void onNewMessageCallback();
-    }
-
     public interface OnDialogClickCallback {
-        void onDialogClick();
+        void onDialogClick(int position);
     }
 
     public interface OnDialogDeleteCallback {
         void onDialogDelete(int position);
-    }
-
-    public DialogsRecyclerViewAdapter setNewMessageCallback(OnNewMessageCallback callback) {
-        this.newMessageCallback = callback;
-        return this;
     }
 
     public DialogsRecyclerViewAdapter setOnDialogDeleteCallback(OnDialogDeleteCallback onDialogDeleteCallback) {
@@ -112,6 +106,7 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         SwipeLayout swipeLayout;
         DialogsRecyclerViewAdapter adapter;
         Button deleteButton;
+        FrameLayout surfaceLayout;
         CircleImageView imageView;
         TextView mMessageAuthor,
                 mLastMessage,
@@ -136,12 +131,13 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
             mTitle = (TextView) itemView.findViewById(R.id.chats_item_name);
             swipeLayout = (SwipeLayout) itemView.findViewById(R.id.chats_item_swipe_layout);
             deleteButton = (Button) itemView.findViewById(R.id.chats_item_delete_button);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //deleteItem();
-                    confirm();
-                }
+            deleteButton.setOnClickListener(v -> {
+                //deleteItem();
+                confirm();
+            });
+            surfaceLayout = (FrameLayout)itemView.findViewById(R.id.chats_item_surface_view);
+            surfaceLayout.setOnClickListener(v -> {
+                adapter.onDialogClickCallback.onDialogClick(getAdapterPosition());
             });
         }
 

@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.constans;
 
 
 public class DialogsType {
-    public static final int ONE = 1,
-            TWO = 2,
-            TRHEE = 3;
+    public static final int PUBLIC_GROUP_CHAT = 1,
+            GROUP_CHAT = 2,
+            PRIVATE_CHAT = 3;
 }

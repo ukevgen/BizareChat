@@ -1,8 +1,9 @@
 package com.internship.pbt.bizarechat.data.net.services;
 
 
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
-import com.internship.pbt.bizarechat.data.datamodel.response.CreateDialogResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
@@ -34,14 +35,14 @@ public interface DialogsService {
 
     @Headers("Content-Type: application/json")
     @DELETE("/chat/Dialog/{dialog_id}.json")
-    Observable<Response<Void>> geleteDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+    Observable<Response<Void>> deleteDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                             @Path("dialog_id") String dialogId);
 
     @Headers("Content-Type: application/json")
     @POST("/chat/Dialog.json")
-    Observable<CreateDialogResponse> createDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
-                                                  @Path("type") String type,
-                                                  @Path("name") String name,
-                                                  @Path("occupants_ids") String occupants_ids);
+    Observable<DialogModel> createDialog(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                         @Body NewDialog dialog);
 
+    @GET("/chat/Message/unread.json")
+    Observable<Map<String, Integer>> getUnreadMessagesCount(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader);
 }

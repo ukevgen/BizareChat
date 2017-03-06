@@ -21,9 +21,6 @@ repositories {
         url 'https://maven.fabric.io/public'
     }
     maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
-    maven {
         url 'https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/'
     }
     jcenter {
@@ -130,7 +127,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.0'
 
     // Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
 
@@ -144,17 +141,22 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-simplexml:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 
+<<<<<<< HEAD
     compile "org.igniterealtime.smack:smack-java7:4.1.9"
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     compile "org.igniterealtime.smack:smack-extensions:4.1.9"
     compile "org.igniterealtime.smack:smack-im:4.1.9"
+=======
+    compile 'org.igniterealtime.smack:smack-android-extensions:4.1.9'
+    compile 'org.igniterealtime.smack:smack-tcp:4.1.9'
+
+>>>>>>> bbb26234cf928191b04be84fdd658537db7f9894
     compile 'io.reactivex:rxjava:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.1'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'com.facebook.android:facebook-android-sdk:4.16.1'
-    compile 'com.androidadvance:topsnackbar:1.1.1'
 
     //SnackBar on steroids
     compile 'com.androidadvance:topsnackbar:1.1.1'

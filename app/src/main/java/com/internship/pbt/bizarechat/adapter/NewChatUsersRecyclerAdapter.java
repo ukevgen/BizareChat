@@ -39,6 +39,10 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
         return this;
     }
 
+    public List<UserModel> getUsers() {
+        return users;
+    }
+
     @Override
     public UserHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -55,14 +59,14 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
     public void onBindViewHolder(UserHolder holder, int position) {
         UserModel user = users.get(position);
         Bitmap photo = usersPhotos.get(user.getUserId());
-        if(photo != null)
+        if (photo != null)
             holder.photo.setImageBitmap(photo);
         else
             holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
         holder.name.setText(user.getFullName());
         boolean isChecked = checkedUsers.contains(user.getUserId());
         holder.userCheckBox.setChecked(isChecked);
-        if(isChecked)
+        if (isChecked)
             holder.name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name_checked));
         else
             holder.name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name));
@@ -73,23 +77,22 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
         return users.size();
     }
 
-    class UserHolder extends RecyclerView.ViewHolder{
+    class UserHolder extends RecyclerView.ViewHolder {
         private CircleImageView photo;
         private TextView name;
         private AppCompatCheckBox userCheckBox;
 
         public UserHolder(View itemView) {
             super(itemView);
-            photo = (CircleImageView)itemView.findViewById(R.id.new_chat_member_image);
-            name = (TextView)itemView.findViewById(R.id.new_chat_member_name);
-            userCheckBox = (AppCompatCheckBox)itemView.findViewById(R.id.new_chat_member_checkbox);
+            photo = (CircleImageView) itemView.findViewById(R.id.new_chat_member_image);
+            name = (TextView) itemView.findViewById(R.id.new_chat_member_name);
+            userCheckBox = (AppCompatCheckBox) itemView.findViewById(R.id.new_chat_member_checkbox);
             userCheckBox.setOnCheckedChangeListener(
                     (buttonView, isChecked) -> {
-                        if(isChecked) {
+                        if (isChecked) {
                             checkedUsers.add(users.get(getAdapterPosition()).getUserId());
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name_checked));
-                        }
-                        else {
+                        } else {
                             checkedUsers.remove(users.get(getAdapterPosition()).getUserId());
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name));
                         }
@@ -98,7 +101,7 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
         }
     }
 
-    public interface OnCheckBoxClickListener{
+    public interface OnCheckBoxClickListener {
         void onCheckBoxClick();
     }
 }

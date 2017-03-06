@@ -21,7 +21,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.EditChatRecyclerViewAdapter;
-import com.internship.pbt.bizarechat.data.cache.CacheSharedPreferences;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
@@ -64,17 +63,16 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
     EditChatPresenterImpl provideEditChatPresenter() {
         return new EditChatPresenterImpl(
                 new UpdateDialogUseCase(
-                        new DialogsDataRepository(BizareChatApp.getInstance().getDialogsService())),
+                        new DialogsDataRepository(BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession())),
                 new GetAllUsersUseCase(
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
                 new GetPhotoUseCase(
                         new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        CacheSharedPreferences.getInstance(BizareChatApp.getInstance()),
                         CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
-                        BizareChatApp.getInstance().getCache(),
                         BizareChatApp.getInstance().getCacheUsersPhotos()),
                 new Converter(BizareChatApp.getInstance().getApplicationContext()),
                 new Validator());

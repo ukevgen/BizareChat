@@ -46,4 +46,10 @@ Thumbs.db
 .externalNativeBuild
 gradle.properties
 .idea/codeStyleSettings.xml
+
 intermediates
+
+app/build
+
+gradle.properties
+

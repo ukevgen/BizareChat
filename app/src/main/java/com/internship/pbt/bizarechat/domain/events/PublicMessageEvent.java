@@ -1,16 +1,16 @@
 package com.internship.pbt.bizarechat.domain.events;
 
 
-import org.jivesoftware.smack.packet.Message;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
 
 public class PublicMessageEvent {
-    private Message message;
+    private MessageModel message;
 
-    public PublicMessageEvent(Message message) {
+    public PublicMessageEvent(MessageModel message) {
         this.message = message;
     }
 
-    public Message getMessage() {
+    public MessageModel getMessage() {
         return message;
     }
 }
