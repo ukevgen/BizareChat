@@ -46,14 +46,9 @@ Thumbs.db
 .externalNativeBuild
 gradle.properties
 .idea/codeStyleSettings.xml
-<<<<<<< HEAD
-app/build
-=======
 
+app/build
 intermediates
-
-app/build
-
 gradle.properties
 
->>>>>>> beta
+
