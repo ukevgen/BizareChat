@@ -155,13 +155,14 @@ public class MainActivity extends MvpAppCompatActivity implements
             email.setText(currentUser.getCurrentEmail());
 
         TextView login = (TextView) headerView.findViewById(R.id.user_login);
-        if (currentUser.getUserLogin() != null)
-            login.setText(currentUser.getUserLogin());
+        if(currentUser.getFullName()!=null)
+            login.setText(currentUser.getFullName());
 
         CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
-        String s = currentUser.getStringAvatar();
+
+        String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)
             avatar.setImageBitmap(bitmap);

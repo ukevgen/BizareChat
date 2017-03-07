@@ -71,22 +71,23 @@ public class DialogsDataRepository implements DialogsRepository {
 
             Exception exception = new Exception();
             DialogModel[] wrapper = new DialogModel[1];
-            createDialog(new NewDialog(DialogsType.PRIVATE_CHAT, String.valueOf(id), "", ""))
-                    .subscribeOn(Schedulers.immediate())
-                    .observeOn(Schedulers.immediate())
-                    .subscribe(new Subscriber<DialogModel>() {
-                        @Override public void onCompleted() {
+            createDialog(new NewDialog(DialogsType.PRIVATE_CHAT, "", String.valueOf(id), ""))
+                        .subscribeOn(Schedulers.immediate())
+                        .observeOn(Schedulers.immediate())
+                        .subscribe(new Subscriber<DialogModel>() {
+                            @Override public void onCompleted() {
 
-                        }
+                            }
 
-                        @Override public void onError(Throwable e) {
-                            exception.initCause(e);
-                        }
+                            @Override public void onError(Throwable e) {
+                                exception.initCause(e);
+                            }
 
-                        @Override public void onNext(DialogModel dialogModel) {
-                            wrapper[0] = dialogModel;
-                        }
-                    });
+                            @Override public void onNext(DialogModel dialogModel) {
+                                wrapper[0] = dialogModel;
+                                daoSession.getDialogModelDao().insertInTx(dialogModel);
+                            }
+                        });
 
             if(exception.getCause() != null)
                 throw exception;

@@ -123,6 +123,7 @@ public class CacheSharedPreferences {
     }
 
 
+
     public int getUserIntId() {
         int id = mSharedPreferences.getInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, -1);
         return id;
@@ -132,6 +133,16 @@ public class CacheSharedPreferences {
     public void putUserId(Integer id) {
         mEditor.putInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, id);
         mEditor.apply();
+    }
+
+
+    public void putFullName(String fullName){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, fullName);
+        mEditor.apply();
+    }
+
+    public String getFullName(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, null);
     }
 
 

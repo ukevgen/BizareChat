@@ -190,7 +190,7 @@ public class BizareChatMessageService extends Service {
         String dialog_id = "";
         XmlPullParser parser = Xml.newPullParser();
         try {
-            parser.setInput(new StringReader(message.getExtensions().get(0).toXML().toString()));
+            parser.setInput(new StringReader(message.getExtensions().get(1).toXML().toString()));
             while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                 switch (parser.getEventType()) {
                     case XmlPullParser.START_TAG:

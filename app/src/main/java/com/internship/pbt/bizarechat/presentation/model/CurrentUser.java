@@ -122,6 +122,7 @@ public class CurrentUser implements AuthStore {
         return cache.getStringAvatar();
     }
 
+
     public void setUserLogin(String login) {
         cache.putUserLogin(login);
     }
@@ -131,3 +132,13 @@ public class CurrentUser implements AuthStore {
     }
 
 }
+
+    public void setFullName(String fullName){
+        cache.putFullName(fullName);
+    }
+
+    public String getFullName(){
+        return cache.getFullName();
+    }
+}
+
