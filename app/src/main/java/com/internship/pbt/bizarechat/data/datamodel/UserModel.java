@@ -93,9 +93,9 @@ public class UserModel {
 
     @Generated(hash = 11920562)
     public UserModel(Long userId, String fullName, String email, String login, String phone,
-            String website, String createdAt, String updatedAt, String lastRequestAt,
-            Integer externalUserId, Long facebookId, String twitterId, Integer twitterDigitsId,
-            Integer blobId, String customData, String userTags) {
+                     String website, String createdAt, String updatedAt, String lastRequestAt,
+                     Integer externalUserId, Long facebookId, String twitterId, Integer twitterDigitsId,
+                     Integer blobId, String customData, String userTags) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;

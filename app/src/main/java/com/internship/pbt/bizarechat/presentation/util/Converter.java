@@ -66,7 +66,7 @@ public class Converter {
     public String getOccupantsArray(Set<Long> users) {
         StringBuilder builder = new StringBuilder();
         for (long value : users) {
-                builder.append(value).append(",");
+            builder.append(value).append(",");
         }
         if (builder.length() > 0)
             builder.setLength(builder.length() - 1);

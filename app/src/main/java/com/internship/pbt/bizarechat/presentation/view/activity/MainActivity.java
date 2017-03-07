@@ -108,6 +108,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Intent messageServiceIntent;
     private ProgressBar progressBar;
     private Converter converter;
+    private CurrentUser currentUser;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -146,16 +147,21 @@ public class MainActivity extends MvpAppCompatActivity implements
     private void setUserInformation() {
 
         View headerView = mNavigationView.getHeaderView(0);
+        if (currentUser == null)
+            currentUser = CurrentUser.getInstance();
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
-        email.setText(CurrentUser.getInstance().getCurrentEmail());
+        if (currentUser.getCurrentEmail() != null)
+            email.setText(currentUser.getCurrentEmail());
 
         TextView login = (TextView) headerView.findViewById(R.id.user_login);
-        login.setText(CurrentUser.getInstance().getFullName());
+        if(currentUser.getFullName()!=null)
+            login.setText(currentUser.getFullName());
 
         CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
+
         String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)
@@ -401,7 +407,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void showPrivateChatRoom(DialogModel dialogModel){
+    public void showPrivateChatRoom(DialogModel dialogModel) {
         Fragment fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
@@ -421,7 +427,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void showPublicChatRoom(DialogModel dialogModel){
+    public void showPublicChatRoom(DialogModel dialogModel) {
         Fragment fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());

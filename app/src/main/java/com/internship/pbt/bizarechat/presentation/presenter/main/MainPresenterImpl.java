@@ -181,4 +181,3 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().hideNavigationElements();
     }
 }
-
