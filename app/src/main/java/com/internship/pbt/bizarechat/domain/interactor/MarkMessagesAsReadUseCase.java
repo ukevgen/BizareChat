@@ -1,10 +1,10 @@
 package com.internship.pbt.bizarechat.domain.interactor;
 
-
 import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
 
 import retrofit2.Response;
 import rx.Observable;
+
 
 public class MarkMessagesAsReadUseCase extends UseCase<Response<Void>> {
     private DialogsRepository dialogsRepository;

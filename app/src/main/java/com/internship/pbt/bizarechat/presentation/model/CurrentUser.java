@@ -131,7 +131,7 @@ public class CurrentUser implements AuthStore {
         return cache.getUserLogin();
     }
 
-}
+
 
     public void setFullName(String fullName){
         cache.putFullName(fullName);
