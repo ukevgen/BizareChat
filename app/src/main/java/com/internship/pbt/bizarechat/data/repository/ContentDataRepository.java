@@ -77,6 +77,10 @@ public class ContentDataRepository implements ContentRepository {
         });
     }
 
+    public ContentDataRepository(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
     public Observable<Bitmap> getPhoto(final Integer blobId) {
         return Observable.fromCallable(new Callable<Bitmap>() {
             @Override

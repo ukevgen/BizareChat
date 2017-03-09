@@ -125,6 +125,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Converter converter;
     private CircleImageView drawerAvatar;
     private TextView drawerLogin;
+    private CurrentUser currentUser;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -192,9 +193,12 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         View headerView = mNavigationView.getHeaderView(0);
         headerView.findViewById(R.id.nav_header_root).setOnClickListener(this);
+        if (currentUser == null)
+            currentUser = CurrentUser.getInstance();
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
-        email.setText(CurrentUser.getInstance().getCurrentEmail());
+        if (currentUser.getCurrentEmail() != null)
+            email.setText(currentUser.getCurrentEmail());
 
         drawerLogin = (TextView) headerView.findViewById(R.id.user_login);
         drawerLogin.setText(CurrentUser.getInstance().getFullName());
@@ -202,6 +206,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         drawerAvatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
+
         String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)

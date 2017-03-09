@@ -283,4 +283,3 @@ public class NewChatFragment extends MvpAppCompatFragment implements
 
 
 
-
