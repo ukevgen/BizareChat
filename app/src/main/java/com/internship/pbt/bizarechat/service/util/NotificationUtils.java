@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,8 @@ public class NotificationUtils {
     public void showNotificationMessage(String title, String message,
                                         String timeStamp, Intent intent) {
         if(TextUtils.isEmpty(message)) return;
+
+        if(!CurrentUser.getInstance().isNotificationsOn()) return;
 
         int icon = R.mipmap.ic_launcher;
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

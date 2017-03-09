@@ -20,6 +20,7 @@ import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.
 import org.greenrobot.eventbus.EventBus;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
@@ -33,15 +34,18 @@ import org.jivesoftware.smack.packet.id.StanzaIdUtil;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.muc.DiscussionHistory;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class QuickbloxPrivateXmppConnection
-        implements ConnectionListener, ChatMessageListener, ChatManagerListener {
+        implements ConnectionListener, ChatMessageListener, ChatManagerListener, MessageListener {
     private volatile boolean connected = false;
     private static final String TAG = QuickbloxPrivateXmppConnection.class.getSimpleName();
     private static volatile QuickbloxPrivateXmppConnection INSTANCE;
@@ -50,11 +54,14 @@ public final class QuickbloxPrivateXmppConnection
     private WeakReference<BizareChatMessageService> messageService;
     private ConcurrentLinkedQueue<Message> offlineMessages;
     private Map<String, Chat> privateChats;
+    private Map<String, MultiUserChat> publicChats;
+    private String publicChatToLeave = "";
 
     private QuickbloxPrivateXmppConnection(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
         offlineMessages = new ConcurrentLinkedQueue<>();
-        privateChats = new HashMap<>();
+        privateChats = new ConcurrentHashMap<>();
+        publicChats = new ConcurrentHashMap<>();
     }
 
     public static QuickbloxPrivateXmppConnection getInstance(BizareChatMessageService messageService) {
@@ -146,6 +153,13 @@ public final class QuickbloxPrivateXmppConnection
     public void sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId) {
         Log.d(TAG, "Sending message to : " + chatJid);
 
+        MultiUserChat mucChat;
+        if((mucChat = publicChats.get(chatJid)) == null) {
+            mucChat = MultiUserChatManager.getInstanceFor(privateChatConnection).getMultiUserChat(chatJid);
+            mucChat.addMessageListener(this);
+            publicChats.put(chatJid, mucChat);
+        }
+
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
         extension.setProperty("save_to_history", "1");
@@ -157,10 +171,37 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            privateChatConnection.sendStanza(message);
+            if(!mucChat.isJoined()) {
+                DiscussionHistory history = new DiscussionHistory();
+                history.setMaxStanzas(20);
+                mucChat.join(
+                        CurrentUser.getInstance().getCurrentUserId().toString(),
+                        null,
+                        history,
+                        privateChatConnection.getPacketReplyTimeout());
+            }
+            mucChat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
             offlineMessages.add(message);
+        } catch (XMPPException | SmackException ex){
+            Log.e(TAG, ex.getMessage(), ex);
         }
+    }
+
+    public void leavePublicChat(String chatJid){
+        MultiUserChat muc = publicChats.get(chatJid);
+        try {
+            if (publicChats.get(chatJid) != null) {
+                muc.leave();
+            }
+        } catch (SmackException.NotConnectedException ex){
+            publicChatToLeave = chatJid;
+        }
+    }
+
+    @Override
+    public void processMessage(Message message) {
+        processMessage(null, message);
     }
 
     @Override
@@ -226,6 +267,10 @@ public final class QuickbloxPrivateXmppConnection
             JobExecutor.getInstance().execute(() -> {
                 while (!offlineMessages.isEmpty()) {
                     try {
+                        if(!publicChatToLeave.isEmpty()){
+                            publicChats.get(publicChatToLeave).leave();
+                            publicChatToLeave = "";
+                        }
                         Message message = offlineMessages.peek();
                         privateChatConnection.sendStanza(message);
                         if(message.getType() == Message.Type.groupchat) {

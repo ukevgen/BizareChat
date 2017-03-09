@@ -9,7 +9,6 @@ import com.internship.pbt.bizarechat.adapter.DialogsRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
-import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.db.QueryBuilder;
@@ -249,8 +248,6 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             }
 
             @Override public void onNext(AllDialogsResponse response) {
-                DialogModelDao modelDao = daoSession.getDialogModelDao();
-                modelDao.insertOrReplaceInTx(response.getDialogModels());
                 for(DialogModel dialog : response.getDialogModels()){
                     boolean replaced = false;
                     for(int i = 0; i < dialogs.size(); i++){
@@ -275,6 +272,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
     public void onDialogClick(int position){
         DialogModel dialog = dialogs.get(position);
+        dialog.setUnreadMessagesCount(0);
+        adapter.notifyItemChanged(position);
         getViewState().showChatRoom(dialog);
     }
 

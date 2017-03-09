@@ -1,8 +1,8 @@
 package com.internship.pbt.bizarechat.data.net.services;
 
 
-import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.UserByIdResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 
 import retrofit2.Response;
@@ -36,6 +36,6 @@ public interface UserService {
 
     @GET("/users/{id}.json")
     @Headers("QuickBlox-REST-API-Version: 0.1.0")
-    Observable<UserModel> getUserById(@Header(ApiConstants.TOKEN_HEADER_NAME) String token,
-                                      @Path("id") Integer id);
+    Observable<UserByIdResponse> getUserById(@Header(ApiConstants.TOKEN_HEADER_NAME) String token,
+                                             @Path("id") Integer id);
 }

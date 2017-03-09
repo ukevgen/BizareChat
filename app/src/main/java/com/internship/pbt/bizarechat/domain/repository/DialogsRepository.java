@@ -25,5 +25,7 @@ public interface DialogsRepository {
 
     Observable<Map<String, Integer>> getUnreadMessagesCount();
 
+    Observable<Response<Void>> markMessagesAsRead(String dialogId);
+
     Observable<DialogModel> getPrivateDialogByUserId(long id);
 }

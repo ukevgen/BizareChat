@@ -6,8 +6,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 
 
+@StateStrategyType(SkipStrategy.class)
 public interface DialogsView extends MvpView {
-    @StateStrategyType(SkipStrategy.class)
     void showChatRoom(DialogModel dialogModel);
 
     void stopRefreshing();

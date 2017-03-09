@@ -12,11 +12,14 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 import id.zelory.compressor.Compressor;
 
 public class Converter {
+    private static SimpleDateFormat messageTimeFormat = new SimpleDateFormat("HH:mm");
 
     private Context context;
 
@@ -72,5 +75,16 @@ public class Converter {
             builder.setLength(builder.length() - 1);
 
         return builder.toString();
+    }
+  
+    public static String imageToString(Bitmap image){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public static String longToTime(long timestamp){
+        return messageTimeFormat.format(new Date(timestamp));
     }
 }

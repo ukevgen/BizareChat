@@ -37,7 +37,7 @@ public class QueryBuilder {
                 .getDialogModelDao()
                 .queryBuilder()
                 .where(DialogModelDao.Properties.Type.eq(DialogsType.PRIVATE_CHAT))
-                .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
+                .orderDesc(DialogModelDao.Properties.LastMessageDateSent)
                 .list();
         return modelList;
     }
@@ -48,7 +48,7 @@ public class QueryBuilder {
                 .getDialogModelDao()
                 .queryBuilder()
                 .where(DialogModelDao.Properties.Type.notEq(DialogsType.PRIVATE_CHAT))
-                .orderAsc(DialogModelDao.Properties.LastMessageDateSent)
+                .orderDesc(DialogModelDao.Properties.LastMessageDateSent)
                 .list();
         return modelList;
     }
