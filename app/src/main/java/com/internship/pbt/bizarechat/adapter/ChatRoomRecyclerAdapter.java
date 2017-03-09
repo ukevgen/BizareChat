@@ -31,7 +31,7 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
 
     public ChatRoomRecyclerAdapter(List<MessageModel> messageList,
                                    Map<Long, Bitmap> occupantsPhotos,
-                                   Map<Long, String> userNames){
+                                   Map<Long, String> userNames) {
         this.messageList = messageList;
         this.occupantsPhotos = occupantsPhotos;
         this.userNames = userNames;
@@ -45,17 +45,17 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         this.occupantsPhotos = occupantsPhotos;
     }
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         this.context = context;
     }
 
     @Override
     public MessageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if(viewType == self){
+        if (viewType == self) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_message_outgoing, parent, false);
-        } else{
+        } else {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_message_incoming, parent, false);
         }
@@ -65,7 +65,7 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
     @Override
     public int getItemViewType(int position) {
         MessageModel messageModel = messageList.get(position);
-        if(messageModel.getSenderId() == currentUserId){
+        if (messageModel.getSenderId() == currentUserId) {
             return self;
         }
         return position;
@@ -78,9 +78,9 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         holder.userName.setText(userNames.get(message.getSenderId().longValue()));
         holder.messageText.setText(message.getMessage());
         holder.time.setText(Converter.longToTime(message.getDateSent() * 1000));
-        if(message.getSenderId().longValue() == currentUserId){
+        if (message.getSenderId().longValue() == currentUserId) {
             holder.userName.setText(context.getString(R.string.me));
-            switch(message.getRead()){
+            switch (message.getRead()) {
                 case MessageState.DELIVERED:
                     holder.deliveryStatus.setImageDrawable(
                             context.getResources().getDrawable(R.drawable.single_check_mark));
@@ -94,10 +94,38 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
                     break;
             }
         }
-        if(photo != null)
+        if (photo != null)
             holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getSenderId().longValue()));
         else
             holder.userPhoto.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
+
+        if (position > 0) {
+            setTimeTextVisibility(message.getDateSent(), messageList.get(position - 1).getDateSent(),
+                    holder.timeText);
+        } else {
+            setTimeTextVisibility(message.getDateSent(), 0, holder.timeText);
+        }
+
+    }
+
+    private void setTimeTextVisibility(long currentTime, long previousTime, TextView timeText
+    ) {
+        if (previousTime == 0) {
+            timeText.setVisibility(View.VISIBLE);
+            timeText.setText(Converter.getLastMessageDay(currentTime));
+        } else {
+            String cal1 = Converter.getLastMessageDay(currentTime);
+            String cal2 = Converter.getLastMessageDay(previousTime);
+            boolean sameDay = cal1.equals(cal2);
+
+            if (sameDay) {
+                timeText.setVisibility(View.GONE);
+                timeText.setText("");
+            } else {
+                timeText.setVisibility(View.VISIBLE);
+                timeText.setText(Converter.getPartOfTheWeek(currentTime));
+            }
+        }
     }
 
     @Override
@@ -105,20 +133,22 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         return messageList.size();
     }
 
-    class MessageHolder extends RecyclerView.ViewHolder{
+    class MessageHolder extends RecyclerView.ViewHolder {
         private CircleImageView userPhoto;
         private TextView messageText;
         private TextView userName;
         private TextView time;
+        private TextView timeText;
         private ImageView deliveryStatus;
 
-        MessageHolder(View view){
+        MessageHolder(View view) {
             super(view);
-            userPhoto = (CircleImageView)view.findViewById(R.id.message_user_photo);
-            messageText = (TextView)view.findViewById(R.id.message_text);
-            userName = (TextView)view.findViewById(R.id.message_user_name);
-            time = (TextView)view.findViewById(R.id.message_time);
-            deliveryStatus = (ImageView)view.findViewById(R.id.message_status);
+            timeText = (TextView) view.findViewById(R.id.timeText);
+            userPhoto = (CircleImageView) view.findViewById(R.id.message_user_photo);
+            messageText = (TextView) view.findViewById(R.id.message_text);
+            userName = (TextView) view.findViewById(R.id.message_user_name);
+            time = (TextView) view.findViewById(R.id.message_time);
+            deliveryStatus = (ImageView) view.findViewById(R.id.message_status);
         }
     }
 }

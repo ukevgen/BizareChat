@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import id.zelory.compressor.Compressor;
 
 public class Converter {
     private static SimpleDateFormat messageTimeFormat = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat messageDateFormat = new SimpleDateFormat("dd/MM/yy");
 
     private Context context;
 
@@ -76,15 +78,41 @@ public class Converter {
 
         return builder.toString();
     }
-  
-    public static String imageToString(Bitmap image){
+
+    public static String imageToString(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
-    public static String longToTime(long timestamp){
+    public static String longToTime(long timestamp) {
         return messageTimeFormat.format(new Date(timestamp));
+    }
+
+    public static String getLastMessageDay(long lastMessageDateSent) {
+        Date dt = new Date(lastMessageDateSent * 1000);
+        return messageDateFormat.format(dt);
+    }
+
+    public static String getPartOfTheWeek(long currentTime) {
+        Date dt = new Date(currentTime * 1000);
+        String now = messageDateFormat.format(new Date());
+        String messageDate = messageDateFormat.format(dt);
+        if (now.equals(messageDate)) {
+            return "Today";
+        } else if (yesterday().equals(messageDate)) {
+            return "Yestarday";
+        } else
+            return messageDate;
+
+
+    }
+
+    private static String yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+
+        return messageDateFormat.format(cal.getTime());
     }
 }
