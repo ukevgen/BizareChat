@@ -229,6 +229,11 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().showPublicChatRoom(dialogModel);
     }
 
+    public void navigateToSettingsScreen(){
+        hideNavigationElements();
+        getViewState().showSettingsScreen();
+    }
+
     public void hideNavigationElements(){
         getViewState().hideNavigationElements();
     }

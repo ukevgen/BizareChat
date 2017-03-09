@@ -60,6 +60,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateD
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PublicDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.settings.SettingsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.userinfo.UserInfoFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersFragment;
 import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
@@ -79,12 +80,13 @@ public class MainActivity extends MvpAppCompatActivity implements
         PrivateDialogsFragment.OnPrivateDialogClickListener, PublicDialogsFragment.OnPublicDialogClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private final String newChatFragmentTag = "newChatFragment";
-    private final String usersFragmentTag = "usersFragment";
+    private final static String NEW_CHAT_FR_TAG = "newChatFragment";
+    private final static String USERS_FR_TAG = "usersFragment";
     private final static String INVITE_FRIENDS_FR_TAG = "inviteFriendsFragment";
     private final static String PUBLIC_DIALOGS_FR_TAG = "publicDialogsFragment";
     private final static String PRIVATE_DIALOGS_FR_TAG = "privateDialogsFragment";
     private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
+    private final static String SETTINGS_FR_TAG = "settingsFragment";
 
 
     @InjectPresenter
@@ -295,9 +297,28 @@ public class MainActivity extends MvpAppCompatActivity implements
             case R.id.log_out:
                 presenter.confirmLogOut();
                 return true;
+            case R.id.settings:
+                presenter.navigateToSettingsScreen();
+                return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void showSettingsScreen(){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_FR_TAG);
+        if (fragment != null) {
+            getSupportFragmentManager().popBackStack();
+            transaction.replace(R.id.main_screen_container, fragment, SETTINGS_FR_TAG)
+                    .commit();
+            return;
+        }
+
+        transaction.replace(R.id.main_screen_container, new SettingsFragment(), SETTINGS_FR_TAG)
+                .addToBackStack(NEW_CHAT_FR_TAG)
+                .commit();
     }
 
     @Override
@@ -400,32 +421,32 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void startNewChatView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(newChatFragmentTag);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(NEW_CHAT_FR_TAG);
         if (fragment != null) {
             getSupportFragmentManager().popBackStack();
-            transaction.replace(R.id.main_screen_container, fragment, newChatFragmentTag)
+            transaction.replace(R.id.main_screen_container, fragment, NEW_CHAT_FR_TAG)
                     .commit();
             return;
         }
 
-        transaction.replace(R.id.main_screen_container, new NewChatFragment(), newChatFragmentTag)
-                .addToBackStack(newChatFragmentTag)
+        transaction.replace(R.id.main_screen_container, new NewChatFragment(), NEW_CHAT_FR_TAG)
+                .addToBackStack(NEW_CHAT_FR_TAG)
                 .commit();
     }
 
     @Override
     public void startUsersView() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(usersFragmentTag);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(USERS_FR_TAG);
         if (fragment != null) {
             getSupportFragmentManager().popBackStack();
-            transaction.replace(R.id.main_screen_container, fragment, usersFragmentTag)
+            transaction.replace(R.id.main_screen_container, fragment, USERS_FR_TAG)
                     .commit();
             return;
         }
 
-        transaction.replace(R.id.main_screen_container, new UsersFragment(), usersFragmentTag)
-                .addToBackStack(newChatFragmentTag)
+        transaction.replace(R.id.main_screen_container, new UsersFragment(), USERS_FR_TAG)
+                .addToBackStack(NEW_CHAT_FR_TAG)
                 .commit();
     }
 

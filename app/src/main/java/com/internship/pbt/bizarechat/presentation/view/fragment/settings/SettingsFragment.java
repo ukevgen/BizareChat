@@ -16,6 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.BuildConfig;
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.presenter.settings.SettingsPresenter;
 
 public class SettingsFragment extends MvpAppCompatFragment
@@ -39,6 +40,7 @@ public class SettingsFragment extends MvpAppCompatFragment
         version = (TextView)view.findViewById(R.id.settings_version);
         version.setText(String.format("v%s", BuildConfig.VERSION_NAME));
         notifications = (SwitchCompat)view.findViewById(R.id.settings_toggle_button);
+        notifications.setChecked(CurrentUser.getInstance().isNotificationsOn());
         notifications.setOnCheckedChangeListener(this);
         toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
         progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);

@@ -47,6 +47,8 @@ public interface MainView extends MvpView {
 
     void startUsersView();
 
+    void showSettingsScreen();
+
     void confirmLogOut();
 
     void startBackPressed();
