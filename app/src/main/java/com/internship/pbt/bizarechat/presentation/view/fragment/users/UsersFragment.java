@@ -265,7 +265,6 @@ public class UsersFragment extends MvpAppCompatFragment
             fragment.setSharedElementReturnTransition(sharedElementTransition);
             setReenterTransition(usersTransitionIn);
             setExitTransition(usersTransitionOut);
-
         }
 
         getActivity().getSupportFragmentManager()

@@ -103,6 +103,10 @@ public class UserInfoFragment extends MvpAppCompatFragment
         view.findViewById(R.id.user_info_website_layout).setOnClickListener(this);
         userInfoFab.setOnClickListener(this);
 
+        if(presenter.isCurrentUser()){
+            userInfoFab.setVisibility(View.GONE);
+        }
+
         packageManager = getActivity().getPackageManager();
 
         return view;

@@ -2,10 +2,7 @@
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chats_item_swipe_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="16dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/chats_item_bottom_view"
@@ -17,29 +14,33 @@
             android:id="@+id/chats_item_delete_button"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@drawable/delete_icon" />
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/chats_item_surface_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?android:attr/selectableItemBackground">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.CardView
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/chats_item_surface_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/chats_item_chat_image"
@@ -102,8 +103,8 @@
             android:paddingStart="10dp"
             android:paddingTop="4dp"
             android:text="+1"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </FrameLayout>
 </com.daimajia.swipe.SwipeLayout>

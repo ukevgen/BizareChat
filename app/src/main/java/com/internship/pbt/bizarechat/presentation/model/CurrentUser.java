@@ -75,11 +75,11 @@ public class CurrentUser implements AuthStore {
     }
 
     public void setKeepMeSignIn(boolean keepMeSignIn) {
-        cache.putKeppMeSignIn(keepMeSignIn);
+        cache.putKeepMeSignIn(keepMeSignIn);
     }
 
     public boolean getKeepMeSignIn() {
-        return cache.getKeppMeSignIn();
+        return cache.getKeepMeSignIn();
     }
 
     public void setCurrentFacebookId(Long id) {
@@ -128,5 +128,29 @@ public class CurrentUser implements AuthStore {
 
     public String getFullName(){
         return cache.getFullName();
+    }
+
+    public void setNotificationsState(boolean status){
+        cache.putNotificationsState(status);
+    }
+
+    public boolean isNotificationsOn(){
+        return cache.isNotificationsOn();
+    }
+
+    public void setPhone(String phone){
+        cache.putPhone(phone);
+    }
+
+    public String getPhone(){
+        return cache.getPhone();
+    }
+
+    public void setWebsite(String website){
+        cache.putWebsite(website);
+    }
+
+    public String getWebsite(){
+        return cache.getWebsite();
     }
 }

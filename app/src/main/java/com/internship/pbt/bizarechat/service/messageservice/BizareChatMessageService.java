@@ -76,7 +76,7 @@ public class BizareChatMessageService extends Service {
     void processPrivateMessage(Message message){
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = getMessageModel(message);
-            saveMessageToDb(messageModel);
+            savePrivateMessageToDb(messageModel);
             if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 notificationUtils.showNotificationMessage(
@@ -109,16 +109,18 @@ public class BizareChatMessageService extends Service {
     void processPublicMessage(Message message) {
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = getMessageModel(message);
-            saveMessageToDb(messageModel);
-            if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                notificationUtils.showNotificationMessage(
-                        message.getFrom(),
-                        message.getBody(),
-                        System.currentTimeMillis() + "",
-                        intent);
-            } else {
-                EventBus.getDefault().post(new PublicMessageEvent(messageModel));
+            if(messageModel.getSenderId().longValue() != CurrentUser.getInstance().getCurrentUserId()) {
+                savePrivateMessageToDb(messageModel);
+                if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    notificationUtils.showNotificationMessage(
+                            message.getFrom(),
+                            message.getBody(),
+                            System.currentTimeMillis() + "",
+                            intent);
+                } else {
+                    EventBus.getDefault().post(new PublicMessageEvent(messageModel));
+                }
             }
         });
     }
@@ -177,10 +179,20 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    private void saveMessageToDb(MessageModel message){
+    public void leavePublicChat(String chatJid){
+        JobExecutor.getInstance().execute(() -> privateConnection.leavePublicChat(chatJid));
+    }
+
+    private void savePrivateMessageToDb(MessageModel message){
         JobExecutor.getInstance().execute(() -> {
             String receiverJid = message.getSenderId() + "-" + ApiConstants.APP_ID + "@" + ApiConstants.CHAT_END_POINT;
             sendPrivateDeliveredStatusMessage(receiverJid, message.getMessageId(), message.getChatDialogId());
+            daoSession.getMessageModelDao().insert(message);
+        });
+    }
+
+    private void savePublicMessageToDb(MessageModel message){
+        JobExecutor.getInstance().execute(() -> {
             daoSession.getMessageModelDao().insert(message);
         });
     }

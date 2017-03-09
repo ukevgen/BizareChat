@@ -3,13 +3,14 @@ package com.internship.pbt.bizarechat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -17,6 +18,7 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.daimajia.swipe.util.Attributes;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecyclerViewAdapter.DialogsHolder> {
+    private long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private Context context;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
@@ -55,14 +58,23 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         holder.setPosition(position);
         holder.mLastMessage.setText(dialog.getLastMessage());
         holder.mLastMessageDate.setText(String.valueOf(dialog.getLastMessageTime()));
-        holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
+        if(dialog.getLastMessageUserId() == currentUserId)
+            holder.mMessageAuthor.setText(R.string.me);
+        else
+            holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
+        holder.mTitle.setText(dialog.getName());
         if(dialog.getUnreadMessagesCount() != 0) {
+            holder.mLastMessageDate.setTextColor(context.getResources().getColor(R.color.chats_item_last_message_date_new));
+            holder.mTitle.setTextColor(context.getResources().getColor(R.color.chats_item_name_new));
             holder.mNewMessageIndicator.setVisibility(View.VISIBLE);
-            holder.mNewMessageIndicator.setText("+" + dialog.getUnreadMessagesCount());
+            holder.mNewMessageIndicator.setText(String.format("+%d", dialog.getUnreadMessagesCount()));
+            ViewCompat.setZ(holder.mNewMessageIndicator, 1000000);
         } else {
+            holder.mLastMessageDate.setTextColor(context.getResources().getColor(R.color.chats_item_last_message_date));
+            holder.mTitle.setTextColor(context.getResources().getColor(R.color.chats_item_name));
             holder.mNewMessageIndicator.setVisibility(View.GONE);
         }
-        holder.mTitle.setText(dialog.getName());
+
         holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 
         Bitmap photo = dialogPhotos.get(dialog.getDialogId());
@@ -106,7 +118,7 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         SwipeLayout swipeLayout;
         DialogsRecyclerViewAdapter adapter;
         Button deleteButton;
-        FrameLayout surfaceLayout;
+        RelativeLayout surfaceLayout;
         CircleImageView imageView;
         TextView mMessageAuthor,
                 mLastMessage,
@@ -135,7 +147,7 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
                 //deleteItem();
                 confirm();
             });
-            surfaceLayout = (FrameLayout)itemView.findViewById(R.id.chats_item_surface_view);
+            surfaceLayout = (RelativeLayout)itemView.findViewById(R.id.chats_item_surface_view);
             surfaceLayout.setOnClickListener(v -> {
                 adapter.onDialogClickCallback.onDialogClick(getAdapterPosition());
             });

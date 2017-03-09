@@ -131,12 +131,12 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
-    public void putKeppMeSignIn(boolean keepMeSignIn) {
+    public void putKeepMeSignIn(boolean keepMeSignIn) {
         mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_KEEP_ME_SIGN_IN, keepMeSignIn);
         mEditor.apply();
     }
 
-    public boolean getKeppMeSignIn() {
+    public boolean getKeepMeSignIn() {
         return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_KEEP_ME_SIGN_IN, true);
     }
 
@@ -154,4 +154,30 @@ public class CacheSharedPreferences {
         return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_IS_SUBSCRIBED, false);
     }
 
+    public void putNotificationsState(boolean status) {
+        mEditor.putBoolean(CacheConstants.CURRENT_ACCOUNT_IS_NOTIFICATIONS_ON, status);
+        mEditor.apply();
+    }
+
+    public boolean isNotificationsOn() {
+        return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_IS_NOTIFICATIONS_ON, true);
+    }
+
+    public void putPhone(String phone){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_PHONE, phone);
+        mEditor.apply();
+    }
+
+    public String getPhone(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PHONE, null);
+    }
+
+    public void putWebsite(String website){
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_WEBSITE, website);
+        mEditor.apply();
+    }
+
+    public String getWebsite(){
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_WEBSITE, null);
+    }
 }

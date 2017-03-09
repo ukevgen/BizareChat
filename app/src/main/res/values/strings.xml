@@ -107,4 +107,5 @@
     <string name="not_admin_error">You are not an owner of this chat</string>
     <string name="full_name_error">Full name can\'t be empty</string>
     <string name="settings_push_notifications_title">Push Notifications</string>
+    <string name="settings_title">SETTINGS</string>
 </resources>

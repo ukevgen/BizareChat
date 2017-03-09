@@ -16,6 +16,7 @@ import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomView;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Response;
 import rx.Subscriber;
 
 @InjectViewState
@@ -44,6 +46,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     private List<Integer> occupantsIds;
     private GetUsersPhotosByIdsUseCase usersPhotosUseCase;
     private GetUsersByIdsUseCase usersByIdsUseCase;
+    private MarkMessagesAsReadUseCase markMessagesAsReadUseCase;
     private WeakReference<BizareChatMessageService> messageService;
     private ChatRoomRecyclerAdapter adapter;
     private List<MessageModel> messages;
@@ -56,10 +59,12 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     public ChatRoomPresenterImpl(DaoSession daoSession,
                                  GetUsersPhotosByIdsUseCase usersPhotosUseCase,
-                                 GetUsersByIdsUseCase usersByIdsUseCase) {
+                                 GetUsersByIdsUseCase usersByIdsUseCase,
+                                 MarkMessagesAsReadUseCase markMessagesAsReadUseCase) {
         this.daoSession = daoSession;
         this.usersPhotosUseCase = usersPhotosUseCase;
         this.usersByIdsUseCase = usersByIdsUseCase;
+        this.markMessagesAsReadUseCase = markMessagesAsReadUseCase;
         messages = new ArrayList<>();
         occupantsPhotos = new HashMap<>();
         userNames = new HashMap<>();
@@ -69,6 +74,24 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     public void init(){
         getViewState().showLoading();
         initUsers();
+        sendReadRequestToServer();
+    }
+
+    private void sendReadRequestToServer(){
+        markMessagesAsReadUseCase.setDialogId(dialogId);
+        markMessagesAsReadUseCase.execute(new Subscriber<Response<Void>>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+
+            @Override public void onNext(Response<Void> response) {
+                response.body();
+            }
+        });
     }
 
     private void initUsers(){
@@ -203,7 +226,20 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     public void sendPublicMessage(String message, long timestamp, String stanzaId){
-        messageService.get().sendPublicMessage(message, dialogRoomJid, timestamp, stanzaId);
+        messageService.get().sendPublicMessage(message, dialogRoomJid, timestamp, stanzaId)
+                .subscribe(new Subscriber<Boolean>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+
+            }
+
+            @Override public void onNext(Boolean aBoolean) {
+
+            }
+        });
     }
 
     private void sendPrivateMessage(String message, long timestamp, String stanzaId) {
@@ -307,5 +343,11 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                 break;
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if(type != DialogsType.PRIVATE_CHAT)
+            messageService.get().leavePublicChat(dialogRoomJid);
     }
 }

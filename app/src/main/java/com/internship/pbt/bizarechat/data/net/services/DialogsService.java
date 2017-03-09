@@ -6,10 +6,12 @@ import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.data.net.requests.MarkMessagesAsReadRequest;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
 
 import java.util.Map;
 
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -45,4 +47,9 @@ public interface DialogsService {
 
     @GET("/chat/Message/unread.json")
     Observable<Map<String, Integer>> getUnreadMessagesCount(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/chat/Message.json")
+    Call<Void> markMessagesAsRead(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                            @Body MarkMessagesAsReadRequest request);
 }

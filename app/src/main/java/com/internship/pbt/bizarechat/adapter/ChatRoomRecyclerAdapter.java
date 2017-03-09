@@ -13,6 +13,7 @@ import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         Bitmap photo = occupantsPhotos.get(message.getSenderId().longValue());
         holder.userName.setText(userNames.get(message.getSenderId().longValue()));
         holder.messageText.setText(message.getMessage());
-        holder.time.setText(String.valueOf(message.getDateSent()));
+        holder.time.setText(Converter.longToTime(message.getDateSent() * 1000));
         if(message.getSenderId().longValue() == currentUserId){
             holder.userName.setText(context.getString(R.string.me));
             switch(message.getRead()){

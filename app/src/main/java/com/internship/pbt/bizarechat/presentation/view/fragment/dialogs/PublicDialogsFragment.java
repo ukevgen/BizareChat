@@ -95,15 +95,19 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         return view;
     }
 
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter.loadDialogs();
+        recyclerView.setAdapter(presenter.getAdapter());
+        presenter.getAdapter().setContext(getActivity());
+        presenter.getAdapter().setOnDialogClickCallback(this);
+        presenter.refreshDialogsInfo();
+    }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        presenter.loadDialogs();
-        recyclerView.setAdapter(presenter.getAdapter());
-        presenter.getAdapter().setContext(getActivity());
-        presenter.getAdapter().setOnDialogClickCallback(this);
     }
 
     @Override public void onResume() {
@@ -114,6 +118,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        stopRefreshing();
     }
 
     @Override
@@ -126,7 +131,6 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == menuSearchId) {
-            //TODO search logic
             return true;
         }
         return super.onOptionsItemSelected(item);

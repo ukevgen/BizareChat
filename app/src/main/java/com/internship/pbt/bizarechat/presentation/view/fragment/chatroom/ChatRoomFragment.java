@@ -23,6 +23,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
+import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
 import com.internship.pbt.bizarechat.domain.events.DisplayedEvent;
 import com.internship.pbt.bizarechat.domain.events.PrivateMessageEvent;
@@ -31,6 +32,7 @@ import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
 import com.internship.pbt.bizarechat.domain.events.ReceivedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.chatroom.ChatRoomPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
@@ -66,7 +68,11 @@ public class ChatRoomFragment extends MvpAppCompatFragment
                         BizareChatApp.getInstance().getContentService(),
                         BizareChatApp.getInstance().getCacheUsersPhotos())),
                 new GetUsersByIdsUseCase(new UserDataRepository(
-                        BizareChatApp.getInstance().getUserService()))
+                        BizareChatApp.getInstance().getUserService())),
+                new MarkMessagesAsReadUseCase(new DialogsDataRepository(
+                        BizareChatApp.getInstance().getDialogsService(),
+                        BizareChatApp.getInstance().getDaoSession()
+                ))
         );
     }
 
@@ -146,6 +152,8 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         toolbarTitle.setText(presenter.getChatName());
         presenter.getAdapter().setContext(getActivity());
         recyclerView.setAdapter(presenter.getAdapter());
+        if(presenter.getAdapter().getItemCount() > 0)
+            scrollToEnd();
         EventBus.getDefault().register(this);
     }
 

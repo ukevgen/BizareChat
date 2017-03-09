@@ -18,6 +18,13 @@
         android:text="@string/settings_push_notifications_title"
         android:textSize="20sp"
         app:thumbTint="@color/settings_thumb_color"
-        app:trackTint="@color/settings_track_color"
-        />
+        app:trackTint="@color/settings_track_color"/>
+    <TextView
+        android:id="@+id/settings_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:text="fljhfghdfgh"/>
 </RelativeLayout>

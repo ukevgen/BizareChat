@@ -5,6 +5,7 @@ import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.datamodel.UserModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
+import com.internship.pbt.bizarechat.data.datamodel.response.UserByIdResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.services.UserService;
 import com.internship.pbt.bizarechat.domain.repository.UserRepository;
@@ -62,10 +63,10 @@ public class UserDataRepository implements UserRepository {
             return Observable.just(user);
         else
             return userService.getUserById(UserToken.getInstance().getToken(), id)
-                    .flatMap(new Func1<UserModel, Observable<UserModel>>() {
-                        @Override public Observable<UserModel> call(UserModel userModel) {
-                            daoSession.getUserModelDao().insertInTx(userModel);
-                            return Observable.just(userModel);
+                    .flatMap(new Func1<UserByIdResponse, Observable<UserModel>>() {
+                        @Override public Observable<UserModel> call(UserByIdResponse userModel) {
+                            daoSession.getUserModelDao().insertInTx(userModel.getUser());
+                            return Observable.just(userModel.getUser());
                         }
                     });
     }

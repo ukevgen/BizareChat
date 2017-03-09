@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.presenter.main;
 
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -16,9 +17,11 @@ import com.internship.pbt.bizarechat.data.repository.UserToken;
 import com.internship.pbt.bizarechat.domain.events.DialogsUpdatedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
+import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,20 +37,41 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     private SignOutUseCase signOutUseCase;
     private GetAllDialogsUseCase dialogsUseCase;
     private DaoSession daoSession;
+    private GetPhotoUseCase photoUseCase;
     private long dialogsCount;
+    private boolean launched = false;
+    private boolean privateDialogsOnScreen = false;
 
     public MainPresenterImpl(SignOutUseCase signOutUseCase,
                              GetAllDialogsUseCase dialogsUseCase,
-                             DaoSession daoSession) {
+                             DaoSession daoSession,
+                             GetPhotoUseCase photoUseCase) {
         this.signOutUseCase = signOutUseCase;
         this.dialogsUseCase = dialogsUseCase;
         this.daoSession = daoSession;
+        this.photoUseCase = photoUseCase;
     }
 
     private void clearCurrentUserCache() {
         UserToken.getInstance().deleteToken();
         CurrentUser.getInstance().setAuthorized(false);
         CurrentUser.getInstance().clearCurrentUser();
+    }
+
+    public boolean isLaunched() {
+        return launched;
+    }
+
+    public void setLaunched(boolean launched) {
+        this.launched = launched;
+    }
+
+    public boolean isPrivateDialogsOnScreen() {
+        return privateDialogsOnScreen;
+    }
+
+    public void setPrivateDialogsOnScreen(boolean privateDialogsOnScreen) {
+        this.privateDialogsOnScreen = privateDialogsOnScreen;
     }
 
     @Override
@@ -71,6 +95,30 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
             }
         });
 
+    }
+
+    public void showCurrentUserInfo(){
+        hideNavigationElements();
+        getViewState().closeDrawer();
+        getViewState().showUserInfo();
+    }
+
+    public void loadUserAvatar(){
+        photoUseCase.setBlobId(CurrentUser.getInstance().getAvatarBlobId().intValue());
+        photoUseCase.execute(new Subscriber<Bitmap>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+
+            @Override public void onNext(Bitmap image) {
+                getViewState().setAvatarImage(image);
+                CurrentUser.getInstance().setStringAvatar(Converter.imageToString(image));
+            }
+        });
     }
 
     public void sendSubscriptionToServer() {
@@ -98,14 +146,14 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     public void navigateToUsers() {
+        hideNavigationElements();
         getViewState().startUsersView();
-        getViewState().hideNavigationElements();
     }
 
     @Override
     public void navigateToNewChat() {
+        hideNavigationElements();
         getViewState().startNewChatView();
-        getViewState().hideNavigationElements();
     }
 
     @Override
@@ -133,8 +181,8 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
     @Override
     public void inviteFriends() {
+        hideNavigationElements();
         getViewState().showInviteFriendsScreen();
-        getViewState().hideNavigationElements();
     }
 
     private boolean isDialogDaoEmpty() {
@@ -172,13 +220,21 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     public void navigateToPrivateChatRoom(DialogModel dialogModel) {
+        hideNavigationElements();
         getViewState().showPrivateChatRoom(dialogModel);
-        getViewState().hideNavigationElements();
     }
 
     public void navigateToPublicChatRoom(DialogModel dialogModel) {
+        hideNavigationElements();
         getViewState().showPublicChatRoom(dialogModel);
+    }
+
+    public void hideNavigationElements(){
         getViewState().hideNavigationElements();
+    }
+
+    public void showNavigationElements(){
+        getViewState().showNavigationElements();
     }
 }
 

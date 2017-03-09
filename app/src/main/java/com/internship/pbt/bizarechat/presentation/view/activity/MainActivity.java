@@ -1,12 +1,15 @@
 package com.internship.pbt.bizarechat.presentation.view.activity;
 
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -23,6 +26,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionInflater;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,10 +43,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.SessionDataRepository;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
+import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
@@ -53,6 +60,7 @@ import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PrivateD
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.PublicDialogsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.friends.InviteFriendsFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.newchat.NewChatFragment;
+import com.internship.pbt.bizarechat.presentation.view.fragment.userinfo.UserInfoFragment;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersFragment;
 import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
 import com.internship.pbt.bizarechat.service.messageservice.MessageServiceBinder;
@@ -76,6 +84,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private final static String INVITE_FRIENDS_FR_TAG = "inviteFriendsFragment";
     private final static String PUBLIC_DIALOGS_FR_TAG = "publicDialogsFragment";
     private final static String PRIVATE_DIALOGS_FR_TAG = "privateDialogsFragment";
+    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
 
 
     @InjectPresenter
@@ -89,7 +98,11 @@ public class MainActivity extends MvpAppCompatActivity implements
                         new DialogsDataRepository(
                                 BizareChatApp.getInstance().getDialogsService(),
                                 BizareChatApp.getInstance().getDaoSession())),
-                BizareChatApp.getInstance().getDaoSession());
+                BizareChatApp.getInstance().getDaoSession(),
+                new GetPhotoUseCase(
+                        new ContentDataRepository(
+                                BizareChatApp.getInstance().getContentService(),
+                                BizareChatApp.getInstance().getCacheUsersPhotos())));
     }
 
     private RelativeLayout mLayout;
@@ -108,6 +121,8 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Intent messageServiceIntent;
     private ProgressBar progressBar;
     private Converter converter;
+    private CircleImageView drawerAvatar;
+    private TextView drawerLogin;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -119,8 +134,19 @@ public class MainActivity extends MvpAppCompatActivity implements
         setContentView(R.layout.activity_drawer_base_layout);
         messageServiceIntent = new Intent(this, BizareChatMessageService.class);
 
-        if (!CurrentUser.getInstance().isSubscribed())
+        if (!CurrentUser.getInstance().isSubscribed()) {
             presenter.sendSubscriptionToServer();
+            presenter.updateDialogsDao();
+        }
+
+        if(CurrentUser.getInstance().getStringAvatar() == null
+                && CurrentUser.getInstance().getAvatarBlobId() != null){
+            presenter.loadUserAvatar();
+        }
+
+        if(!isMyServiceRunning(BizareChatMessageService.class)){
+            startService(new Intent(this, BizareChatMessageService.class));
+        }
 
         findViews();
         setToolbarAndNavigationDrawer();
@@ -130,12 +156,29 @@ public class MainActivity extends MvpAppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setUserInformation();
-        showPublicDialogs();
-        presenter.updateDialogsDao();
+        if(!presenter.isLaunched()) {
+            showPublicDialogs();
+            presenter.setLaunched(true);
+        }
+
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+            if(presenter.isPrivateDialogsOnScreen())
+                mTabLayout.getTabAt(1).select();
+        }
     }
 
     public BizareChatMessageService getMessageService() {
         return messageService;
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -146,21 +189,27 @@ public class MainActivity extends MvpAppCompatActivity implements
     private void setUserInformation() {
 
         View headerView = mNavigationView.getHeaderView(0);
+        headerView.findViewById(R.id.nav_header_root).setOnClickListener(this);
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
         email.setText(CurrentUser.getInstance().getCurrentEmail());
 
-        TextView login = (TextView) headerView.findViewById(R.id.user_login);
-        login.setText(CurrentUser.getInstance().getFullName());
+        drawerLogin = (TextView) headerView.findViewById(R.id.user_login);
+        drawerLogin.setText(CurrentUser.getInstance().getFullName());
 
-        CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
+        drawerAvatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
         if (converter == null)
             converter = new Converter(getApplicationContext());
         String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
         if (bitmap != null)
-            avatar.setImageBitmap(bitmap);
+            drawerAvatar.setImageBitmap(bitmap);
 
+    }
+
+    @Override
+    public void setAvatarImage(Bitmap image){
+        drawerAvatar.setImageBitmap(image);
     }
 
     private void setToolbarAndNavigationDrawer() {
@@ -174,7 +223,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
@@ -235,7 +284,7 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        mDrawer.closeDrawer(GravityCompat.START, true);
+        closeDrawer();
         switch (item.getItemId()) {
             case R.id.create_new_chat:
                 presenter.addNewChat();
@@ -269,6 +318,46 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
+    public void showUserInfo(){
+        Fragment fragment = new UserInfoFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(UserInfoFragment.ID_BUNDLE_KEY, CurrentUser.getInstance().getCurrentUserId());
+        bundle.putString(UserInfoFragment.EMAIL_BUNDLE_KEY, CurrentUser.getInstance().getCurrentEmail());
+        bundle.putString(UserInfoFragment.PHONE_BUNDLE_KEY, CurrentUser.getInstance().getPhone());
+        bundle.putString(UserInfoFragment.WEBSITE_BUNDLE_KEY, CurrentUser.getInstance().getWebsite());
+        bundle.putString(UserInfoFragment.FULL_NAME_BUNDLE_KEY, CurrentUser.getInstance().getFullName());
+        bundle.putParcelable(UserInfoFragment.AVATAR_BUNDLE_KEY, ((BitmapDrawable) drawerAvatar.getDrawable()).getBitmap());
+        fragment.setArguments(bundle);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TransitionSet sharedElementTransition = (TransitionSet) TransitionInflater
+                    .from(this)
+                    .inflateTransition(R.transition.user_shared_element);
+            TransitionSet userInfoTransitionIn = (TransitionSet)TransitionInflater
+                    .from(this)
+                    .inflateTransition(R.transition.user_info_transition_in);
+            TransitionSet userInfoTransitionOut = (TransitionSet)TransitionInflater
+                    .from(this)
+                    .inflateTransition(R.transition.user_info_transition_out);
+            fragment.setSharedElementEnterTransition(sharedElementTransition);
+            fragment.setEnterTransition(userInfoTransitionIn);
+            fragment.setReturnTransition(userInfoTransitionOut);
+            fragment.setSharedElementReturnTransition(sharedElementTransition);
+
+        }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_screen_container, fragment)
+                .addSharedElement(drawerAvatar, getString(R.string.transition_user_avatar_name))
+                .addSharedElement(drawerLogin, getString(R.string.transition_user_full_name))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
@@ -280,6 +369,9 @@ public class MainActivity extends MvpAppCompatActivity implements
                 break;
             case R.id.invite_friends:
                 presenter.inviteFriends();
+                break;
+            case R.id.nav_header_root:
+                presenter.showCurrentUserInfo();
                 break;
         }
     }
@@ -345,22 +437,26 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void startBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            showNavigationElements();
+            presenter.showNavigationElements();
+            getSupportFragmentManager().popBackStackImmediate();
+            if(presenter.isPrivateDialogsOnScreen()){
+                mTabLayout.getTabAt(1).select();
+            } else {
+                mTabLayout.getTabAt(0).select();
+            }
+            return;
         }
 
         super.onBackPressed();
     }
 
     @Override
-    public void showDialogs() {
-
-    }
-
-    @Override
     public void showPublicDialogs() {
+        presenter.setPrivateDialogsOnScreen(false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PUBLIC_DIALOGS_FR_TAG);
         if (fragment != null) {
+            ((PublicDialogsFragment)fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PUBLIC_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -375,9 +471,11 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void showPrivateDialogs() {
+        presenter.setPrivateDialogsOnScreen(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PRIVATE_DIALOGS_FR_TAG);
         if (fragment != null) {
+            ((PrivateDialogsFragment)fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PRIVATE_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -402,7 +500,16 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @Override
     public void showPrivateChatRoom(DialogModel dialogModel){
-        Fragment fragment = new ChatRoomFragment();
+        String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, tag)
+                    .commit();
+            return;
+        }
+
+        fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
         args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
@@ -413,16 +520,23 @@ public class MainActivity extends MvpAppCompatActivity implements
         args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
 
         fragment.setArguments(args);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_screen_container, fragment)
+        transaction.replace(R.id.main_screen_container, fragment, tag)
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void showPublicChatRoom(DialogModel dialogModel){
-        Fragment fragment = new ChatRoomFragment();
+        String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, tag)
+                    .commit();
+            return;
+        }
+
+        fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
         args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
@@ -433,25 +547,24 @@ public class MainActivity extends MvpAppCompatActivity implements
         args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
 
         fragment.setArguments(args);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_screen_container, fragment)
+        transaction.replace(R.id.main_screen_container, fragment, tag)
                 .addToBackStack(null)
                 .commit();
     }
 
     private void startActionBarToggleAnim(float start, float end) {
         ValueAnimator anim = ValueAnimator.ofFloat(start, end);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                toggle.onDrawerSlide(null, slideOffset);
+        anim.addUpdateListener(valueAnimator -> {
+            float slideOffset = (Float) valueAnimator.getAnimatedValue();
+            toggle.onDrawerSlide(null, slideOffset);
 
-                if (slideOffset == 1 && start == 0) {
-                    toggle.setDrawerIndicatorEnabled(false);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                }
+            if (slideOffset == 1 && start == 0) {
+                toggle.setDrawerIndicatorEnabled(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+            if (slideOffset == 0 && start == 1){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                toggle.setDrawerIndicatorEnabled(true);
             }
         });
         anim.setInterpolator(new DecelerateInterpolator());
@@ -462,21 +575,25 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void showNavigationElements() {
         fab.show();
-        mTextOnToolbar.setText(getString(R.string.chat));
-        mNavigationView.getMenu().getItem(0).setChecked(true);
-        mNavigationView.getMenu().getItem(0).setChecked(false);
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            mTextOnToolbar.setText(getString(R.string.chat));
+            mNavigationView.getMenu().getItem(0).setChecked(true);
+            mNavigationView.getMenu().getItem(0).setChecked(false);
+        }
         toolbarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                 | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         mTabLayout.setVisibility(View.VISIBLE);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        toggle.setDrawerIndicatorEnabled(true);
         startActionBarToggleAnim(1, 0);
+    }
+
+    @Override
+    public void closeDrawer(){
+        mDrawer.closeDrawer(GravityCompat.START, true);
     }
 
     @Override
     public void hideNavigationElements() {
         fab.hide();
-        supportInvalidateOptionsMenu();
         toolbarParams.setScrollFlags(0);
         mTabLayout.setVisibility(View.GONE);
         mLayout.setVisibility(View.GONE);
@@ -520,7 +637,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         super.onStart();
         NotificationUtils.clearNotifications(getApplicationContext());
         EventBus.getDefault().register(this);
-        startService(new Intent(getApplicationContext(), BizareChatMessageService.class));
         bindMessageService();
     }
 

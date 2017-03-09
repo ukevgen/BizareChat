@@ -8,6 +8,7 @@ import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
+import com.internship.pbt.bizarechat.data.net.requests.MarkMessagesAsReadRequest;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
@@ -31,7 +32,35 @@ public class DialogsDataRepository implements DialogsRepository {
 
     @Override
     public Observable<AllDialogsResponse> getAllDialogs(Map<String, String> parameters) {
-        return dialogsService.getDialogs(UserToken.getInstance().getToken(), parameters);
+        return Observable.fromCallable(() -> {
+            AllDialogsResponse[] wrapper = new AllDialogsResponse[1];
+            Exception exception = new Exception();
+
+            dialogsService.getDialogs(UserToken.getInstance().getToken(), parameters)
+                    .subscribeOn(Schedulers.immediate())
+                    .observeOn(Schedulers.immediate())
+                    .subscribe(new Subscriber<AllDialogsResponse>() {
+                        @Override public void onCompleted() {
+
+                        }
+
+                        @Override public void onError(Throwable e) {
+                            exception.initCause(e);
+                        }
+
+                        @Override public void onNext(AllDialogsResponse allDialogsResponse) {
+                            DialogModelDao modelDao = daoSession.getDialogModelDao();
+                            modelDao.insertOrReplaceInTx(allDialogsResponse.getDialogModels());
+                            wrapper[0] = allDialogsResponse;
+                        }
+                    });
+
+            if(exception.getCause() != null){
+                throw exception;
+            }
+
+            return wrapper[0];
+        });
     }
 
     @Override
@@ -52,6 +81,20 @@ public class DialogsDataRepository implements DialogsRepository {
     @Override
     public Observable<Map<String, Integer>> getUnreadMessagesCount(){
         return dialogsService.getUnreadMessagesCount(UserToken.getInstance().getToken());
+    }
+
+    @Override
+    public Observable<Response<Void>> markMessagesAsRead(String dialogId){
+        return Observable.fromCallable(() -> {
+            DialogModel dialog = daoSession.getDialogModelDao().queryBuilder()
+                    .where(DialogModelDao.Properties.DialogId.eq(dialogId)).unique();
+            dialog.setUnreadMessagesCount(0);
+            daoSession.getDialogModelDao().updateInTx(dialog);
+
+            return dialogsService.markMessagesAsRead(
+                    UserToken.getInstance().getToken(),
+                    new MarkMessagesAsReadRequest(1, dialogId)).execute();
+        });
     }
 
     @Override
