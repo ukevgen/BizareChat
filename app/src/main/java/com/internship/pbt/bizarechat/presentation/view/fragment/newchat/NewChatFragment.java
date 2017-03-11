@@ -10,6 +10,8 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +32,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.NewChatUsersRecyclerAdapter;
+import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
@@ -40,8 +44,10 @@ import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.presenter.newchat.NewChatPresenterImpl;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
+import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomFragment;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -50,6 +56,9 @@ import static android.app.Activity.RESULT_OK;
 public class NewChatFragment extends MvpAppCompatFragment implements
         NewChatView, View.OnClickListener, NewChatUsersRecyclerAdapter.OnCheckBoxClickListener {
 
+    private static final String CHAT_ROOM = "chat_room";
+    private final static String PRIVATE_DIALOGS_FR_TAG = "privateDialogsFragment";
+    private final static String PUBLIC_DIALOGS_FR_TAG = "publicDialogsFragment";
     @InjectPresenter
     NewChatPresenterImpl presenter;
 
@@ -92,6 +101,7 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     private TSnackbar connProblemSnack;
 
     private boolean loading = true;
+    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
     private int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @Nullable
@@ -261,9 +271,79 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     }
 
     @Override
-    public void showChatRoom() {
-        // TODO start new dialog
+    public void showChatRoom(DialogModel dialogModel) {
+        switch (dialogModel.getType()) {
+            case DialogsType.PRIVATE_CHAT:
+                showPrivateChatRoom(dialogModel);
+                break;
+            case DialogsType.GROUP_CHAT:
+                showPublicChatRoom(dialogModel);
+                break;
+            default:
+                break;
+        }
     }
+
+    @Override
+    public void showPublicChatRoom(DialogModel dialogModel) {
+        String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(tag);
+        getActivity().getSupportFragmentManager().popBackStackImmediate();
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, tag)
+                    .commit();
+            return;
+        }
+
+        fragment = new ChatRoomFragment();
+        Bundle args = new Bundle();
+        args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
+        args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
+        args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
+        args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
+        ArrayList<Integer> list = new ArrayList<>(dialogModel.getOccupantsIds());
+        args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
+
+        fragment.setArguments(args);
+        transaction.replace(R.id.main_screen_container, fragment, tag)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showPrivateChatRoom(DialogModel dialogModel) {
+        String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
+
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(tag);
+        getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, tag)
+                    .commit();
+            return;
+        }
+
+        fragment = new ChatRoomFragment();
+        Bundle args = new Bundle();
+        args.putString(ChatRoomFragment.DIALOG_ID_BUNDLE_KEY, dialogModel.getDialogId());
+        args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());
+        args.putString(ChatRoomFragment.DIALOG_NAME_BUNDLE_KEY, dialogModel.getName());
+        args.putInt(ChatRoomFragment.DIALOG_TYPE_BUNDLE_KEY, dialogModel.getType());
+        args.putString(ChatRoomFragment.DIALOG_ROOM_JID_BUNDLE_KEY, dialogModel.getXmppRoomJid());
+        ArrayList<Integer> list = new ArrayList<>(dialogModel.getOccupantsIds());
+        args.putIntegerArrayList(ChatRoomFragment.OCCUPANTS_IDS_BUNDLE_KEY, list);
+
+        fragment.setArguments(args);
+
+        transaction.replace(R.id.main_screen_container, fragment, tag)
+                .addToBackStack(PRIVATE_DIALOGS_FR_TAG)
+                .commit();
+
+    }
+
 
     @Override
     public void showNetworkError() {

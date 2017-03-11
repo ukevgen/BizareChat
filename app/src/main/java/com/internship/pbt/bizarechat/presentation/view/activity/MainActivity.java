@@ -439,7 +439,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         }
 
         transaction.replace(R.id.main_screen_container, new NewChatFragment(), NEW_CHAT_FR_TAG)
-                .addToBackStack(NEW_CHAT_FR_TAG)
+                .addToBackStack(null)
                 .commit();
     }
 

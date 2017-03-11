@@ -59,6 +59,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     private Converter converter;
     private Validator validator;
     private String blobId;
+    private DialogModel respone;
 
     public NewChatPresenterImpl(Converter converter,
                                 GetAllUsersUseCase allUsersUseCase,
@@ -204,19 +205,18 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
         String occupants = converter.getOccupantsArray(checkedUsers);
         if (!isPublicButtonChecked && checkedUsers.size() == 1) {
             dialog = new NewDialog(DialogsType.PRIVATE_CHAT, chatName, occupants);
-        }
-        else if (!isPublicButtonChecked && checkedUsers.size() > 1) {
+        } else if (!isPublicButtonChecked && checkedUsers.size() > 1) {
             dialog = new NewDialog(DialogsType.GROUP_CHAT, chatName, occupants, blobId);
-        }
-        else {
+        } else {
             dialog = new NewDialog(DialogsType.PUBLIC_GROUP_CHAT, chatName, occupants, blobId);
         }
 
         createDialogUseCase.setDialog(dialog);
         createDialogUseCase.execute(new Subscriber<DialogModel>() {
+
             @Override
             public void onCompleted() {
-
+                Log.d("TAG", "tag");
             }
 
             @Override
@@ -230,10 +230,18 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                 Log.d("TAG", response.toString());
                 queryBuilder.saveNewDialog(response);
                 getViewState().hideLoading();
-                getViewState().showChatRoom();
+                getViewState().showChatRoom(response);
             }
         });
+
     }
+
+    public void destroy() {
+        if (createDialogUseCase != null)
+            createDialogUseCase.unsubscribe();
+        this.onDestroy();
+    }
+
 
     public void uploadChatPhoto() {
         String fileName = UUID.randomUUID().toString();

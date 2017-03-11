@@ -61,7 +61,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     ChatRoomPresenterImpl presenter;
 
     @ProvidePresenter
-    ChatRoomPresenterImpl provideChatRoomPresenter(){
+    ChatRoomPresenterImpl provideChatRoomPresenter() {
         return new ChatRoomPresenterImpl(
                 BizareChatApp.getInstance().getDaoSession(),
                 new GetUsersPhotosByIdsUseCase(new ContentDataRepository(
@@ -90,7 +90,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         setHasOptionsMenu(true);
-        presenter.setMessageService(((MainActivity)getActivity()).getMessageService());
+        presenter.setMessageService(((MainActivity) getActivity()).getMessageService());
         presenter.setDialogId(getArguments().getString(DIALOG_ID_BUNDLE_KEY));
         presenter.setDialogRoomJid(getArguments().getString(DIALOG_ROOM_JID_BUNDLE_KEY));
         presenter.setOccupantsIds(getArguments().getIntegerArrayList(OCCUPANTS_IDS_BUNDLE_KEY));
@@ -98,26 +98,35 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         presenter.setAdminId(getArguments().getLong(DIALOG_ADMIN_BUNDLE_KEY));
         presenter.setChatName(getArguments().getString(DIALOG_NAME_BUNDLE_KEY));
         mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView = (RecyclerView)view.findViewById(R.id.chat_room_messages_container);
+        recyclerView = (RecyclerView) view.findViewById(R.id.chat_room_messages_container);
         recyclerView.setLayoutManager(mLayoutManager);
-        progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);
-        sendButton = (ImageButton)view.findViewById(R.id.chat_room_send_button);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            }
+        });
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
+        sendButton = (ImageButton) view.findViewById(R.id.chat_room_send_button);
         sendButton.setOnClickListener(this);
-        messageEditText = (EmojiconEditText)view.findViewById(R.id.chat_room_enter_message);
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
-        emojiButton = (ImageView)view.findViewById(R.id.chat_room_emoji_button);
+        messageEditText = (EmojiconEditText) view.findViewById(R.id.chat_room_enter_message);
+        toolbarTitle = (TextView) getActivity().findViewById(R.id.chat_toolbar_title);
+        emojiButton = (ImageView) view.findViewById(R.id.chat_room_emoji_button);
         emojIconActions = new EmojIconActions(getActivity(), view, messageEditText, emojiButton);
         emojIconActions.ShowEmojIcon();
         return view;
     }
 
-    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         presenter.init();
     }
 
-    @Override public void onClick(View v) {
-        if(v.getId() == R.id.chat_room_send_button){
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.chat_room_send_button) {
             presenter.sendMessage(messageEditText.getText().toString());
             messageEditText.setText("");
         }
@@ -125,16 +134,16 @@ public class ChatRoomFragment extends MvpAppCompatFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(presenter.getType() != DialogsType.PRIVATE_CHAT)
+        if (presenter.getType() != DialogsType.PRIVATE_CHAT)
             menu.add(0, editItemId, 0, "Search").setIcon(R.drawable.edit_icon)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == editItemId){
+        if (item.getItemId() == editItemId) {
             presenter.showEditChat();
             return true;
         }
@@ -142,8 +151,8 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void scrollToEnd(){
-        recyclerView.scrollToPosition(presenter.getAdapter().getItemCount()-1);
+    public void scrollToEnd() {
+        recyclerView.scrollToPosition(presenter.getAdapter().getItemCount() - 1);
     }
 
     @Override
@@ -152,7 +161,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         toolbarTitle.setText(presenter.getChatName());
         presenter.getAdapter().setContext(getActivity());
         recyclerView.setAdapter(presenter.getAdapter());
-        if(presenter.getAdapter().getItemCount() > 0)
+        if (presenter.getAdapter().getItemCount() > 0)
             scrollToEnd();
         EventBus.getDefault().register(this);
     }
@@ -164,46 +173,46 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPrivateMessageEvent(PrivateMessageEvent event){
-        if(presenter.getType() == DialogsType.PRIVATE_CHAT) {
+    public void onPrivateMessageEvent(PrivateMessageEvent event) {
+        if (presenter.getType() == DialogsType.PRIVATE_CHAT) {
             presenter.processPrivateMessage(event.getMessage());
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPublicMessageEvent(PublicMessageEvent event){
-        if(presenter.getType() != DialogsType.PRIVATE_CHAT) {
+    public void onPublicMessageEvent(PublicMessageEvent event) {
+        if (presenter.getType() != DialogsType.PRIVATE_CHAT) {
             presenter.processPublicMessage(event.getMessage());
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDeliveredReceipt(ReceivedEvent event){
+    public void onDeliveredReceipt(ReceivedEvent event) {
         presenter.processDeliveredReceipt(event.getMessages());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReadReceipt(DisplayedEvent event){
+    public void onReadReceipt(DisplayedEvent event) {
         presenter.processReadReceipt(event.getMessages());
     }
 
     @Subscribe
-    public void onSentPublicMessage(PublicMessageSentEvent event){
+    public void onSentPublicMessage(PublicMessageSentEvent event) {
         presenter.processSentPublicMessageEvent(event.getMessageId());
     }
 
     @Override
-    public void showLoading(){
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideLoading(){
+    public void hideLoading() {
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void showEditChat(){
+    public void showEditChat() {
         Fragment fragment = new EditChatFragment();
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -213,7 +222,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void showNotAdminError(){
+    public void showNotAdminError() {
         Toast.makeText(getActivity(), R.string.not_admin_error, Toast.LENGTH_SHORT).show();
     }
 }
