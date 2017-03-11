@@ -20,6 +20,8 @@ import java.util.Set;
 import id.zelory.compressor.Compressor;
 
 public class Converter {
+    private static final String YESTERDAY = "Yestarday";
+    private static final String TODAY = "Today";
     private static SimpleDateFormat messageTimeFormat = new SimpleDateFormat("HH:mm");
     private static SimpleDateFormat messageDateFormat = new SimpleDateFormat("dd/MM/yy");
 
@@ -100,9 +102,9 @@ public class Converter {
         String now = messageDateFormat.format(new Date());
         String messageDate = messageDateFormat.format(dt);
         if (now.equals(messageDate)) {
-            return "Today";
+            return TODAY;
         } else if (yesterday().equals(messageDate)) {
-            return "Yestarday";
+            return YESTERDAY;
         } else
             return messageDate;
 
@@ -112,7 +114,6 @@ public class Converter {
     private static String yesterday() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-
         return messageDateFormat.format(cal.getTime());
     }
 }
