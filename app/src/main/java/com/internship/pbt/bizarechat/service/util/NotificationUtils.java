@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.internship.pbt.bizarechat.R;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 
 import java.text.ParseException;
@@ -106,6 +107,7 @@ public class NotificationUtils {
             Date date = format.parse(timeStamp);
             return date.getTime();
         } catch (ParseException e) {
+            Logger.logExceptionToFabric(e);
             e.printStackTrace();
         }
         return 0;

@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Base64;
 
+import com.internship.pbt.bizarechat.logs.Logger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class Converter {
             byte[] b = baos.toByteArray();
             imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logExceptionToFabric(e);
         }
         return imageEncoded;
     }

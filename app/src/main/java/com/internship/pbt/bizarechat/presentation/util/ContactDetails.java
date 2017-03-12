@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.model.ContactsFriends;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class ContactDetails {
                     try {
                         friend.setUserPic(queryContactImage(Integer.parseInt(friend.getPhotoId())));
                     } catch (Exception e) {
-
+                        Logger.logExceptionToFabric(e);
                     } finally {
                         contactsFriendses.add(friend);
                     }

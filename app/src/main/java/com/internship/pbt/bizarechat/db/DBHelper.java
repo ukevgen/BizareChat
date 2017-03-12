@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.datamodel.DaoMaster;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.logs.Logger;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -53,9 +54,11 @@ public class DBHelper {
                 return helper.getWritableDb();
             }
         } catch (Exception ex) {
+            Logger.logExceptionToFabric(ex);
             Log.e(TAG, s, ex);
             return null;
         } catch (Error err) {
+            Logger.logExceptionToFabric(err);
             Log.e(TAG, s, err);
             return null;
         }

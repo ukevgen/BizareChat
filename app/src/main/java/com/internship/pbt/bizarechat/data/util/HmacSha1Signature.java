@@ -3,6 +3,7 @@ package com.internship.pbt.bizarechat.data.util;
 import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.logs.Logger;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +43,7 @@ public class HmacSha1Signature {
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
+            Logger.logExceptionToFabric(ex);
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
         }
         return null;
@@ -58,6 +60,7 @@ public class HmacSha1Signature {
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
+            Logger.logExceptionToFabric(ex);
             Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
         }
         return null;

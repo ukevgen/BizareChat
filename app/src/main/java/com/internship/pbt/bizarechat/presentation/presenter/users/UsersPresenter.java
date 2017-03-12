@@ -10,6 +10,7 @@ import com.internship.pbt.bizarechat.data.datamodel.response.AllUsersResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.domain.interactor.GetAllUsersUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersView;
@@ -228,6 +229,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
             try {
                 return format.parse(user2.getCreatedAt()).compareTo(format.parse(user1.getCreatedAt()));
             } catch (ParseException ex) {
+                Logger.logExceptionToFabric(ex);
                 throw new IllegalArgumentException(ex);
             }
         }

@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.Xml;
 
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
@@ -18,6 +17,7 @@ import com.internship.pbt.bizarechat.domain.events.PublicMessageEvent;
 import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
 import com.internship.pbt.bizarechat.domain.events.ReceivedEvent;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
@@ -219,7 +219,7 @@ public class BizareChatMessageService extends Service {
                 parser.next();
             }
         } catch (XmlPullParserException | IOException ex) {
-            Log.e(TAG, ex.getMessage(), ex);
+            Logger.logExceptionToFabric(ex);
         }
 
         int recipientId = 0;
@@ -270,6 +270,7 @@ public class BizareChatMessageService extends Service {
             try {
                 privateConnection.connect();
             }catch (XMPPException | SmackException | IOException ex){
+                Logger.logExceptionToFabric(ex);
                 EventBus.getDefault().post(ex);
             }
         });

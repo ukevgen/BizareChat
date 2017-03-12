@@ -9,6 +9,7 @@ import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Displayed;
@@ -95,6 +96,7 @@ public final class QuickbloxPrivateXmppConnection
         try {
             chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
+            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         }
     }
@@ -119,6 +121,7 @@ public final class QuickbloxPrivateXmppConnection
         try {
             chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
+            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         }
     }
@@ -146,6 +149,7 @@ public final class QuickbloxPrivateXmppConnection
         try {
             chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
+            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         }
     }
@@ -182,9 +186,10 @@ public final class QuickbloxPrivateXmppConnection
             }
             mucChat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
+            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         } catch (XMPPException | SmackException ex){
-            Log.e(TAG, ex.getMessage(), ex);
+            Logger.logExceptionToFabric(ex);
         }
     }
 
@@ -195,6 +200,7 @@ public final class QuickbloxPrivateXmppConnection
                 muc.leave();
             }
         } catch (SmackException.NotConnectedException ex){
+            Logger.logExceptionToFabric(ex);
             publicChatToLeave = chatJid;
         }
     }
@@ -284,6 +290,7 @@ public final class QuickbloxPrivateXmppConnection
                             BizareChatApp.getInstance().getDaoSession().getMessageModelDao().updateInTx(messageModel);
                         }
                     } catch (SmackException ex) {
+                        Logger.logExceptionToFabric(ex);
                         break;
                     }
                     offlineMessages.poll();

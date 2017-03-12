@@ -4,6 +4,7 @@ package com.internship.pbt.bizarechat;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.view.activity.SplashActivity;
 
 import org.junit.Rule;
@@ -29,7 +30,7 @@ public class SplashScreenTest {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
             intended(anyIntent());
         }).start();
