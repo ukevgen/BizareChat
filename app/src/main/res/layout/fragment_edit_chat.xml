@@ -27,6 +27,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/edit_chat_image"
             android:background="@drawable/group_icon"
+
             android:layout_gravity="bottom"
             android:layout_width="@dimen/image_size_main"
             android:layout_height="@dimen/image_size_main" />
@@ -45,13 +46,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_below="@id/edit_chat_members_title"/>
+
     <Button
         android:id="@+id/edit_chat_button_create"
         style="@style/NewChatButtonCreate"
         android:layout_width="182dp"
         android:layout_height="40dp"
-        android:layout_below="@id/edit_chat_members_container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="@string/edit_chat_save_button"/>
+        android:text="@string/edit_chat_save_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
