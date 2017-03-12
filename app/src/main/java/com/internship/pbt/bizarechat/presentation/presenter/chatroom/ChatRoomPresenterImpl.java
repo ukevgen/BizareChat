@@ -18,6 +18,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetUsersByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomView;
 import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
@@ -125,7 +126,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
             @Override public void onError(Throwable e) {
                 getViewState().hideLoading();
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e);
             }
 
             @Override public void onNext(Map<Long, Bitmap> photos) {

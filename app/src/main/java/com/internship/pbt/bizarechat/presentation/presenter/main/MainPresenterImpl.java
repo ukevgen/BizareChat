@@ -19,6 +19,7 @@ import com.internship.pbt.bizarechat.domain.interactor.CreateSubscriptionUseCase
 import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.SignOutUseCase;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
@@ -84,12 +85,11 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
             @Override
             public void onError(Throwable e) {
-                Log.d("TAG", e.getLocalizedMessage());
+                Logger.logExceptionToFabric(e);
             }
 
             @Override
             public void onNext(Response<Void> voidResponse) {
-                Log.d("TAG", "ok");
                 getViewState().navigateToLoginScreen();
                 clearCurrentUserCache();
             }
@@ -111,7 +111,8 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
             }
 
             @Override public void onError(Throwable e) {
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e);
+
             }
 
             @Override public void onNext(Bitmap image) {

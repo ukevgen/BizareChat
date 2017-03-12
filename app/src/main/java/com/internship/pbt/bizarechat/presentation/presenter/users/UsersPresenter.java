@@ -87,7 +87,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                 getViewState().hideLoading();
                 if (e instanceof SocketTimeoutException)
                     getViewState().showNetworkError();
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
 
             @Override
@@ -134,7 +134,7 @@ public class UsersPresenter extends MvpPresenter<UsersView>
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
 
             @Override

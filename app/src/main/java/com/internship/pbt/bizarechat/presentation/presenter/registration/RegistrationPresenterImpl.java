@@ -22,6 +22,7 @@ import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
@@ -155,7 +156,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
                 @Override
                 public void onError(Throwable e) {
-                    e.printStackTrace();
+
+                    Logger.logExceptionToFabric(e);
                     if (mRegisterView != null) {
                         String message = ErrorMessageFactory.
                                 createMessageOnLogin(mRegisterView.getContextActivity(), e);
@@ -259,7 +261,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, e.toString());
+                Logger.logExceptionToFabric(e);
                 if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
@@ -334,7 +336,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
                 if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
@@ -374,6 +376,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(FacebookException error) {
+                Logger.logExceptionToFabric(error);
             }
         });
     }

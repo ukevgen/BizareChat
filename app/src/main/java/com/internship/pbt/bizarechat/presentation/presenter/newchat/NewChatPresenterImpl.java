@@ -21,6 +21,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
@@ -90,7 +91,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
 
             @Override
@@ -131,7 +132,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
 
             @Override
@@ -259,7 +260,7 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.d("TAG", e.getLocalizedMessage());
+                    Logger.logExceptionToFabric(e);
                     if (getViewState() != null) {
                         getViewState().hideLoading();
                         getViewState().showErrorMassage(e.getLocalizedMessage());
