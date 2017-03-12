@@ -84,6 +84,8 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     private EmojIconActions emojIconActions;
     private ProgressBar progressBar;
     private TextView toolbarTitle;
+    private TextView messageDay;
+
 
     @Nullable
     @Override
@@ -98,6 +100,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         presenter.setAdminId(getArguments().getLong(DIALOG_ADMIN_BUNDLE_KEY));
         presenter.setChatName(getArguments().getString(DIALOG_NAME_BUNDLE_KEY));
         mLayoutManager = new LinearLayoutManager(getActivity());
+        messageDay = (TextView) view.findViewById(R.id.message_day);
         recyclerView = (RecyclerView) view.findViewById(R.id.chat_room_messages_container);
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -105,6 +108,17 @@ public class ChatRoomFragment extends MvpAppCompatFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                final int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    messageDay.setVisibility(View.VISIBLE);
+                    messageDay.setText(presenter.getAdapter().getPreviousMesageDay(firstVisibleItemPosition - 1));
+                } else
+                    messageDay.setVisibility(View.GONE);
             }
         });
         progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
