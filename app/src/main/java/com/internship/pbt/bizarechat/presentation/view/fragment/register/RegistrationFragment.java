@@ -95,17 +95,19 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (Build.VERSION.SDK_INT < 23)
+        if (Build.VERSION.SDK_INT < 23) {
             if (activity instanceof OnRegisterSuccess) {
                 mOnRegisterSuccess = (OnRegisterSuccess) activity;
             }
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mOnRegisterSuccess != null)
+        if (mOnRegisterSuccess != null) {
             mOnRegisterSuccess = null;
+        }
     }
 
     @Override
@@ -269,7 +271,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void hideErrorEmptyFullName(){
+    public void hideErrorEmptyFullName() {
         mFullNameLayout.setError(null);
     }
 
@@ -279,7 +281,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
     }
 
     @Override
-    public void showErrorEmptyFullName(){
+    public void showErrorEmptyFullName() {
         mFullNameLayout.setError(getString(R.string.full_name_error));
     }
 
@@ -346,8 +348,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
 
     @Override
     public void getInformationForValidation() {
-        if (userModel == null)
+        if (userModel == null) {
             userModel = new SignUpUserM();
+        }
         userModel.setEmail(mEmailEditText.getText().toString());
         userModel.setFullName(mFullName.getText().toString());
         userModel.setPassword(mPasswordEditText.getText().toString());
@@ -374,8 +377,9 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
             mRegistrationPresenter.verifyAndLoadAvatar(data.getData());
         }
 
-        if (resultCode == RESULT_OK)
+        if (resultCode == RESULT_OK) {
             mRegistrationPresenter.setOnActivityResultInFacebookCallback(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -414,7 +418,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationVi
         mPasswordLayout = (TextInputLayout) v.findViewById(R.id.text_input_password);
         mPasswordConfLayout = (TextInputLayout) v.findViewById(R.id.text_input_password_confirm);
         mPhoneLayout = (TextInputLayout) v.findViewById(R.id.text_input_phone);
-        mFullNameLayout = (TextInputLayout) v.findViewById(R.id.text_input_full_name) ;
+        mFullNameLayout = (TextInputLayout) v.findViewById(R.id.text_input_full_name);
 
         mEmailEditText = (EditText) v.findViewById(R.id.register_email);
         //mEmailEditText.requestFocus(View.VISIBLE);

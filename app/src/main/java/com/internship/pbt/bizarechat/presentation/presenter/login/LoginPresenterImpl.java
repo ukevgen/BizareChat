@@ -43,7 +43,9 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void checkIsEmailValid(String email) {
         if (validator.isValidEmail(email)) {
-            if (loginView != null) loginView.showLoading();
+            if (loginView != null) {
+                loginView.showLoading();
+            }
 
             resetPasswordUseCase.setEmail(email);
             resetPasswordUseCase.execute(new Subscriber<Response<Void>>() {
@@ -103,23 +105,27 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onEmailChanged(String email) {
         isEmailFieldEmpty = email.isEmpty();
-        if (isEmailFieldEmpty || isPasswordFieldEmpty)
+        if (isEmailFieldEmpty || isPasswordFieldEmpty) {
             loginView.setButtonSignInEnabled(false);
-        else
+        } else {
             loginView.setButtonSignInEnabled(true);
+        }
     }
 
     @Override
     public void onPasswordChanged(String password) {
         isPasswordFieldEmpty = password.isEmpty();
-        if (isEmailFieldEmpty || isPasswordFieldEmpty)
+        if (isEmailFieldEmpty || isPasswordFieldEmpty) {
             loginView.setButtonSignInEnabled(false);
-        else
+        } else {
             loginView.setButtonSignInEnabled(true);
+        }
     }
 
     private void loginUseCase(String email, String password) {
-        if (loginView != null) loginView.showLoading();
+        if (loginView != null) {
+            loginView.showLoading();
+        }
         this.loginUseCase = new LoginUserUseCase(sessionRepository,
                 new UserRequestModel(email, password));
 
@@ -127,7 +133,9 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-                if (loginView != null) loginView.hideLoading();
+                if (loginView != null) {
+                    loginView.hideLoading();
+                }
                 navigateToMainActivity();
             }
 
@@ -143,10 +151,11 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             @Override
             public void onNext(UserLoginResponse userLoginResponse) {
-                if (currentUser.getKeepMeSignIn())
+                if (currentUser.getKeepMeSignIn()) {
                     currentUser.setAuthorized(true);
-                else
+                } else {
                     currentUser.setAuthorized(false);
+                }
 
                 currentUser.setCurrentEmail(email);
                 currentUser.setUserLogin(userLoginResponse.getFullName());
@@ -155,8 +164,9 @@ public class LoginPresenterImpl implements LoginPresenter {
                 currentUser.setCurrentUserId(userLoginResponse.getId());
                 currentUser.setWebsite(userLoginResponse.getWebsite());
                 currentUser.setPhone(userLoginResponse.getPhone());
-                if(userLoginResponse.getBlobId() != null)
+                if (userLoginResponse.getBlobId() != null) {
                     currentUser.setAvatarBlobId(Long.valueOf(userLoginResponse.getBlobId()));
+                }
             }
         });
     }
@@ -190,10 +200,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void stop() {
-        if (loginUseCase != null)
+        if (loginUseCase != null) {
             loginUseCase.unsubscribe();
-        if (resetPasswordUseCase != null)
+        }
+        if (resetPasswordUseCase != null) {
             resetPasswordUseCase.unsubscribe();
+        }
     }
 
     @Override

@@ -42,8 +42,9 @@ public class InviteFriendsPresenterImpl extends MvpPresenter<InviteFriendsView> 
 
     public String[] getEmail() {
         for (ContactsFriends c : adapter.getItems()) {
-            if (c.isChecked())
+            if (c.isChecked()) {
                 emails.add(c.getEmail().trim());
+            }
         }
         return emails.toArray(new String[emails.size()]);
     }

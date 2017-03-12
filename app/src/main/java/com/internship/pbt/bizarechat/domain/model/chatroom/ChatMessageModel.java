@@ -1,7 +1,6 @@
 package com.internship.pbt.bizarechat.domain.model.chatroom;
 
 
-
 public class ChatMessageModel {
     private String text;
     private String userName;

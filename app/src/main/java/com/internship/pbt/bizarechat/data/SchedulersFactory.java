@@ -7,19 +7,20 @@ import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
 import com.internship.pbt.bizarechat.presentation.UiThread;
 
 public class SchedulersFactory {
-    public interface SchedulerProvider {
-        ThreadExecutor getThreadExecutor();
-        PostExecutorThread getPostExecutor();
-    }
-
     static SchedulerProvider instance = new DefaultSchedulerProvider();
 
-    public static ThreadExecutor getThreadExecutor(){
+    public static ThreadExecutor getThreadExecutor() {
         return instance.getThreadExecutor();
     }
 
-    public static PostExecutorThread getPostExecutor(){
+    public static PostExecutorThread getPostExecutor() {
         return instance.getPostExecutor();
+    }
+
+    public interface SchedulerProvider {
+        ThreadExecutor getThreadExecutor();
+
+        PostExecutorThread getPostExecutor();
     }
 
     private static class DefaultSchedulerProvider implements SchedulerProvider {

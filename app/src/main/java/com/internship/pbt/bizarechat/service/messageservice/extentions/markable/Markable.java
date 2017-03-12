@@ -9,9 +9,13 @@ import org.jivesoftware.smack.util.XmlStringBuilder;
 import java.util.List;
 import java.util.Map;
 
-public class Markable implements ExtensionElement{
+public class Markable implements ExtensionElement {
     public static final String NAMESPACE = "urn:xmpp:chat-markers:0";
     public static final String ELEMENT = "markable";
+
+    public static Markable from(Message message) {
+        return message.getExtension(ELEMENT, NAMESPACE);
+    }
 
     @Override
     public String getElementName() {
@@ -30,16 +34,12 @@ public class Markable implements ExtensionElement{
         return builder;
     }
 
-    public static Markable from(Message message) {
-        return message.getExtension(ELEMENT, NAMESPACE);
-    }
-
     public static class Provider extends EmbeddedExtensionProvider<Markable> {
         @Override
         protected Markable createReturnExtension(String currentElement,
-                                                    String currentNamespace,
-                                                    Map<String, String> attributeMap,
-                                                    List<? extends ExtensionElement> content) {
+                                                 String currentNamespace,
+                                                 Map<String, String> attributeMap,
+                                                 List<? extends ExtensionElement> content) {
             return new Markable();
         }
     }

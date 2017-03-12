@@ -14,8 +14,9 @@ public class UiThreadTest implements PostExecutorThread {
     }
 
     public static UiThreadTest getInstance() {
-        if (mUiThread == null)
+        if (mUiThread == null) {
             mUiThread = new UiThreadTest();
+        }
 
         return mUiThread;
     }

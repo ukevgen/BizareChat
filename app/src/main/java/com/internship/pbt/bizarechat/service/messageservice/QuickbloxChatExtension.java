@@ -11,7 +11,7 @@ import java.util.Map;
 public class QuickbloxChatExtension implements ExtensionElement {
     private Map<String, String> properties;
 
-    public QuickbloxChatExtension(){
+    public QuickbloxChatExtension() {
         properties = new HashMap<>();
     }
 
@@ -32,7 +32,7 @@ public class QuickbloxChatExtension implements ExtensionElement {
         Iterator<String> iterator = properties.keySet().iterator();
 
         String key;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             key = iterator.next();
             builder.element(key, this.getProperty(key));
         }
@@ -45,15 +45,15 @@ public class QuickbloxChatExtension implements ExtensionElement {
         properties.put(name, value);
     }
 
-    public void setProperties(Map<String, String> properties) {
-        this.properties.putAll(properties);
-    }
-
     public Map<String, String> getProperties() {
         return properties;
     }
 
-    public String getProperty(String key){
+    public void setProperties(Map<String, String> properties) {
+        this.properties.putAll(properties);
+    }
+
+    public String getProperty(String key) {
         return properties.get(key);
     }
 }

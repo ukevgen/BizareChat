@@ -19,12 +19,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsHolder> {
     private List<ContactsFriends> items;
 
-    public List<ContactsFriends> getItems() {
-        return items;
-    }
-
     public FriendsAdapter(List<ContactsFriends> items) {
         this.items = items;
+    }
+
+    public List<ContactsFriends> getItems() {
+        return items;
     }
 
     @Override
@@ -41,8 +41,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsH
         holder.setPosition(position);
         holder.mName.setText(friend.getName());
         holder.mEmail.setText(friend.getEmail());
-        if (friend.getUserPic() != null)
+        if (friend.getUserPic() != null) {
             holder.mImageView.setImageBitmap(friend.getUserPic());
+        }
 
         //in some cases, it will prevent unwanted situations
         holder.mCheckBox.setOnCheckedChangeListener(null);

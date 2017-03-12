@@ -54,26 +54,26 @@ public class BizareChatMessageService extends Service {
         daoSession = BizareChatApp.getInstance().getDaoSession();
     }
 
-    public Observable<Boolean> sendPrivateMessage(String body, String receiverJid, long timestamp, String stanzaId){
+    public Observable<Boolean> sendPrivateMessage(String body, String receiverJid, long timestamp, String stanzaId) {
         return Observable.fromCallable(() -> {
             privateConnection.sendPrivateMessage(body, receiverJid, timestamp, stanzaId);
             return true;
         });
     }
 
-    public void sendPrivateReadStatusMessage(String receiver, String stanzaId, String dialog_id){
+    public void sendPrivateReadStatusMessage(String receiver, String stanzaId, String dialog_id) {
         JobExecutor.getInstance().execute(() -> {
             privateConnection.sendDisplayedReceipt(receiver, stanzaId, dialog_id);
         });
     }
 
-    public void sendPrivateDeliveredStatusMessage(String receiver, String stanzaId, String dialog_id){
+    public void sendPrivateDeliveredStatusMessage(String receiver, String stanzaId, String dialog_id) {
         JobExecutor.getInstance().execute(() -> {
             privateConnection.sendReceivedReceipt(receiver, stanzaId, dialog_id);
         });
     }
 
-    void processPrivateMessage(Message message){
+    void processPrivateMessage(Message message) {
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = getMessageModel(message);
             savePrivateMessageToDb(messageModel);
@@ -90,7 +90,7 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    public Observable<Boolean> sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId){
+    public Observable<Boolean> sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId) {
         return Observable.fromCallable(() -> {
             privateConnection.sendPublicMessage(body, chatJid, timestamp, stanzaId);
             EventBus.getDefault().post(new PublicMessageSentEvent(stanzaId));
@@ -109,7 +109,7 @@ public class BizareChatMessageService extends Service {
     void processPublicMessage(Message message) {
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = getMessageModel(message);
-            if(messageModel.getSenderId().longValue() != CurrentUser.getInstance().getCurrentUserId()) {
+            if (messageModel.getSenderId().longValue() != CurrentUser.getInstance().getCurrentUserId()) {
                 savePrivateMessageToDb(messageModel);
                 if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -125,7 +125,7 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    void processReceived(String fromJid, String toJid, String receiptId, Stanza receipt){
+    void processReceived(String fromJid, String toJid, String receiptId, Stanza receipt) {
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = daoSession.getMessageModelDao()
                     .queryBuilder()
@@ -142,7 +142,7 @@ public class BizareChatMessageService extends Service {
                             MessageModelDao.Properties.Read.eq(MessageState.DEFAULT)))
                     .list();
 
-            for(MessageModel message : messages){
+            for (MessageModel message : messages) {
                 message.setRead(MessageState.DELIVERED);
             }
 
@@ -152,7 +152,7 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    void processDisplayed(String fromJid, String toJid, String receiptId, Stanza receipt){
+    void processDisplayed(String fromJid, String toJid, String receiptId, Stanza receipt) {
         JobExecutor.getInstance().execute(() -> {
             MessageModel messageModel = daoSession.getMessageModelDao()
                     .queryBuilder()
@@ -169,7 +169,7 @@ public class BizareChatMessageService extends Service {
                             MessageModelDao.Properties.Read.notEq(MessageState.READ)))
                     .list();
 
-            for(MessageModel message : messages){
+            for (MessageModel message : messages) {
                 message.setRead(MessageState.READ);
             }
 
@@ -179,11 +179,11 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    public void leavePublicChat(String chatJid){
+    public void leavePublicChat(String chatJid) {
         JobExecutor.getInstance().execute(() -> privateConnection.leavePublicChat(chatJid));
     }
 
-    private void savePrivateMessageToDb(MessageModel message){
+    private void savePrivateMessageToDb(MessageModel message) {
         JobExecutor.getInstance().execute(() -> {
             String receiverJid = message.getSenderId() + "-" + ApiConstants.APP_ID + "@" + ApiConstants.CHAT_END_POINT;
             sendPrivateDeliveredStatusMessage(receiverJid, message.getMessageId(), message.getChatDialogId());
@@ -191,13 +191,13 @@ public class BizareChatMessageService extends Service {
         });
     }
 
-    private void savePublicMessageToDb(MessageModel message){
+    private void savePublicMessageToDb(MessageModel message) {
         JobExecutor.getInstance().execute(() -> {
             daoSession.getMessageModelDao().insert(message);
         });
     }
 
-    private MessageModel getMessageModel(Message message){
+    private MessageModel getMessageModel(Message message) {
         long timestamp = 0;
         String dialog_id = "";
         XmlPullParser parser = Xml.newPullParser();
@@ -206,10 +206,10 @@ public class BizareChatMessageService extends Service {
             while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
                 switch (parser.getEventType()) {
                     case XmlPullParser.START_TAG:
-                        if(parser.getName().equals("date_sent")){
+                        if (parser.getName().equals("date_sent")) {
                             timestamp = Long.valueOf(parser.nextText());
                         }
-                        if(parser.getName().equals("dialog_id")){
+                        if (parser.getName().equals("dialog_id")) {
                             dialog_id = parser.nextText();
                         }
                         break;
@@ -225,10 +225,10 @@ public class BizareChatMessageService extends Service {
         int recipientId = 0;
         int senderId = 0;
 
-        if(message.getType() == Message.Type.chat){
+        if (message.getType() == Message.Type.chat) {
             recipientId = Integer.valueOf(message.getTo().split("-")[0]);
             senderId = Integer.valueOf(message.getFrom().split("-")[0]);
-        } else if(message.getType() == Message.Type.groupchat){
+        } else if (message.getType() == Message.Type.groupchat) {
             senderId = Integer.valueOf(message.getFrom().split("/")[1]);
         }
 

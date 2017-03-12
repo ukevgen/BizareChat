@@ -39,8 +39,9 @@ public class BizareChatApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.CRASH_REPORTS)
+        if (BuildConfig.CRASH_REPORTS) {
             Fabric.with(this, new Crashlytics());
+        }
 
         INSTANCE = this;
 

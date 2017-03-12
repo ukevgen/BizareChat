@@ -35,6 +35,6 @@ public class FacebookLinkInform {
     @Override
     public String toString() {
         return "\\FullName=" + fullName + "\n" +
-                "\\UserId="+userId+"\n";
+                "\\UserId=" + userId + "\n";
     }
 }

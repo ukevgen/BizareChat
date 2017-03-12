@@ -102,10 +102,11 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
                     break;
             }
         }
-        if (photo != null)
+        if (photo != null) {
             holder.userPhoto.setImageBitmap(occupantsPhotos.get(message.getSenderId().longValue()));
-        else
+        } else {
             holder.userPhoto.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
+        }
 
         if (position > 0) {
             setTimeTextVisibility(message.getDateSent(), messageList.get(position - 1).getDateSent(),

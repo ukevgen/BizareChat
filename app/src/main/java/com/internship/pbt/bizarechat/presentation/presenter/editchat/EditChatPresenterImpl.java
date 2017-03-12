@@ -98,14 +98,18 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
     @Override
     public void destroy() {
-        if (updateDialogUseCase != null)
+        if (updateDialogUseCase != null) {
             updateDialogUseCase.unsubscribe();
-        if (photoUseCase != null)
+        }
+        if (photoUseCase != null) {
             photoUseCase.unsubscribe();
-        if (uploadFileUseCase != null)
+        }
+        if (uploadFileUseCase != null) {
             uploadFileUseCase.unsubscribe();
-        if (allUsersUseCase != null)
+        }
+        if (allUsersUseCase != null) {
             allUsersUseCase.unsubscribe();
+        }
 
         this.allUsersUseCase = null;
         this.photoUseCase = null;
@@ -132,7 +136,9 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
     }
 
     public void getAllUsers() {
-        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
+        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) {
+            return;
+        }
 
         allUsersUseCase.setPage(++currentUsersPage);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
@@ -152,8 +158,9 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
                 for (AllUsersResponse.Item item : response.getItems()) {
                     user = item.getUser();
 
-                    if (user.getUserId().equals(currentUserId))
+                    if (user.getUserId().equals(currentUserId)) {
                         continue;
+                    }
 
                     users.add(user);
                     insertCounter++;
@@ -195,12 +202,15 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
     @Override
     public void saveChanges() {
-        if (requestModel == null)
+        if (requestModel == null) {
             requestModel = new DialogUpdateRequestModel();
-        if (pushAll != null && pushAllSet != null)
+        }
+        if (pushAll != null && pushAllSet != null) {
             requestModel.setPushAll(new DialogUpdateRequestModel.PushAll(pushAllSet));
-        if (pullAll != null && pullAllSet != null)
+        }
+        if (pullAll != null && pullAllSet != null) {
             requestModel.setPullAll(new DialogUpdateRequestModel.PullAll(pullAllSet));
+        }
         if (dialogId != null && updateDialogUseCase != null) {
             updateDialogUseCase.setDialogId(dialogId);
             updateDialogUseCase.setRequestModel(requestModel);
@@ -248,8 +258,9 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
                 @Override
                 public void onNext(Integer blobId) {
-                    if (requestModel == null)
+                    if (requestModel == null) {
                         requestModel = new DialogUpdateRequestModel();
+                    }
                     requestModel.setPhotoBlobId(blobId);
                 }
             });
@@ -269,8 +280,9 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
     }
 
     private void loadAvatar() {
-        if (fileToUpload != null)
+        if (fileToUpload != null) {
             getViewState().loadAvatarToImageView(fileToUpload);
+        }
     }
 
     private void showTooLargeImage() {
@@ -290,24 +302,28 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
     @Override
     public void editChatTitle(String newTitle) {
-        if (requestModel == null)
+        if (requestModel == null) {
             requestModel = new DialogUpdateRequestModel();
+        }
         requestModel.setName(newTitle);
     }
 
     @Override
     public void onCheckBoxClickPush(Long id) {
-        if (pushAllSet == null)
+        if (pushAllSet == null) {
             pushAllSet = new HashSet<>();
+        }
         pushAllSet.add(id);
     }
 
     @Override
     public void onCheckBoxClickPull(Long id) {
-        if (pullAllSet == null)
+        if (pullAllSet == null) {
             pullAllSet = new HashSet<>();
-        if (!pullAllSet.add(id))
+        }
+        if (!pullAllSet.add(id)) {
             pullAllSet.remove(id);
+        }
     }
 
     public EditChatRecyclerViewAdapter getAdapter() {

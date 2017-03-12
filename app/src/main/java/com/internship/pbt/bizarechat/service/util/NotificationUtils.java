@@ -30,47 +30,6 @@ public class NotificationUtils {
         this.context = context;
     }
 
-    public void showNotificationMessage(String title, String message,
-                                        String timeStamp, Intent intent) {
-        if(TextUtils.isEmpty(message)) return;
-
-        if(!CurrentUser.getInstance().isNotificationsOn()) return;
-
-        int icon = R.mipmap.ic_launcher;
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        context,
-                        0,
-                        intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
-                );
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context);
-        showSmallNotification(notifBuilder, icon, title, message, timeStamp, resultPendingIntent);
-    }
-
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon,
-                                       String title, String message, String timeStamp,
-                                       PendingIntent resultPendingIntent) {
-
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-
-        inboxStyle.addLine(message);
-
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentIntent(resultPendingIntent)
-                .setStyle(inboxStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-                .setContentText(message)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1001, notification);
-    }
-
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -111,6 +70,51 @@ public class NotificationUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public void showNotificationMessage(String title, String message,
+                                        String timeStamp, Intent intent) {
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
+
+        if (!CurrentUser.getInstance().isNotificationsOn()) {
+            return;
+        }
+
+        int icon = R.mipmap.ic_launcher;
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        context,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                );
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(context);
+        showSmallNotification(notifBuilder, icon, title, message, timeStamp, resultPendingIntent);
+    }
+
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon,
+                                       String title, String message, String timeStamp,
+                                       PendingIntent resultPendingIntent) {
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+        inboxStyle.addLine(message);
+
+        Notification notification;
+        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
+                .setAutoCancel(true)
+                .setContentTitle(title)
+                .setContentIntent(resultPendingIntent)
+                .setStyle(inboxStyle)
+                .setWhen(getTimeMilliSec(timeStamp))
+                .setContentText(message)
+                .build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1001, notification);
     }
 
 }

@@ -17,7 +17,7 @@ public class FileCreateRequest {
         this.blob = blob;
     }
 
-    public static class Blob{
+    public static class Blob {
         @SerializedName("content_type")
         @Expose
         private String contentType;

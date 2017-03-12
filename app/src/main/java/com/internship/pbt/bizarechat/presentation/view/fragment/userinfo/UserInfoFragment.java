@@ -44,7 +44,8 @@ public class UserInfoFragment extends MvpAppCompatFragment
     public static final String WEBSITE_BUNDLE_KEY = "userWebsite";
     public static final String FULL_NAME_BUNDLE_KEY = "userFullName";
     public static final String AVATAR_BUNDLE_KEY = "userAvatar";
-
+    @InjectPresenter
+    UserInfoPresenter presenter;
     private PackageManager packageManager;
     private ImageView avatarImage;
     private Bundle arguments;
@@ -60,16 +61,13 @@ public class UserInfoFragment extends MvpAppCompatFragment
     private TextView titleShadow;
     private ProgressBar progressBar;
 
-    @InjectPresenter
-    UserInfoPresenter presenter;
-
     @ProvidePresenter
-    UserInfoPresenter provideUserInfoPresenter(){
+    UserInfoPresenter provideUserInfoPresenter() {
         return new UserInfoPresenter(
                 new GetPrivateDialogByUserId(
-                    new DialogsDataRepository(
-                        BizareChatApp.getInstance().getDialogsService(),
-                        BizareChatApp.getInstance().getDaoSession()))
+                        new DialogsDataRepository(
+                                BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession()))
         );
     }
 
@@ -84,13 +82,13 @@ public class UserInfoFragment extends MvpAppCompatFragment
         fullName = arguments.getString(FULL_NAME_BUNDLE_KEY);
         presenter.setUserId(arguments.getLong(ID_BUNDLE_KEY));
 
-        Toolbar toolbar = (Toolbar)view.findViewById(R.id.user_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.user_toolbar);
         final TintTypedArray a = TintTypedArray.obtainStyledAttributes(toolbar.getContext(),
                 null, android.support.v7.appcompat.R.styleable.ActionBar, android.support.v7.appcompat.R.attr.actionBarStyle, 0);
         toolbar.setNavigationIcon(a.getDrawable(android.support.v7.appcompat.R.styleable.ActionBar_homeAsUpIndicator));
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
-        toolbarLayout = (CollapsingToolbarLayout)view.findViewById(R.id.user_collapsing_toolbar_layout);
+        toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.user_collapsing_toolbar_layout);
         emailTextView = (TextView) view.findViewById(R.id.user_info_email_value);
         phoneTextView = (TextView) view.findViewById(R.id.user_info_phone_value);
         websiteTextView = (TextView) view.findViewById(R.id.user_info_website_value);
@@ -103,7 +101,7 @@ public class UserInfoFragment extends MvpAppCompatFragment
         view.findViewById(R.id.user_info_website_layout).setOnClickListener(this);
         userInfoFab.setOnClickListener(this);
 
-        if(presenter.isCurrentUser()){
+        if (presenter.isCurrentUser()) {
             userInfoFab.setVisibility(View.GONE);
         }
 
@@ -115,20 +113,23 @@ public class UserInfoFragment extends MvpAppCompatFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        avatarImage = (ImageView)view.findViewById(R.id.user_collapsing_toolbar_image);
-        progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);
+        avatarImage = (ImageView) view.findViewById(R.id.user_collapsing_toolbar_image);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
         avatarImage.setImageBitmap(arguments.getParcelable(AVATAR_BUNDLE_KEY));
-        if (!TextUtils.isEmpty(email))
+        if (!TextUtils.isEmpty(email)) {
             emailTextView.setText(email);
-        if (!TextUtils.isEmpty(phone))
+        }
+        if (!TextUtils.isEmpty(phone)) {
             phoneTextView.setText(phone);
-        if (!TextUtils.isEmpty(website))
+        }
+        if (!TextUtils.isEmpty(website)) {
             websiteTextView.setText(website);
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.user_info_email_layout:
                 presenter.sendEmail(email);
                 break;
@@ -158,23 +159,24 @@ public class UserInfoFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void startSendEmail(String email){
+    public void startSendEmail(String email) {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", email, null));
-        if(emailIntent.resolveActivity(packageManager) != null)
+        if (emailIntent.resolveActivity(packageManager) != null) {
             startActivity(emailIntent);
-        else
+        } else {
             Snackbar.make(emailTextView, R.string.no_email_apps_error, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void startDialPhoneNumber(String number){
+    public void startDialPhoneNumber(String number) {
         Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
                 "tel", number, null));
-        if(packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)){
-            if(((TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE))
-                    .getSimState() == TelephonyManager.SIM_STATE_READY){
-                if(Settings.Global.getInt(getContext().getContentResolver(),
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            if (((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE))
+                    .getSimState() == TelephonyManager.SIM_STATE_READY) {
+                if (Settings.Global.getInt(getContext().getContentResolver(),
                         Settings.Global.AIRPLANE_MODE_ON, 0) == 0) {
                     startActivity(phoneIntent);
                     return;
@@ -185,26 +187,27 @@ public class UserInfoFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void startOpenWebsite(String website){
+    public void startOpenWebsite(String website) {
         Intent websiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
-        if(websiteIntent.resolveActivity(packageManager) != null)
+        if (websiteIntent.resolveActivity(packageManager) != null) {
             startActivity(websiteIntent);
-        else
+        } else {
             Snackbar.make(websiteTextView, R.string.no_web_apps_error, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void showLoading(){
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideLoading(){
+    public void hideLoading() {
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void showChatRoom(DialogModel dialogModel){
+    public void showChatRoom(DialogModel dialogModel) {
         Fragment fragment = new ChatRoomFragment();
         Bundle args = new Bundle();
         args.putLong(ChatRoomFragment.DIALOG_ADMIN_BUNDLE_KEY, dialogModel.getAdminId());

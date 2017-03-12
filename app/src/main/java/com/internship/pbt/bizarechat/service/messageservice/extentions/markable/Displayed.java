@@ -19,6 +19,10 @@ public class Displayed implements ExtensionElement {
         this.id = id;
     }
 
+    public static Displayed from(Message message) {
+        return message.getExtension(ELEMENT, NAMESPACE);
+    }
+
     public String getId() {
         return id;
     }
@@ -41,16 +45,12 @@ public class Displayed implements ExtensionElement {
         return builder;
     }
 
-    public static Displayed from(Message message) {
-        return message.getExtension(ELEMENT, NAMESPACE);
-    }
-
     public static class Provider extends EmbeddedExtensionProvider<Displayed> {
         @Override
         protected Displayed createReturnExtension(String currentElement,
-                                                 String currentNamespace,
-                                                 Map<String, String> attributeMap,
-                                                 List<? extends ExtensionElement> content) {
+                                                  String currentNamespace,
+                                                  Map<String, String> attributeMap,
+                                                  List<? extends ExtensionElement> content) {
             return new Displayed(attributeMap.get("id"));
         }
     }

@@ -69,18 +69,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (Build.VERSION.SDK_INT < 23)
+        if (Build.VERSION.SDK_INT < 23) {
             if (activity instanceof OnLoginSuccess) {
                 Log.d("123", "OnAttach");
                 this.onLoginSuccess = (OnLoginSuccess) activity;
             }
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (onLoginSuccess != null)
+        if (onLoginSuccess != null) {
             onLoginSuccess = null;
+        }
     }
 
     @Override
@@ -146,8 +148,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         forgotPasswordTextView.setOnClickListener(v -> loginPresenter.onForgotPasswordClicked());
 
         keepMeSignIn.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if (!isChecked)
+            if (!isChecked) {
                 loginPresenter.onKeepMeSignInFalse();
+            }
         });
     }
 
@@ -258,10 +261,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() != 0)
+                if (editable.length() != 0) {
                     buttonSend.setEnabled(true);
-                if (emailEditTextInPasswordRecovery.getText().length() == 0)
+                }
+                if (emailEditTextInPasswordRecovery.getText().length() == 0) {
                     buttonSend.setEnabled(false);
+                }
             }
         });
     }
@@ -274,8 +279,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void showSuccessOnPasswordRecovery() {
         dialog.cancel();
-        if (getView() != null)
+        if (getView() != null) {
             Snackbar.make(getView(), R.string.password_recovery_sent, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override

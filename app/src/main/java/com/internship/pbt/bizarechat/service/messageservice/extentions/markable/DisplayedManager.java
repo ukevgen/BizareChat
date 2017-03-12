@@ -28,8 +28,8 @@ public class DisplayedManager extends Manager {
         ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(connection);
         sdm.addFeature(Displayed.NAMESPACE);
         connection.addAsyncStanzaListener(packet -> {
-            Displayed receipt = Displayed.from((Message)packet);
-            for(ReceiptReceivedListener listener : receiptReceivedListeners){
+            Displayed receipt = Displayed.from((Message) packet);
+            for (ReceiptReceivedListener listener : receiptReceivedListeners) {
                 listener.onReceiptReceived(packet.getFrom(), packet.getTo(), receipt.getId(), packet);
             }
         }, MESSAGES_WITH_DISPLAYED);

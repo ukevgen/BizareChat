@@ -74,7 +74,6 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
 
-
     public void init() {
         getViewState().showLoading();
         initUsers();
@@ -175,24 +174,24 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public int getType() {
         return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public ChatRoomRecyclerAdapter getAdapter() {
         return adapter;
     }
 
-    public void setDialogId(String dialogId) {
-        this.dialogId = dialogId;
-    }
-
     public String getDialogId() {
         return dialogId;
+    }
+
+    public void setDialogId(String dialogId) {
+        this.dialogId = dialogId;
     }
 
     public void setDialogRoomJid(String dialogRoomJid) {
@@ -312,10 +311,13 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     private int getPrivateDialogOccupant() {
-        if (occupantsIds.isEmpty() && occupantsIds.size() > 2) return 0;
+        if (occupantsIds.isEmpty() && occupantsIds.size() > 2) {
+            return 0;
+        }
         for (Integer id : occupantsIds) {
-            if (id != currentUserId)
+            if (id != currentUserId) {
                 return id;
+            }
         }
         return 0;
     }
@@ -378,7 +380,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     @Override
     public void onDestroy() {
-        if (type != DialogsType.PRIVATE_CHAT)
+        if (type != DialogsType.PRIVATE_CHAT) {
             messageService.get().leavePublicChat(dialogRoomJid);
+        }
     }
 }
