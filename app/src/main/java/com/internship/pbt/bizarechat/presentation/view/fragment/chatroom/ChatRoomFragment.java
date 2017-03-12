@@ -239,4 +239,9 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     public void showNotAdminError() {
         Toast.makeText(getActivity(), R.string.not_admin_error, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void showToLargeMessage() {
+        Toast.makeText(getContext(), R.string.to_large_message, Toast.LENGTH_SHORT);
+    }
 }
