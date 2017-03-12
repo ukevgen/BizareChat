@@ -36,6 +36,7 @@ import rx.Subscriber;
 @InjectViewState
 public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements ChatRoomPresenter {
     private static final String TAG = ChatRoomPresenterImpl.class.getSimpleName();
+    private static final int MESSAGE_LENGTH = 500;
 
     private long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private int type;
@@ -71,44 +72,50 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         adapter = new ChatRoomRecyclerAdapter(messages, occupantsPhotos, userNames);
     }
 
-    public void init(){
+    public void init() {
         getViewState().showLoading();
         initUsers();
         sendReadRequestToServer();
     }
 
-    private void sendReadRequestToServer(){
+    private void sendReadRequestToServer() {
         markMessagesAsReadUseCase.setDialogId(dialogId);
         markMessagesAsReadUseCase.execute(new Subscriber<Response<Void>>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(Response<Void> response) {
+            @Override
+            public void onNext(Response<Void> response) {
                 response.body();
             }
         });
     }
 
-    private void initUsers(){
+    private void initUsers() {
         usersByIdsUseCase.setIds(occupantsIds);
         usersByIdsUseCase.execute(new Subscriber<List<UserModel>>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 getViewState().hideLoading();
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(List<UserModel> models) {
+            @Override
+            public void onNext(List<UserModel> models) {
                 users = models;
-                for(UserModel user : models){
+                for (UserModel user : models) {
                     userNames.put(user.getUserId(), user.getFullName());
                 }
                 initUsersPhotos();
@@ -116,19 +123,22 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         });
     }
 
-    private void initUsersPhotos(){
+    private void initUsersPhotos() {
         usersPhotosUseCase.setUsers(users);
         usersPhotosUseCase.execute(new Subscriber<Map<Long, Bitmap>>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 getViewState().hideLoading();
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(Map<Long, Bitmap> photos) {
+            @Override
+            public void onNext(Map<Long, Bitmap> photos) {
                 occupantsPhotos = photos;
                 adapter.setOccupantsPhotos(occupantsPhotos);
                 initMessages();
@@ -136,7 +146,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         });
     }
 
-    private void initMessages(){
+    private void initMessages() {
         messages = daoSession.getMessageModelDao()
                 .queryBuilder()
                 .where(MessageModelDao.Properties.ChatDialogId.eq(dialogId))
@@ -146,9 +156,9 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         adapter.notifyDataSetChanged();
         getViewState().scrollToEnd();
         getViewState().hideLoading();
-        if(messages != null && messages.size() > 0) {
+        if (messages != null && messages.size() > 0) {
             MessageModel lastMessage;
-            for(int i = messages.size()-1; i >=0; i--) {
+            for (int i = messages.size() - 1; i >= 0; i--) {
                 lastMessage = messages.get(i);
                 if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
                     messageService.get().sendPrivateReadStatusMessage(
@@ -206,15 +216,23 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         this.messageService = new WeakReference<>(messageService);
     }
 
-    public void showEditChat(){
-        if(currentUserId == adminId){
+    public void showEditChat() {
+        if (currentUserId == adminId) {
             getViewState().showEditChat();
         } else {
             getViewState().showNotAdminError();
         }
     }
 
+    private boolean isMessageLengthValid(String message) {
+        return message.length() < MESSAGE_LENGTH;
+    }
+
     public void sendMessage(String message) {
+        if (!isMessageLengthValid(message)) {
+            getViewState().showToLargeMessage();
+            return;
+        }
         long timestamp = System.currentTimeMillis() / 1000;
         String stanzaId = StanzaIdUtil.newStanzaId();
         saveOutgoingMessageToDb(message, timestamp, stanzaId);
@@ -225,41 +243,47 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
-    public void sendPublicMessage(String message, long timestamp, String stanzaId){
+    public void sendPublicMessage(String message, long timestamp, String stanzaId) {
         messageService.get().sendPublicMessage(message, dialogRoomJid, timestamp, stanzaId)
                 .subscribe(new Subscriber<Boolean>() {
-            @Override public void onCompleted() {
-
-            }
-
-            @Override public void onError(Throwable e) {
-
-            }
-
-            @Override public void onNext(Boolean aBoolean) {
-
-            }
-        });
-    }
-
-    private void sendPrivateMessage(String message, long timestamp, String stanzaId) {
-        messageService.get().sendPrivateMessage(message, privateOccupantJid, timestamp, stanzaId)
-                .subscribe(new Subscriber<Boolean>() {
-                    @Override public void onCompleted() {
+                    @Override
+                    public void onCompleted() {
 
                     }
 
-                    @Override public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
                     }
 
-                    @Override public void onNext(Boolean aBoolean) {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
 
                     }
                 });
     }
 
-    private void saveOutgoingMessageToDb(String message, long timestamp, String stanzaId){
+    private void sendPrivateMessage(String message, long timestamp, String stanzaId) {
+        messageService.get().sendPrivateMessage(message, privateOccupantJid, timestamp, stanzaId)
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+
+                    }
+                });
+    }
+
+    private void saveOutgoingMessageToDb(String message, long timestamp, String stanzaId) {
         final MessageModel messageModel = new MessageModel(
                 stanzaId,
                 "",
@@ -271,7 +295,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                 timestamp,
                 message,
                 0,
-                (int)currentUserId,
+                (int) currentUserId,
                 MessageState.DEFAULT
         );
         messages.add(messageModel);
@@ -289,8 +313,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         return 0;
     }
 
-    public void processPrivateMessage(MessageModel message){
-        if(message.getSenderId() == getPrivateDialogOccupant()){
+    public void processPrivateMessage(MessageModel message) {
+        if (message.getSenderId() == getPrivateDialogOccupant()) {
             messages.add(message);
             adapter.notifyItemInserted(messages.lastIndexOf(message));
             getViewState().scrollToEnd();
@@ -298,20 +322,20 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
-    public void processPublicMessage(MessageModel message){
-        if(message.getChatDialogId().equals(dialogId)){
+    public void processPublicMessage(MessageModel message) {
+        if (message.getChatDialogId().equals(dialogId)) {
             messages.add(message);
             adapter.notifyItemInserted(messages.lastIndexOf(message));
             getViewState().scrollToEnd();
         }
     }
 
-    public void processDeliveredReceipt(List<MessageModel> messages){
-        if(messages != null && !messages.isEmpty() && messages.get(0).getChatDialogId().equals(dialogId)){
-            for(MessageModel message : messages){
-                for(int i = 0; i < this.messages.size(); i++){
-                    if(this.messages.get(i).getMessageId().equals(message.getMessageId()) &&
-                            messages.get(i).getRead() != MessageState.READ){
+    public void processDeliveredReceipt(List<MessageModel> messages) {
+        if (messages != null && !messages.isEmpty() && messages.get(0).getChatDialogId().equals(dialogId)) {
+            for (MessageModel message : messages) {
+                for (int i = 0; i < this.messages.size(); i++) {
+                    if (this.messages.get(i).getMessageId().equals(message.getMessageId()) &&
+                            messages.get(i).getRead() != MessageState.READ) {
                         this.messages.get(i).setRead(MessageState.DELIVERED);
                         adapter.notifyItemChanged(i);
                         break;
@@ -321,11 +345,11 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
-    public void processReadReceipt(List<MessageModel> messages){
-        if(messages != null && !messages.isEmpty() && messages.get(0).getChatDialogId().equals(dialogId)){
-            for(MessageModel message : messages){
-                for(int i = 0; i < this.messages.size(); i++){
-                    if(this.messages.get(i).getMessageId().equals(message.getMessageId())){
+    public void processReadReceipt(List<MessageModel> messages) {
+        if (messages != null && !messages.isEmpty() && messages.get(0).getChatDialogId().equals(dialogId)) {
+            for (MessageModel message : messages) {
+                for (int i = 0; i < this.messages.size(); i++) {
+                    if (this.messages.get(i).getMessageId().equals(message.getMessageId())) {
                         this.messages.get(i).setRead(MessageState.READ);
                         adapter.notifyItemChanged(i);
                         break;
@@ -335,9 +359,9 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         }
     }
 
-    public void processSentPublicMessageEvent(String messageId){
-        for(int i = 0; i < this.messages.size(); i++){
-            if(messages.get(i).getMessageId().equals(messageId)){
+    public void processSentPublicMessageEvent(String messageId) {
+        for (int i = 0; i < this.messages.size(); i++) {
+            if (messages.get(i).getMessageId().equals(messageId)) {
                 this.messages.get(i).setRead(MessageState.DELIVERED);
                 adapter.notifyItemChanged(i);
                 break;
@@ -347,7 +371,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     @Override
     public void onDestroy() {
-        if(type != DialogsType.PRIVATE_CHAT)
+        if (type != DialogsType.PRIVATE_CHAT)
             messageService.get().leavePublicChat(dialogRoomJid);
     }
 }

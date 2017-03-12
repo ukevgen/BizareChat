@@ -16,4 +16,6 @@ public interface ChatRoomView extends MvpView{
     void showEditChat();
 
     void showNotAdminError();
+
+    void showToLargeMessage();
 }
