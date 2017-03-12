@@ -129,7 +129,7 @@ public class DialogModel {
     }
 
     public String getLastMessage() {
-        return lastMessage;
+        return lastMessage == null ? "" : lastMessage;
     }
 
     public void setLastMessage(String lastMessage) {
@@ -255,6 +255,8 @@ public class DialogModel {
         String messageDate = formatter.format(dt);
         if (now.equals(messageDate))
             return localDateFormat.format(dt).toString();
+        else if (lastMessageDateSent == 0)
+            return "";
         else
             return messageDate;
     }
