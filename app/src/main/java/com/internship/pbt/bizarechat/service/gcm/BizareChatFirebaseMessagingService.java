@@ -25,8 +25,9 @@ public class BizareChatFirebaseMessagingService extends FirebaseMessagingService
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage == null)
+        if (remoteMessage == null) {
             return;
+        }
 
         if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());

@@ -52,8 +52,9 @@ public class LoginActivity extends BaseActivity implements RegistrationFragment.
 
         UserToken.getInstance().initSharedPreferences(this);
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             addFragment(R.id.activity_layout_fragment_container, new LoginFragment());
+        }
         checkStoragePermission();
         checkCameraPermission();
         checkContactsPermission();

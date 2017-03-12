@@ -59,22 +59,28 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
     public void onBindViewHolder(UserHolder holder, int position) {
         UserModel user = users.get(position);
         Bitmap photo = usersPhotos.get(user.getUserId());
-        if (photo != null)
+        if (photo != null) {
             holder.photo.setImageBitmap(photo);
-        else
+        } else {
             holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
+        }
         holder.name.setText(user.getFullName());
         boolean isChecked = checkedUsers.contains(user.getUserId());
         holder.userCheckBox.setChecked(isChecked);
-        if (isChecked)
+        if (isChecked) {
             holder.name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name_checked));
-        else
+        } else {
             holder.name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name));
+        }
     }
 
     @Override
     public int getItemCount() {
         return users.size();
+    }
+
+    public interface OnCheckBoxClickListener {
+        void onCheckBoxClick();
     }
 
     class UserHolder extends RecyclerView.ViewHolder {
@@ -99,9 +105,5 @@ public class NewChatUsersRecyclerAdapter extends RecyclerView.Adapter<NewChatUse
                         listener.onCheckBoxClick();
                     });
         }
-    }
-
-    public interface OnCheckBoxClickListener {
-        void onCheckBoxClick();
     }
 }

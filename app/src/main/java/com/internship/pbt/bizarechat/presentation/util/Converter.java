@@ -31,10 +31,49 @@ public class Converter {
         this.context = context;
     }
 
+    public static String imageToString(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public static String longToTime(long timestamp) {
+        return messageTimeFormat.format(new Date(timestamp));
+    }
+
+    public static String getLastMessageDay(long lastMessageDateSent) {
+        Date dt = new Date(lastMessageDateSent * 1000);
+        return messageDateFormat.format(dt);
+    }
+
+    public static String getPartOfTheWeek(long currentTime) {
+        Date dt = new Date(currentTime * 1000);
+        String now = messageDateFormat.format(new Date());
+        String messageDate = messageDateFormat.format(dt);
+        if (now.equals(messageDate)) {
+            return TODAY;
+        } else if (yesterday().equals(messageDate)) {
+            return YESTERDAY;
+        } else {
+            return messageDate;
+        }
+
+
+    }
+
+    private static String yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return messageDateFormat.format(cal.getTime());
+    }
+
     public File convertUriToFile(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) return null;
+        if (cursor == null) {
+            return null;
+        }
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         String s = cursor.getString(column_index);
@@ -64,8 +103,9 @@ public class Converter {
 
     public Bitmap decodeBase64(String stringAvatar) {
         byte[] decodedByte = new byte[0];
-        if (stringAvatar != null)
+        if (stringAvatar != null) {
             decodedByte = Base64.decode(stringAvatar, 0);
+        }
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
 
     }
@@ -75,45 +115,10 @@ public class Converter {
         for (long value : users) {
             builder.append(value).append(",");
         }
-        if (builder.length() > 0)
+        if (builder.length() > 0) {
             builder.setLength(builder.length() - 1);
+        }
 
         return builder.toString();
-    }
-
-    public static String imageToString(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
-
-    public static String longToTime(long timestamp) {
-        return messageTimeFormat.format(new Date(timestamp));
-    }
-
-    public static String getLastMessageDay(long lastMessageDateSent) {
-        Date dt = new Date(lastMessageDateSent * 1000);
-        return messageDateFormat.format(dt);
-    }
-
-    public static String getPartOfTheWeek(long currentTime) {
-        Date dt = new Date(currentTime * 1000);
-        String now = messageDateFormat.format(new Date());
-        String messageDate = messageDateFormat.format(dt);
-        if (now.equals(messageDate)) {
-            return TODAY;
-        } else if (yesterday().equals(messageDate)) {
-            return YESTERDAY;
-        } else
-            return messageDate;
-
-
-    }
-
-    private static String yesterday() {
-        final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        return messageDateFormat.format(cal.getTime());
     }
 }

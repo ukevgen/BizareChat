@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 
 public final class JsonAndXmlConverters {
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Json{
+    public @interface Json {
 
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Xml{
+    public @interface Xml {
 
     }
 }

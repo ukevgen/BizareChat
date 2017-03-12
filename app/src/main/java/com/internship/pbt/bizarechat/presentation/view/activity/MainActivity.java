@@ -91,22 +91,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @InjectPresenter
     MainPresenterImpl presenter;
-
-    @ProvidePresenter
-    MainPresenterImpl provideMainPresenter() {
-        return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
-                getInstance().getSessionService())),
-                new GetAllDialogsUseCase(
-                        new DialogsDataRepository(
-                                BizareChatApp.getInstance().getDialogsService(),
-                                BizareChatApp.getInstance().getDaoSession())),
-                BizareChatApp.getInstance().getDaoSession(),
-                new GetPhotoUseCase(
-                        new ContentDataRepository(
-                                BizareChatApp.getInstance().getContentService(),
-                                BizareChatApp.getInstance().getCacheUsersPhotos())));
-    }
-
     private RelativeLayout mLayout;
     private TextView mTextOnToolbar;
     private NavigationView mNavigationView;
@@ -129,6 +113,21 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
+    }
+
+    @ProvidePresenter
+    MainPresenterImpl provideMainPresenter() {
+        return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
+                getInstance().getSessionService())),
+                new GetAllDialogsUseCase(
+                        new DialogsDataRepository(
+                                BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession())),
+                BizareChatApp.getInstance().getDaoSession(),
+                new GetPhotoUseCase(
+                        new ContentDataRepository(
+                                BizareChatApp.getInstance().getContentService(),
+                                BizareChatApp.getInstance().getCacheUsersPhotos())));
     }
 
     @Override
@@ -165,8 +164,9 @@ public class MainActivity extends MvpAppCompatActivity implements
         }
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            if (presenter.isPrivateDialogsOnScreen())
+            if (presenter.isPrivateDialogsOnScreen()) {
                 mTabLayout.getTabAt(1).select();
+            }
         }
     }
 
@@ -193,24 +193,28 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         View headerView = mNavigationView.getHeaderView(0);
         headerView.findViewById(R.id.nav_header_root).setOnClickListener(this);
-        if (currentUser == null)
+        if (currentUser == null) {
             currentUser = CurrentUser.getInstance();
+        }
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
-        if (currentUser.getCurrentEmail() != null)
+        if (currentUser.getCurrentEmail() != null) {
             email.setText(currentUser.getCurrentEmail());
+        }
 
         drawerLogin = (TextView) headerView.findViewById(R.id.user_login);
         drawerLogin.setText(CurrentUser.getInstance().getFullName());
 
         drawerAvatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
-        if (converter == null)
+        if (converter == null) {
             converter = new Converter(getApplicationContext());
+        }
 
         String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
-        if (bitmap != null)
+        if (bitmap != null) {
             drawerAvatar.setImageBitmap(bitmap);
+        }
 
     }
 

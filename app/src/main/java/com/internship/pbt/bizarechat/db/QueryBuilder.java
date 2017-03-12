@@ -75,8 +75,9 @@ public class QueryBuilder {
                 .where(UserModelDao.Properties.UserId.eq(userId))
                 .list();
         for (UserModel m : users) {
-            if (m.getUserId() == userId)
+            if (m.getUserId() == userId) {
                 break;
+            }
         }
 
         return users.size() != 0;

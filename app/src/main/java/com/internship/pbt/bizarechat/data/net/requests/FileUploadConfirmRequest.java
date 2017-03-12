@@ -17,7 +17,7 @@ public class FileUploadConfirmRequest {
         this.blob = blob;
     }
 
-    public static class Blob{
+    public static class Blob {
         @SerializedName("size")
         @Expose
         private String size;

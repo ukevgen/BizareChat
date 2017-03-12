@@ -60,7 +60,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void getAllUsers() {
-        if (filtering) return;
+        if (filtering) {
+            return;
+        }
 
         if (!BizareChatApp.getInstance().isNetworkConnected()) {
             getViewState().showNetworkError();
@@ -84,8 +86,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
             @Override
             public void onError(Throwable e) {
                 getViewState().hideLoading();
-                if (e instanceof SocketTimeoutException)
+                if (e instanceof SocketTimeoutException) {
                     getViewState().showNetworkError();
+                }
                 e.printStackTrace();
             }
 
@@ -96,8 +99,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                 for (AllUsersResponse.Item item : response.getItems()) {
                     user = item.getUser();
 
-                    if (user.getUserId().equals(currentUserId))
+                    if (user.getUserId().equals(currentUserId)) {
                         continue;
+                    }
 
                     if (user.getFullName() == null) {
                         user.setFullName("");
@@ -112,8 +116,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                         usersPhotos.put(user.getUserId(), null);
                     }
                 }
-                if (usersCount == 0)
+                if (usersCount == 0) {
                     usersCount = response.getTotalEntries();
+                }
                 if (usersCount == 1) {
                     getViewState().showAloneMessage();
                 } else {
@@ -156,8 +161,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void sortByNameAsc() {
-        if (currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME))
+        if (currentSortOrder.equals(ApiConstants.ORDER_ASC_FULL_NAME)) {
             return;
+        }
         currentSortOrder = ApiConstants.ORDER_ASC_FULL_NAME;
 
         if (allUsersLoaded) {
@@ -173,8 +179,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void sortByNameDesc() {
-        if (currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME))
+        if (currentSortOrder.equals(ApiConstants.ORDER_DESC_FULL_NAME)) {
             return;
+        }
         currentSortOrder = ApiConstants.ORDER_DESC_FULL_NAME;
 
         if (allUsersLoaded) {
@@ -190,8 +197,9 @@ public class UsersPresenter extends MvpPresenter<UsersView>
     }
 
     public void sortDefault() {
-        if (currentSortOrder.equals(ApiConstants.ORDER_DEFAULT))
+        if (currentSortOrder.equals(ApiConstants.ORDER_DEFAULT)) {
             return;
+        }
         currentSortOrder = ApiConstants.ORDER_DEFAULT;
 
         if (allUsersLoaded) {
@@ -204,6 +212,15 @@ public class UsersPresenter extends MvpPresenter<UsersView>
         users.clear();
         adapter.notifyDataSetChanged();
         getAllUsers();
+    }
+
+    @Override
+    public void onUserClick(int position) {
+        getViewState().showUserInfo(users.get(position));
+    }
+
+    public String getCurrentFilterQuery() {
+        return currentFilterQuery;
     }
 
     public static class ComparatorNameAsc implements Comparator<UserModel> {
@@ -231,14 +248,5 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                 throw new IllegalArgumentException(ex);
             }
         }
-    }
-
-    @Override
-    public void onUserClick(int position) {
-        getViewState().showUserInfo(users.get(position));
-    }
-
-    public String getCurrentFilterQuery() {
-        return currentFilterQuery;
     }
 }

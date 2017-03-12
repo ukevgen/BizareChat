@@ -46,12 +46,11 @@ import static android.app.Activity.RESULT_OK;
 public class EditChatFragment extends MvpAppCompatFragment implements EditChatView, View.OnClickListener,
         EditChatRecyclerViewAdapter.OnCheckBoxClickListener {
 
+    public static final String DIALOG_NAME_BUNDLE_KEY = "dialogName";
+    public static final String DIALOG_ID_BUNDLE_KEY = "dialogId";
+    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
-    public static final String DIALOG_NAME_BUNDLE_KEY = "dialogName";
-    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
-    public static final String DIALOG_ID_BUNDLE_KEY = "dialogId";
-
     @InjectPresenter
     EditChatPresenterImpl presenter;
 

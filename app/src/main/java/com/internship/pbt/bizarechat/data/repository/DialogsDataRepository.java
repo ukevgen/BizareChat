@@ -40,22 +40,25 @@ public class DialogsDataRepository implements DialogsRepository {
                     .subscribeOn(Schedulers.immediate())
                     .observeOn(Schedulers.immediate())
                     .subscribe(new Subscriber<AllDialogsResponse>() {
-                        @Override public void onCompleted() {
+                        @Override
+                        public void onCompleted() {
 
                         }
 
-                        @Override public void onError(Throwable e) {
+                        @Override
+                        public void onError(Throwable e) {
                             exception.initCause(e);
                         }
 
-                        @Override public void onNext(AllDialogsResponse allDialogsResponse) {
+                        @Override
+                        public void onNext(AllDialogsResponse allDialogsResponse) {
                             DialogModelDao modelDao = daoSession.getDialogModelDao();
                             modelDao.insertOrReplaceInTx(allDialogsResponse.getDialogModels());
                             wrapper[0] = allDialogsResponse;
                         }
                     });
 
-            if(exception.getCause() != null){
+            if (exception.getCause() != null) {
                 throw exception;
             }
 
@@ -79,12 +82,12 @@ public class DialogsDataRepository implements DialogsRepository {
     }
 
     @Override
-    public Observable<Map<String, Integer>> getUnreadMessagesCount(){
+    public Observable<Map<String, Integer>> getUnreadMessagesCount() {
         return dialogsService.getUnreadMessagesCount(UserToken.getInstance().getToken());
     }
 
     @Override
-    public Observable<Response<Void>> markMessagesAsRead(String dialogId){
+    public Observable<Response<Void>> markMessagesAsRead(String dialogId) {
         return Observable.fromCallable(() -> {
             DialogModel dialog = daoSession.getDialogModelDao().queryBuilder()
                     .where(DialogModelDao.Properties.DialogId.eq(dialogId)).unique();
@@ -98,7 +101,7 @@ public class DialogsDataRepository implements DialogsRepository {
     }
 
     @Override
-    public Observable<DialogModel> getPrivateDialogByUserId(long id){
+    public Observable<DialogModel> getPrivateDialogByUserId(long id) {
         return Observable.fromCallable(() -> {
             DialogModel resultDialog = null;
             List<DialogModel> dialogs = daoSession.getDialogModelDao().queryBuilder()
@@ -110,30 +113,36 @@ public class DialogsDataRepository implements DialogsRepository {
                 }
             }
 
-            if (resultDialog != null) return resultDialog;
+            if (resultDialog != null) {
+                return resultDialog;
+            }
 
             Exception exception = new Exception();
             DialogModel[] wrapper = new DialogModel[1];
             createDialog(new NewDialog(DialogsType.PRIVATE_CHAT, "", String.valueOf(id), ""))
-                        .subscribeOn(Schedulers.immediate())
-                        .observeOn(Schedulers.immediate())
-                        .subscribe(new Subscriber<DialogModel>() {
-                            @Override public void onCompleted() {
+                    .subscribeOn(Schedulers.immediate())
+                    .observeOn(Schedulers.immediate())
+                    .subscribe(new Subscriber<DialogModel>() {
+                        @Override
+                        public void onCompleted() {
 
-                            }
+                        }
 
-                            @Override public void onError(Throwable e) {
-                                exception.initCause(e);
-                            }
+                        @Override
+                        public void onError(Throwable e) {
+                            exception.initCause(e);
+                        }
 
-                            @Override public void onNext(DialogModel dialogModel) {
-                                wrapper[0] = dialogModel;
-                                daoSession.getDialogModelDao().insertInTx(dialogModel);
-                            }
-                        });
+                        @Override
+                        public void onNext(DialogModel dialogModel) {
+                            wrapper[0] = dialogModel;
+                            daoSession.getDialogModelDao().insertInTx(dialogModel);
+                        }
+                    });
 
-            if(exception.getCause() != null)
+            if (exception.getCause() != null) {
                 throw exception;
+            }
 
             return wrapper[0];
         });

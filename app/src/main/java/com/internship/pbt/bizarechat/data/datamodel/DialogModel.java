@@ -148,6 +148,10 @@ public class DialogModel {
         return lastMessageUserId;
     }
 
+    public void setLastMessageUserId(int lastMessageUserId) {
+        this.lastMessageUserId = lastMessageUserId;
+    }
+
     public void setLastMessageUserId(Integer lastMessageUserId) {
         this.lastMessageUserId = lastMessageUserId;
     }
@@ -200,34 +204,6 @@ public class DialogModel {
         this.xmppRoomJid = xmppRoomJid;
     }
 
-    public void setLastMessageUserId(int lastMessageUserId) {
-        this.lastMessageUserId = lastMessageUserId;
-    }
-
-    public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
-        @Override
-        public List<Integer> convertToEntityProperty(String databaseValue) {
-            if (databaseValue == null)
-                return null;
-
-            List<Integer> result = new ArrayList<>();
-            databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
-
-            if (databaseValue.isEmpty()) return result;
-
-            for (String entry : databaseValue.split("\\s*,\\s*")) {
-                result.add(Integer.parseInt(entry));
-            }
-
-            return result;
-        }
-
-        @Override
-        public String convertToDatabaseValue(List<Integer> entityProperty) {
-            return entityProperty.toString();
-        }
-    }
-
     @Override
     public String toString() {
         return "DialogModel{" +
@@ -253,11 +229,39 @@ public class DialogModel {
 
         String now = formatter.format(new Date());
         String messageDate = formatter.format(dt);
-        if (now.equals(messageDate))
+        if (now.equals(messageDate)) {
             return localDateFormat.format(dt).toString();
-        else if (lastMessageDateSent == 0)
+        } else if (lastMessageDateSent == 0) {
             return "";
-        else
+        } else {
             return messageDate;
+        }
+    }
+
+    public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
+        @Override
+        public List<Integer> convertToEntityProperty(String databaseValue) {
+            if (databaseValue == null) {
+                return null;
+            }
+
+            List<Integer> result = new ArrayList<>();
+            databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
+
+            if (databaseValue.isEmpty()) {
+                return result;
+            }
+
+            for (String entry : databaseValue.split("\\s*,\\s*")) {
+                result.add(Integer.parseInt(entry));
+            }
+
+            return result;
+        }
+
+        @Override
+        public String convertToDatabaseValue(List<Integer> entityProperty) {
+            return entityProperty.toString();
+        }
     }
 }

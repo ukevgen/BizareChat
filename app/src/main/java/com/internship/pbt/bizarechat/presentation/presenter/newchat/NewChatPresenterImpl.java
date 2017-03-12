@@ -80,7 +80,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     }
 
     public void getAllUsers() {
-        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) return;
+        if (usersCount != 0 && currentUsersPage * ApiConstants.USERS_PER_PAGE >= usersCount) {
+            return;
+        }
 
         allUsersUseCase.setPage(++currentUsersPage);
         allUsersUseCase.execute(new Subscriber<AllUsersResponse>() {
@@ -100,8 +102,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
                 for (AllUsersResponse.Item item : response.getItems()) {
                     user = item.getUser();
 
-                    if (user.getUserId().equals(currentUserId))
+                    if (user.getUserId().equals(currentUserId)) {
                         continue;
+                    }
 
                     users.add(user);
                     queryBuilder.addUserToUsersDao(user);
@@ -156,11 +159,11 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     }
 
     public void setChatPhotoVisibility() {
-        if (!isPublicButtonChecked && checkedUsers.size() > 1)
+        if (!isPublicButtonChecked && checkedUsers.size() > 1) {
             getViewState().showChatPhoto();
-        else if (isPublicButtonChecked)
+        } else if (isPublicButtonChecked) {
             getViewState().showChatPhoto();
-        else {
+        } else {
             getViewState().hideChatPhoto();
         }
     }
@@ -183,8 +186,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     }
 
     private void loadAvatar() {
-        if (fileToUpload != null)
+        if (fileToUpload != null) {
             getViewState().loadAvatarToImageView(fileToUpload);
+        }
     }
 
     @Override
@@ -237,8 +241,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
     }
 
     public void destroy() {
-        if (createDialogUseCase != null)
+        if (createDialogUseCase != null) {
             createDialogUseCase.unsubscribe();
+        }
         this.onDestroy();
     }
 

@@ -19,6 +19,10 @@ public class ReadReceipt implements ExtensionElement {
         this.id = id;
     }
 
+    public static ReadReceipt from(Message message) {
+        return message.getExtension(ELEMENT, NAMESPACE);
+    }
+
     public String getId() {
         return id;
     }
@@ -39,10 +43,6 @@ public class ReadReceipt implements ExtensionElement {
         builder.attribute("id", id);
         builder.closeEmptyElement();
         return builder;
-    }
-
-    public static ReadReceipt from(Message message) {
-        return message.getExtension(ELEMENT, NAMESPACE);
     }
 
     public static class Provider extends EmbeddedExtensionProvider<ReadReceipt> {

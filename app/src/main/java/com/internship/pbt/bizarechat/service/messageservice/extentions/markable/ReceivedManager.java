@@ -28,8 +28,8 @@ public class ReceivedManager extends Manager {
         ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(connection);
         sdm.addFeature(Received.NAMESPACE);
         connection.addAsyncStanzaListener(packet -> {
-            Received receipt = Received.from((Message)packet);
-            for(ReceiptReceivedListener listener : receiptReceivedListeners){
+            Received receipt = Received.from((Message) packet);
+            for (ReceiptReceivedListener listener : receiptReceivedListeners) {
                 listener.onReceiptReceived(packet.getFrom(), packet.getTo(), receipt.getId(), packet);
             }
         }, MESSAGES_WITH_RECEIVED);

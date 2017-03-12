@@ -59,42 +59,48 @@ public class UserDataRepository implements UserRepository {
                 .where(UserModelDao.Properties.UserId.eq(id.longValue()))
                 .unique();
 
-        if(user != null)
+        if (user != null) {
             return Observable.just(user);
-        else
+        } else {
             return userService.getUserById(UserToken.getInstance().getToken(), id)
                     .flatMap(new Func1<UserByIdResponse, Observable<UserModel>>() {
-                        @Override public Observable<UserModel> call(UserByIdResponse userModel) {
+                        @Override
+                        public Observable<UserModel> call(UserByIdResponse userModel) {
                             daoSession.getUserModelDao().insertInTx(userModel.getUser());
                             return Observable.just(userModel.getUser());
                         }
                     });
+        }
     }
 
     @Override
-    public Observable<List<UserModel>> getUsersByIds(List<Integer> ids){
+    public Observable<List<UserModel>> getUsersByIds(List<Integer> ids) {
         final List<UserModel> users = new ArrayList<>();
         return Observable.fromCallable(() -> {
             Exception exception = new Exception();
-            for(Integer id : ids){
+            for (Integer id : ids) {
                 getUserById(id).subscribeOn(Schedulers.immediate())
                         .observeOn(Schedulers.immediate())
                         .subscribe(new Subscriber<UserModel>() {
-                            @Override public void onCompleted() {
+                            @Override
+                            public void onCompleted() {
 
                             }
 
-                            @Override public void onError(Throwable e) {
+                            @Override
+                            public void onError(Throwable e) {
                                 exception.initCause(e);
                             }
 
-                            @Override public void onNext(UserModel userModel) {
+                            @Override
+                            public void onNext(UserModel userModel) {
                                 users.add(userModel);
                             }
                         });
             }
-            if(exception.getCause() != null)
+            if (exception.getCause() != null) {
                 throw exception;
+            }
             return users;
         });
     }

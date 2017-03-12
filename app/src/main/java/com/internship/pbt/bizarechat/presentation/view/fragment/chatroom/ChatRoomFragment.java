@@ -59,6 +59,15 @@ public class ChatRoomFragment extends MvpAppCompatFragment
 
     @InjectPresenter
     ChatRoomPresenterImpl presenter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private ImageButton sendButton;
+    private EmojiconEditText messageEditText;
+    private ImageView emojiButton;
+    private EmojIconActions emojIconActions;
+    private ProgressBar progressBar;
+    private TextView toolbarTitle;
+    private TextView messageDay;
 
     @ProvidePresenter
     ChatRoomPresenterImpl provideChatRoomPresenter() {
@@ -75,17 +84,6 @@ public class ChatRoomFragment extends MvpAppCompatFragment
                 ))
         );
     }
-
-    private RecyclerView recyclerView;
-    private LinearLayoutManager mLayoutManager;
-    private ImageButton sendButton;
-    private EmojiconEditText messageEditText;
-    private ImageView emojiButton;
-    private EmojIconActions emojIconActions;
-    private ProgressBar progressBar;
-    private TextView toolbarTitle;
-    private TextView messageDay;
-
 
     @Nullable
     @Override
@@ -117,8 +115,9 @@ public class ChatRoomFragment extends MvpAppCompatFragment
                 if (firstVisibleItemPosition != 0) {
                     messageDay.setVisibility(View.VISIBLE);
                     messageDay.setText(presenter.getAdapter().getPreviousMesageDay(firstVisibleItemPosition - 1));
-                } else
+                } else {
                     messageDay.setVisibility(View.GONE);
+                }
             }
         });
         progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
@@ -148,9 +147,10 @@ public class ChatRoomFragment extends MvpAppCompatFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (presenter.getType() != DialogsType.PRIVATE_CHAT)
+        if (presenter.getType() != DialogsType.PRIVATE_CHAT) {
             menu.add(0, editItemId, 0, "Search").setIcon(R.drawable.edit_icon)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -175,8 +175,9 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         toolbarTitle.setText(presenter.getChatName());
         presenter.getAdapter().setContext(getActivity());
         recyclerView.setAdapter(presenter.getAdapter());
-        if (presenter.getAdapter().getItemCount() > 0)
+        if (presenter.getAdapter().getItemCount() > 0) {
             scrollToEnd();
+        }
         EventBus.getDefault().register(this);
     }
 

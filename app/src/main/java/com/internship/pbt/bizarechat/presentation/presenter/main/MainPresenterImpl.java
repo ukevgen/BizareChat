@@ -97,24 +97,27 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
 
     }
 
-    public void showCurrentUserInfo(){
+    public void showCurrentUserInfo() {
         hideNavigationElements();
         getViewState().closeDrawer();
         getViewState().showUserInfo();
     }
 
-    public void loadUserAvatar(){
+    public void loadUserAvatar() {
         photoUseCase.setBlobId(CurrentUser.getInstance().getAvatarBlobId().intValue());
         photoUseCase.execute(new Subscriber<Bitmap>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(Bitmap image) {
+            @Override
+            public void onNext(Bitmap image) {
                 getViewState().setAvatarImage(image);
                 CurrentUser.getInstance().setStringAvatar(Converter.imageToString(image));
             }
@@ -191,8 +194,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     public void updateDialogsDao() {
-        if (BizareChatApp.getInstance().getDaoSession() == null)
+        if (BizareChatApp.getInstance().getDaoSession() == null) {
             daoSession = BizareChatApp.getInstance().getDaoSession();
+        }
 
         if (BizareChatApp.getInstance().isNetworkConnected()) {
             dialogsUseCase.setParameters(new HashMap<>());
@@ -211,8 +215,9 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
                 public void onNext(AllDialogsResponse response) {
                     DialogModelDao modelDao = daoSession.getDialogModelDao();
                     modelDao.insertOrReplaceInTx(response.getDialogModels());
-                    if (isDialogDaoEmpty())
+                    if (isDialogDaoEmpty()) {
                         getViewState().showEmptyScreen();
+                    }
                     EventBus.getDefault().post(new DialogsUpdatedEvent());
                 }
             });
@@ -229,16 +234,16 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
         getViewState().showPublicChatRoom(dialogModel);
     }
 
-    public void navigateToSettingsScreen(){
+    public void navigateToSettingsScreen() {
         hideNavigationElements();
         getViewState().showSettingsScreen();
     }
 
-    public void hideNavigationElements(){
+    public void hideNavigationElements() {
         getViewState().hideNavigationElements();
     }
 
-    public void showNavigationElements(){
+    public void showNavigationElements() {
         getViewState().showNavigationElements();
     }
 }

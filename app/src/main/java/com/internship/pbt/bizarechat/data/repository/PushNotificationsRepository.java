@@ -10,15 +10,15 @@ import com.internship.pbt.bizarechat.domain.repository.NotificationsRepository;
 
 import rx.Observable;
 
-public class PushNotificationsRepository implements NotificationsRepository{
+public class PushNotificationsRepository implements NotificationsRepository {
     private NotificationService service;
 
     public PushNotificationsRepository(NotificationService service) {
         this.service = service;
     }
 
-    public Observable<CreateSubscriptionResponse[]> createSubscription(String token){
-        int nonce = (int)(Math.random() * 1000);
+    public Observable<CreateSubscriptionResponse[]> createSubscription(String token) {
+        int nonce = (int) (Math.random() * 1000);
         long timestamp = System.currentTimeMillis();
         String udid = HmacSha1Signature.calculateSignature(nonce, timestamp);
         CreateSubscriptionRequest.Device device = new CreateSubscriptionRequest.Device();

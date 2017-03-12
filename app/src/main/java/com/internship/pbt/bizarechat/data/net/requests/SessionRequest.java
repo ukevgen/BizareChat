@@ -56,7 +56,8 @@ public class SessionRequest {
         return applicationId;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "SessionRequest{" +
                 "applicationId='" + applicationId + '\'' +
                 ", authKey='" + authKey + '\'' +

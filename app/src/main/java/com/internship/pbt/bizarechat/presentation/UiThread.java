@@ -14,13 +14,15 @@ public class UiThread implements PostExecutorThread {
     }
 
     public static UiThread getInstance() {
-        if (mUiThread == null)
+        if (mUiThread == null) {
             mUiThread = new UiThread();
+        }
 
         return mUiThread;
     }
 
-    @Override public Scheduler getScheduler() {
+    @Override
+    public Scheduler getScheduler() {
         return AndroidSchedulers.mainThread();
     }
 }

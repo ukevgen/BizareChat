@@ -48,37 +48,41 @@ public class ContentDataRepository implements ContentRepository {
         contentService = retrofitApi;
     }
 
+    public ContentDataRepository(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
     @Override
-    public Observable<Map<Long, Bitmap>> getUsersPhotos(List<UserModel> users){
+    public Observable<Map<Long, Bitmap>> getUsersPhotos(List<UserModel> users) {
         final Map<Long, Bitmap> usersPhotos = new HashMap<>();
         return Observable.fromCallable(() -> {
-            for(UserModel user : users){
-                if(user.getBlobId() == null)
+            for (UserModel user : users) {
+                if (user.getBlobId() == null) {
                     usersPhotos.put(user.getUserId(), null);
-                else
+                } else {
                     getPhoto(user.getBlobId())
                             .subscribeOn(Schedulers.immediate())
                             .observeOn(Schedulers.immediate())
                             .subscribe(new Subscriber<Bitmap>() {
-                                @Override public void onCompleted() {
+                                @Override
+                                public void onCompleted() {
 
                                 }
 
-                                @Override public void onError(Throwable e) {
+                                @Override
+                                public void onError(Throwable e) {
                                     Log.e(TAG, e.getMessage(), e);
                                 }
 
-                                @Override public void onNext(Bitmap bitmap) {
+                                @Override
+                                public void onNext(Bitmap bitmap) {
                                     usersPhotos.put(user.getUserId(), bitmap);
                                 }
                             });
+                }
             }
             return usersPhotos;
         });
-    }
-
-    public ContentDataRepository(ContentService contentService) {
-        this.contentService = contentService;
     }
 
     public Observable<Bitmap> getPhoto(final Integer blobId) {
@@ -91,9 +95,9 @@ public class ContentDataRepository implements ContentRepository {
                 .flatMap(new Func1<Bitmap, Observable<Bitmap>>() {
                     @Override
                     public Observable<Bitmap> call(Bitmap bitmap) {
-                        if (bitmap != null)
+                        if (bitmap != null) {
                             return Observable.just(bitmap);
-                        else {
+                        } else {
                             return contentService.downloadFile(UserToken.getInstance().getToken(), blobId)
                                     .flatMap(new Func1<ResponseBody, Observable<Bitmap>>() {
                                         @Override
@@ -201,10 +205,11 @@ public class ContentDataRepository implements ContentRepository {
     @NonNull
     private MultipartBody.Part prepareFilePart(File file, String contentType, String name) {
         RequestBody requestFile = RequestBody.create(MediaType.parse(contentType), file);
-        if (name == null)
+        if (name == null) {
             this.name = file.getName();
-        else
+        } else {
             this.name = name;
+        }
         return MultipartBody.Part.createFormData(
                 ApiConstants.AMAZON_FILE,
                 this.name,

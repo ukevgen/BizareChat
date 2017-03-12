@@ -134,8 +134,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         if (dialogModel.getType() == DialogsType.PRIVATE_CHAT) {
             setUserPhotoId(getOccupantIdFromPrivateDialog(dialogModel), dialogModel);
         } else {
-            if (dialogModel.getPhoto() != null && !dialogModel.getPhoto().isEmpty())
+            if (dialogModel.getPhoto() != null && !dialogModel.getPhoto().isEmpty()) {
                 setDialogPhotos(Integer.valueOf(dialogModel.getPhoto()), dialogModel);
+            }
         }
 
     }
@@ -163,8 +164,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private void setUserPhotoId(Integer lastUserId, DialogModel dialog) {
         if (queryBuilder.isUserExist(lastUserId)) {
             Integer blobId = queryBuilder.getUserBlobId(lastUserId);
-            if (blobId != null)
+            if (blobId != null) {
                 setDialogPhotos(blobId, dialog);
+            }
         } else {
             getUserByIdUseCase.setId(lastUserId);
             getUserByIdUseCase.execute(new Subscriber<UserModel>() {
@@ -180,8 +182,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
                 @Override
                 public void onNext(UserModel userModel) {
-                    if(userModel.getBlobId() != null)
+                    if (userModel.getBlobId() != null) {
                         setDialogPhotos(userModel.getBlobId(), dialog);
+                    }
                 }
             });
         }
@@ -192,39 +195,43 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         Integer occupantId = null;
         List<Integer> users = dialogModel.getOccupantsIds();
         for (Integer i : users) {
-            if (i != currentUser)
+            if (i != currentUser) {
                 occupantId = i;
+            }
         }
         return occupantId;
     }
 
-    public void onDialogsUpdated(){
+    public void onDialogsUpdated() {
         getDialogsFromDao();
     }
 
-    public void refreshDialogsInfo(){
-        if (!BizareChatApp.getInstance().isNetworkConnected()){
+    public void refreshDialogsInfo() {
+        if (!BizareChatApp.getInstance().isNetworkConnected()) {
             return;
         }
 
         unreadMessagesCountUseCase.execute(new Subscriber<Map<String, Integer>>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 getViewState().stopRefreshing();
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(Map<String, Integer> response) {
-                if(response.size() > 1){
+            @Override
+            public void onNext(Map<String, Integer> response) {
+                if (response.size() > 1) {
                     response.remove("total");
                     StringBuilder builder = new StringBuilder();
-                    for(String dialogId : response.keySet()){
+                    for (String dialogId : response.keySet()) {
                         builder.append(dialogId).append(",");
                     }
-                    builder.deleteCharAt(builder.length()-1);
+                    builder.deleteCharAt(builder.length() - 1);
                     getDialogInfo(builder.toString());
                 } else {
                     getViewState().stopRefreshing();
@@ -233,32 +240,35 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         });
     }
 
-    private void getDialogInfo(String dialogsIds){
+    private void getDialogInfo(String dialogsIds) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("_id[in]", dialogsIds);
         allDialogsUseCase.setParameters(parameters);
         allDialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 getViewState().stopRefreshing();
                 Log.e(TAG, e.getMessage(), e);
             }
 
-            @Override public void onNext(AllDialogsResponse response) {
-                for(DialogModel dialog : response.getDialogModels()){
+            @Override
+            public void onNext(AllDialogsResponse response) {
+                for (DialogModel dialog : response.getDialogModels()) {
                     boolean replaced = false;
-                    for(int i = 0; i < dialogs.size(); i++){
-                        if(dialog.getDialogId().equals(dialogs.get(i).getDialogId())){
+                    for (int i = 0; i < dialogs.size(); i++) {
+                        if (dialog.getDialogId().equals(dialogs.get(i).getDialogId())) {
                             dialogs.set(i, dialog);
                             adapter.notifyItemChanged(i);
                             replaced = true;
                             break;
                         }
                     }
-                    if(!replaced){
+                    if (!replaced) {
                         dialogs.add(dialog);
                         Collections.sort(dialogs, new ComparatorDefault());
                         adapter.notifyItemInserted(dialogs.indexOf(dialog));
@@ -270,7 +280,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         });
     }
 
-    public void onDialogClick(int position){
+    public void onDialogClick(int position) {
         DialogModel dialog = dialogs.get(position);
         dialog.setUnreadMessagesCount(0);
         adapter.notifyItemChanged(position);

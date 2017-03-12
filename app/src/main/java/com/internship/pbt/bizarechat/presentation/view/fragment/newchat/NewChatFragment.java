@@ -59,12 +59,25 @@ public class NewChatFragment extends MvpAppCompatFragment implements
     private static final String CHAT_ROOM = "chat_room";
     private final static String PRIVATE_DIALOGS_FR_TAG = "privateDialogsFragment";
     private final static String PUBLIC_DIALOGS_FR_TAG = "publicDialogsFragment";
-    @InjectPresenter
-    NewChatPresenterImpl presenter;
-
     private static final int DEVICE_CAMERA = 0;
     private static final int PHOTO_GALLERY = 1;
+    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
+    @InjectPresenter
+    NewChatPresenterImpl presenter;
     private ProgressBar mProgressBar;
+    private LinearLayoutManager layoutManager;
+    private TextInputLayout chatNameInputLayout;
+    private TextInputEditText chatNameEditText;
+    private CircleImageView chatPhoto;
+    private AppCompatRadioButton publicRadioButton;
+    private AppCompatRadioButton privateRadioButton;
+    private RecyclerView recyclerView;
+    private Button createButton;
+    private TextView toolbarTitle;
+    private TextView membersTitle;
+    private TSnackbar connProblemSnack;
+    private boolean loading = true;
+    private int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @ProvidePresenter
     NewChatPresenterImpl provideNewChatPresenter() {
@@ -82,27 +95,10 @@ public class NewChatFragment extends MvpAppCompatFragment implements
         );
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    private LinearLayoutManager layoutManager;
-    private TextInputLayout chatNameInputLayout;
-    private TextInputEditText chatNameEditText;
-    private CircleImageView chatPhoto;
-    private AppCompatRadioButton publicRadioButton;
-    private AppCompatRadioButton privateRadioButton;
-    private RecyclerView recyclerView;
-    private Button createButton;
-    private TextView toolbarTitle;
-    private TextView membersTitle;
-    private TSnackbar connProblemSnack;
-
-    private boolean loading = true;
-    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
-    private int pastVisibleItems, visibleItemCount, totalItemCount;
 
     @Nullable
     @Override

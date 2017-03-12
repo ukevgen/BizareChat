@@ -71,8 +71,8 @@ public class MessageModel {
 
     @Generated(hash = 469757593)
     public MessageModel(String messageId, String createdAt, String updatedAt, List<Object> attachments,
-            List<Integer> readIds, List<Integer> deliveredIds, String chatDialogId, long dateSent,
-            String message, Integer recipientId, Integer senderId, Integer read) {
+                        List<Integer> readIds, List<Integer> deliveredIds, String chatDialogId, long dateSent,
+                        String message, Integer recipientId, Integer senderId, Integer read) {
         this.messageId = messageId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -190,15 +190,18 @@ public class MessageModel {
     public static class OccupantsIdsConverter implements PropertyConverter<List<Integer>, String> {
         @Override
         public List<Integer> convertToEntityProperty(String databaseValue) {
-            if(databaseValue == null)
+            if (databaseValue == null) {
                 return null;
+            }
 
             List<Integer> result = new ArrayList<>();
-            databaseValue = databaseValue.substring(1, databaseValue.length()-1);
+            databaseValue = databaseValue.substring(1, databaseValue.length() - 1);
 
-            if(databaseValue.isEmpty()) return result;
+            if (databaseValue.isEmpty()) {
+                return result;
+            }
 
-            for(String entry : databaseValue.split("\\s*,\\s*")){
+            for (String entry : databaseValue.split("\\s*,\\s*")) {
                 result.add(Integer.parseInt(entry));
             }
 

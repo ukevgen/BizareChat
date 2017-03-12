@@ -10,14 +10,15 @@ import java.io.IOException;
 import retrofit2.adapter.rxjava.HttpException;
 
 public class ErrorMessageFactory {
-    private ErrorMessageFactory(){}
+    private ErrorMessageFactory() {
+    }
 
-    public static String createMessageOnRegistration(Context context, Throwable throwable){
+    public static String createMessageOnRegistration(Context context, Throwable throwable) {
         String message = "Unknown Error";
-        if(throwable instanceof HttpException){
-            HttpException httpException = (HttpException)throwable;
+        if (throwable instanceof HttpException) {
+            HttpException httpException = (HttpException) throwable;
             int code = httpException.code();
-            switch (code){
+            switch (code) {
                 case 400:
                     message = context.getString(R.string.malformed_request_parameters);
                     break;
@@ -37,19 +38,19 @@ public class ErrorMessageFactory {
                     message = "UNKNOWN. CODE " + code;
                     break;
             }
-        } else if(throwable instanceof IOException){
+        } else if (throwable instanceof IOException) {
             message = context.getString(R.string.message_no_connection);
         }
 
         return message;
     }
 
-    public static String createMessageOnLogin(Context context, Throwable throwable){
+    public static String createMessageOnLogin(Context context, Throwable throwable) {
         String message = "Unknown Error";
-        if(throwable instanceof HttpException){
-            HttpException httpException = (HttpException)throwable;
+        if (throwable instanceof HttpException) {
+            HttpException httpException = (HttpException) throwable;
             int code = httpException.code();
-            switch (code){
+            switch (code) {
                 case 400:
                     message = context.getString(R.string.malformed_request_parameters);
                     break;
@@ -65,9 +66,9 @@ public class ErrorMessageFactory {
                 default:
                     break;
             }
-        } else if(throwable instanceof IOException){
+        } else if (throwable instanceof IOException) {
             message = context.getString(R.string.message_no_connection);
-        } else if(throwable instanceof IllegalStateException){
+        } else if (throwable instanceof IllegalStateException) {
             message = context.getString(R.string.invalid_login_or_password);
         }
 

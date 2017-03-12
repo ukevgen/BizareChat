@@ -46,10 +46,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class QuickbloxPrivateXmppConnection
         implements ConnectionListener, ChatMessageListener, ChatManagerListener, MessageListener {
-    private volatile boolean connected = false;
     private static final String TAG = QuickbloxPrivateXmppConnection.class.getSimpleName();
     private static volatile QuickbloxPrivateXmppConnection INSTANCE;
-
+    private volatile boolean connected = false;
     private XMPPTCPConnection privateChatConnection;
     private WeakReference<BizareChatMessageService> messageService;
     private ConcurrentLinkedQueue<Message> offlineMessages;
@@ -77,7 +76,7 @@ public final class QuickbloxPrivateXmppConnection
 
     public void sendDisplayedReceipt(String receiverJid, String stanzaId, String dialog_id) {
         Chat chat;
-        if((chat = privateChats.get(receiverJid)) == null) {
+        if ((chat = privateChats.get(receiverJid)) == null) {
             chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
             privateChats.put(receiverJid, chat);
         }
@@ -101,7 +100,7 @@ public final class QuickbloxPrivateXmppConnection
 
     public void sendReceivedReceipt(String receiverJid, String stanzaId, String dialog_id) {
         Chat chat;
-        if((chat = privateChats.get(receiverJid)) == null) {
+        if ((chat = privateChats.get(receiverJid)) == null) {
             chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
             privateChats.put(receiverJid, chat);
         }
@@ -127,7 +126,7 @@ public final class QuickbloxPrivateXmppConnection
         Log.d(TAG, "Sending message to : " + receiverJid);
 
         Chat chat;
-        if((chat = privateChats.get(receiverJid)) == null) {
+        if ((chat = privateChats.get(receiverJid)) == null) {
             chat = ChatManager.getInstanceFor(privateChatConnection).createChat(receiverJid, this);
             privateChats.put(receiverJid, chat);
         }
@@ -154,7 +153,7 @@ public final class QuickbloxPrivateXmppConnection
         Log.d(TAG, "Sending message to : " + chatJid);
 
         MultiUserChat mucChat;
-        if((mucChat = publicChats.get(chatJid)) == null) {
+        if ((mucChat = publicChats.get(chatJid)) == null) {
             mucChat = MultiUserChatManager.getInstanceFor(privateChatConnection).getMultiUserChat(chatJid);
             mucChat.addMessageListener(this);
             publicChats.put(chatJid, mucChat);
@@ -171,7 +170,7 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            if(!mucChat.isJoined()) {
+            if (!mucChat.isJoined()) {
                 DiscussionHistory history = new DiscussionHistory();
                 history.setMaxStanzas(20);
                 mucChat.join(
@@ -183,18 +182,18 @@ public final class QuickbloxPrivateXmppConnection
             mucChat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
             offlineMessages.add(message);
-        } catch (XMPPException | SmackException ex){
+        } catch (XMPPException | SmackException ex) {
             Log.e(TAG, ex.getMessage(), ex);
         }
     }
 
-    public void leavePublicChat(String chatJid){
+    public void leavePublicChat(String chatJid) {
         MultiUserChat muc = publicChats.get(chatJid);
         try {
             if (publicChats.get(chatJid) != null) {
                 muc.leave();
             }
-        } catch (SmackException.NotConnectedException ex){
+        } catch (SmackException.NotConnectedException ex) {
             publicChatToLeave = chatJid;
         }
     }
@@ -206,7 +205,9 @@ public final class QuickbloxPrivateXmppConnection
 
     @Override
     public void processMessage(Chat chat, Message message) {
-        if(message.getBody() == null) return;
+        if (message.getBody() == null) {
+            return;
+        }
 
         if (message.getType() == Message.Type.groupchat) {
             messageService.get().processPublicMessage(message);
@@ -216,8 +217,9 @@ public final class QuickbloxPrivateXmppConnection
         messageService.get().processPrivateMessage(message);
     }
 
-    @Override public void chatCreated(Chat chat, boolean createdLocally) {
-        if(!privateChats.containsKey(chat.getParticipant())){
+    @Override
+    public void chatCreated(Chat chat, boolean createdLocally) {
+        if (!privateChats.containsKey(chat.getParticipant())) {
             chat.addMessageListener(this);
             privateChats.put(chat.getParticipant().split("/")[0], chat);
         }
@@ -230,8 +232,9 @@ public final class QuickbloxPrivateXmppConnection
     }
 
     public void disconnect() {
-        if (privateChatConnection != null)
+        if (privateChatConnection != null) {
             privateChatConnection.disconnect();
+        }
         privateChatConnection = null;
     }
 
@@ -267,13 +270,13 @@ public final class QuickbloxPrivateXmppConnection
             JobExecutor.getInstance().execute(() -> {
                 while (!offlineMessages.isEmpty()) {
                     try {
-                        if(!publicChatToLeave.isEmpty()){
+                        if (!publicChatToLeave.isEmpty()) {
                             publicChats.get(publicChatToLeave).leave();
                             publicChatToLeave = "";
                         }
                         Message message = offlineMessages.peek();
                         privateChatConnection.sendStanza(message);
-                        if(message.getType() == Message.Type.groupchat) {
+                        if (message.getType() == Message.Type.groupchat) {
                             EventBus.getDefault().post(new PublicMessageSentEvent(message.getStanzaId()));
 
                             MessageModel messageModel = BizareChatApp.getInstance().getDaoSession().getMessageModelDao()

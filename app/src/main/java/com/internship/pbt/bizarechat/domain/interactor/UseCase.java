@@ -12,7 +12,8 @@ public abstract class UseCase<T> {
 
     private Subscription mSubscription = Subscriptions.empty();
 
-    UseCase() {}
+    UseCase() {
+    }
 
     protected abstract Observable<T> buildUseCaseObservable();
 
@@ -26,8 +27,9 @@ public abstract class UseCase<T> {
     }
 
     public void unsubscribe() {
-        if (!mSubscription.isUnsubscribed())
+        if (!mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
+        }
     }
 
 

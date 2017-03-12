@@ -2,7 +2,7 @@ package com.internship.pbt.bizarechat.data.net;
 
 
 /**
-    This class is the only place to store all API constants
+ * This class is the only place to store all API constants
  */
 public class ApiConstants {
     public static final String APP_ID = "52565";
@@ -20,7 +20,7 @@ public class ApiConstants {
     public static final String AMAZON_END_POINT = "https://qbprod.s3.amazonaws.com/";
     public static final String AMAZON_CONTENT_TYPE = "Content-Type";
     public static final String AMAZON_EXPIRES = "Expires";
-    public static final String AMAZON_ACL= "acl";
+    public static final String AMAZON_ACL = "acl";
     public static final String AMAZON_KEY = "key";
     public static final String AMAZON_POLICY = "policy";
     public static final String AMAZON_ACTION_STATUS = "success_action_status";

@@ -54,10 +54,11 @@ public class EditChatRecyclerViewAdapter extends RecyclerView.Adapter<EditChatRe
     public void onBindViewHolder(EditChatRecyclerViewAdapter.UserHolder holder, int position) {
         UserModel user = users.get(position);
         Bitmap photo = usersPhotos.get(user.getUserId());
-        if(photo != null)
+        if (photo != null) {
             holder.photo.setImageBitmap(photo);
-        else
+        } else {
             holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
+        }
         holder.name.setText(user.getFullName());
         boolean isChecked = checkedUsers.contains(user.getUserId());
         holder.userCheckBox.setChecked(isChecked);
@@ -68,38 +69,37 @@ public class EditChatRecyclerViewAdapter extends RecyclerView.Adapter<EditChatRe
         return users.size();
     }
 
-    class UserHolder extends RecyclerView.ViewHolder{
+    public interface OnCheckBoxClickListener {
+
+        void onCheckBoxClickPush(Long id);
+
+        void onCheckBoxClickPull(Long id);
+    }
+
+    class UserHolder extends RecyclerView.ViewHolder {
         private CircleImageView photo;
         private TextView name;
         private AppCompatCheckBox userCheckBox;
 
         public UserHolder(View itemView) {
             super(itemView);
-            photo = (CircleImageView)itemView.findViewById(R.id.new_chat_member_image);
-            name = (TextView)itemView.findViewById(R.id.new_chat_member_name);
-            userCheckBox = (AppCompatCheckBox)itemView.findViewById(R.id.new_chat_member_checkbox);
+            photo = (CircleImageView) itemView.findViewById(R.id.new_chat_member_image);
+            name = (TextView) itemView.findViewById(R.id.new_chat_member_name);
+            userCheckBox = (AppCompatCheckBox) itemView.findViewById(R.id.new_chat_member_checkbox);
             userCheckBox.setOnCheckedChangeListener(
                     (buttonView, isChecked) -> {
                         long userId = users.get(getAdapterPosition()).getUserId();
-                        if(isChecked) {
+                        if (isChecked) {
                             checkedUsers.add(userId);
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name_checked));
                             listener.onCheckBoxClickPush(userId);
-                        }
-                        else {
+                        } else {
                             checkedUsers.remove(userId);
                             name.setTextColor(context.getResources().getColor(R.color.new_chat_member_name));
                             listener.onCheckBoxClickPull(userId);
                         }
                     });
         }
-    }
-
-    public interface OnCheckBoxClickListener{
-
-        void onCheckBoxClickPush(Long id);
-
-        void onCheckBoxClickPull(Long id);
     }
 }
 

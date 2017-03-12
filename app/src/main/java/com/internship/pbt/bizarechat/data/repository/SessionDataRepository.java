@@ -36,7 +36,9 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<Session> getSession() {
         int nonce = randomizer.nextInt();
-        if (nonce < NIL) nonce = -nonce;
+        if (nonce < NIL) {
+            nonce = -nonce;
+        }
         long timestamp = System.currentTimeMillis() / MILSECONDS;
         String signature = HmacSha1Signature.calculateSignature(nonce, timestamp);
 
@@ -56,7 +58,9 @@ public class SessionDataRepository implements SessionRepository {
     public Observable<Session> getSessionWithAuth(UserRequestModel requestModel) {
         Log.d("321", "get SessionWithAuth()");
         int nonce = randomizer.nextInt();
-        if (nonce < NIL) nonce = -nonce;
+        if (nonce < NIL) {
+            nonce = -nonce;
+        }
         long timestamp = System.currentTimeMillis() / MILSECONDS;
         String signature = HmacSha1Signature.calculateSignatureWithAuth(
                 requestModel.getEmail(), requestModel.getPassword(), nonce, timestamp);

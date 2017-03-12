@@ -175,7 +175,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
-        if (mRegisterView != null) mRegisterView.showLoading();
+        if (mRegisterView != null) {
+            mRegisterView.showLoading();
+        }
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
         if (informationOnCheck.getFullName().trim().isEmpty()) {
@@ -208,7 +210,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             currentUser.setCurrentPasswrod(informationOnCheck.getPassword());
             this.registrationRequest(informationOnCheck);
         } else {
-            if (mRegisterView != null) mRegisterView.hideLoading();
+            if (mRegisterView != null) {
+                mRegisterView.hideLoading();
+            }
         }
     }
 
@@ -247,8 +251,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
         userM.setFacebookId(currentUser.getCurrentFacebookId());
 
-        if (signUpRequestM == null)
+        if (signUpRequestM == null) {
             signUpRequestM = new SignUpRequestM();
+        }
         signUpRequestM.setUser(userM);
 
         signUpUseCase = new SignUpUseCase(sessionRepository, signUpRequestM);
@@ -306,16 +311,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void stop() {
-        if (uploadFileUseCase != null)
+        if (uploadFileUseCase != null) {
             uploadFileUseCase.unsubscribe();
-        if (loginUseCase != null)
+        }
+        if (loginUseCase != null) {
             loginUseCase.unsubscribe();
+        }
     }
 
     @Override
     public void destroy() {
-        if (mRegisterView != null)
+        if (mRegisterView != null) {
             mRegisterView = null;
+        }
     }
 
     private void authorize() {
@@ -326,10 +334,11 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-                if (fileToUpload != null)
+                if (fileToUpload != null) {
                     uploadAvatar();
-                else
+                } else {
                     onRegistrationSuccess();
+                }
             }
 
             @Override
