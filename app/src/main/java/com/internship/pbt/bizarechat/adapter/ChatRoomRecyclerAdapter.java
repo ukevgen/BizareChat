@@ -28,6 +28,7 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
     private Map<Long, String> userNames;
     private int self = Integer.MAX_VALUE;
     private Context context;
+    private int position;
 
     public ChatRoomRecyclerAdapter(List<MessageModel> messageList,
                                    Map<Long, Bitmap> occupantsPhotos,
@@ -39,6 +40,11 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
 
     public void setMessageList(List<MessageModel> messageList) {
         this.messageList = messageList;
+    }
+
+    public String getPreviousMesageDay(int position) {
+        long date = messageList.get(position).getDateSent();
+        return Converter.getLastMessageDay(date);
     }
 
     public void setOccupantsPhotos(Map<Long, Bitmap> occupantsPhotos) {
@@ -71,9 +77,11 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         return position;
     }
 
+
     @Override
     public void onBindViewHolder(MessageHolder holder, int position) {
         MessageModel message = messageList.get(position);
+        this.position = position;
         Bitmap photo = occupantsPhotos.get(message.getSenderId().longValue());
         holder.userName.setText(userNames.get(message.getSenderId().longValue()));
         holder.messageText.setText(message.getMessage());
@@ -149,6 +157,10 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
             userName = (TextView) view.findViewById(R.id.message_user_name);
             time = (TextView) view.findViewById(R.id.message_time);
             deliveryStatus = (ImageView) view.findViewById(R.id.message_status);
+        }
+
+        public TextView getTime() {
+            return time;
         }
     }
 }

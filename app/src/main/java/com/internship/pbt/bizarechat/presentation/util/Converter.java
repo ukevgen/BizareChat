@@ -22,10 +22,10 @@ import java.util.Set;
 import id.zelory.compressor.Compressor;
 
 public class Converter {
-    private static final String YESTERDAY = "Yestarday";
+    private static final String YESTERDAY = "Yesterday";
     private static final String TODAY = "Today";
     private static SimpleDateFormat messageTimeFormat = new SimpleDateFormat("HH:mm");
-    private static SimpleDateFormat messageDateFormat = new SimpleDateFormat("dd/MM/yy");
+    private static SimpleDateFormat messageDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     private Context context;
 
