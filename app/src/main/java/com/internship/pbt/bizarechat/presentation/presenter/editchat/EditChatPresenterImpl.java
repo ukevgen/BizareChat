@@ -78,6 +78,13 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
         this.adapter = new EditChatRecyclerViewAdapter(users, usersPhotos, checkedUsers);
     }
 
+    public String getDialogId() {
+        return dialogId;
+    }
+
+    public void setDialogId(String dialogId) {
+        this.dialogId = dialogId;
+    }
 
     @Override
     public void resume() {
@@ -213,7 +220,6 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
                     @Override
                     public void onNext(DialogUpdateResponseModel responseModel) {
-
                     }
                 });
             } else {

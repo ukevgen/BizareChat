@@ -228,6 +228,10 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     @Override
     public void showEditChat() {
         Fragment fragment = new EditChatFragment();
+        Bundle args = new Bundle();
+        args.putString(DIALOG_NAME_BUNDLE_KEY, presenter.getChatName());
+        args.putString(DIALOG_ID_BUNDLE_KEY, presenter.getDialogId());
+        fragment.setArguments(args);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_screen_container, fragment)
@@ -242,6 +246,6 @@ public class ChatRoomFragment extends MvpAppCompatFragment
 
     @Override
     public void showToLargeMessage() {
-        Toast.makeText(getContext(), R.string.to_large_message, Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(), R.string.to_large_message, Toast.LENGTH_SHORT).show();
     }
 }

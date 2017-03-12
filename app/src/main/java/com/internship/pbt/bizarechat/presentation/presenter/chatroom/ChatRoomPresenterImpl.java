@@ -72,6 +72,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         adapter = new ChatRoomRecyclerAdapter(messages, occupantsPhotos, userNames);
     }
 
+
+
     public void init() {
         getViewState().showLoading();
         initUsers();
@@ -186,6 +188,10 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     public void setDialogId(String dialogId) {
         this.dialogId = dialogId;
+    }
+
+    public String getDialogId() {
+        return dialogId;
     }
 
     public void setDialogRoomJid(String dialogRoomJid) {
