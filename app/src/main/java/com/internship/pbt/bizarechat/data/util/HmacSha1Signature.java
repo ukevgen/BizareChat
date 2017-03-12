@@ -1,7 +1,5 @@
 package com.internship.pbt.bizarechat.data.util;
 
-import android.util.Log;
-
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.logs.Logger;
 
@@ -58,13 +56,9 @@ public class HmacSha1Signature {
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
-<<<<<<< HEAD
+
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
             Logger.logExceptionToFabric(ex);
-=======
-        } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
->>>>>>> refactoring
-            Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
         }
         return null;
     }
