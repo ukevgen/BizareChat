@@ -22,6 +22,7 @@ import com.internship.pbt.bizarechat.domain.model.UserLoginResponse;
 import com.internship.pbt.bizarechat.domain.model.signup.ResponseSignUpModel;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
 import com.internship.pbt.bizarechat.domain.repository.SessionRepository;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.exception.ErrorMessageFactory;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.model.FacebookLinkInform;
@@ -92,7 +93,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         mRegisterView.showErrorInvalidEmail();
     }
 
-    public void showErrorEmptyFullName(){
+    public void showErrorEmptyFullName() {
         mRegisterView.showErrorEmptyFullName();
     }
 
@@ -155,7 +156,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
                 @Override
                 public void onError(Throwable e) {
-                    e.printStackTrace();
+
+                    Logger.logExceptionToFabric(e);
                     if (mRegisterView != null) {
                         String message = ErrorMessageFactory.
                                 createMessageOnLogin(mRegisterView.getContextActivity(), e);
@@ -175,10 +177,12 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void validateInformation(SignUpUserM informationOnCheck, String passwordConf) {
-        if (mRegisterView != null) mRegisterView.showLoading();
+        if (mRegisterView != null) {
+            mRegisterView.showLoading();
+        }
         this.hideErrorsInvalid();
         boolean isValidationSuccess = true;
-        if(informationOnCheck.getFullName().trim().isEmpty()){
+        if (informationOnCheck.getFullName().trim().isEmpty()) {
             isValidationSuccess = false;
             this.showErrorEmptyFullName();
         }
@@ -208,7 +212,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
             currentUser.setCurrentPasswrod(informationOnCheck.getPassword());
             this.registrationRequest(informationOnCheck);
         } else {
-            if (mRegisterView != null) mRegisterView.hideLoading();
+            if (mRegisterView != null) {
+                mRegisterView.hideLoading();
+            }
         }
     }
 
@@ -247,8 +253,9 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         userM.setPhone(mValidator.toApiPhoneFormat(userM.getPhone()));
         userM.setFacebookId(currentUser.getCurrentFacebookId());
 
-        if (signUpRequestM == null)
+        if (signUpRequestM == null) {
             signUpRequestM = new SignUpRequestM();
+        }
         signUpRequestM.setUser(userM);
 
         signUpUseCase = new SignUpUseCase(sessionRepository, signUpRequestM);
@@ -259,7 +266,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, e.toString());
+                Logger.logExceptionToFabric(e);
                 if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
@@ -306,16 +313,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void stop() {
-        if (uploadFileUseCase != null)
+        if (uploadFileUseCase != null) {
             uploadFileUseCase.unsubscribe();
-        if (loginUseCase != null)
+        }
+        if (loginUseCase != null) {
             loginUseCase.unsubscribe();
+        }
     }
 
     @Override
     public void destroy() {
-        if (mRegisterView != null)
+        if (mRegisterView != null) {
             mRegisterView = null;
+        }
     }
 
     private void authorize() {
@@ -326,15 +336,16 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         loginUseCase.execute(new Subscriber<UserLoginResponse>() {
             @Override
             public void onCompleted() {
-                if (fileToUpload != null)
+                if (fileToUpload != null) {
                     uploadAvatar();
-                else
+                } else {
                     onRegistrationSuccess();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
                 if (mRegisterView != null) {
                     mRegisterView.hideLoading();
                     mRegisterView.showError(ErrorMessageFactory.
@@ -344,6 +355,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onNext(UserLoginResponse session) {
+                currentUser.setUserLogin(session.getLogin());
             }
         });
     }
@@ -373,6 +385,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
             @Override
             public void onError(FacebookException error) {
+                Logger.logExceptionToFabric(error);
             }
         });
     }

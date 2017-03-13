@@ -26,16 +26,18 @@ public class UsersSearchFilter extends Filter {
         filteredUserList.clear();
         FilterResults results = new FilterResults();
 
-        if(TextUtils.isEmpty(constraint)){
+        if (TextUtils.isEmpty(constraint)) {
             results.values = userList;
             results.count = userList.size();
             return results;
         }
 
-        for(UserModel user : userList){
-            if(user.getFullName() == null) continue;
+        for (UserModel user : userList) {
+            if (user.getFullName() == null) {
+                continue;
+            }
 
-            if(user.getFullName().toLowerCase().contains(constraint.toString().toLowerCase())){
+            if (user.getFullName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                 filteredUserList.add(user);
             }
         }
@@ -46,7 +48,7 @@ public class UsersSearchFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        adapter.setUsers((List<UserModel>)results.values);
+        adapter.setUsers((List<UserModel>) results.values);
         adapter.notifyDataSetChanged();
     }
 }

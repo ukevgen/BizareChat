@@ -48,16 +48,26 @@ public class CacheSharedPreferences {
         mEditor.apply();
     }
 
+    public void putUserLogin(String login) {
+        mEditor.putString(CacheConstants.CURRENT_ACCOUNT_LOGIN, login);
+        mEditor.apply();
+    }
+
+    public String getUserLogin() {
+        return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_LOGIN, null);
+    }
+
     public String getStringAvatar() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_AVATAR_STRING, null);
     }
 
     public Long getAccountAvatarBlobId() {
         long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_AVATAR, -1);
-        if (id == -1)
+        if (id == -1) {
             return null;
-        else
+        } else {
             return id;
+        }
     }
 
     public void putIsUserAuthorized(boolean status) {
@@ -94,10 +104,11 @@ public class CacheSharedPreferences {
 
     public Long getCurrentFacebookId() {
         Long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_FACEBOOK_ID, -1);
-        if (id == -1)
+        if (id == -1) {
             return null;
-        else
+        } else {
             return id;
+        }
     }
 
     public void putUserId(Long id) {
@@ -107,20 +118,35 @@ public class CacheSharedPreferences {
 
     public Long getUserId() {
         long id = mSharedPreferences.getLong(CacheConstants.CURRENT_ACCOUNT_ID, -1);
-        if (id == -1)
+        if (id == -1) {
             return null;
-        else
+        } else {
             return id;
+        }
     }
 
-    public void putFullName(String fullName){
+
+    public int getUserIntId() {
+        int id = mSharedPreferences.getInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, -1);
+        return id;
+    }
+
+
+    public void putUserId(Integer id) {
+        mEditor.putInt(CacheConstants.CURRENT_ACCOUNT_ID_IN_INT, id);
+        mEditor.apply();
+    }
+
+
+    public void putFullName(String fullName) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, fullName);
         mEditor.apply();
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FULL_NAME, null);
     }
+
 
     public String getFirebaseToken() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_FIREBASE_TOKEN, null);
@@ -163,21 +189,21 @@ public class CacheSharedPreferences {
         return mSharedPreferences.getBoolean(CacheConstants.CURRENT_ACCOUNT_IS_NOTIFICATIONS_ON, true);
     }
 
-    public void putPhone(String phone){
+    public void putPhone(String phone) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_PHONE, phone);
         mEditor.apply();
     }
 
-    public String getPhone(){
+    public String getPhone() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_PHONE, null);
     }
 
-    public void putWebsite(String website){
+    public void putWebsite(String website) {
         mEditor.putString(CacheConstants.CURRENT_ACCOUNT_WEBSITE, website);
         mEditor.apply();
     }
 
-    public String getWebsite(){
+    public String getWebsite() {
         return mSharedPreferences.getString(CacheConstants.CURRENT_ACCOUNT_WEBSITE, null);
     }
 }

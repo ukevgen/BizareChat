@@ -41,7 +41,7 @@ public class CreateSubscriptionRequest {
         this.device = device;
     }
 
-    public static class PushToken{
+    public static class PushToken {
         @SerializedName("environment")
         @Expose
         private String environment;
@@ -67,7 +67,7 @@ public class CreateSubscriptionRequest {
         }
     }
 
-    public static class Device{
+    public static class Device {
         @SerializedName("platform")
         @Expose
         private String platform;

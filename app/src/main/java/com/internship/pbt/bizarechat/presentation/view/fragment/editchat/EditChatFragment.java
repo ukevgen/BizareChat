@@ -7,6 +7,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.adapter.EditChatRecyclerViewAdapter;
 import com.internship.pbt.bizarechat.data.cache.CacheUsersPhotos;
+import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.repository.ContentDataRepository;
 import com.internship.pbt.bizarechat.data.repository.DialogsDataRepository;
 import com.internship.pbt.bizarechat.data.repository.UserDataRepository;
@@ -43,9 +46,11 @@ import static android.app.Activity.RESULT_OK;
 public class EditChatFragment extends MvpAppCompatFragment implements EditChatView, View.OnClickListener,
         EditChatRecyclerViewAdapter.OnCheckBoxClickListener {
 
+    public static final String DIALOG_NAME_BUNDLE_KEY = "dialogName";
+    public static final String DIALOG_ID_BUNDLE_KEY = "dialogId";
+    private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
-
     @InjectPresenter
     EditChatPresenterImpl presenter;
 
@@ -69,8 +74,8 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
                         new UserDataRepository(BizareChatApp.getInstance().getUserService())),
                 new GetPhotoUseCase(
                         new ContentDataRepository(
-                        BizareChatApp.getInstance().getContentService(),
-                        CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
+                                BizareChatApp.getInstance().getContentService(),
+                                CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))),
                 new ContentDataRepository(
                         BizareChatApp.getInstance().getContentService(),
                         BizareChatApp.getInstance().getCacheUsersPhotos()),
@@ -84,10 +89,14 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
         View view = inflater.inflate(R.layout.fragment_edit_chat, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.edit_chat_members_container);
         chatImageView = (CircleImageView) view.findViewById(R.id.edit_chat_image);
-        chatNameEditText = (TextInputEditText) view.findViewById(R.id.new_chat_name_edit); // TODO insert chatName by default
+        chatNameEditText = (TextInputEditText) view.findViewById(R.id.edit_chat_name_edit);
+        chatNameEditText.setText(getArguments().getString(DIALOG_NAME_BUNDLE_KEY));
         saveButton = (Button) view.findViewById(R.id.edit_chat_button_create);
         layoutManager = new LinearLayoutManager(getActivity());
-
+        saveButton.setOnClickListener(this);
+        chatImageView.setOnClickListener(this);
+        presenter.setDialogId(getArguments().getString(DIALOG_ID_BUNDLE_KEY));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -126,13 +135,28 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
     @Override
     public void showOnSaveChangesSuccessfully() {
         Snackbar.make(getView(), getString(R.string.successfully_edited),
-                Snackbar.LENGTH_SHORT);
+                Snackbar.LENGTH_SHORT).show();
+        String tag = CHAT_ROOM_FR_TAG + presenter.getDialogId();
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+        if (fragment != null) {
+            transaction.replace(R.id.main_screen_container, fragment, tag)
+                    .commit();
+            return;
+        }
+
     }
 
     @Override
     public void showTooLargePicture() {
         Snackbar.make(getView(), getText(R.string.too_large_picture_please_select_anouther),
                 Snackbar.LENGTH_SHORT);
+    }
+
+    @Override
+    public void showChatRoom(DialogUpdateResponseModel dialogModel) {
     }
 
     @Override

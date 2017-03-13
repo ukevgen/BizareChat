@@ -87,7 +87,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.dialogs_swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dialogs_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         setHasOptionsMenu(true);
@@ -95,7 +95,8 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
         return view;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.loadDialogs();
         recyclerView.setAdapter(presenter.getAdapter());
@@ -148,7 +149,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void showChatRoom(DialogModel dialogModel){
+    public void showChatRoom(DialogModel dialogModel) {
         dialogClickListener.onPrivateDialogClick(dialogModel);
     }
 
@@ -158,7 +159,7 @@ public class PrivateDialogsFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void stopRefreshing(){
+    public void stopRefreshing() {
         swipeRefreshLayout.setRefreshing(false);
     }
 

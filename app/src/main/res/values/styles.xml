@@ -93,5 +93,4 @@
         <item name="android:layout_height">@dimen/forgot_password_height</item>
     </style>
 
-
 </resources>

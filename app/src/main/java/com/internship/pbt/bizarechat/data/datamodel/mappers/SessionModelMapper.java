@@ -1,4 +1,5 @@
 package com.internship.pbt.bizarechat.data.datamodel.mappers;
+
 import com.internship.pbt.bizarechat.data.datamodel.SessionModel;
 import com.internship.pbt.bizarechat.data.datamodel.response.SignInResponseModel;
 import com.internship.pbt.bizarechat.domain.model.Session;

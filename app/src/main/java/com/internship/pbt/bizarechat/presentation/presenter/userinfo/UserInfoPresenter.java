@@ -22,7 +22,7 @@ public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
         this.getDialog = getDialog;
     }
 
-    public boolean isCurrentUser(){
+    public boolean isCurrentUser() {
         return userId == CurrentUser.getInstance().getCurrentUserId();
     }
 
@@ -30,40 +30,45 @@ public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
         this.userId = userId;
     }
 
-    public void sendEmail(String email){
-        if(!isCurrentUser() && email != null && !email.isEmpty()){
+    public void sendEmail(String email) {
+        if (!isCurrentUser() && email != null && !email.isEmpty()) {
             getViewState().startSendEmail(email);
         }
     }
 
-    public void dialPhoneNumber(String phone){
-        if(!isCurrentUser() && phone != null && !phone.isEmpty()){
+    public void dialPhoneNumber(String phone) {
+        if (!isCurrentUser() && phone != null && !phone.isEmpty()) {
             getViewState().startDialPhoneNumber(phone);
         }
     }
 
-    public void openWebsite(String website){
-        if(!isCurrentUser() && website != null && !website.isEmpty()){
+    public void openWebsite(String website) {
+        if (!isCurrentUser() && website != null && !website.isEmpty()) {
             getViewState().startOpenWebsite(website);
         }
     }
 
-    public void startUserChat(){
-        if(isCurrentUser()) return;
+    public void startUserChat() {
+        if (isCurrentUser()) {
+            return;
+        }
 
         getViewState().showLoading();
         getDialog.setUserId(userId);
         getDialog.execute(new Subscriber<DialogModel>() {
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
 
             }
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
                 getViewState().hideLoading();
                 Log.d(TAG, e.getCause().getMessage(), e.getCause());
             }
 
-            @Override public void onNext(DialogModel dialog) {
+            @Override
+            public void onNext(DialogModel dialog) {
                 getViewState().hideLoading();
                 getViewState().showChatRoom(dialog);
             }

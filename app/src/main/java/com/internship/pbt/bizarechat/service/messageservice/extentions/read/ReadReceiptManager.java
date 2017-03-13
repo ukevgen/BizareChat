@@ -27,8 +27,8 @@ public class ReadReceiptManager extends Manager {
         ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(connection);
         sdm.addFeature(ReadReceipt.NAMESPACE);
         connection.addAsyncStanzaListener(packet -> {
-            ReadReceipt receipt = ReadReceipt.from((Message)packet);
-            for(ReceiptReceivedListener listener : receiptReceivedListeners){
+            ReadReceipt receipt = ReadReceipt.from((Message) packet);
+            for (ReceiptReceivedListener listener : receiptReceivedListeners) {
                 listener.onReceiptReceived(packet.getFrom(), packet.getTo(), receipt.getId(), packet);
             }
         }, MESSAGES_WITH_READ_RECEIPT);

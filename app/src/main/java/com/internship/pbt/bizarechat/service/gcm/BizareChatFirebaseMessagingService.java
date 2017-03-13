@@ -8,6 +8,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.internship.pbt.bizarechat.R;
 import com.internship.pbt.bizarechat.domain.events.GcmMessageReceivedEvent;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.view.activity.MainActivity;
 import com.internship.pbt.bizarechat.service.util.NotificationUtils;
 
@@ -25,8 +26,9 @@ public class BizareChatFirebaseMessagingService extends FirebaseMessagingService
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        if (remoteMessage == null)
+        if (remoteMessage == null) {
             return;
+        }
 
         if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
@@ -40,6 +42,7 @@ public class BizareChatFirebaseMessagingService extends FirebaseMessagingService
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
                 handleDataMessage(json);
             } catch (Exception e) {
+                Logger.logExceptionToFabric(e);
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
         }
@@ -69,8 +72,10 @@ public class BizareChatFirebaseMessagingService extends FirebaseMessagingService
                 showNotificationMessage(getApplicationContext(), message, resultIntent);
             }
         } catch (JSONException e) {
+            Logger.logExceptionToFabric(e);
             Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
+            Logger.logExceptionToFabric(e);
             Log.e(TAG, "Exception: " + e.getMessage());
         }
     }

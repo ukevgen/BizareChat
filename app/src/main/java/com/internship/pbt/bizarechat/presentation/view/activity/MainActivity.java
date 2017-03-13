@@ -91,22 +91,6 @@ public class MainActivity extends MvpAppCompatActivity implements
 
     @InjectPresenter
     MainPresenterImpl presenter;
-
-    @ProvidePresenter
-    MainPresenterImpl provideMainPresenter() {
-        return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
-                getInstance().getSessionService())),
-                new GetAllDialogsUseCase(
-                        new DialogsDataRepository(
-                                BizareChatApp.getInstance().getDialogsService(),
-                                BizareChatApp.getInstance().getDaoSession())),
-                BizareChatApp.getInstance().getDaoSession(),
-                new GetPhotoUseCase(
-                        new ContentDataRepository(
-                                BizareChatApp.getInstance().getContentService(),
-                                BizareChatApp.getInstance().getCacheUsersPhotos())));
-    }
-
     private RelativeLayout mLayout;
     private TextView mTextOnToolbar;
     private NavigationView mNavigationView;
@@ -125,9 +109,25 @@ public class MainActivity extends MvpAppCompatActivity implements
     private Converter converter;
     private CircleImageView drawerAvatar;
     private TextView drawerLogin;
+    private CurrentUser currentUser;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
+    }
+
+    @ProvidePresenter
+    MainPresenterImpl provideMainPresenter() {
+        return new MainPresenterImpl(new SignOutUseCase(new SessionDataRepository(BizareChatApp.
+                getInstance().getSessionService())),
+                new GetAllDialogsUseCase(
+                        new DialogsDataRepository(
+                                BizareChatApp.getInstance().getDialogsService(),
+                                BizareChatApp.getInstance().getDaoSession())),
+                BizareChatApp.getInstance().getDaoSession(),
+                new GetPhotoUseCase(
+                        new ContentDataRepository(
+                                BizareChatApp.getInstance().getContentService(),
+                                BizareChatApp.getInstance().getCacheUsersPhotos())));
     }
 
     @Override
@@ -141,12 +141,12 @@ public class MainActivity extends MvpAppCompatActivity implements
             presenter.updateDialogsDao();
         }
 
-        if(CurrentUser.getInstance().getStringAvatar() == null
-                && CurrentUser.getInstance().getAvatarBlobId() != null){
+        if (CurrentUser.getInstance().getStringAvatar() == null
+                && CurrentUser.getInstance().getAvatarBlobId() != null) {
             presenter.loadUserAvatar();
         }
 
-        if(!isMyServiceRunning(BizareChatMessageService.class)){
+        if (!isMyServiceRunning(BizareChatMessageService.class)) {
             startService(new Intent(this, BizareChatMessageService.class));
         }
 
@@ -158,14 +158,15 @@ public class MainActivity extends MvpAppCompatActivity implements
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setUserInformation();
-        if(!presenter.isLaunched()) {
+        if (!presenter.isLaunched()) {
             showPublicDialogs();
             presenter.setLaunched(true);
         }
 
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-            if(presenter.isPrivateDialogsOnScreen())
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            if (presenter.isPrivateDialogsOnScreen()) {
                 mTabLayout.getTabAt(1).select();
+            }
         }
     }
 
@@ -192,25 +193,33 @@ public class MainActivity extends MvpAppCompatActivity implements
 
         View headerView = mNavigationView.getHeaderView(0);
         headerView.findViewById(R.id.nav_header_root).setOnClickListener(this);
+        if (currentUser == null) {
+            currentUser = CurrentUser.getInstance();
+        }
 
         TextView email = (TextView) headerView.findViewById(R.id.header_email);
-        email.setText(CurrentUser.getInstance().getCurrentEmail());
+        if (currentUser.getCurrentEmail() != null) {
+            email.setText(currentUser.getCurrentEmail());
+        }
 
         drawerLogin = (TextView) headerView.findViewById(R.id.user_login);
         drawerLogin.setText(CurrentUser.getInstance().getFullName());
 
         drawerAvatar = (CircleImageView) headerView.findViewById(R.id.user_pic);
-        if (converter == null)
+        if (converter == null) {
             converter = new Converter(getApplicationContext());
+        }
+
         String s = CurrentUser.getInstance().getStringAvatar();
         Bitmap bitmap = converter.decodeBase64(s);
-        if (bitmap != null)
+        if (bitmap != null) {
             drawerAvatar.setImageBitmap(bitmap);
+        }
 
     }
 
     @Override
-    public void setAvatarImage(Bitmap image){
+    public void setAvatarImage(Bitmap image) {
         drawerAvatar.setImageBitmap(image);
     }
 
@@ -300,13 +309,17 @@ public class MainActivity extends MvpAppCompatActivity implements
             case R.id.settings:
                 presenter.navigateToSettingsScreen();
                 return true;
+            case R.id.invite_users:
+                presenter.inviteFriends();
+                break;
             default:
-                return false;
+                break;
         }
+        return false;
     }
 
     @Override
-    public void showSettingsScreen(){
+    public void showSettingsScreen() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_FR_TAG);
         if (fragment != null) {
@@ -339,7 +352,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void showUserInfo(){
+    public void showUserInfo() {
         Fragment fragment = new UserInfoFragment();
 
         Bundle bundle = new Bundle();
@@ -356,10 +369,10 @@ public class MainActivity extends MvpAppCompatActivity implements
             TransitionSet sharedElementTransition = (TransitionSet) TransitionInflater
                     .from(this)
                     .inflateTransition(R.transition.user_shared_element);
-            TransitionSet userInfoTransitionIn = (TransitionSet)TransitionInflater
+            TransitionSet userInfoTransitionIn = (TransitionSet) TransitionInflater
                     .from(this)
                     .inflateTransition(R.transition.user_info_transition_in);
-            TransitionSet userInfoTransitionOut = (TransitionSet)TransitionInflater
+            TransitionSet userInfoTransitionOut = (TransitionSet) TransitionInflater
                     .from(this)
                     .inflateTransition(R.transition.user_info_transition_out);
             fragment.setSharedElementEnterTransition(sharedElementTransition);
@@ -430,7 +443,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         }
 
         transaction.replace(R.id.main_screen_container, new NewChatFragment(), NEW_CHAT_FR_TAG)
-                .addToBackStack(NEW_CHAT_FR_TAG)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -459,7 +472,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     public void startBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             getSupportFragmentManager().popBackStackImmediate();
-            if(presenter.isPrivateDialogsOnScreen()){
+            if (presenter.isPrivateDialogsOnScreen()) {
                 mTabLayout.getTabAt(1).select();
             } else {
                 mTabLayout.getTabAt(0).select();
@@ -477,7 +490,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PUBLIC_DIALOGS_FR_TAG);
         if (fragment != null) {
-            ((PublicDialogsFragment)fragment).setDialogClickListener(this);
+            ((PublicDialogsFragment) fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PUBLIC_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -496,7 +509,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PRIVATE_DIALOGS_FR_TAG);
         if (fragment != null) {
-            ((PrivateDialogsFragment)fragment).setDialogClickListener(this);
+            ((PrivateDialogsFragment) fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PRIVATE_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -520,7 +533,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void showPrivateChatRoom(DialogModel dialogModel){
+    public void showPrivateChatRoom(DialogModel dialogModel) {
         String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
@@ -547,7 +560,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void showPublicChatRoom(DialogModel dialogModel){
+    public void showPublicChatRoom(DialogModel dialogModel) {
         String tag = CHAT_ROOM_FR_TAG + dialogModel.getDialogId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
@@ -583,7 +596,7 @@ public class MainActivity extends MvpAppCompatActivity implements
                 toggle.setDrawerIndicatorEnabled(false);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
-            if (slideOffset == 0 && start == 1){
+            if (slideOffset == 0 && start == 1) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 toggle.setDrawerIndicatorEnabled(true);
             }
@@ -596,7 +609,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void showNavigationElements() {
         fab.show();
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             mTextOnToolbar.setText(getString(R.string.chat));
             mNavigationView.getMenu().getItem(0).setChecked(true);
             mNavigationView.getMenu().getItem(0).setChecked(false);
@@ -608,7 +621,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     }
 
     @Override
-    public void closeDrawer(){
+    public void closeDrawer() {
         mDrawer.closeDrawer(GravityCompat.START, true);
     }
 

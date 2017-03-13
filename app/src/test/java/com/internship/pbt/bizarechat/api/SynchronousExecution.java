@@ -4,6 +4,7 @@ import com.internship.pbt.bizarechat.data.SchedulersFactory;
 import com.internship.pbt.bizarechat.data.executor.JobExecutorTest;
 import com.internship.pbt.bizarechat.domain.executor.PostExecutorThread;
 import com.internship.pbt.bizarechat.domain.executor.ThreadExecutor;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.UiThreadTest;
 
 import org.junit.rules.ExternalResource;
@@ -39,7 +40,7 @@ public class SynchronousExecution extends ExternalResource {
             constructor.setAccessible(true);
             field.set(SchedulersFactory.class, constructor.newInstance());
         }catch (Exception ex){
-            ex.printStackTrace();
+            Logger.logExceptionToFabric(ex);
         }
     }
 }

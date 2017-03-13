@@ -25,16 +25,15 @@ public class InviteFriendsFragment extends MvpAppCompatFragment implements Invit
     private static final String MAIL_SUBJECT = "Invite to chat";
     @InjectPresenter
     InviteFriendsPresenterImpl presenter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private Button mSend;
+    private TextView mText;
 
     @ProvidePresenter
     InviteFriendsPresenterImpl provaideInviteFriendsPresenter() {
         return new InviteFriendsPresenterImpl(getContext());
     }
-
-    private RecyclerView recyclerView;
-    private LinearLayoutManager mLayoutManager;
-    private Button mSend;
-    private TextView mText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,9 @@ public class InviteFriendsFragment extends MvpAppCompatFragment implements Invit
     }
 
     private void showEmptyList() {
-        if (recyclerView.getAdapter().getItemCount() == 0)
+        if (recyclerView.getAdapter().getItemCount() == 0) {
             mText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -74,8 +74,9 @@ public class InviteFriendsFragment extends MvpAppCompatFragment implements Invit
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.send)
+        if (id == R.id.send) {
             sendEmail();
+        }
     }
 
     @Override

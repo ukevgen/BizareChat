@@ -1,8 +1,7 @@
 package com.internship.pbt.bizarechat.data.util;
 
-import android.util.Log;
-
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.logs.Logger;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -18,7 +17,8 @@ import static com.internship.pbt.bizarechat.data.net.ApiConstants.AUTH_KEY;
 public class HmacSha1Signature {
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
-    private HmacSha1Signature(){}
+    private HmacSha1Signature() {
+    }
 
     private static String toHexString(byte[] bytes) {
         Formatter formatter = new Formatter();
@@ -31,7 +31,7 @@ public class HmacSha1Signature {
     }
 
 
-    public static String calculateSignatureWithAuth(String login, String pass, int nonce, long timestamp){
+    public static String calculateSignatureWithAuth(String login, String pass, int nonce, long timestamp) {
 
         String data = composeParametersToString(login, pass, nonce, timestamp);
 
@@ -42,23 +42,23 @@ public class HmacSha1Signature {
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
-            Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
+            Logger.logExceptionToFabric(ex);
         }
         return null;
     }
 
-    public static String calculateSignature(int nonce, long timestamp)
-    {
+    public static String calculateSignature(int nonce, long timestamp) {
         String data = composeParametersToString(nonce, timestamp);
 
         try {
             SecretKeySpec signingKey = new SecretKeySpec(ApiConstants.AUTH_SECRET.getBytes(),
-                                                            HMAC_SHA1_ALGORITHM);
+                    HMAC_SHA1_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             mac.init(signingKey);
             return toHexString(mac.doFinal(data.getBytes()));
+
         } catch(NoSuchAlgorithmException | InvalidKeyException ex){
-            Log.e(HmacSha1Signature.class.getSimpleName(), ex.getMessage(), ex);
+            Logger.logExceptionToFabric(ex);
         }
         return null;
     }
@@ -66,7 +66,7 @@ public class HmacSha1Signature {
     /**
      * Prepare string with parameters for signature calculation
      */
-    private static String composeParametersToString(int nonce, long timestamp){
+    private static String composeParametersToString(int nonce, long timestamp) {
         StringBuilder sb = new StringBuilder("");
         sb.append("application_id=").append(APP_ID);
         sb.append("&auth_key=").append(AUTH_KEY);
@@ -76,7 +76,7 @@ public class HmacSha1Signature {
         return sb.toString();
     }
 
-    private static String composeParametersToString(String login, String pass, int nonce, long timestamp){
+    private static String composeParametersToString(String login, String pass, int nonce, long timestamp) {
         StringBuilder sb = new StringBuilder("");
         sb.append("application_id=").append(APP_ID);
         sb.append("&auth_key=").append(AUTH_KEY);

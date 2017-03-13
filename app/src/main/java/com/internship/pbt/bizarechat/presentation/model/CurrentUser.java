@@ -22,8 +22,9 @@ public class CurrentUser implements AuthStore {
     }
 
     public static CurrentUser getInstance() {
-        if (INSTANCE == null)
+        if (INSTANCE == null) {
             INSTANCE = new CurrentUser();
+        }
 
         return INSTANCE;
     }
@@ -74,16 +75,16 @@ public class CurrentUser implements AuthStore {
         return cache.getCurrentFacebookId();
     }
 
-    public void setKeepMeSignIn(boolean keepMeSignIn) {
-        cache.putKeepMeSignIn(keepMeSignIn);
+    public void setCurrentFacebookId(Long id) {
+        cache.putCurrentFacebookId(id);
     }
 
     public boolean getKeepMeSignIn() {
         return cache.getKeepMeSignIn();
     }
 
-    public void setCurrentFacebookId(Long id) {
-        cache.putCurrentFacebookId(id);
+    public void setKeepMeSignIn(boolean keepMeSignIn) {
+        cache.putKeepMeSignIn(keepMeSignIn);
     }
 
     public void clearCurrentUser() {
@@ -114,43 +115,52 @@ public class CurrentUser implements AuthStore {
         cache.putIsSubscribed(subscribed);
     }
 
-    public void setStringAvatar(String s) {
-        cache.putStringAvatar(s);
-    }
-
     public String getStringAvatar() {
         return cache.getStringAvatar();
     }
 
-    public void setFullName(String fullName){
-        cache.putFullName(fullName);
+    public void setStringAvatar(String s) {
+        cache.putStringAvatar(s);
     }
 
-    public String getFullName(){
+    public String getUserLogin() {
+        return cache.getUserLogin();
+    }
+
+    public void setUserLogin(String login) {
+        cache.putUserLogin(login);
+    }
+
+    public String getFullName() {
         return cache.getFullName();
     }
 
-    public void setNotificationsState(boolean status){
+    public void setFullName(String fullName) {
+        cache.putFullName(fullName);
+    }
+
+    public void setNotificationsState(boolean status) {
         cache.putNotificationsState(status);
     }
 
-    public boolean isNotificationsOn(){
+    public boolean isNotificationsOn() {
         return cache.isNotificationsOn();
     }
 
-    public void setPhone(String phone){
-        cache.putPhone(phone);
-    }
-
-    public String getPhone(){
+    public String getPhone() {
         return cache.getPhone();
     }
 
-    public void setWebsite(String website){
-        cache.putWebsite(website);
+    public void setPhone(String phone) {
+        cache.putPhone(phone);
     }
 
-    public String getWebsite(){
+    public String getWebsite() {
         return cache.getWebsite();
     }
+
+    public void setWebsite(String website) {
+        cache.putWebsite(website);
+    }
 }
+

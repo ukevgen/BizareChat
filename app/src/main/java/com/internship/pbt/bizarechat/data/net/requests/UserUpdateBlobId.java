@@ -10,8 +10,9 @@ public class UserUpdateBlobId {
     private User user;
 
     public UserUpdateBlobId(Integer blobId) {
-        if(user == null)
+        if (user == null) {
             user = new User(blobId);
+        }
     }
 
     public User getUser() {

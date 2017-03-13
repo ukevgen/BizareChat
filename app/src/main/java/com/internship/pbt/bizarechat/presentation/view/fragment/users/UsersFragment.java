@@ -41,21 +41,10 @@ import com.internship.pbt.bizarechat.presentation.presenter.users.UsersPresenter
 import com.internship.pbt.bizarechat.presentation.view.fragment.userinfo.UserInfoFragment;
 
 public class UsersFragment extends MvpAppCompatFragment
-        implements UsersView, View.OnTouchListener{
+        implements UsersView, View.OnTouchListener {
 
     @InjectPresenter
     UsersPresenter presenter;
-
-    @ProvidePresenter
-    UsersPresenter provideUsersPresenter(){
-        return new UsersPresenter(
-                new GetAllUsersUseCase(
-                        new UserDataRepository(BizareChatApp.getInstance().getUserService())),
-                new GetPhotoUseCase(new ContentDataRepository(
-                        BizareChatApp.getInstance().getContentService(),
-                        CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))));
-    }
-
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     private TextView toolbarTitle;
@@ -66,8 +55,17 @@ public class UsersFragment extends MvpAppCompatFragment
     private TSnackbar connProblemSnack;
     private TextView aloneMessage;
     private String sortQuery;
-
     private int pastVisibleItems, visibleItemCount, totalItemCount;
+
+    @ProvidePresenter
+    UsersPresenter provideUsersPresenter() {
+        return new UsersPresenter(
+                new GetAllUsersUseCase(
+                        new UserDataRepository(BizareChatApp.getInstance().getUserService())),
+                new GetPhotoUseCase(new ContentDataRepository(
+                        BizareChatApp.getInstance().getContentService(),
+                        CacheUsersPhotos.getInstance(BizareChatApp.getInstance()))));
+    }
 
     @Nullable
     @Override
@@ -77,12 +75,11 @@ public class UsersFragment extends MvpAppCompatFragment
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_users, container, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);
-        aloneMessage = (TextView)view.findViewById(R.id.users_alone_message);
-        recyclerView = (RecyclerView)view.findViewById(R.id.users_users_container);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
+        aloneMessage = (TextView) view.findViewById(R.id.users_alone_message);
+        recyclerView = (RecyclerView) view.findViewById(R.id.users_users_container);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) //check for scroll down
@@ -97,7 +94,7 @@ public class UsersFragment extends MvpAppCompatFragment
                 }
             }
         });
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             sortQuery = presenter.getCurrentFilterQuery();
         }
         return view;
@@ -111,27 +108,31 @@ public class UsersFragment extends MvpAppCompatFragment
         sortItem.collapseActionView();
 
         filterItem = menu.findItem(R.id.users_action_filter);
-        filterEditText = (EditText)getActivity().getLayoutInflater()
+        filterEditText = (EditText) getActivity().getLayoutInflater()
                 .inflate(R.layout.users_search_edit_text, null, false);
         filterItem.setActionView(filterEditText);
         filterItem.collapseActionView();
         filterEditText.setOnTouchListener(this);
         filterEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 presenter.performFilter(s.toString());
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(sortQuery != null && !sortQuery.isEmpty()) {
+        if (sortQuery != null && !sortQuery.isEmpty()) {
             filterItem.expandActionView();
             filterEditText.setText(sortQuery);
             filterEditText.requestFocus();
@@ -157,7 +158,7 @@ public class UsersFragment extends MvpAppCompatFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.users_action_filter:
                 sortItem.collapseActionView();
                 item.expandActionView();
@@ -185,7 +186,7 @@ public class UsersFragment extends MvpAppCompatFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
+        toolbarTitle = (TextView) getActivity().findViewById(R.id.chat_toolbar_title);
     }
 
     @Override
@@ -197,18 +198,18 @@ public class UsersFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void showLoading(){
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideLoading(){
+    public void hideLoading() {
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void showNetworkError(){
-        if(connProblemSnack == null) {
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
             connProblemSnack = TSnackbar.make(recyclerView,
                     R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
             connProblemSnack.getView().setBackgroundColor(getResources()
@@ -228,7 +229,7 @@ public class UsersFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void showUserInfo(UserModel user){
+    public void showUserInfo(UserModel user) {
         Fragment fragment = new UserInfoFragment();
         ImageView sharedImage = presenter.getAdapter().getClickedUserImage();
         TextView textView = presenter.getAdapter().getClickedTextView();
@@ -239,24 +240,24 @@ public class UsersFragment extends MvpAppCompatFragment
         bundle.putString(UserInfoFragment.PHONE_BUNDLE_KEY, user.getPhone());
         bundle.putString(UserInfoFragment.WEBSITE_BUNDLE_KEY, user.getWebsite());
         bundle.putString(UserInfoFragment.FULL_NAME_BUNDLE_KEY, user.getFullName());
-        bundle.putParcelable(UserInfoFragment.AVATAR_BUNDLE_KEY, ((BitmapDrawable)sharedImage.getDrawable()).getBitmap());
+        bundle.putParcelable(UserInfoFragment.AVATAR_BUNDLE_KEY, ((BitmapDrawable) sharedImage.getDrawable()).getBitmap());
         fragment.setArguments(bundle);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TransitionSet sharedElementTransition = (TransitionSet)TransitionInflater
+            TransitionSet sharedElementTransition = (TransitionSet) TransitionInflater
                     .from(getActivity())
                     .inflateTransition(R.transition.user_shared_element);
-            TransitionSet userInfoTransitionIn = (TransitionSet)TransitionInflater
+            TransitionSet userInfoTransitionIn = (TransitionSet) TransitionInflater
                     .from(getActivity())
                     .inflateTransition(R.transition.user_info_transition_in);
-            TransitionSet userInfoTransitionOut = (TransitionSet)TransitionInflater
+            TransitionSet userInfoTransitionOut = (TransitionSet) TransitionInflater
                     .from(getActivity())
                     .inflateTransition(R.transition.user_info_transition_out);
-            TransitionSet usersTransitionIn = (TransitionSet)TransitionInflater
+            TransitionSet usersTransitionIn = (TransitionSet) TransitionInflater
                     .from(getActivity())
                     .inflateTransition(R.transition.users_transition_in);
-            TransitionSet usersTransitionOut = (TransitionSet)TransitionInflater
+            TransitionSet usersTransitionOut = (TransitionSet) TransitionInflater
                     .from(getActivity())
                     .inflateTransition(R.transition.users_transition_out);
             fragment.setSharedElementEnterTransition(sharedElementTransition);

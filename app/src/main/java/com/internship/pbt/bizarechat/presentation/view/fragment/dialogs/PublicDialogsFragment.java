@@ -87,7 +87,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.dialogs_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
-        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.dialogs_swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dialogs_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         setHasOptionsMenu(true);
@@ -95,7 +95,8 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         return view;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.loadDialogs();
         recyclerView.setAdapter(presenter.getAdapter());
@@ -110,7 +111,8 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         EventBus.getDefault().register(this);
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
     }
 
@@ -146,12 +148,13 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
         //presenter.deleteDialog(position);
     }
 
-    @Override public void onDialogClick(int position) {
+    @Override
+    public void onDialogClick(int position) {
         presenter.onDialogClick(position);
     }
 
     @Override
-    public void showChatRoom(DialogModel dialogModel){
+    public void showChatRoom(DialogModel dialogModel) {
         dialogClickListener.onPublicDialogClick(dialogModel);
     }
 
@@ -161,7 +164,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void stopRefreshing(){
+    public void stopRefreshing() {
         swipeRefreshLayout.setRefreshing(false);
     }
 

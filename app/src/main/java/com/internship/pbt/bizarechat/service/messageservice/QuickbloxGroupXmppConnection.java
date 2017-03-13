@@ -62,8 +62,9 @@ public final class QuickbloxGroupXmppConnection implements ConnectionListener, M
 
     public void disconnect() {
         ReadReceiptManager.getInstanceFor(groupChatConnection).removeRemoveReceivedListener(receiptReceivedListener);
-        if (groupChatConnection != null)
+        if (groupChatConnection != null) {
             groupChatConnection.disconnect();
+        }
         groupChatConnection = null;
     }
 

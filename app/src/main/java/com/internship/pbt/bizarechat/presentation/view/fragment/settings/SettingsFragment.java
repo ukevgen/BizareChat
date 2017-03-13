@@ -23,27 +23,27 @@ public class SettingsFragment extends MvpAppCompatFragment
         implements SettingsView, CompoundButton.OnCheckedChangeListener {
     @InjectPresenter
     SettingsPresenter presenter;
-
-    @ProvidePresenter
-    SettingsPresenter provideSettingsPresenter(){
-        return new SettingsPresenter();
-    }
-
     private TextView toolbarTitle;
     private TextView version;
     private SwitchCompat notifications;
     private ProgressBar progressBar;
 
-    @Nullable @Override
+    @ProvidePresenter
+    SettingsPresenter provideSettingsPresenter() {
+        return new SettingsPresenter();
+    }
+
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        version = (TextView)view.findViewById(R.id.settings_version);
+        version = (TextView) view.findViewById(R.id.settings_version);
         version.setText(String.format("v%s", BuildConfig.VERSION_NAME));
-        notifications = (SwitchCompat)view.findViewById(R.id.settings_toggle_button);
+        notifications = (SwitchCompat) view.findViewById(R.id.settings_toggle_button);
         notifications.setChecked(CurrentUser.getInstance().isNotificationsOn());
         notifications.setOnCheckedChangeListener(this);
-        toolbarTitle = (TextView)getActivity().findViewById(R.id.chat_toolbar_title);
-        progressBar = (ProgressBar)getActivity().findViewById(R.id.main_progress_bar);
+        toolbarTitle = (TextView) getActivity().findViewById(R.id.chat_toolbar_title);
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
         return view;
     }
 
@@ -59,12 +59,12 @@ public class SettingsFragment extends MvpAppCompatFragment
     }
 
     @Override
-    public void showLoading(){
+    public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideLoading(){
+    public void hideLoading() {
         progressBar.setVisibility(View.GONE);
     }
 }

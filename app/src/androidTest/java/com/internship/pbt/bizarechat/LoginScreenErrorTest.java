@@ -7,6 +7,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.view.activity.LoginActivity;
 
 import org.junit.BeforeClass;
@@ -103,7 +104,7 @@ public class LoginScreenErrorTest {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                Logger.logExceptionToFabric(ex);
             }
 
             onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Wrong login or password")))

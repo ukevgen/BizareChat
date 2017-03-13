@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.internship.pbt.bizarechat.logs.Logger;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,7 +69,7 @@ public final class CacheUsersPhotos {
                     outputStream.write(buffer, 0, byteRead);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e);
             }
 
             if(outputStream != null)
@@ -75,7 +77,7 @@ public final class CacheUsersPhotos {
             if(inputStream != null)
                 inputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logExceptionToFabric(e);
         }
     }
 }

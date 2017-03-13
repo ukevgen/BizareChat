@@ -2,7 +2,9 @@ package com.internship.pbt.bizarechat.data.cache;
 
 public final class CacheConstants {
 
+    public static final String CURRENT_ACCOUNT_LOGIN = "CURRENT_ACCOUNT_LOGIN";
     protected static final String CURRENT_ACCOUNT_ID = "CURRENT_ACCOUNT_ID";
+    protected static final String CURRENT_ACCOUNT_ID_IN_INT = "CURRENT_ACCOUNT_ID_IN_INT";
     protected static final String CURRENT_ACCOUNT_TOKEN = "CURRENT_ACCOUNT_TOKEN";
     protected static final String CURRENT_ACCOUNT_AVATAR = "CURRENT_ACCOUNT_AVATAR";
     protected static final String CURRENT_ACCOUNT_AUTHORIZATION = "CURRENT_ACCOUNT_AUTHORIZATION";
@@ -18,5 +20,4 @@ public final class CacheConstants {
     protected static final String CURRENT_ACCOUNT_IS_SUBSCRIBED = "CURRENT_ACCOUNT_IS_SUBSCRIBED_PUSH";
     protected static final String CURRENT_ACCOUNT_IS_NOTIFICATIONS_ON = "CURRENT_ACCOUNT_IS_NOTIFICATIONS_ON";
     protected static final String CURRENT_ACCOUNT_AVATAR_STRING = "CURRENT_ACCOUNT_AVATAR_STRING";
-
 }

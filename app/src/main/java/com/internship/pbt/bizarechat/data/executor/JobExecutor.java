@@ -14,19 +14,6 @@ public class JobExecutor implements ThreadExecutor {
 
     private final ThreadPoolExecutor mThreadPoolExecutor;
 
-    public static JobExecutor getInstance(){
-        JobExecutor local = sInstance;
-        if(local == null) {
-            synchronized (JobExecutor.class) {
-                local = sInstance;
-                if(local == null){
-                    sInstance = local = new JobExecutor();
-                }
-            }
-        }
-        return local;
-    }
-
     private JobExecutor() {
         mThreadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
                 Runtime.getRuntime().availableProcessors(),
@@ -36,15 +23,30 @@ public class JobExecutor implements ThreadExecutor {
                 new JobThreadFactory());
     }
 
-    @Override public void execute(Runnable command) {
+    public static JobExecutor getInstance() {
+        JobExecutor local = sInstance;
+        if (local == null) {
+            synchronized (JobExecutor.class) {
+                local = sInstance;
+                if (local == null) {
+                    sInstance = local = new JobExecutor();
+                }
+            }
+        }
+        return local;
+    }
+
+    @Override
+    public void execute(Runnable command) {
         mThreadPoolExecutor.execute(command);
     }
 
-    private static class JobThreadFactory implements ThreadFactory{
+    private static class JobThreadFactory implements ThreadFactory {
 
         private int counter = 0;
 
-        @Override public Thread newThread(Runnable r) {
+        @Override
+        public Thread newThread(Runnable r) {
             return new Thread(r, "BizareChatThread" + counter++);
         }
     }

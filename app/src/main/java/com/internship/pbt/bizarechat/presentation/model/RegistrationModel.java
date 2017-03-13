@@ -20,8 +20,9 @@ public class RegistrationModel implements SignUpModel {
         inform.setToken(AccessToken.getCurrentAccessToken().getToken());
         inform.setUserId(Long.parseLong(AccessToken.getCurrentAccessToken().getUserId()));
         inform.setFullName(Profile.getCurrentProfile().getName());
-        if(inform.getToken() != null && inform.getUserId() != null)
+        if (inform.getToken() != null && inform.getUserId() != null) {
             presenter.refreshLinkedInfInView(inform);
+        }
     }
 
     @Override

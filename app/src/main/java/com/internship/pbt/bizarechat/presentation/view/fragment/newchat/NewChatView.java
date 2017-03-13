@@ -4,9 +4,11 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.newchat;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 
 import java.io.File;
 
+@StateStrategyType(SkipStrategy.class)
 public interface NewChatView extends MvpView {
     void showUsersView();
 
@@ -28,8 +30,11 @@ public interface NewChatView extends MvpView {
 
     void hideLoading();
 
-    @StateStrategyType(SkipStrategy.class)
-    void showChatRoom();
+    void showChatRoom(DialogModel dialogModel);
+
+    void showPublicChatRoom(DialogModel dialogModel);
+
+    void showPrivateChatRoom(DialogModel dialogModel);
 
     void showNetworkError();
 

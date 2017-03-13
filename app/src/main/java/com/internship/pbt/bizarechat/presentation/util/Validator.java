@@ -5,11 +5,10 @@ import java.io.File;
 
 public class Validator {
 
+    public static final String LETTERS = "[\\D+]";
     private static final String TAG = "Validator";
-
     private static final int SIX = 8;
     private static final int TWELVE = 12;
-    public static final String LETTERS = "[\\D+]";
     private final String PASSWORD_REGEX = "(?=(.*\\d){2})(?=(.*[a-z]))(?=(.*[A-Z]){2}).*";
     private final String EMAIL_REGEX = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private final String PHONE_REGEX = "(\\+[0-9]+[\\- \\.]*)?"
@@ -36,8 +35,8 @@ public class Validator {
         return password.equals(confirmPsw);
     }
 
-    public boolean isValidAvatarSize(File file){
-        return file.length() < 1024*1024 && file.length() != 0;
+    public boolean isValidAvatarSize(File file) {
+        return file.length() < 1024 * 1024 && file.length() != 0;
     }
 
     public String toApiPhoneFormat(String number) {

@@ -12,7 +12,7 @@ public class UserToken {
     private SharedPreferences preferences;
 
 
-    private UserToken(){
+    private UserToken() {
     }
 
     public static UserToken getInstance() {
@@ -26,25 +26,25 @@ public class UserToken {
         return INSTANCE;
     }
 
-    public void initSharedPreferences(Context context){
+    public void initSharedPreferences(Context context) {
         preferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
-    public boolean isTokenExists(){
+    public boolean isTokenExists() {
         return getToken() != null;
     }
 
-    public void saveToken(String token){
+    public void saveToken(String token) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(tokenTag, token);
         editor.apply();
     }
 
-    public String getToken(){
+    public String getToken() {
         return preferences.getString(tokenTag, null);
     }
 
-    public void deleteToken(){
+    public void deleteToken() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();
