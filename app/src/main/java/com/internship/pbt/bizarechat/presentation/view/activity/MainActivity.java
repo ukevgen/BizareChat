@@ -458,13 +458,13 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     public void startBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            presenter.showNavigationElements();
             getSupportFragmentManager().popBackStackImmediate();
             if(presenter.isPrivateDialogsOnScreen()){
                 mTabLayout.getTabAt(1).select();
             } else {
                 mTabLayout.getTabAt(0).select();
             }
+            presenter.showNavigationElements();
             return;
         }
 
