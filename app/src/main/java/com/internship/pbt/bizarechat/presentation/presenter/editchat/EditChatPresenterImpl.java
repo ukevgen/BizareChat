@@ -18,6 +18,7 @@ import com.internship.pbt.bizarechat.domain.interactor.UpdateDialogUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UploadFileUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.UseCase;
 import com.internship.pbt.bizarechat.domain.repository.ContentRepository;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.util.Converter;
 import com.internship.pbt.bizarechat.presentation.util.Validator;
@@ -34,7 +35,8 @@ import java.util.Set;
 import rx.Subscriber;
 
 @InjectViewState
-public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements EditChatPresenter {
+public class EditChatPresenterImpl extends MvpPresenter<EditChatView>{
+    private static final String TAG = EditChatPresenterImpl.class.getSimpleName();
 
     private DialogUpdateRequestModel requestModel;
     private DialogUpdateRequestModel.PushAll pushAll;
@@ -51,6 +53,7 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
     private Integer currentUsersPage = 0;
     private Integer usersCount = 0;
     private GetPhotoUseCase photoUseCase;
+    private List<Integer> occupantsIds;
     private List<UserModel> users;
     private Map<Long, Bitmap> usersPhotos;
     private Set<Long> checkedUsers;
@@ -86,53 +89,15 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
         this.dialogId = dialogId;
     }
 
-    @Override
-    public void resume() {
-
+    public List<Integer> getOccupantsIds() {
+        return occupantsIds;
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void destroy() {
-        if (updateDialogUseCase != null) {
-            updateDialogUseCase.unsubscribe();
+    public void setOccupantsIds(List<Integer> occupantsIds) {
+        this.occupantsIds = occupantsIds;
+        for(int id : occupantsIds){
+            checkedUsers.add((long)id);
         }
-        if (photoUseCase != null) {
-            photoUseCase.unsubscribe();
-        }
-        if (uploadFileUseCase != null) {
-            uploadFileUseCase.unsubscribe();
-        }
-        if (allUsersUseCase != null) {
-            allUsersUseCase.unsubscribe();
-        }
-
-        this.allUsersUseCase = null;
-        this.photoUseCase = null;
-        this.updateDialogUseCase = null;
-        this.contentRepository = null;
-        this.converter = null;
-        this.validator = null;
-        this.users = null;
-        this.usersPhotos = null;
-        this.checkedUsers = null;
-        this.adapter = null;
-    }
-
-    @Override
-    public void stop() {
-
-    }
-
-    public void getConcreteDialogInf() {
-        //TODO implement retrieving occupants of a concrete dialog and dialog id
-        // and impl checkedUsers = retrievedUsers;
-        // dialogId = dialogId
-
     }
 
     public void getAllUsers() {
@@ -148,7 +113,8 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -189,7 +155,8 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -200,7 +167,6 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
         });
     }
 
-    @Override
     public void saveChanges() {
         if (requestModel == null) {
             requestModel = new DialogUpdateRequestModel();
@@ -225,7 +191,8 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
                     @Override
                     public void onError(Throwable e) {
-                        onSaveChangesFailed();
+                        Logger.logExceptionToFabric(e, TAG);
+                        getViewState().showNetworkError();
                     }
 
                     @Override
@@ -253,7 +220,8 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
                 @Override
                 public void onError(Throwable e) {
-                    e.printStackTrace();
+                    Logger.logExceptionToFabric(e, TAG);
+                    getViewState().showNetworkError();
                 }
 
                 @Override
@@ -288,19 +256,16 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
     private void showTooLargeImage() {
     }
 
-    @Override
     public void onSaveChanges() {
         pullAll = null;
         pushAll = null;
         getViewState().showOnSaveChangesSuccessfully();
     }
 
-    @Override
     public void onSaveChangesFailed() {
         getViewState().showNoPermissionsToEdit();
     }
 
-    @Override
     public void editChatTitle(String newTitle) {
         if (requestModel == null) {
             requestModel = new DialogUpdateRequestModel();
@@ -308,7 +273,6 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
         requestModel.setName(newTitle);
     }
 
-    @Override
     public void onCheckBoxClickPush(Long id) {
         if (pushAllSet == null) {
             pushAllSet = new HashSet<>();
@@ -316,7 +280,6 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
         pushAllSet.add(id);
     }
 
-    @Override
     public void onCheckBoxClickPull(Long id) {
         if (pullAllSet == null) {
             pullAllSet = new HashSet<>();
@@ -328,5 +291,21 @@ public class EditChatPresenterImpl extends MvpPresenter<EditChatView> implements
 
     public EditChatRecyclerViewAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (updateDialogUseCase != null) {
+            updateDialogUseCase.unsubscribe();
+        }
+        if (photoUseCase != null) {
+            photoUseCase.unsubscribe();
+        }
+        if (uploadFileUseCase != null) {
+            uploadFileUseCase.unsubscribe();
+        }
+        if (allUsersUseCase != null) {
+            allUsersUseCase.unsubscribe();
+        }
     }
 }

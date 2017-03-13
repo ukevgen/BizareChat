@@ -12,11 +12,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -48,6 +51,8 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
 
     public static final String DIALOG_NAME_BUNDLE_KEY = "dialogName";
     public static final String DIALOG_ID_BUNDLE_KEY = "dialogId";
+    public static final String DIALOG_OCCUPANTS_BUNDLE_KEY = "dialogOccupants";
+
     private final static String CHAT_ROOM_FR_TAG = "chatRoomFragment_";
     private final int DEVICE_CAMERA = 0;
     private final int PHOTO_GALLERY = 1;
@@ -62,6 +67,7 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
 
     private boolean loading = true;
     private int pastVisibleItems, visibleItemCount, totalItemCount;
+    private TSnackbar connProblemSnack;
 
 
     @ProvidePresenter
@@ -91,6 +97,7 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
         chatImageView = (CircleImageView) view.findViewById(R.id.edit_chat_image);
         chatNameEditText = (TextInputEditText) view.findViewById(R.id.edit_chat_name_edit);
         chatNameEditText.setText(getArguments().getString(DIALOG_NAME_BUNDLE_KEY));
+        presenter.setOccupantsIds(getArguments().getIntegerArrayList(DIALOG_OCCUPANTS_BUNDLE_KEY));
         saveButton = (Button) view.findViewById(R.id.edit_chat_button_create);
         layoutManager = new LinearLayoutManager(getActivity());
         saveButton.setOnClickListener(this);
@@ -209,12 +216,6 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.destroy();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -225,5 +226,20 @@ public class EditChatFragment extends MvpAppCompatFragment implements EditChatVi
         if (data != null && resultCode == RESULT_OK && requestCode == PHOTO_GALLERY) {
             presenter.verifyAndLoadAvatar(data.getData());
         }
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
+            connProblemSnack = TSnackbar.make(recyclerView,
+                    R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
+            connProblemSnack.getView().setBackgroundColor(getResources()
+                    .getColor(R.color.main_screen_connection_problem_background));
+            TextView message = (TextView) connProblemSnack.getView()
+                    .findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+            message.setTextColor(getResources().getColor(R.color.main_screen_connection_problem_text));
+            message.setGravity(Gravity.CENTER);
+        }
+        connProblemSnack.show();
     }
 }

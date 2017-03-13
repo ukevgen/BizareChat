@@ -15,7 +15,6 @@ import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.users.UsersView;
 
-import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +30,8 @@ import rx.Subscriber;
 @InjectViewState
 public class UsersPresenter extends MvpPresenter<UsersView>
         implements UsersRecyclerAdapter.OnUserClickListener {
+    private static final String TAG = UsersPresenter.class.getSimpleName();
+
     private boolean filtering = false;
     private String currentSortOrder;
     private String currentFilterQuery;
@@ -87,10 +88,8 @@ public class UsersPresenter extends MvpPresenter<UsersView>
             @Override
             public void onError(Throwable e) {
                 getViewState().hideLoading();
-                if (e instanceof SocketTimeoutException) {
-                    getViewState().showNetworkError();
-                    Logger.logExceptionToFabric(e);
-                }
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -139,7 +138,8 @@ public class UsersPresenter extends MvpPresenter<UsersView>
 
             @Override
             public void onError(Throwable e) {
-                Logger.logExceptionToFabric(e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -249,6 +249,15 @@ public class UsersPresenter extends MvpPresenter<UsersView>
                 Logger.logExceptionToFabric(ex);
                 throw new IllegalArgumentException(ex);
             }
+        }
+    }
+
+    @Override public void onDestroy() {
+        if (allUsersUseCase != null) {
+            allUsersUseCase.unsubscribe();
+        }
+        if (photoUseCase != null) {
+            photoUseCase.unsubscribe();
         }
     }
 }

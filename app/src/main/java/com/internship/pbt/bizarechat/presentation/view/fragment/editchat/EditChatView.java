@@ -20,4 +20,5 @@ public interface EditChatView extends MvpView {
 
     void showChatRoom(DialogUpdateResponseModel dialogModel);
 
+    void showNetworkError();
 }

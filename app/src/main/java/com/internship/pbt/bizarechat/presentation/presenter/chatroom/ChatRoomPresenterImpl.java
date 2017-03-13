@@ -2,7 +2,6 @@ package com.internship.pbt.bizarechat.presentation.presenter.chatroom;
 
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -45,7 +44,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     private String dialogRoomJid;
     private long adminId;
     private String chatName;
-    private List<Integer> occupantsIds;
+    private ArrayList<Integer> occupantsIds;
     private GetUsersPhotosByIdsUseCase usersPhotosUseCase;
     private GetUsersByIdsUseCase usersByIdsUseCase;
     private MarkMessagesAsReadUseCase markMessagesAsReadUseCase;
@@ -90,7 +89,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e, TAG);
             }
 
             @Override
@@ -111,7 +110,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
             @Override
             public void onError(Throwable e) {
                 getViewState().hideLoading();
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -136,7 +136,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
             @Override
             public void onError(Throwable e) {
                 getViewState().hideLoading();
-                Logger.logExceptionToFabric(e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -198,12 +199,16 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         this.dialogRoomJid = dialogRoomJid;
     }
 
-    public void setOccupantsIds(List<Integer> occupantsIds) {
+    public void setOccupantsIds(ArrayList<Integer> occupantsIds) {
         this.occupantsIds = occupantsIds;
         int id;
         if ((id = getPrivateDialogOccupant()) != 0) {
             privateOccupantJid = id + "-" + ApiConstants.APP_ID + "@" + ApiConstants.CHAT_END_POINT;
         }
+    }
+
+    public ArrayList<Integer> getOccupantsIds() {
+        return occupantsIds;
     }
 
     public void setAdminId(long adminId) {
@@ -259,7 +264,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Logger.logExceptionToFabric(e, TAG);
+                        getViewState().showNetworkError();
                     }
 
                     @Override
@@ -279,7 +285,8 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Logger.logExceptionToFabric(e, TAG);
+                        getViewState().showNetworkError();
                     }
 
                     @Override
@@ -382,6 +389,15 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     public void onDestroy() {
         if (type != DialogsType.PRIVATE_CHAT) {
             messageService.get().leavePublicChat(dialogRoomJid);
+        }
+        if(usersPhotosUseCase != null){
+            usersPhotosUseCase.unsubscribe();
+        }
+        if(usersByIdsUseCase != null){
+            usersByIdsUseCase.unsubscribe();
+        }
+        if(markMessagesAsReadUseCase != null){
+            markMessagesAsReadUseCase.unsubscribe();
         }
     }
 }

@@ -41,6 +41,8 @@ import rx.Subscriber;
 
 @InjectViewState
 public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements NewChatPresenter {
+    private static final String TAG = NewChatPresenterImpl.class.getSimpleName();
+
     private final ContentRepository contentRepository;
     private Long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private Integer currentUsersPage = 0;
@@ -93,7 +95,8 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                Logger.logExceptionToFabric(e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -135,7 +138,8 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                Logger.logExceptionToFabric(e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -226,8 +230,9 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
             @Override
             public void onError(Throwable e) {
-                Log.d("TAG", e.toString());
                 getViewState().hideLoading();
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -240,14 +245,6 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
         });
 
     }
-
-    public void destroy() {
-        if (createDialogUseCase != null) {
-            createDialogUseCase.unsubscribe();
-        }
-        this.onDestroy();
-    }
-
 
     public void uploadChatPhoto() {
         String fileName = UUID.randomUUID().toString();
@@ -265,17 +262,12 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
 
                 @Override
                 public void onError(Throwable e) {
-                    Logger.logExceptionToFabric(e);
-                    if (getViewState() != null) {
-                        getViewState().hideLoading();
-                        getViewState().showErrorMassage(e.getLocalizedMessage());
-                        getViewState().getChatProperties();
-                    }
+                    Logger.logExceptionToFabric(e, TAG);
+                    getViewState().showNetworkError();
                 }
 
                 @Override
                 public void onNext(Integer response) {
-                    Log.d("TAG", "blod id = " + response);
                     blobId = String.valueOf(response);
                     getViewState().getChatProperties();
                 }
@@ -292,6 +284,19 @@ public class NewChatPresenterImpl extends MvpPresenter<NewChatView> implements N
             getViewState().getChatProperties();
         } else {
             getViewState().showNetworkError();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (allUsersUseCase != null) {
+            allUsersUseCase.unsubscribe();
+        }
+        if (photoUseCase != null) {
+            photoUseCase.unsubscribe();
+        }
+        if (createDialogUseCase != null) {
+            createDialogUseCase.unsubscribe();
         }
     }
 }

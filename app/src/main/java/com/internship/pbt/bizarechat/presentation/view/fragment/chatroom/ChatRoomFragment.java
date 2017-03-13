@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -68,6 +70,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     private ProgressBar progressBar;
     private TextView toolbarTitle;
     private TextView messageDay;
+    private TSnackbar connProblemSnack;
 
     @ProvidePresenter
     ChatRoomPresenterImpl provideChatRoomPresenter() {
@@ -230,8 +233,9 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     public void showEditChat() {
         Fragment fragment = new EditChatFragment();
         Bundle args = new Bundle();
-        args.putString(DIALOG_NAME_BUNDLE_KEY, presenter.getChatName());
-        args.putString(DIALOG_ID_BUNDLE_KEY, presenter.getDialogId());
+        args.putString(EditChatFragment.DIALOG_NAME_BUNDLE_KEY, presenter.getChatName());
+        args.putString(EditChatFragment.DIALOG_ID_BUNDLE_KEY, presenter.getDialogId());
+        args.putIntegerArrayList(EditChatFragment.DIALOG_OCCUPANTS_BUNDLE_KEY, presenter.getOccupantsIds());
         fragment.setArguments(args);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -248,5 +252,20 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     @Override
     public void showToLargeMessage() {
         Toast.makeText(getContext(), R.string.to_large_message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
+            connProblemSnack = TSnackbar.make(recyclerView,
+                    R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
+            connProblemSnack.getView().setBackgroundColor(getResources()
+                    .getColor(R.color.main_screen_connection_problem_background));
+            TextView message = (TextView) connProblemSnack.getView()
+                    .findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+            message.setTextColor(getResources().getColor(R.color.main_screen_connection_problem_text));
+            message.setGravity(Gravity.CENTER);
+        }
+        connProblemSnack.show();
     }
 }
