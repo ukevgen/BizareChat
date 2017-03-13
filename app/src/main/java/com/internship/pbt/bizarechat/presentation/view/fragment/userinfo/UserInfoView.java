@@ -21,4 +21,6 @@ public interface UserInfoView extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
     void showChatRoom(DialogModel dialogModel);
+
+    void showNetworkError();
 }

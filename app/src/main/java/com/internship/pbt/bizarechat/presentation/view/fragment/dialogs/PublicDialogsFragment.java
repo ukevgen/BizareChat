@@ -6,13 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -50,6 +53,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TSnackbar connProblemSnack;
 
     @ProvidePresenter
     DialogsPresenterImp provideNewDialogsPresenter() {
@@ -170,5 +174,20 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
 
     public interface OnPublicDialogClickListener {
         void onPublicDialogClick(DialogModel dialog);
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
+            connProblemSnack = TSnackbar.make(recyclerView,
+                    R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
+            connProblemSnack.getView().setBackgroundColor(getResources()
+                    .getColor(R.color.main_screen_connection_problem_background));
+            TextView message = (TextView) connProblemSnack.getView()
+                    .findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+            message.setTextColor(getResources().getColor(R.color.main_screen_connection_problem_text));
+            message.setGravity(Gravity.CENTER);
+        }
+        connProblemSnack.show();
     }
 }

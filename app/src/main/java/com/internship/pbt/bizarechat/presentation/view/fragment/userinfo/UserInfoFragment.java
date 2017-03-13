@@ -15,6 +15,7 @@ import android.support.v7.widget.TintTypedArray;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -60,6 +62,7 @@ public class UserInfoFragment extends MvpAppCompatFragment
     private CollapsingToolbarLayout toolbarLayout;
     private TextView titleShadow;
     private ProgressBar progressBar;
+    private TSnackbar connProblemSnack;
 
     @ProvidePresenter
     UserInfoPresenter provideUserInfoPresenter() {
@@ -224,5 +227,20 @@ public class UserInfoFragment extends MvpAppCompatFragment
                 .replace(R.id.main_screen_container, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void showNetworkError() {
+        if (connProblemSnack == null) {
+            connProblemSnack = TSnackbar.make(websiteTextView,
+                    R.string.main_connection_problem, TSnackbar.LENGTH_SHORT);
+            connProblemSnack.getView().setBackgroundColor(getResources()
+                    .getColor(R.color.main_screen_connection_problem_background));
+            TextView message = (TextView) connProblemSnack.getView()
+                    .findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+            message.setTextColor(getResources().getColor(R.color.main_screen_connection_problem_text));
+            message.setGravity(Gravity.CENTER);
+        }
+        connProblemSnack.show();
     }
 }

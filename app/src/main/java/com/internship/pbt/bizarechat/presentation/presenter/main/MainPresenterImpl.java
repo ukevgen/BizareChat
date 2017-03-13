@@ -245,4 +245,17 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     public void showNavigationElements() {
         getViewState().showNavigationElements();
     }
+
+    @Override
+    public void onDestroy() {
+        if (signOutUseCase != null) {
+            signOutUseCase.unsubscribe();
+        }
+        if (dialogsUseCase != null) {
+            dialogsUseCase.unsubscribe();
+        }
+        if (photoUseCase != null) {
+            photoUseCase.unsubscribe();
+        }
+    }
 }

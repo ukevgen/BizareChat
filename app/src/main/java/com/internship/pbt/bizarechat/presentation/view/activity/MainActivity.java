@@ -681,5 +681,4 @@ public class MainActivity extends MvpAppCompatActivity implements
         unbindMessageService();
     }
 
-
 }

@@ -1,7 +1,6 @@
 package com.internship.pbt.bizarechat.presentation.presenter.dialogs;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -17,6 +16,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetAllDialogsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetPhotoUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUnreadMessagesCountUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUserByIdUseCase;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.dialogs.DialogsView;
@@ -119,7 +119,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onError(Throwable e) {
-                Log.d("TAG", e.getLocalizedMessage());
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -150,7 +151,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -177,7 +179,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.d("TAG", e.getLocalizedMessage());
+                    Logger.logExceptionToFabric(e, TAG);
+                    getViewState().showNetworkError();
                 }
 
                 @Override
@@ -220,7 +223,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             @Override
             public void onError(Throwable e) {
                 getViewState().stopRefreshing();
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -253,7 +257,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             @Override
             public void onError(Throwable e) {
                 getViewState().stopRefreshing();
-                Log.e(TAG, e.getMessage(), e);
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -285,6 +290,25 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         dialog.setUnreadMessagesCount(0);
         adapter.notifyItemChanged(position);
         getViewState().showChatRoom(dialog);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(deleteDialogUseCase != null){
+            deleteDialogUseCase.unsubscribe();
+        }
+        if(photoUseCase != null){
+            photoUseCase.unsubscribe();
+        }
+        if(getUserByIdUseCase != null){
+            getUserByIdUseCase.unsubscribe();
+        }
+        if(unreadMessagesCountUseCase != null){
+            unreadMessagesCountUseCase.unsubscribe();
+        }
+        if(allDialogsUseCase != null){
+            allDialogsUseCase.unsubscribe();
+        }
     }
 
     public static class ComparatorDefault implements Comparator<DialogModel> {

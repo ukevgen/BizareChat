@@ -11,4 +11,6 @@ public interface DialogsView extends MvpView {
     void showChatRoom(DialogModel dialogModel);
 
     void stopRefreshing();
+
+    void showNetworkError();
 }

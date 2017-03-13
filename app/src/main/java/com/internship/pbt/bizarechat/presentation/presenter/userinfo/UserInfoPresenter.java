@@ -1,11 +1,10 @@
 package com.internship.pbt.bizarechat.presentation.presenter.userinfo;
 
-import android.util.Log;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.domain.interactor.GetPrivateDialogByUserId;
+import com.internship.pbt.bizarechat.logs.Logger;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.userinfo.UserInfoView;
 
@@ -64,7 +63,8 @@ public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
             @Override
             public void onError(Throwable e) {
                 getViewState().hideLoading();
-                Log.d(TAG, e.getCause().getMessage(), e.getCause());
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
             }
 
             @Override
@@ -73,5 +73,12 @@ public class UserInfoPresenter extends MvpPresenter<UserInfoView> {
                 getViewState().showChatRoom(dialog);
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (getDialog != null) {
+            getDialog.unsubscribe();
+        }
     }
 }

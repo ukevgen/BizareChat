@@ -18,4 +18,6 @@ public interface ChatRoomView extends MvpView{
     void showNotAdminError();
 
     void showToLargeMessage();
+
+    void showNetworkError();
 }
