@@ -3,14 +3,9 @@ package com.internship.pbt.bizarechat.service.messageservice;
 
 import android.util.Log;
 
-import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
-import com.internship.pbt.bizarechat.data.datamodel.MessageModelDao;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
-import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
-import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.logs.Logger;
-import com.internship.pbt.bizarechat.presentation.BizareChatApp;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Displayed;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.DisplayedManager;
@@ -18,7 +13,6 @@ import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.Received;
 import com.internship.pbt.bizarechat.service.messageservice.extentions.markable.ReceivedManager;
 
-import org.greenrobot.eventbus.EventBus;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.MessageListener;
@@ -41,6 +35,7 @@ import org.jivesoftware.smackx.muc.MultiUserChatManager;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -120,7 +115,6 @@ public final class QuickbloxPrivateXmppConnection
         try {
             chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
-            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         }
     }
@@ -148,7 +142,6 @@ public final class QuickbloxPrivateXmppConnection
         try {
             chat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
-            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
         }
     }
@@ -156,12 +149,7 @@ public final class QuickbloxPrivateXmppConnection
     public void sendPublicMessage(String body, String chatJid, long timestamp, String stanzaId) {
         Log.d(TAG, "Sending message to : " + chatJid);
 
-        MultiUserChat mucChat;
-        if ((mucChat = publicChats.get(chatJid)) == null) {
-            mucChat = MultiUserChatManager.getInstanceFor(privateChatConnection).getMultiUserChat(chatJid);
-            mucChat.addMessageListener(this);
-            publicChats.put(chatJid, mucChat);
-        }
+        MultiUserChat mucChat = publicChats.get(chatJid);
 
         QuickbloxChatExtension extension = new QuickbloxChatExtension();
         extension.setProperty("date_sent", timestamp + "");
@@ -174,20 +162,34 @@ public final class QuickbloxPrivateXmppConnection
         message.addExtension(extension);
 
         try {
-            if (!mucChat.isJoined()) {
-                DiscussionHistory history = new DiscussionHistory();
-                history.setMaxStanzas(20);
-                mucChat.join(
-                        CurrentUser.getInstance().getCurrentUserId().toString(),
-                        null,
-                        history,
-                        privateChatConnection.getPacketReplyTimeout());
+            if (mucChat != null) {
+                mucChat.sendMessage(message);
             }
-            mucChat.sendMessage(message);
         } catch (SmackException.NotConnectedException ex) {
-            Logger.logExceptionToFabric(ex);
             offlineMessages.add(message);
-        } catch (XMPPException | SmackException ex){
+        }
+    }
+
+    public void joinPublicChat(String chatJid, long lastMessageDate) {
+        try {
+            MultiUserChat mucChat;
+            if ((mucChat = publicChats.get(chatJid)) == null) {
+                mucChat = MultiUserChatManager.getInstanceFor(privateChatConnection).getMultiUserChat(chatJid);
+                mucChat.addMessageListener(this);
+                publicChats.put(chatJid, mucChat);
+            }
+
+            DiscussionHistory history = new DiscussionHistory();
+            if(lastMessageDate != 0)
+                history.setSince(new Date(lastMessageDate * 1000));
+            else
+                history.setMaxChars(0);
+            mucChat.join(
+                    CurrentUser.getInstance().getCurrentUserId().toString(),
+                    null,
+                    history,
+                    privateChatConnection.getPacketReplyTimeout());
+        } catch (Exception ex) {
             Logger.logExceptionToFabric(ex);
         }
     }
@@ -283,16 +285,6 @@ public final class QuickbloxPrivateXmppConnection
                         }
                         Message message = offlineMessages.peek();
                         privateChatConnection.sendStanza(message);
-                        if (message.getType() == Message.Type.groupchat) {
-                            EventBus.getDefault().post(new PublicMessageSentEvent(message.getStanzaId()));
-
-                            MessageModel messageModel = BizareChatApp.getInstance().getDaoSession().getMessageModelDao()
-                                    .queryBuilder()
-                                    .where(MessageModelDao.Properties.MessageId.eq(message.getStanzaId()))
-                                    .unique();
-                            messageModel.setRead(MessageState.DELIVERED);
-                            BizareChatApp.getInstance().getDaoSession().getMessageModelDao().updateInTx(messageModel);
-                        }
                     } catch (SmackException ex) {
                         Logger.logExceptionToFabric(ex);
                         break;

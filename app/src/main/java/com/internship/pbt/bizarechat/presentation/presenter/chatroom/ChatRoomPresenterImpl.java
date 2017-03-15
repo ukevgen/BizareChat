@@ -9,10 +9,10 @@ import com.internship.pbt.bizarechat.adapter.ChatRoomRecyclerAdapter;
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
-import com.internship.pbt.bizarechat.data.datamodel.MessageModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.UserModel;
 import com.internship.pbt.bizarechat.data.executor.JobExecutor;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
+import com.internship.pbt.bizarechat.domain.interactor.GetMessagesUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
@@ -38,6 +38,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     private static final String TAG = ChatRoomPresenterImpl.class.getSimpleName();
     private static final int MESSAGE_LENGTH = 500;
 
+    private boolean loaded = false;
     private long currentUserId = CurrentUser.getInstance().getCurrentUserId();
     private int type;
     private String dialogId;
@@ -48,6 +49,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     private GetUsersPhotosByIdsUseCase usersPhotosUseCase;
     private GetUsersByIdsUseCase usersByIdsUseCase;
     private MarkMessagesAsReadUseCase markMessagesAsReadUseCase;
+    private GetMessagesUseCase getMessagesUseCase;
     private WeakReference<BizareChatMessageService> messageService;
     private ChatRoomRecyclerAdapter adapter;
     private List<MessageModel> messages;
@@ -61,11 +63,13 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     public ChatRoomPresenterImpl(DaoSession daoSession,
                                  GetUsersPhotosByIdsUseCase usersPhotosUseCase,
                                  GetUsersByIdsUseCase usersByIdsUseCase,
-                                 MarkMessagesAsReadUseCase markMessagesAsReadUseCase) {
+                                 MarkMessagesAsReadUseCase markMessagesAsReadUseCase,
+                                 GetMessagesUseCase getMessagesUseCase) {
         this.daoSession = daoSession;
         this.usersPhotosUseCase = usersPhotosUseCase;
         this.usersByIdsUseCase = usersByIdsUseCase;
         this.markMessagesAsReadUseCase = markMessagesAsReadUseCase;
+        this.getMessagesUseCase = getMessagesUseCase;
         messages = new ArrayList<>();
         occupantsPhotos = new HashMap<>();
         userNames = new HashMap<>();
@@ -74,12 +78,13 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
 
     public void init() {
-        getViewState().showLoading();
-        initUsers();
-        sendReadRequestToServer();
+        if(!loaded) {
+            getViewState().showLoading();
+            initUsers();
+        }
     }
 
-    private void sendReadRequestToServer() {
+    public void sendReadRequestToServer() {
         markMessagesAsReadUseCase.setDialogId(dialogId);
         markMessagesAsReadUseCase.execute(new Subscriber<Response<Void>>() {
             @Override
@@ -112,6 +117,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                 getViewState().hideLoading();
                 Logger.logExceptionToFabric(e, TAG);
                 getViewState().showNetworkError();
+                initUsersPhotos();
             }
 
             @Override
@@ -138,6 +144,7 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                 getViewState().hideLoading();
                 Logger.logExceptionToFabric(e, TAG);
                 getViewState().showNetworkError();
+                initMessages();
             }
 
             @Override
@@ -150,29 +157,46 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     private void initMessages() {
-        messages = daoSession.getMessageModelDao()
-                .queryBuilder()
-                .where(MessageModelDao.Properties.ChatDialogId.eq(dialogId))
-                .orderAsc(MessageModelDao.Properties.DateSent)
-                .list();
-        adapter.setMessageList(messages);
-        adapter.notifyDataSetChanged();
-        getViewState().scrollToEnd();
-        getViewState().hideLoading();
-        if (messages != null && messages.size() > 0) {
-            MessageModel lastMessage;
-            for (int i = messages.size() - 1; i >= 0; i--) {
-                lastMessage = messages.get(i);
-                if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
-                    messageService.get().sendPrivateReadStatusMessage(
-                            privateOccupantJid,
-                            lastMessage.getMessageId(),
-                            dialogId
-                    );
-                    break;
-                }
+        getMessagesUseCase.setChatDialogId(dialogId);
+        getMessagesUseCase.setDialogType(type);
+        getMessagesUseCase.execute(new Subscriber<List<MessageModel>>() {
+            @Override public void onCompleted() {
+
             }
-        }
+
+            @Override public void onError(Throwable e) {
+                Logger.logExceptionToFabric(e);
+            }
+
+            @Override public void onNext(List<MessageModel> messageModels) {
+                messages = messageModels;
+                adapter.setMessageList(messages);
+                adapter.notifyDataSetChanged();
+                getViewState().scrollToEnd();
+                getViewState().hideLoading();
+                if (messages != null && messages.size() > 0 && type == DialogsType.PRIVATE_CHAT) {
+                    MessageModel lastMessage;
+                    for (int i = messages.size() - 1; i >= 0; i--) {
+                        lastMessage = messages.get(i);
+                        if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
+                            messageService.get().sendPrivateReadStatusMessage(
+                                    privateOccupantJid,
+                                    lastMessage.getMessageId(),
+                                    dialogId
+                            );
+                            break;
+                        }
+                    }
+                }
+                if (type != DialogsType.PRIVATE_CHAT) {
+                    if (messages != null && messages.size() > 0)
+                        messageService.get().joinPublicChat(dialogRoomJid, messages.get(messages.size() - 1).getDateSent());
+                    else
+                        messageService.get().joinPublicChat(dialogRoomJid, 0);
+                }
+                loaded = true;
+            }
+        });
     }
 
     public int getType() {
@@ -225,6 +249,10 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
 
     public void setMessageService(BizareChatMessageService messageService) {
         this.messageService = new WeakReference<>(messageService);
+    }
+
+    public WeakReference<BizareChatMessageService> getMessageService(){
+        return messageService;
     }
 
     public void showEditChat() {
@@ -390,13 +418,13 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
         if (type != DialogsType.PRIVATE_CHAT) {
             messageService.get().leavePublicChat(dialogRoomJid);
         }
-        if(usersPhotosUseCase != null){
+        if (usersPhotosUseCase != null) {
             usersPhotosUseCase.unsubscribe();
         }
-        if(usersByIdsUseCase != null){
+        if (usersByIdsUseCase != null) {
             usersByIdsUseCase.unsubscribe();
         }
-        if(markMessagesAsReadUseCase != null){
+        if (markMessagesAsReadUseCase != null) {
             markMessagesAsReadUseCase.unsubscribe();
         }
     }
