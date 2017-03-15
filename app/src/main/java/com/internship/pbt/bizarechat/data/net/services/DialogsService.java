@@ -5,6 +5,7 @@ import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
+import com.internship.pbt.bizarechat.data.datamodel.response.MessagesResponse;
 import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.data.net.requests.MarkMessagesAsReadRequest;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
@@ -52,4 +53,8 @@ public interface DialogsService {
     @PUT("/chat/Message.json")
     Call<Void> markMessagesAsRead(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
                                             @Body MarkMessagesAsReadRequest request);
+
+    @GET("/chat/Message.json")
+    Observable<MessagesResponse> getMessages(@Header(ApiConstants.TOKEN_HEADER_NAME) String tokenHeader,
+                                             @QueryMap Map<String, String> parameters);
 }

@@ -9,6 +9,9 @@ import java.util.Map;
 
 
 public class QuickbloxChatExtension implements ExtensionElement {
+    public static final String NAMESPACE = "jabber:client";
+    public static final String ELEMENT = "extraParams";
+
     private Map<String, String> properties;
 
     public QuickbloxChatExtension() {
@@ -17,12 +20,12 @@ public class QuickbloxChatExtension implements ExtensionElement {
 
     @Override
     public String getNamespace() {
-        return "jabber:client";
+        return NAMESPACE;
     }
 
     @Override
     public String getElementName() {
-        return "extraParams";
+        return ELEMENT;
     }
 
     @Override
