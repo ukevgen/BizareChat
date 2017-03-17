@@ -1,27 +1,38 @@
 package com.internship.pbt.bizarechat.data.repository;
 
 
+import android.util.Log;
+
 import com.internship.pbt.bizarechat.constans.DialogsType;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
 import com.internship.pbt.bizarechat.data.datamodel.DialogModelDao;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModelDao;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
+import com.internship.pbt.bizarechat.data.datamodel.response.MessagesResponse;
 import com.internship.pbt.bizarechat.data.net.requests.MarkMessagesAsReadRequest;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
 import com.internship.pbt.bizarechat.data.net.services.DialogsService;
 import com.internship.pbt.bizarechat.domain.repository.DialogsRepository;
+import com.internship.pbt.bizarechat.logs.Logger;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class DialogsDataRepository implements DialogsRepository {
+    private static final String TAG = DialogsDataRepository.class.getSimpleName();
+
     private DialogsService dialogsService;
     private DaoSession daoSession;
 
@@ -84,6 +95,54 @@ public class DialogsDataRepository implements DialogsRepository {
     @Override
     public Observable<Map<String, Integer>> getUnreadMessagesCount() {
         return dialogsService.getUnreadMessagesCount(UserToken.getInstance().getToken());
+    }
+
+    @Override
+    public Observable<List<MessageModel>> getMessages(String chatDialogId, int dialogType) {
+        return Observable.fromCallable(() -> {
+            List<MessageModel> messagesFromDao = daoSession.getMessageModelDao()
+                    .queryBuilder()
+                    .where(MessageModelDao.Properties.ChatDialogId.eq(chatDialogId))
+                    .orderAsc(MessageModelDao.Properties.DateSent)
+                    .list();
+
+            if (dialogType != DialogsType.PRIVATE_CHAT) {
+                getUnreadMessagesCount().flatMap(new Func1<Map<String, Integer>, Observable<MessagesResponse>>() {
+                    @Override
+                    public Observable<MessagesResponse> call(Map<String, Integer> unreadCount) {
+                        //avoiding unnecessary request for messages
+                        if (unreadCount.get("total") == 0)
+                            throw new IllegalArgumentException("Unread messages count is 0");
+
+                        Map<String, String> parameters = new HashMap<>();
+                        parameters.put("chat_dialog_id", chatDialogId);
+                        parameters.put("sort_desc", "date_sent");
+                        parameters.put("limit", String.valueOf(unreadCount.get("total")));
+                        return dialogsService.getMessages(UserToken.getInstance().getToken(), parameters);
+                    }
+                }).subscribeOn(Schedulers.immediate())
+                        .observeOn(Schedulers.immediate())
+                        .subscribe(new Subscriber<MessagesResponse>() {
+                            @Override public void onCompleted() {
+
+                            }
+
+                            @Override public void onError(Throwable e) {
+                                if (e instanceof IllegalArgumentException) return;
+                                Logger.logExceptionToFabric(e);
+                                Log.d(TAG, e.getMessage(), e);
+                            }
+
+                            @Override public void onNext(MessagesResponse messagesResponse) {
+                                Collections.reverse(messagesResponse.getMessageModels());
+                                daoSession.getMessageModelDao().insertInTx(messagesResponse.getMessageModels());
+                                messagesFromDao.addAll(messagesResponse.getMessageModels());
+                            }
+                        });
+            }
+
+            return messagesFromDao;
+        });
     }
 
     @Override

@@ -184,11 +184,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         return false;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     private void setUserInformation() {
 
         View headerView = mNavigationView.getHeaderView(0);
@@ -490,7 +485,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PUBLIC_DIALOGS_FR_TAG);
         if (fragment != null) {
-            ((PublicDialogsFragment) fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PUBLIC_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -509,7 +503,6 @@ public class MainActivity extends MvpAppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(PRIVATE_DIALOGS_FR_TAG);
         if (fragment != null) {
-            ((PrivateDialogsFragment) fragment).setDialogClickListener(this);
             transaction.replace(R.id.main_screen_container, fragment, PRIVATE_DIALOGS_FR_TAG)
                     .commit();
             return;
@@ -669,6 +662,17 @@ public class MainActivity extends MvpAppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(PUBLIC_DIALOGS_FR_TAG);
+        if (fragment != null) {
+            ((PublicDialogsFragment) fragment).setDialogClickListener(this);
+        }
+
+        fragment = getSupportFragmentManager().findFragmentByTag(PRIVATE_DIALOGS_FR_TAG);
+        if (fragment != null) {
+            ((PrivateDialogsFragment) fragment).setDialogClickListener(this);
+        }
+
         NotificationUtils.clearNotifications(getApplicationContext());
         EventBus.getDefault().register(this);
         bindMessageService();

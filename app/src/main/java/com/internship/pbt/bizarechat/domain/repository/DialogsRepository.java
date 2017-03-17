@@ -2,11 +2,13 @@ package com.internship.pbt.bizarechat.domain.repository;
 
 
 import com.internship.pbt.bizarechat.data.datamodel.DialogModel;
+import com.internship.pbt.bizarechat.data.datamodel.MessageModel;
 import com.internship.pbt.bizarechat.data.datamodel.NewDialog;
 import com.internship.pbt.bizarechat.data.datamodel.response.AllDialogsResponse;
 import com.internship.pbt.bizarechat.data.datamodel.response.DialogUpdateResponseModel;
 import com.internship.pbt.bizarechat.data.net.requests.dialog.DialogUpdateRequestModel;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Response;
@@ -24,6 +26,8 @@ public interface DialogsRepository {
     Observable<DialogModel> createDialog(NewDialog dialog);
 
     Observable<Map<String, Integer>> getUnreadMessagesCount();
+
+    Observable<List<MessageModel>> getMessages(String chatDialogId, int dialogType);
 
     Observable<Response<Void>> markMessagesAsRead(String dialogId);
 

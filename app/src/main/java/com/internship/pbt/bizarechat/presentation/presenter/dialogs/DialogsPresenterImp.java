@@ -229,14 +229,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
 
             @Override
             public void onNext(Map<String, Integer> response) {
-                if (response.size() > 1) {
-                    response.remove("total");
-                    StringBuilder builder = new StringBuilder();
-                    for (String dialogId : response.keySet()) {
-                        builder.append(dialogId).append(",");
-                    }
-                    builder.deleteCharAt(builder.length() - 1);
-                    getDialogInfo(builder.toString());
+                if (response.get("total") != 0) {
+                    getDialogInfo();
                 } else {
                     getViewState().stopRefreshing();
                 }
@@ -244,9 +238,14 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         });
     }
 
-    private void getDialogInfo(String dialogsIds) {
+    private void getDialogInfo() {
+        StringBuilder builder = new StringBuilder();
+        for (DialogModel dialog : dialogs) {
+            builder.append(dialog.getDialogId()).append(",");
+        }
+        builder.deleteCharAt(builder.length() - 1);
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("_id[in]", dialogsIds);
+        parameters.put("_id[in]", builder.toString());
         allDialogsUseCase.setParameters(parameters);
         allDialogsUseCase.execute(new Subscriber<AllDialogsResponse>() {
             @Override

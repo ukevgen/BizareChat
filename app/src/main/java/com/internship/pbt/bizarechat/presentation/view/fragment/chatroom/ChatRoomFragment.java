@@ -32,6 +32,7 @@ import com.internship.pbt.bizarechat.domain.events.PrivateMessageEvent;
 import com.internship.pbt.bizarechat.domain.events.PublicMessageEvent;
 import com.internship.pbt.bizarechat.domain.events.PublicMessageSentEvent;
 import com.internship.pbt.bizarechat.domain.events.ReceivedEvent;
+import com.internship.pbt.bizarechat.domain.interactor.GetMessagesUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCase;
 import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
@@ -56,6 +57,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     public static final String DIALOG_ROOM_JID_BUNDLE_KEY = "dialogRoomJid";
     public static final String DIALOG_TYPE_BUNDLE_KEY = "dialogType";
     public static final String OCCUPANTS_IDS_BUNDLE_KEY = "occupantsIds";
+    public static final String UNREAD_MESSAGES_COUNT = "unreadMessagesCount";
     private final int editItemId = 400;
 
 
@@ -83,8 +85,10 @@ public class ChatRoomFragment extends MvpAppCompatFragment
                         BizareChatApp.getInstance().getUserService())),
                 new MarkMessagesAsReadUseCase(new DialogsDataRepository(
                         BizareChatApp.getInstance().getDialogsService(),
-                        BizareChatApp.getInstance().getDaoSession()
-                ))
+                        BizareChatApp.getInstance().getDaoSession())),
+                new GetMessagesUseCase(new DialogsDataRepository(
+                        BizareChatApp.getInstance().getDialogsService(),
+                        BizareChatApp.getInstance().getDaoSession()))
         );
     }
 
@@ -93,7 +97,8 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         setHasOptionsMenu(true);
-        presenter.setMessageService(((MainActivity) getActivity()).getMessageService());
+        if(presenter.getMessageService() == null)
+            presenter.setMessageService(((MainActivity) getActivity()).getMessageService());
         presenter.setDialogId(getArguments().getString(DIALOG_ID_BUNDLE_KEY));
         presenter.setDialogRoomJid(getArguments().getString(DIALOG_ROOM_JID_BUNDLE_KEY));
         presenter.setOccupantsIds(getArguments().getIntegerArrayList(OCCUPANTS_IDS_BUNDLE_KEY));
@@ -187,6 +192,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     @Override
     public void onStop() {
         super.onStop();
+        presenter.sendReadRequestToServer();
         EventBus.getDefault().unregister(this);
     }
 
