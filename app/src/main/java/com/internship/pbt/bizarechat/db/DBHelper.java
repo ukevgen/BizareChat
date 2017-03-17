@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.internship.pbt.bizarechat.data.datamodel.DaoMaster;
 import com.internship.pbt.bizarechat.data.datamodel.DaoSession;
+import com.internship.pbt.bizarechat.data.net.ApiConstants;
 import com.internship.pbt.bizarechat.logs.Logger;
 
 import org.greenrobot.greendao.database.Database;
@@ -21,9 +22,6 @@ public class DBHelper {
         this.context = context;
     }
 
-
-/*DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
-    db = openHelper.getWritableDb();    */
 
     private DaoMaster getMaster() {
         if (db == null) {
@@ -49,9 +47,9 @@ public class DBHelper {
             Log.i(TAG, s);
             DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_NAME);
             if (readOnly) {
-                return helper.getReadableDb();
+                return helper.getEncryptedReadableDb(ApiConstants.AUTH_KEY);
             } else {
-                return helper.getWritableDb();
+                return helper.getEncryptedWritableDb(ApiConstants.AUTH_KEY);
             }
         } catch (Exception ex) {
             Logger.logExceptionToFabric(ex);

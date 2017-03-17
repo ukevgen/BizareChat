@@ -28,9 +28,6 @@ public class BizareChatApp extends MultiDexApplication {
 
     private static BizareChatApp INSTANCE = null;
     private DBHelper dbHelper = new DBHelper(this);
-    private DaoSession daoSession;
-    private DaoMaster daoMaster;
-    private Database db;
 
     public static BizareChatApp getInstance() {
         return INSTANCE;
@@ -52,11 +49,6 @@ public class BizareChatApp extends MultiDexApplication {
 
         AppEventsLogger.activateApp(this);
         UserToken.getInstance().initSharedPreferences(this);
-
-        //DB init
-        /*DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "bizare-db");
-        db = openHelper.getWritableDb();*/
-
 
     }
 
@@ -84,20 +76,10 @@ public class BizareChatApp extends MultiDexApplication {
         return RetrofitApi.getRetrofitApi().getDialogsService();
     }
 
-    /*public DaoSession getDaoSession() {
-        if (daoSession == null)
-            daoSession = getDaoMaster().newSession();
-        return daoSession;
-    }*/
 
     public DaoSession getDaoSession() {
         return getInstance().dbHelper.getSession(false);
     }
-    /*private DaoMaster getDaoMaster() {
-        if (daoMaster == null)
-            daoMaster = new DaoMaster(db);
-        return daoMaster;
-    }*/
 
     public boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
