@@ -22,12 +22,12 @@ public class Logger {
 
         try {
             ex.printStackTrace();
-        }catch (StackOverflowError ignored) {
+        } catch (StackOverflowError ignored) {
             Crashlytics.log("StackOverflowError in Logger " + ignored);
             return;
         }
 
-        if(Fabric.isInitialized() && !TextUtils.isEmpty(ex.getMessage())) {
+        if (Fabric.isInitialized() && !TextUtils.isEmpty(ex.getMessage())) {
             Crashlytics.logException(ex);
         }
     }
