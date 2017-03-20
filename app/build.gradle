@@ -38,6 +38,13 @@ def versionMinor = 0
 def versionPatch = 0
 def versionBuild = 0
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 24
@@ -75,6 +82,12 @@ android {
     }
 
     signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
         debug {
             storeFile file('keystore/debug.keystore')
             storePassword 'android'
@@ -107,8 +120,9 @@ android {
         release {
             buildConfigField BOOLEAN, CRASH_REPORTS, TRUE
             buildConfigField INT, SPLASH_DELAY, '3000'
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
