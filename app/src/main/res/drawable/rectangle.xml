@@ -5,9 +5,7 @@
         <shape>
             <solid android:color="#2bbc9b"/>
             <corners android:bottomRightRadius="7dip"
-                android:bottomLeftRadius="7dip"
-                android:topLeftRadius="7dip"
-                android:topRightRadius="7dip"/>
+                android:bottomLeftRadius="7dip"/>
         </shape>
     </item>
 </selector>

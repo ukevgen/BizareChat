@@ -124,10 +124,16 @@ public class MainPresenterImpl extends MvpPresenter<MainView> implements MainPre
     }
 
     public void sendSubscriptionToServer() {
+        String firebaseToken = CurrentUser.getInstance().getFirebaseToken();
+
+        if (firebaseToken == null || firebaseToken.isEmpty()) {
+            CurrentUser.getInstance().setSubscribed(true);
+            return;
+        }
+
         CreateSubscriptionUseCase useCase = new CreateSubscriptionUseCase(
                 new PushNotificationsRepository(RetrofitApi.getRetrofitApi().getNotificationService()));
-        useCase.setFirebaseToken(CurrentUser.getInstance().getFirebaseToken());
-
+        useCase.setFirebaseToken(firebaseToken);
         useCase.execute(new Subscriber<CreateSubscriptionResponse[]>() {
             @Override
             public void onCompleted() {

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,7 +110,8 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         messageDay = (TextView) view.findViewById(R.id.message_day);
         recyclerView = (RecyclerView) view.findViewById(R.id.chat_room_messages_container);
         recyclerView.setLayoutManager(mLayoutManager);
-
+        presenter.getAdapter().setLayoutManager(mLayoutManager);
+        ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -120,14 +122,15 @@ public class ChatRoomFragment extends MvpAppCompatFragment
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 final int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-                if (firstVisibleItemPosition != 0) {
+                if (firstVisibleItemPosition != -1) {
                     messageDay.setVisibility(View.VISIBLE);
-                    messageDay.setText(presenter.getAdapter().getPreviousMesageDay(firstVisibleItemPosition - 1));
+                    messageDay.setText(presenter.getAdapter().getPreviousMessageDay(firstVisibleItemPosition));
                 } else {
                     messageDay.setVisibility(View.GONE);
                 }
             }
         });
+
         progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
         sendButton = (ImageButton) view.findViewById(R.id.chat_room_send_button);
         sendButton.setOnClickListener(this);
@@ -150,6 +153,16 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         if (v.getId() == R.id.chat_room_send_button) {
             presenter.sendMessage(messageEditText.getText().toString());
             messageEditText.setText("");
+        }
+    }
+
+    @Override
+    public void showMessageDay() {
+        presenter.getAdapter().setMessageDay(messageDay);
+        final int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+        if (firstVisibleItemPosition != -1) {
+            messageDay.setVisibility(View.VISIBLE);
+            messageDay.setText(presenter.getAdapter().getPreviousMessageDay(firstVisibleItemPosition));
         }
     }
 

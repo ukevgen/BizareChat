@@ -32,10 +32,12 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
     private Context context;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
+    private Map<Long, String> userNames;
 
-    public DialogsRecyclerViewAdapter(List<DialogModel> dialogs, Map<String, Bitmap> dialogPhotos) {
+    public DialogsRecyclerViewAdapter(List<DialogModel> dialogs, Map<String, Bitmap> dialogPhotos, Map<Long, String> userNames) {
         this.dialogs = dialogs;
         this.dialogPhotos = dialogPhotos;
+        this.userNames = userNames;
         mItemManger.setMode(Attributes.Mode.Single);
     }
 
@@ -56,7 +58,9 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
         if (dialog.getLastMessageUserId() == currentUserId) {
             holder.mMessageAuthor.setText(R.string.me);
         } else {
-            holder.mMessageAuthor.setText(String.valueOf(dialog.getLastMessageUserId()));
+            String userName = userNames.get(dialog.getLastMessageUserId().longValue());
+            if(userName != null)
+                holder.mMessageAuthor.setText(userNames.get(dialog.getLastMessageUserId().longValue()));
         }
         holder.mTitle.setText(dialog.getName());
         if (dialog.getUnreadMessagesCount() != 0) {

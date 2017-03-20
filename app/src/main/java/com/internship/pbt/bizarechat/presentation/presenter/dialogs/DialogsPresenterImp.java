@@ -46,6 +46,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
     private int dialogsType;
     private List<DialogModel> dialogs;
     private Map<String, Bitmap> dialogPhotos;
+    private Map<Long, String> userNames;
 
     public DialogsPresenterImp(DeleteDialogUseCase deleteDialogUseCase,
                                GetPhotoUseCase photoUseCase,
@@ -64,7 +65,8 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         dialogs = new ArrayList<>();
         queryBuilder = QueryBuilder.getQueryBuilder(daoSession);
         dialogPhotos = new HashMap<>();
-        adapter = new DialogsRecyclerViewAdapter(dialogs, dialogPhotos);
+        userNames = new HashMap<>();
+        adapter = new DialogsRecyclerViewAdapter(dialogs, dialogPhotos, userNames);
         adapter.setOnDialogDeleteCallback(this);
     }
 
@@ -94,6 +96,7 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
             dialogs.addAll(buffer);
             for (int i = 0; i < dialogs.size(); i++) {
                 getAndAddPhoto(dialogs.get(i));
+                getAndAddUserName(dialogs.get(i));
             }
         }
         adapter.notifyDataSetChanged();
@@ -130,6 +133,25 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
         });
     }
 
+    private void getAndAddUserName(DialogModel dialog){
+        if(dialog.getLastMessageUserId() == 0) return;
+        getUserByIdUseCase.setId(dialog.getLastMessageUserId());
+        getUserByIdUseCase.execute(new Subscriber<UserModel>() {
+            @Override public void onCompleted() {
+
+            }
+
+            @Override public void onError(Throwable e) {
+                Logger.logExceptionToFabric(e, TAG);
+                getViewState().showNetworkError();
+            }
+
+            @Override public void onNext(UserModel user) {
+                userNames.put(user.getUserId(), user.getFullName());
+                adapter.notifyItemChanged(dialogs.indexOf(dialog));
+            }
+        });
+    }
 
     private void getAndAddPhoto(DialogModel dialogModel) {
         if (dialogModel.getType() == DialogsType.PRIVATE_CHAT) {
@@ -276,8 +298,9 @@ public class DialogsPresenterImp extends MvpPresenter<DialogsView>
                         dialogs.add(dialog);
                         Collections.sort(dialogs, new ComparatorDefault());
                         adapter.notifyItemInserted(dialogs.indexOf(dialog));
-                        getAndAddPhoto(dialog);
                     }
+                    getAndAddPhoto(dialog);
+                    getAndAddUserName(dialog);
                 }
                 getViewState().stopRefreshing();
             }
