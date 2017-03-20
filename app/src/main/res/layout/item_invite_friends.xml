@@ -3,44 +3,45 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:textSize="13dp"
-        android:id="@+id/friend_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="@string/friend_email"
-        android:textColor="@color/chats_item_last_message"
-        android:layout_below="@+id/check_friend"
-        android:layout_toEndOf="@+id/friend_pic" />
-
-    <TextView
-        android:id="@+id/friend_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="13dp"
-        android:text="@string/friend_name"
-        android:textColor="@color/chats_item_last_message"
-        android:layout_marginTop="24dp"
-        android:layout_alignEnd="@+id/friend_email" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_marginTop="12dp"
         android:id="@+id/friend_pic"
-        android:layout_width="@dimen/sing_up_avatar_size"
-        android:layout_height="@dimen/sing_up_avatar_size"
+        android:layout_width="@dimen/image_size_main"
+        android:layout_height="@dimen/image_size_main"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:src="@drawable/user_icon" />
 
+    <TextView
+        android:id="@+id/friend_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="12dp"
+        android:text="@string/friend_name"
+        android:textColor="@color/chats_item_last_message"
+        android:layout_toEndOf="@id/friend_pic"/>
+
+    <TextView
+        android:textSize="14dp"
+        android:id="@+id/friend_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friend_email"
+        android:textColor="@color/chats_item_last_message"
+        android:layout_alignStart="@id/friend_name"
+        android:layout_marginTop="40dp"
+        android:layout_toEndOf="@id/friend_pic" />
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/check_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp"
-        android:layout_alignTop="@+id/friend_name"
+        android:layout_alignTop="@id/friend_name"
         android:layout_alignParentEnd="true"
         android:checked="false"
         app:buttonTint="@color/colorPrimary"/>

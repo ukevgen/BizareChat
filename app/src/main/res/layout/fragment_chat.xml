@@ -65,7 +65,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/rectangle"
-        android:text="day"
         android:textColor="@color/white"
-        android:visibility="gone" />
+        android:padding="4dp"
+        android:alpha="0.5"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -2,10 +2,12 @@ package com.internship.pbt.bizarechat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,8 +29,10 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
     private Map<Long, Bitmap> occupantsPhotos;
     private Map<Long, String> userNames;
     private int self = Integer.MAX_VALUE;
+    private TextView messageDay;
+    private LinearLayoutManager layoutManager;
+    private int[] defaultCoordinates;
     private Context context;
-    private int position;
 
     public ChatRoomRecyclerAdapter(List<MessageModel> messageList,
                                    Map<Long, Bitmap> occupantsPhotos,
@@ -38,11 +42,17 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         this.userNames = userNames;
     }
 
+    public void setMessageDay(TextView messageDay) {
+        this.messageDay = messageDay;
+        defaultCoordinates = new int[2];
+        messageDay.getLocationOnScreen(defaultCoordinates);
+    }
+
     public void setMessageList(List<MessageModel> messageList) {
         this.messageList = messageList;
     }
 
-    public String getPreviousMesageDay(int position) {
+    public String getPreviousMessageDay(int position) {
         long date = messageList.get(position).getDateSent();
         return Converter.getLastMessageDay(date);
     }
@@ -53,6 +63,10 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setLayoutManager(LinearLayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -81,7 +95,6 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
     @Override
     public void onBindViewHolder(MessageHolder holder, int position) {
         MessageModel message = messageList.get(position);
-        this.position = position;
         Bitmap photo = occupantsPhotos.get(message.getSenderId().longValue());
         holder.userName.setText(userNames.get(message.getSenderId().longValue()));
         holder.messageText.setText(message.getMessage());
@@ -153,6 +166,32 @@ public class ChatRoomRecyclerAdapter extends RecyclerView.Adapter<ChatRoomRecycl
         MessageHolder(View view) {
             super(view);
             timeText = (TextView) view.findViewById(R.id.timeText);
+            timeText.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                @Override public void onScrollChanged() {
+                    if (timeText.getVisibility() != View.VISIBLE) return;
+
+                    if (messageDay != null) {
+                        if (layoutManager.findFirstVisibleItemPosition() + 1 == getAdapterPosition() ||
+                                layoutManager.findFirstVisibleItemPosition() == getAdapterPosition()) {
+                            int[] messageDayCoordinates = new int[2];
+                            int[] timeTextCoordinates = new int[2];
+                            messageDay.getLocationInWindow(messageDayCoordinates);
+                            timeText.getLocationInWindow(timeTextCoordinates);
+
+                            if (timeTextCoordinates[1] - timeText.getHeight() / 2 <= defaultCoordinates[1] + messageDay.getHeight() / 2 &&
+                                    timeTextCoordinates[1] + timeText.getHeight() / 2 >= defaultCoordinates[1] - messageDay.getHeight() / 2
+                                    ) {
+                                messageDay.setY(messageDay.getY() - ((messageDayCoordinates[1] + messageDay.getHeight() / 2) - (timeTextCoordinates[1] - timeText.getHeight() / 2)));
+                                return;
+                            }
+
+                            messageDay.setY(0);
+                            messageDay.setText(getPreviousMessageDay(layoutManager.findFirstVisibleItemPosition()));
+                        }
+                    }
+                }
+            });
+
             userPhoto = (CircleImageView) view.findViewById(R.id.message_user_photo);
             messageText = (TextView) view.findViewById(R.id.message_text);
             userName = (TextView) view.findViewById(R.id.message_user_name);

@@ -18,6 +18,7 @@ import com.internship.pbt.bizarechat.domain.interactor.GetUsersPhotosByIdsUseCas
 import com.internship.pbt.bizarechat.domain.interactor.MarkMessagesAsReadUseCase;
 import com.internship.pbt.bizarechat.domain.model.chatroom.MessageState;
 import com.internship.pbt.bizarechat.logs.Logger;
+import com.internship.pbt.bizarechat.presentation.UiThread;
 import com.internship.pbt.bizarechat.presentation.model.CurrentUser;
 import com.internship.pbt.bizarechat.presentation.view.fragment.chatroom.ChatRoomView;
 import com.internship.pbt.bizarechat.service.messageservice.BizareChatMessageService;
@@ -29,9 +30,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import retrofit2.Response;
+import rx.Observable;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 @InjectViewState
 public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements ChatRoomPresenter {
@@ -172,31 +176,65 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
                 messages = messageModels;
                 adapter.setMessageList(messages);
                 adapter.notifyDataSetChanged();
-                getViewState().scrollToEnd();
-                getViewState().hideLoading();
-                if (messages != null && messages.size() > 0 && type == DialogsType.PRIVATE_CHAT) {
-                    MessageModel lastMessage;
-                    for (int i = messages.size() - 1; i >= 0; i--) {
-                        lastMessage = messages.get(i);
-                        if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
-                            messageService.get().sendPrivateReadStatusMessage(
-                                    privateOccupantJid,
-                                    lastMessage.getMessageId(),
-                                    dialogId
-                            );
-                            break;
-                        }
-                    }
-                }
-                if (type != DialogsType.PRIVATE_CHAT) {
-                    if (messages != null && messages.size() > 0)
-                        messageService.get().joinPublicChat(dialogRoomJid, messages.get(messages.size() - 1).getDateSent());
-                    else
-                        messageService.get().joinPublicChat(dialogRoomJid, 0);
-                }
+
                 loaded = true;
+                initMessageDay();
+                getViewState().hideLoading();
+                getViewState().scrollToEnd();
+
+                sendReadStatus();
+                joinPublicRoom();
             }
         });
+    }
+
+    private void initMessageDay() {
+        Observable.fromCallable(new Callable<Void>() {
+            @Override public Void call() throws Exception {
+                Thread.sleep(100);
+                return null;
+            }
+        }).subscribeOn(Schedulers.from(JobExecutor.getInstance()))
+                .observeOn(UiThread.getInstance().getScheduler())
+                .subscribe(new Subscriber<Void>() {
+                    @Override public void onCompleted() {
+
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        Logger.logExceptionToFabric(e);
+                    }
+
+                    @Override public void onNext(Void aVoid) {
+                        getViewState().showMessageDay();
+                    }
+                });
+    }
+
+    private void sendReadStatus() {
+        if (messages != null && messages.size() > 0 && type == DialogsType.PRIVATE_CHAT) {
+            MessageModel lastMessage;
+            for (int i = messages.size() - 1; i >= 0; i--) {
+                lastMessage = messages.get(i);
+                if (lastMessage.getSenderId() != currentUserId && lastMessage.getRead() != MessageState.READ) {
+                    messageService.get().sendPrivateReadStatusMessage(
+                            privateOccupantJid,
+                            lastMessage.getMessageId(),
+                            dialogId
+                    );
+                    break;
+                }
+            }
+        }
+    }
+
+    private void joinPublicRoom() {
+        if (type != DialogsType.PRIVATE_CHAT) {
+            if (messages != null && messages.size() > 0)
+                messageService.get().joinPublicChat(dialogRoomJid, messages.get(messages.size() - 1).getDateSent());
+            else
+                messageService.get().joinPublicChat(dialogRoomJid, 0);
+        }
     }
 
     public int getType() {
@@ -268,6 +306,9 @@ public class ChatRoomPresenterImpl extends MvpPresenter<ChatRoomView> implements
     }
 
     public void sendMessage(String message) {
+        if (message.trim().isEmpty()) {
+            return;
+        }
         if (!isMessageLengthValid(message)) {
             getViewState().showToLargeMessage();
             return;

@@ -22,8 +22,9 @@
         android:id="@+id/friends_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/select_members_tv">
+        android:layout_below="@+id/select_members_tv"
+        android:layout_above="@+id/send"
+        android:layout_marginBottom="12dp">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -35,7 +36,6 @@
         android:layout_centerHorizontal="true"
         android:background="@color/cardSignBackground"
         android:onClick="onClick"
-
         android:text="@string/send"
         android:textColor="@color/white"
         android:textSize="16dp" />

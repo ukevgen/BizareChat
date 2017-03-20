@@ -66,6 +66,7 @@ public class InviteFriendsFragment extends MvpAppCompatFragment implements Invit
     @Override
     public void onStart() {
         super.onStart();
+        presenter.getAdapter().setContext(getActivity());
         recyclerView.setAdapter(presenter.getAdapter());
         showEmptyList();
     }
