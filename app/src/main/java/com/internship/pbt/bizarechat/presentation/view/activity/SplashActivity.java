@@ -21,8 +21,6 @@ public class SplashActivity extends BaseActivity {
                 BizareChatApp.getInstance().getSessionService());
 
         presenter.checkIsAuthorized();
-
-        finish();
     }
 
     public void navigateToMainActivity() {
