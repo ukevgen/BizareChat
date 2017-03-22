@@ -1,6 +1,7 @@
 package com.internship.pbt.bizarechat.presentation.view.fragment.chatroom;
 
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -210,6 +211,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    @Keep
     public void onPrivateMessageEvent(PrivateMessageEvent event) {
         if (presenter.getType() == DialogsType.PRIVATE_CHAT) {
             presenter.processPrivateMessage(event.getMessage());
@@ -217,6 +219,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    @Keep
     public void onPublicMessageEvent(PublicMessageEvent event) {
         if (presenter.getType() != DialogsType.PRIVATE_CHAT) {
             presenter.processPublicMessage(event.getMessage());
@@ -224,16 +227,19 @@ public class ChatRoomFragment extends MvpAppCompatFragment
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    @Keep
     public void onDeliveredReceipt(ReceivedEvent event) {
         presenter.processDeliveredReceipt(event.getMessages());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    @Keep
     public void onReadReceipt(DisplayedEvent event) {
         presenter.processReadReceipt(event.getMessages());
     }
 
     @Subscribe
+    @Keep
     public void onSentPublicMessage(PublicMessageSentEvent event) {
         presenter.processSentPublicMessageEvent(event.getMessageId());
     }

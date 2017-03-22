@@ -2,6 +2,7 @@ package com.internship.pbt.bizarechat.presentation.view.fragment.dialogs;
 
 
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -145,6 +146,7 @@ public class PublicDialogsFragment extends MvpAppCompatFragment
     }
 
     @Subscribe
+    @Keep
     public void onDialogsUpdated(DialogsUpdatedEvent event) {
         presenter.onDialogsUpdated();
     }
