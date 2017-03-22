@@ -1,3 +1,112 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
     <string name="app_name">BizareChat</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="keep_me_sign_in">Keep me signed in</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="message_session_expired">Your session has expired</string>
+    <string name="user_already_exists">User with given email already exists</string>
+    <string name="invalid_login_or_password">Invalid email or password!</string>
+    <string name="server_common_error">Server encountered an error, try again later</string>
+    <string name="server_is_busy">Server is at capacity, try again later</string>
+    <string name="message_no_connection">Check your internet connection</string>
+    <string name="password_recovery_sent">Password recovery email was sent</string>
+
+
+    <string name="email_com">email@com</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="phone">Phone</string>
+    <string name="website">Website</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid Password</string>
+    <string name="password_don_t_match">Password don\'t match</string>
+    <string name="invalid_phone">Invalid Phone</string>
+    <string name="link_facebook">Link Facebook</string>
+    <string name="linked">Linked</string>
+    <string name="avatar_uploaded">Avatar uploaded</string>
+
+
+    <string name="invalid_weak_password">Password is weak. Please use at least two digits and two capitalized letters</string>
+    <string name="error_password_length">Password length should be 6-12 symbols</string>
+
+    <string name="choose_source_for_getting_image">Choose source for getting image</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="back">Back</string>
+
+    <string name="device_camera">Device Camera</string>
+    <string name="photo_gallery">Photo Gallery</string>
+    <string name="too_large_picture_please_select_anouther">Too large image, please select another</string>
+    <string name="restore_password">Restore Password</string>
+    <string name="send_email">SEND</string>
+    <string name="cancel">Cancel</string>
+    <string name="do_not_match_password">Passwords do not match</string>
+
+    <string name="phone_format">+38 (0__) ___-__-__</string>
+    <string name="ukr_phone">+38 (0</string>
+    <string name="forgot_to_authorize">Seems like you forgot to authorize the app?</string>
+    <string name="bizare_chat">BizareChat</string>
+
+    <string name="facebook_app_id">233083370481962</string>
+    <string name="linked_with_facebook_user">Linked with facebook user</string>
+
+    <string name="malformed_request_parameters">malformed request parameters</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="chat">CHAT</string>
+    <string name="search_title">Search</string>
+    <string name="there_are_no_chats_yet">There are no dialogs yet.</string>
+    <string name="main_invite_friends"><u>Invite friends</u></string>
+    <string name="main_and_start_a_new_chat">\u0020and start a new chat</string>
+    <string name="chat_name">CHAT NAME</string>
+    <string name="privacy">PRIVACY</string>
+    <string name="new_chat_radio_public">Public</string>
+    <string name="new_chat_radio_private">Private</string>
+    <string name="new_chat_members_title">SELECT MEMBERS</string>
+    <string name="new_chat_button_create">CREATE</string>
+    <string name="edit_chat_save_button">SAVE</string>
+    <string name="outgoing_message_author">Me</string>
+    <string name="chat_room_enter_message_hint">Type your message</string>
+    <string name="me">Me</string>
+    <string name="no_friends_error">Please add Friends first</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="sign_out">SIGN OUT</string>
+    <string name="you_have_no_permissions_for_edit_this_chat">You have no permissions for edit this chat</string>
+    <string name="successfully_edited">Successfully edited</string>
+    <string name="select_members">SELECT MEMBERS</string>
+    <string name="save">SAVE</string>
+    <string name="friend_name">Friend name</string>
+    <string name="friend_email">Friend email</string>
+    <string name="send">SEND</string>
+    <string name="error_send">No email client installed in this device.</string>
+    <string name="sorry">Sorry, but you have not any friends with email</string>
+    <string name="new_chat_title">NEW CHAT</string>
+    <string name="users_title">USERS</string>
+    <string name="main_connection_problem">Connection problem</string>
+    <string name="action_search">Find users</string>
+    <string name="action_filter">Filter</string>
+    <string name="users_screen_search_hint">Find users...</string>
+    <string name="users_screen_filter_hint">Filter users...</string>
+    <string name="users_name_default">Name is empty</string>
+    <string name="users_filter_default_title">Clear Sort (created_at)</string>
+    <string name="users_filter_name_asc_title">By name (ASC)</string>
+    <string name="users_filter_name_desc_title">By name (DESC)</string>
+    <string name="users_alone_message">Seems like you are the only User :)</string>
+    <string name="transition_user_avatar_name">userImage</string>
+    <string name="user_info_website_title">WEBSITE</string>
+    <string name="user_info_phone_title">PHONE</string>
+    <string name="user_info_email_title">EMAIL</string>
+    <string name="no_email_apps_error">Please install email client app first</string>
+    <string name="no_web_apps_error">Please install web browser first</string>
+    <string name="calls_unavailable_error">You cannot make calls from your device right now.</string>
+    <string name="transition_user_full_name">userFullName</string>
+    <string name="delete">Delete</string>
+    <string name="not_admin_error">You are not an owner of this chat</string>
+    <string name="full_name_error">Full name can\'t be empty</string>
+    <string name="settings_push_notifications_title">Push Notifications</string>
+    <string name="settings_title">SETTINGS</string>
+    <string name="to_large_message">To large message</string>
 </resources>

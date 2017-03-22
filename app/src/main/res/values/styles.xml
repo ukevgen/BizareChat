@@ -1,11 +1,96 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="textColorError">@color/invalid_info_test_color</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="SignText">
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="EmailPasswordText">
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SignUpButton">
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:background">@drawable/sign_up_button</item>
+    </style>
+
+    <style name="SignInButton">
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:background">@drawable/sign_in_button</item>
+    </style>
+
+    <style name="ForgotPassword">
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/forgot_password</item>
+        <item name="android:alpha">0.69</item>
+    </style>
+
+    <style name="RegisterInfo">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">Roboto-Regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="EmailTextInput">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/email_hint</item>
+    </style>
+
+    <style name="FbButton">
+        <item name="android:drawableLeft">@drawable/fb_icon</item>
+        <item name="android:background">@drawable/fb_button</item>
+        <item name="android:textColor">@drawable/button_text_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextInputLayoutInvalidInfo" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/invalid_info_test_color</item>
+    </style>
+
+    <style name="NewChatTextInputEditText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/new_chat_edit_text_hint_color</item>
+    </style>
+
+    <style name="NewChatButtonCreate">
+        <item name="android:background">@drawable/new_chat_button_create</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/image_chooser_dialog_accent</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/image_chooser_dialog_background</item>
+    </style>
+
+    <style name="AlertDialogConfirmStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/button_disabled_text</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/button_sign_in_pressed</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:layout_width">@dimen/forgot_password_width</item>
+        <item name="android:layout_height">@dimen/forgot_password_height</item>
     </style>
 
 </resources>
