@@ -121,9 +121,7 @@ android {
             buildConfigField BOOLEAN, CRASH_REPORTS, TRUE
             buildConfigField INT, SPLASH_DELAY, '3000'
             signingConfig signingConfigs.release
-            multiDexEnabled false
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
         }
     }
 

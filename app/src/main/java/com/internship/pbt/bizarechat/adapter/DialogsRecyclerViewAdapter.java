@@ -63,7 +63,7 @@ public class DialogsRecyclerViewAdapter extends RecyclerSwipeAdapter<DialogsRecy
                 holder.mMessageAuthor.setText(userNames.get(dialog.getLastMessageUserId().longValue()));
         }
         holder.mTitle.setText(dialog.getName());
-        if (dialog.getUnreadMessagesCount() != 0) {
+        if (dialog.getUnreadMessagesCount() != null && dialog.getUnreadMessagesCount() != 0) {
             holder.mLastMessageDate.setTextColor(context.getResources().getColor(R.color.chats_item_last_message_date_new));
             holder.mTitle.setTextColor(context.getResources().getColor(R.color.chats_item_name_new));
             holder.mNewMessageIndicator.setVisibility(View.VISIBLE);
