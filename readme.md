@@ -8,7 +8,9 @@ TODO: add description here
 
 ### Screenshots
 
-TODO: add screenshots here
+<img src="/images/1page-1-sign-in.png" width="24%"> <img src="/images/2page-1-sign-up.png" width="24%"> <img src="/images/3page-1-chats-menu.png" width="24%"> <img src="/images/4page-1-chats-error.png" width="24%">
+<img src="/images/5page-1-drawer.png" width="24%"> <img src="/images/6page-1-create-chat.png" width="24%"> <img src="/images/7page-1-invite-friends.png" width="24%"> <img src="/images/8page-1-friends-copy.png" width="24%">
+
 
 ### Project Requirements
 
