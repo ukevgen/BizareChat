@@ -238,7 +238,7 @@ public class ChatRoomFragment extends MvpAppCompatFragment
         presenter.processReadReceipt(event.getMessages());
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     @Keep
     public void onSentPublicMessage(PublicMessageSentEvent event) {
         presenter.processSentPublicMessageEvent(event.getMessageId());
