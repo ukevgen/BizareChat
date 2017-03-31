@@ -64,6 +64,11 @@ selected/unselected/enabled/disabled states should be implemented for all clicka
 * User should be notified in case of any kind of errors occur
 * Use Crouton and Toast UI Widgets
 
+### Other requirememts
+
+* Provide [Unit tests](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html) for app's Auth module (Splash/Sign In/Sign Up)
+* Provide [UI tests](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) for app's Auth module (Splash/Sign In/Sign Up)
+
 ### Architecture specs
 
 TODO: describe architecture features here (MVP + Clean Architecture)
@@ -94,9 +99,6 @@ https://github.com/sqlcipher/android-database-sqlcipher
 https://github.com/mockito/mockito
 * Powermock
 https://github.com/powermock/powermock
-
-
-
 
 
 ### License
