@@ -64,14 +64,29 @@ selected/unselected/enabled/disabled states should be implemented for all clicka
 * User should be notified in case of any kind of errors occur
 * Use Crouton and Toast UI Widgets
 
-### Other requirememts
-
-* Provide [Unit tests](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html) for app's Auth module (Splash/Sign In/Sign Up)
-* Provide [UI tests](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) for app's Auth module (Splash/Sign In/Sign Up)
-
 ### Architecture specs
 
-TODO: describe architecture features here (MVP + Clean Architecture)
+All links you can find in the end of this paragraph.
+
+In this project our team adhere to Clean Architecture principles. Its mean that we make 3 layers which performed their specific task with some adds.
+
+Presentation:
+Here we make base MVP pattern, which allow to us separate view elements, from the logic and retrieving data.
+In View, we contain only View elements, lists, specific Android parts which need to be displayed to user. Also we have reference on Presenter class.
+In Model we implemented retrieving of data with specific methods which needs Context for perform.
+In Presenter we contain references on Model, View and UseCase classes here we implements all logic that needs for particullar View.
+
+Domain:
+In this layer we have UseCase classes, every particular class implements one event, that allows to us plan architecture and add every feature without any conflict.
+
+Data:
+In this layer we implemented retrieving data from net, database, cache, or another source. Also, in this layer we implemented choosing of source. For example if we have no any information in database, we retrieve information from net.
+
+Clean Architecture: 
+https://github.com/android10/Android-CleanArchitecture
+
+MVP:
+https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter
 
 ### Used Technologies
 
@@ -99,6 +114,9 @@ https://github.com/sqlcipher/android-database-sqlcipher
 https://github.com/mockito/mockito
 * Powermock
 https://github.com/powermock/powermock
+
+
+
 
 
 ### License
