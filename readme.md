@@ -68,7 +68,34 @@ TODO: describe architecture features here (MVP + Clean Architecture)
 
 ### Used Technologies
 
-TODO: fill in used technologies/libraries/frameworks
+* Retrofit 2
+https://github.com/square/retrofit
+* Okhttp
+https://github.com/square/okhttp
+* RxAndroid
+https://github.com/ReactiveX/RxAndroid
+* Smack
+https://github.com/igniterealtime/Smack
+* Moxy
+https://github.com/Arello-Mobile/Moxy
+* Google-Cloud-Messaging
+https://github.com/google/gcm
+* EventBus
+https://github.com/greenrobot/EventBus
+* Swipe layout
+https://github.com/daimajia/AndroidSwipeLayout
+* GreenDAO
+https://github.com/greenrobot/greenDAO
+* SqlCipher
+https://github.com/sqlcipher/android-database-sqlcipher
+* Mockito
+https://github.com/mockito/mockito
+* Powermock
+https://github.com/powermock/powermock
+
+
+
+
 
 ### License
 
