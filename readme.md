@@ -22,28 +22,28 @@ TODO: add screenshots here
 
 Backend is provided as [QuickBlox](https://quickblox.com) service. 
 
-QuickBlox Admin panel:
+* QuickBlox Admin panel:
 https://admin.quickblox.com
 
-Backend API documentation: 
+* Backend API documentation: 
 http://quickblox.com/developers/Overview
 
-Error codes and rate limits API documentation:
+* Error codes and rate limits API documentation:
 http://quickblox.com/developers/Errors
 
-Authentication and Authorization API documentation:
+* Authentication and Authorization API documentation:
 http://quickblox.com/developers/Authentication_and_Authorization
 
-Users API documentation:
+* Users API documentation:
 http://quickblox.com/developers/Users
 
-Chat API documentation:
+* Chat API documentation:
 http://quickblox.com/developers/Chat
 
-Content API documentation:
+* Content API documentation:
 http://quickblox.com/developers/Content
 
-Push notifications API documentation:
+* Push notifications API documentation:
 http://quickblox.com/developers/Messages
 
 ### Functional requirements
@@ -60,4 +60,4 @@ TODO: fill in used technologies/libraries/frameworks
 
 ### License
 
-TODO: add license file ref
+[Apache-2.0](https://github.com/ukevgen/BizareChat/blob/master/LICENSE.txt)
