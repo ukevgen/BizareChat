@@ -1,10 +1,13 @@
 # Android Agilie Internship
 
-TODO: add description here
-
 ### Project description
 
-TODO: add description here
+Bizare Android chat app has the most common features like: 
+- Users and friends; 
+- Auth & Facebook; 
+- Chat messages and all the actions like remove and edit; 
+- Push messages and local data cache.  
+
 
 ### Screenshots
 
