@@ -14,6 +14,7 @@ Bizare Android chat app has the most common features like:
 <img src="/images/1page-1-sign-in.png" width="24%"> <img src="/images/2page-1-sign-up.png" width="24%"> <img src="/images/3page-1-chats-menu.png" width="24%"> <img src="/images/4page-1-chats-error.png" width="24%">
 <img src="/images/5page-1-drawer.png" width="24%"> <img src="/images/6page-1-create-chat.png" width="24%"> <img src="/images/7page-1-invite-friends.png" width="24%"> <img src="/images/8page-1-friends-copy.png" width="24%">
 
+## Project Specification
 
 ### Project Requirements
 
@@ -23,7 +24,7 @@ Bizare Android chat app has the most common features like:
 - domain: \<your company name>.internship.com
 - localization: en
 
-### Used API (QuickBlox)
+### Backend API (QuickBlox)
 
 Backend is provided as [QuickBlox](https://quickblox.com) service. 
 
@@ -67,29 +68,23 @@ selected/unselected/enabled/disabled states should be implemented for all clicka
 * User should be notified in case of any kind of errors occur
 * Use Crouton and Toast UI Widgets
 
+## About project
+
 ### Architecture specs
 
-All links you can find in the end of this paragraph.
-
-In this project our team adhere to Clean Architecture principles. Its mean that we make 3 layers which performed their specific task with some adds.
+In this project our team adhere to [Clean Architecture](https://github.com/android10/Android-CleanArchitecture) principles. It means that we've made 3 layers which perform their specific task.
 
 Presentation:
-Here we make base MVP pattern, which allow to us separate view elements, from the logic and retrieving data.
-In View, we contain only View elements, lists, specific Android parts which need to be displayed to user. Also we have reference on Presenter class.
-In Model we implemented retrieving of data with specific methods which needs Context for perform.
-In Presenter we contain references on Model, View and UseCase classes here we implements all logic that needs for particullar View.
+Here we've used [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) pattern, which allows us to separate view elements from the logic and retrieving data.
+In _View_ we contain only View elements, lists, specific Android parts which need to be displayed to user. Also we have reference on Presenter class.
+In _Model_ we've implemented retrieving of data with specific methods which needs Context for perform.
+In _Presenter_ we contain references on Model, View and UseCase classes. Here we implement all the logic that is required for concrete View.
 
 Domain:
-In this layer we have UseCase classes, every particular class implements one event, that allows to us plan architecture and add every feature without any conflict.
+In this layer we have UseCase classes, every particular class implements one event that allows us to plan architecture and add every feature without any conflict.
 
 Data:
-In this layer we implemented retrieving data from net, database, cache, or another source. Also, in this layer we implemented choosing of source. For example if we have no any information in database, we retrieve information from net.
-
-Clean Architecture: 
-https://github.com/android10/Android-CleanArchitecture
-
-MVP:
-https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter
+In this layer we've implemented retrieving data from net, database, cache or another source. Also, in this layer we've implemented choosing of source. For example if we have no cached data, we fetch one from network.
 
 ### Used Technologies
 
